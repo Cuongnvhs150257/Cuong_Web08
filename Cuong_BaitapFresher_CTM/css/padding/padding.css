@@ -1,0 +1,43 @@
+.padding{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    order: 5;
+}
+.padding-center{
+    display: flex;
+    margin-left: 20px;
+    
+}.padding-right{
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+    display: flex;
+    height: 25px;
+}.padding-left{
+    position: absolute;
+    left: 0;
+    margin-left: 10px;
+}
+.page-group button{
+    border: 1px solid #000;
+    height: 25px;
+    background-color: #fff;
+}
+.page-group button:hover{
+    background-color: #fff;
+}
+.button-seleced {
+    background-color: #019160;
+    font-weight: bold;
+
+}
+.paddingnumber{
+    width: 30px;
+    height: 30px;
+    margin: 2px;
+    cursor: pointer;
+}
