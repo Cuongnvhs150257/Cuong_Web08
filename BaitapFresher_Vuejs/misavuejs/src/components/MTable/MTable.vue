@@ -185,8 +185,8 @@
 
 <style>
     .content-table{
-    height: calc(100% - 110px);
-    width: calc(100% - 40px);
+    height: calc(100% - 115px);
+    width: calc(100% - 30px);
     /* position: absolute; */
     /* bottom: 0; */
     /* right: 0; */
