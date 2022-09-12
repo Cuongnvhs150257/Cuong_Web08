@@ -45,19 +45,19 @@ export default {
 }
 @font-face {
     font-family: Misa Fonts Regular;
-    src: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\fonts\notosans-regular.2cb88a13.woff2);
+    src: url('./assets/Resource/fonts/notosans-regular.2cb88a13.woff2');
 }
 @font-face {
     font-family: Misa Fonts Bold;
-    src: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\fonts\notosans-bold.3ede5aff.woff2);
+    src: url('./assets/Resource/fonts/notosans-bold.3ede5aff.woff2');
 }
 @font-face {
     font-family: Misa Fonts Italic;
-    src: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\fonts\notosans-italic.1c1aaac9.woff2);
+    src: url('./assets/Resource/fonts/notosans-italic.1c1aaac9.woff2');
 }
 @font-face {
     font-family: Misa Fonts Semibold;
-    src: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\fonts\notosans-semibold.df3e6dc4.woff2);
+    src: url('./assets/Resource/fonts/notosans-semibold.df3e6dc4.woff2');
 }
 .header{
     order: 2;
