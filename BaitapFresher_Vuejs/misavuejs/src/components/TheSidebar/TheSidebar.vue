@@ -71,8 +71,8 @@
 </template>
 <style>
 :root{
-  --icon: url('http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg');
-  --logo: url('http://localhost:8080/img/Logo_Module_TiengViet_White.66947422.abf1e380.svg');
+  --icon: url('../../assets/Resource/img/Sprites.64af8f61.svg');
+  --logo: url('../../assets/Resource/img/Logo_Module_TiengViet_White.66947422.svg'); 
 }
     .sidebar-top{
     width: 200px;

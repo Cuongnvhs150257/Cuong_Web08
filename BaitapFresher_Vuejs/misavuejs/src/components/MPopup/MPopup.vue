@@ -22,21 +22,28 @@
           <div class="input_item item1">
             <label class="item-label">Mã</label>
             <label class="item-labelsao">  *</label>
-            <input type="text" class="item-input in1">
+            <m-input-nomal></m-input-nomal>
           </div>
           <div class="input_item item2">
             <label class="item-label">Tên</label>
             <label class="item-labelsao">  *</label>
-            <input type="text" class="item-input in2">
+            <m-input-nomal></m-input-nomal>
           </div>
-          <div class="input_item item3"></div>
-          <div class="input_item item4"></div>
+          <div class="input_item item3">
+            <label class="item-label label3">Ngày sinh</label>
+            <input type="datetime-local" class="item-input in3">
+          </div>
+          <div class="input_item item4">
+              <label class="item-label label3 gender">Giới tính</label>
+              <div class="input-radio">
+                <m-input-radio></m-input-radio>Nam
+                <m-input-radio></m-input-radio>Nữ
+                <m-input-radio></m-input-radio>Khác
+              </div>
+          </div>
       </div>
       <div class="popup_item input3">
         <div class="input_item item1">
-            <label class="item-label">Mã</label>
-            <label class="item-labelsao">  *</label>
-            <input type="text" class="item-input in1">
           </div>
           <div class="input_item item2">
           </div>
@@ -56,7 +63,7 @@
   --icon: url('http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg');
 }
 .Popup-form {
-  width: 1000px;
+  width: 900px;
   height: 600px;
   background-color: #fff;
   position: relative;
@@ -127,28 +134,48 @@
   height: 100%;
   margin-left: 5px;
 }
-.input_item.item1{
-  width: 170px;
-  margin-left: 20px;
-}
+
 .item-label{
   font-weight: bold;
 }
 .item-labelsao{
   color: red;
-}.input_item.item1 .item-input.in1{
-  height: 30px;
-  margin-top: 5px;
+}.input_item.item1{
+  width: 170px;
+  margin-left: 25px;
+  margin-right: 10px;
+
+}.input_item.item3{
+  margin-left: 25px;
+  width: 150px;
 }
-.input_item.item2 .item-input.in2{
+.input_item.item4{
+  margin-left: 10px;
+}
+.input_item.item3 .item-input.in3{
   height: 30px;
+  width: 150px;
+  margin-top: 5px;
+}.item-label.label3.gender{
+  margin-left: 10px;
+}
+.input-radio{
   width: 100%;
   margin-top: 5px;
+  display: flex;
+  position: absolute;
+  top: 40%;
+
 }
 </style>
 
 <script>
+import MInputNomal from './MInputNomal.vue'
+import MInputRadio from './MInputRadio.vue'
 export default {
-  setup() {},
+  components: {
+    MInputNomal,
+    MInputRadio
+  }
 };
 </script>

@@ -15,7 +15,7 @@
 </template>
 <style>
 :root{
-  --icon: url('http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg');
+  --icon: url('../../assets/Resource/img/Sprites.64af8f61.svg');
 
 }
 .header-left{
