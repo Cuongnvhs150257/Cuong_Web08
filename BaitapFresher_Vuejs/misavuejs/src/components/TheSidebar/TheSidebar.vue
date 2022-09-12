@@ -70,6 +70,10 @@
     </div>
 </template>
 <style>
+:root{
+  --icon: url('http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg');
+  --logo: url('http://localhost:8080/img/Logo_Module_TiengViet_White.66947422.abf1e380.svg');
+}
     .sidebar-top{
     width: 200px;
     height: 48px;
@@ -84,16 +88,16 @@
     margin-top: 10px;
 }
 .sidebar-btn-left-open{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-repeat: no-repeat;
     background-position: -418px -92px;
     background-color: #041434;
-    /* background: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg) no-repeat -418px -92px; */
+    
 }
 .sidebar-logo{
     width: 150px;
     height: 48px;
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Logo_Module_TiengViet_White.66947422.svg);
+    background-image: var(--logo);
     background-repeat: no-repeat;
     background-size: 100px;
     background-position: 16px center;
@@ -132,90 +136,90 @@
 
 }
 .sicon1{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -34px -1630px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon2{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -78px -1631px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon3{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -121px -1633px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon4{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -165px -1632px;
     background-repeat: no-repeat;
     background-color: #041434;
 }.sicon5{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -208px -1631px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon6{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -254px -1632px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon7{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -294px -1632px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon8{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -339px -1633px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon9{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -382px -1632px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon10{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -427px -1634px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon11{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -471px -1633px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon12{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -514px -1632px;        
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon13{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -382px -1664px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon14{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -552px -1636px;
     background-repeat: no-repeat;
     background-color: #041434;
 }
 .sicon15{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-position: -207px -1667px;
     background-repeat: no-repeat;
     background-color: #041434;

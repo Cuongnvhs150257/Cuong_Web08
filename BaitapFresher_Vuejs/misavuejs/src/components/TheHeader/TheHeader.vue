@@ -14,7 +14,10 @@
         </div>
 </template>
 <style>
+:root{
+  --icon: url('http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg');
 
+}
 .header-left{
     width: calc(100%-300px);
     height: 48px;
@@ -32,18 +35,17 @@
    
 }
 .header-left-btn-menu{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+    background-image: var(--icon);
     background-repeat: no-repeat;
     background-position: -845px -32px;
     background-color: #fff;
-    /* background: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg) no-repeat -845px -32px; */
 
 }
 .header-left-btn-down{
-    background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);    background-repeat: no-repeat;
+    background-image: var(--icon); 
+    background-repeat: no-repeat;
     background-position: -943px -357px;
     background-color: #fff;
-    /* background: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg) no-repeat -943px -357px; */
    
 }
 .header-right{
@@ -65,7 +67,7 @@
     background-position: 16px center;
 }
 .header-notification{
-    background: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg) no-repeat -258px -32px;
+    background: var(--icon) no-repeat -258px -32px;
 }
 .header-avatar{
     width: 37px;
@@ -73,11 +75,11 @@
     border-radius: 50%;
     margin-left: 30px;
  
-    background: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg) no-repeat -353px -893px;
+    background: var(--icon) no-repeat -353px -893px;
 
 }
 .header-right-btn-down{
-    background: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg) no-repeat -943px -357px;
+    background: var(--icon) no-repeat -943px -357px;
 }
 .header-username{
     width: 180px;

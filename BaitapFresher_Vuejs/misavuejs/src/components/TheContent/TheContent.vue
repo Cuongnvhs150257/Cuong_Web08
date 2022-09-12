@@ -29,6 +29,9 @@
 </template>
 
 <style>
+:root{
+  --icon: url('http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg');
+}
 .content-top {
   width: 100%;
   height: 80px;
@@ -90,7 +93,7 @@
 .toolbar-load {
   width: 30px;
   height: 30px;
-  background-image: url(C:\Users\s\Documents\GitHub\Cuong_Web08\BaitapFresher_Vuejs\misavuejs\src\assets\Resource\img\Sprites.64af8f61.svg);
+  background-image:var(--icon);
   background-repeat: no-repeat;
   background-position: -425px -198px;
   border: none;

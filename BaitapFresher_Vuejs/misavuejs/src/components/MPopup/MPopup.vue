@@ -1,7 +1,7 @@
 <template>
   <div class="popup">
     <div class="Popup-form">
-      <div class="popup_item input1">
+      <div class="popup_item input">
         <div class="input1-left">
           <label class="input1-label">Thông tin nhân viên</label>
           <div class="input1-checkbox">
@@ -14,21 +14,47 @@
           </div>
         </div>
         <div class="input1-right">
-          <div class="input1-checkbox-ask">ask</div>
-          <div class="input1-checkbox-cancel">x</div>
+          <div class="input1-checkbox-icon ask-icon"></div>
+          <div class="input1-checkbox-icon question-icon"></div>
         </div>
       </div>
-      <div class="popup_item input1"></div>
-      <div class="popup_item input1"></div>
-      <div class="popup_item input1"></div>
-      <div class="popup_item input1"></div>
-      <div class="popup_item input1"></div>
-      <div class="popup_item input1"></div>
-      <div class="popup_item input1"></div>
+      <div class="popup_item input2">
+          <div class="input_item item1">
+            <label class="item-label">Mã</label>
+            <label class="item-labelsao">  *</label>
+            <input type="text" class="item-input in1">
+          </div>
+          <div class="input_item item2">
+            <label class="item-label">Tên</label>
+            <label class="item-labelsao">  *</label>
+            <input type="text" class="item-input in2">
+          </div>
+          <div class="input_item item3"></div>
+          <div class="input_item item4"></div>
+      </div>
+      <div class="popup_item input3">
+        <div class="input_item item1">
+            <label class="item-label">Mã</label>
+            <label class="item-labelsao">  *</label>
+            <input type="text" class="item-input in1">
+          </div>
+          <div class="input_item item2">
+          </div>
+          <div class="input_item item3"></div>
+          <div class="input_item item4"></div>
+      </div>
+      <div class="popup_item input4"></div>
+      <div class="popup_item input5"></div>
+      <div class="popup_item input6"></div>
+      <div class="popup_item input7"></div>
+      <div class="popup_item input8"></div>
     </div>
   </div>
 </template>
 <style>
+:root{
+  --icon: url('http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg');
+}
 .Popup-form {
   width: 1000px;
   height: 600px;
@@ -52,12 +78,7 @@
     top: 30%;
     
 }
-.input1-right{
-    position: absolute;
-    right: 0;
-    display: flex;
-    top: 30%;
-}
+
 .input1-label{
     height: 100%;
   width: 250px;
@@ -78,6 +99,51 @@
 }
 .checkbox-label{
     margin-top: 6px;
+}
+.input1-right{
+    position: absolute;
+    right: 0;
+    display: flex;
+    top: 20%;
+    width: 80px;
+    height: 50px;
+}
+.input1-checkbox-icon{
+  width: 25px;
+  height: 30px;
+  margin-left: 10px;
+}
+.ask-icon{
+  background-image: var(--icon);
+  background-position: -731px -27px;
+  background-repeat: no-repeat;
+}
+.question-icon{
+  background-image: var(--icon);
+  background-position: -146px -141px;
+  background-repeat: no-repeat;
+}.input_item{
+  width: 250px;
+  height: 100%;
+  margin-left: 5px;
+}
+.input_item.item1{
+  width: 170px;
+  margin-left: 20px;
+}
+.item-label{
+  font-weight: bold;
+}
+.item-labelsao{
+  color: red;
+}.input_item.item1 .item-input.in1{
+  height: 30px;
+  margin-top: 5px;
+}
+.input_item.item2 .item-input.in2{
+  height: 30px;
+  width: 100%;
+  margin-top: 5px;
 }
 </style>
 

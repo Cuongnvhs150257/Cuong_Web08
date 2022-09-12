@@ -92,6 +92,5 @@ export default {
     top: 0;
     bottom: 0;
     background-color: rgba(12, 12, 12, 0.6);
-    display: none;
 }
 </style>
