@@ -3,7 +3,7 @@
 </template>
 <style>
     .item-input{
-        height: 30px;
+        height: 28px;
         width: 100%;
         margin-top: 5px;
     }

@@ -44,17 +44,77 @@
       </div>
       <div class="popup_item input3">
         <div class="input_item item1">
+            <label class="item-label">Đơn vị</label>
+            <label class="item-labelsao">  *</label>
+            <select>
+              <option value="1">Phòng nhân sự</option>
+            </select>
           </div>
           <div class="input_item item2">
+            <label class="item-label">Số CMND</label>
+            <m-input-nomal></m-input-nomal>
           </div>
-          <div class="input_item item3"></div>
-          <div class="input_item item4"></div>
+          <div class="input_item item3">
+              <label class="item-label">Ngày cấp</label>
+              <input type="datetime-local" class="item-input in3">
+          </div>
+          
       </div>
-      <div class="popup_item input4"></div>
-      <div class="popup_item input5"></div>
-      <div class="popup_item input6"></div>
-      <div class="popup_item input7"></div>
-      <div class="popup_item input8"></div>
+      <div class="popup_item input4">
+        <div class="input_item item1">
+            <label class="item-label">Chức danh</label>
+            <m-input-nomal></m-input-nomal>
+          </div>
+        <div class="input_item item2">
+            <label class="item-label">Nơi cấp</label>
+            <m-input-nomal></m-input-nomal>
+          </div>  
+      </div>
+      <div class="popup_item input5">
+        <div class="input_item item1">
+            <label class="item-label">Địa chỉ</label>
+            <m-input-nomal></m-input-nomal>
+          </div>
+      </div>
+      <div class="popup_item input6">
+        <div class="input_item item1">
+            <label class="item-label">ĐT di động</label>
+            <m-input-nomal></m-input-nomal>
+          </div>
+          <div class="input_item item">
+            <label class="item-label">ĐT cố định</label>
+            <m-input-nomal></m-input-nomal>
+          </div>
+          <div class="input_item item">
+            <label class="item-label">Email</label>
+            <m-input-nomal></m-input-nomal>
+          </div>
+      </div>
+      <div class="popup_item input6">
+        <div class="input_item item1">
+            <label class="item-label">Tài khoản ngân hàng</label>
+            <m-input-nomal></m-input-nomal>
+          </div>
+          <div class="input_item item">
+            <label class="item-label">Tên ngân hàng</label>
+            <m-input-nomal></m-input-nomal>
+          </div>
+          <div class="input_item item">
+            <label class="item-label">Chi nhánh</label>
+            <m-input-nomal></m-input-nomal>
+          </div>
+      </div>
+      <div class="popup_item input8">
+        <div class="popup_input8_border">
+          <div class="input_item_right">
+            <m-button-1></m-button-1>
+            <button class="btn_input8_right">Cất</button>
+          </div>
+          <div class="input_item_left">
+            <button class="btn_input8_left">Hủy</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -72,8 +132,7 @@
 }
 .popup_item {
   width: 100%;
-  height: 73px;
-  border: 1px solid black;
+  height: 70px;
   display: flex;
   position: relative;
   display: flex;
@@ -106,6 +165,7 @@
 }
 .checkbox-label{
     margin-top: 6px;
+    font-size: 13px;
 }
 .input1-right{
     position: absolute;
@@ -137,23 +197,27 @@
 
 .item-label{
   font-weight: bold;
+  font-size: 12px;
 }
 .item-labelsao{
   color: red;
 }.input_item.item1{
-  width: 170px;
+  width: 150px;
   margin-left: 25px;
-  margin-right: 10px;
+  margin-right: 5px;
 
-}.input_item.item3{
-  margin-left: 25px;
+}.input_item.item2{
+  width: 230px;
+}
+.input_item.item3{
+  margin-left: 30px;
   width: 150px;
 }
 .input_item.item4{
   margin-left: 10px;
 }
 .input_item.item3 .item-input.in3{
-  height: 30px;
+  height: 28px;
   width: 150px;
   margin-top: 5px;
 }.item-label.label3.gender{
@@ -161,21 +225,99 @@
 }
 .input-radio{
   width: 100%;
-  margin-top: 5px;
+  margin-top: 2px;
   display: flex;
   position: absolute;
   top: 40%;
 
+}
+.popup_item.input3 .input_item.item1 {
+  width: 395px;
+  height: 73px;
+}
+.input_item.item1 select{
+  width: 395px;
+  height: 31px;
+  margin-top: 5px;
+}
+.popup_item.input3 .input_item.item2{
+  width: 230px;
+  height: 73px;
+  margin-left: 23px;
+}
+.popup_item.input3 .input_item.item3{
+  margin-left: 10px;
+}.popup_item.input4 .input_item.item1{
+  width: 395px;
+  height: 73px;
+  margin-right: 20px;
+}
+.popup_item.input4 .input_item.item2{
+  width: 395px;
+  height: 73px;
+}.popup_item.input5{
+  margin-top: 10px;
+}
+.popup_item.input5 .input_item.item1{
+  width: 815px;
+  height: 73px;
+}
+.popup_item.input6 .input_item.item1{
+  width: 200px;
+  height: 73px;
+  margin-right: 0;
+}
+.popup_item.input6 .input_item.item{
+  width: 200px;
+  height: 73px;
+  margin-left: 10px;
+}
+.popup_input8_border{
+  margin-top: 30px;
+  margin-left: 25px;
+  width: 93%;
+  height: 70px;
+  border-top: 1px solid black;
+
+}.btn_input8_right{
+    height: 35px;
+    width: 60px;
+    border: 1px solid black;
+    text-align: center;
+    color: black;
+    background-color: #ffff;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-right: 170px;
+    position: absolute;
+    right: 0;
+}
+.btn_input8_left{
+  height: 35px;
+    width: 60px;
+    border: 1px solid black;
+    text-align: center;
+    color: black;
+    background-color: #ffff;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    position: absolute;
+    margin-left: 25px;
+    left: 0;
 }
 </style>
 
 <script>
 import MInputNomal from './MInputNomal.vue'
 import MInputRadio from './MInputRadio.vue'
+import MButton1 from './MButton1.vue'
 export default {
   components: {
     MInputNomal,
-    MInputRadio
+    MInputRadio,
+    MButton1
   }
 };
 </script>
