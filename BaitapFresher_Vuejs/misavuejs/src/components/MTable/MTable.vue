@@ -17,189 +17,86 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr v-for="emp in employees" :key="emp.EmployeeID">
                             <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td>088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
+                            <td>{{emp.EmployeeCode}}</td>
+                            <td>{{emp.FullName}}</td>
+                            <td>{{emp.Gender}}</td>
+                            <td class="tab-th-select">{{emp.DateOfBirth}}</td>
+                            <td>{{emp.IdentityNumber}}</td>
+                            <td>{{emp.PositionName}}</td>
+                            <td>{{emp.DepartmentName}}</td>
+                            <td>{{emp.AccountBank}}</td>
+                            <td>{{emp.NameBank}}</td>
+                            <td>{{emp.BranchBank}}</td>
                             <td class="tab-th-select">Sửa</td>
                         </tr>
 
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td>088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
-                            <td class="tab-th-select">Sửa</td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td>088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
-                            <td class="tab-th-select">Sửa</td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td>088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
-                            <td class="tab-th-select">Sửa</td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td>088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
-                            <td class="tab-th-select">Sửa</td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td>088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
-                            <td class="tab-th-select">Sửa</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td>088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
-                            <td class="tab-th-select">Sửa</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td >088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
-                            <td class="tab-th-select">Sửa</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td>088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
-                            <td class="tab-th-select">Sửa</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td>088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
-                            <td class="tab-th-select">Sửa</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>NV011111</td>
-                            <td>Nguyen Van A</td>
-                            <td>Nam</td>
-                            <td class="tab-th-select">20/08/1995</td>
-                            <td>088888888</td>
-                            <td>A@gmail.com</td>
-                            <td>Quản lý</td>
-                            <td>Phòng nhân sự</td>
-                            <td>15.000.000</td>
-                            <td>Đang thử việc</td>
-                            <td class="tab-th-select">Sửa</td>
-                        </tr>
-
-                    
-
+                        
                     </tbody>
                 </table>
 </template>
+
+<script>
+export default {
+    name: "EmployeeList",
+    created(){
+        fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees", {method:"GET"})
+        .then(res => res.json())
+        .then(data =>{
+            this.employees = data;
+            console.log(data);
+        })
+        .catch(res =>{
+            console.log(res);
+        })
+    },
+    data(){
+        return{
+            employees:[]
+        }
+    },
+}
+</script>
 
 <style>
     .content-table{
     height: calc(100% - 115px);
     width: calc(100% - 30px);
-    /* position: absolute; */
-    /* bottom: 0; */
-    /* right: 0; */
     background-color: #fff;
-    /* margin-right: 30px; */
     border: 10px solid #fff;
     padding-left: 10px;
+    overflow: scroll;
+
+}
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+  
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+  
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #7C869C;
 }
 .content-table table{
     width: 100%;
     border-collapse: collapse;
     border-spacing: unset;
     font-size: 13px;
+    
 }
 
 .content-table tr, .content-table th, .content-table td{
@@ -221,10 +118,3 @@
 
 </style>
 
-<script>
-export default {
-    setup() {
-        
-    },
-}
-</script>

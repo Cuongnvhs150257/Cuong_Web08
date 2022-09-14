@@ -259,6 +259,10 @@ export default {
   width: 395px;
   height: 31px;
   margin-top: 5px;
+  border: 1px solid #bbbbbb;
+}.input_item.item1 select:focus{
+  border: 2px solid #019160;
+  outline: none;
 }
 .popup_item.input3 .input_item.item2{
   width: 230px;
@@ -328,6 +332,8 @@ export default {
     position: absolute;
     margin-left: 25px;
     left: 0;
+}.item-input{
+  border: 1px solid #bbbbbb;
 }
 </style>
 

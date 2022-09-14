@@ -6,7 +6,7 @@
     .content-top-btn1{
     height: 35px;
     padding: 0 24px;
-    border: none;
+    border: 1px solid #bbbbbb;
     text-align: center;
     background-color: #50B83C;
     color: #ffff;
