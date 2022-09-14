@@ -2,7 +2,7 @@
     <div class="padding">
                     <div class="padding-left">
                         <label>Tổng số: </label>
-                        <label class="padding-left-bold">1035 </label>
+                        <label class="padding-left-bold">5 </label>
                         <label>bản ghi</label>
                     </div>
                     <div class="padding-right">

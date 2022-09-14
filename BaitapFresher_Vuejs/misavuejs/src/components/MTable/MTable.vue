@@ -29,7 +29,13 @@
                             <td>{{emp.AccountBank}}</td>
                             <td>{{emp.NameBank}}</td>
                             <td>{{emp.BranchBank}}</td>
-                            <td class="tab-th-select">Sửa</td>
+                            <td class="tab-th-select">Sửa
+                                <select>
+                                   <option value="1">Nhân bản</option>
+                                   <option value="2">Xóa</option>
+                                   <option value="3">Ngưng sử dụng</option>
+                                </select>
+                            </td>
                         </tr>
 
                         
@@ -110,10 +116,15 @@ export default {
     text-align: left;
 }
 .tab-th-select{
-    text-align: center;
+    text-align: center !important;
 }
 .content-table thead{
     background-color: rgb(236,238,241);
+}.tab-th-select select{
+    width: 20px;
+    height: 15px;
+    border: none;
+    outline: none;
 }
 
 </style>
