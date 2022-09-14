@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="content-top-right">
-        <m-button></m-button>
+        <MButton @custom-handle-click="openPopup" />
       </div>
     </div>
 
@@ -25,17 +25,52 @@
       <m-table></m-table>
       <the-padding></the-padding>
     </div>
+
+    <!-- <Teleport to="#page-employee">
+    </Teleport> -->
+    
+      <MPopup v-if="isShow" @custom-handle-click="closePopup"/>
   </div>
 </template>
 
+
+<script>
+import MButton from "../MButton/MButton.vue";
+import MTable from "../MTable/MTable.vue";
+import ThePadding from "../ThePadding/ThePadding.vue";
+import { ref } from "vue";
+
+import MPopup from "../MPopup/MPopup.vue";
+export default {
+  setup() {
+    const isShow = ref(false)
+    function openPopup() {
+      isShow.value = true;
+    }
+    function closePopup() {
+      isShow.value = false;
+    }
+    return {
+      isShow,
+      openPopup,
+      closePopup,
+    };
+  },
+  components: { MButton, MTable, ThePadding, MPopup },
+};
+</script>
+
 <style>
-:root{
-  --icon: url('http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg');
+:root {
+  --icon: url("http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg");
 }
 .content-top {
   width: 100%;
   height: 80px;
   display: flex;
+}
+.popup {
+  z-index: 100;
 }
 .content-top-left {
   width: 30%;
@@ -93,7 +128,7 @@
 .toolbar-load {
   width: 30px;
   height: 30px;
-  background-image:var(--icon);
+  background-image: var(--icon);
   background-repeat: no-repeat;
   background-position: -425px -198px;
   border: none;
@@ -103,14 +138,3 @@
   margin-left: 10px;
 }
 </style>
-<script>
-import MButton from "../MButton/MButton.vue";
-import MTable from "../MTable/MTable.vue";
-import ThePadding from "../ThePadding/ThePadding.vue";
-export default {
-  components: { MButton, MTable, ThePadding },
-  setup() {
-    MButton, MTable, ThePadding;
-  },
-};
-</script>

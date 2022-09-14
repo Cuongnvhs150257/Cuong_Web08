@@ -15,7 +15,7 @@
         </div>
         <div class="input1-right">
           <div class="input1-checkbox-icon ask-icon"></div>
-          <div class="input1-checkbox-icon question-icon"></div>
+          <div class="input1-checkbox-icon question-icon" @click="handleClosePopup"></div>
         </div>
       </div>
       <div class="popup_item input2">
@@ -111,13 +111,32 @@
             <button class="btn_input8_right">Cất</button>
           </div>
           <div class="input_item_left">
-            <button class="btn_input8_left">Hủy</button>
+            <button class="btn_input8_left" @click="handleClosePopup">Hủy</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+<script>
+import MInputNomal from './MInputNomal.vue'
+import MInputRadio from './MInputRadio.vue'
+import MButton1 from './MButton1.vue'
+export default {
+  emit: ["custom-handle-click"],
+  methods: {
+    handleClosePopup() {
+      this.$emit("custom-handle-click");
+    },
+  },
+  components: {
+    MInputNomal,
+    MInputRadio,
+    MButton1
+  }
+  
+};
+</script>
 <style>
 :root{
   --icon: url('http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg');
@@ -231,6 +250,7 @@
   top: 40%;
 
 }
+
 .popup_item.input3 .input_item.item1 {
   width: 395px;
   height: 73px;
@@ -280,11 +300,12 @@
   border-top: 1px solid black;
 
 }.btn_input8_right{
-    height: 35px;
-    width: 60px;
+    height: 36px;
+    width: 80px;
     border: 1px solid black;
     text-align: center;
     color: black;
+    font-weight: bold;
     background-color: #ffff;
     border-radius: 4px;
     cursor: pointer;
@@ -294,11 +315,12 @@
     right: 0;
 }
 .btn_input8_left{
-  height: 35px;
-    width: 60px;
+  height: 36px;
+    width: 80px;
     border: 1px solid black;
     text-align: center;
     color: black;
+    font-weight: bold;
     background-color: #ffff;
     border-radius: 4px;
     cursor: pointer;
@@ -309,15 +331,3 @@
 }
 </style>
 
-<script>
-import MInputNomal from './MInputNomal.vue'
-import MInputRadio from './MInputRadio.vue'
-import MButton1 from './MButton1.vue'
-export default {
-  components: {
-    MInputNomal,
-    MInputRadio,
-    MButton1
-  }
-};
-</script>

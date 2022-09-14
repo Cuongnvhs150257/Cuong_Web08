@@ -1,10 +1,9 @@
 <template>
-    <div class="container">
+    <div id="page-employee" class="container">
       
       <the-header class="header"></the-header>
       <the-sidebar class="sidebar"></the-sidebar>
       <the-content class="content"></the-content>
-        <m-popup class="popup"></m-popup>
     </div>
     
 </template>
@@ -13,7 +12,6 @@
 import TheHeader from './components/TheHeader/TheHeader.vue'
 import TheSidebar from './components/TheSidebar/TheSidebar.vue'
 import TheContent from './components/TheContent/TheContent.vue'
-import MPopup from './components/MPopup/MPopup.vue'
 
 export default {
   name: 'App',
@@ -22,8 +20,7 @@ export default {
     TheHeader,
     TheSidebar,
     TheContent,
-    MPopup
-  }
+  },
 }
 </script>
 
@@ -94,3 +91,5 @@ export default {
     background-color: rgba(12, 12, 12, 0.6);
 }
 </style>
+
+

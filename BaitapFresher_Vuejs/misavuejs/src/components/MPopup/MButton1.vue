@@ -1,14 +1,14 @@
 <template>
-     <button type="button" class="content-top-btn">Cất và Thêm</button>
+     <button type="button" class="content-top-btn1">Cất và Thêm</button>
 </template>
 
 <style>
-    .content-top-btn{
+    .content-top-btn1{
     height: 35px;
     padding: 0 24px;
     border: none;
     text-align: center;
-    background-color: #019160;
+    background-color: #50B83C;
     color: #ffff;
     border-radius: 4px;
     cursor: pointer;

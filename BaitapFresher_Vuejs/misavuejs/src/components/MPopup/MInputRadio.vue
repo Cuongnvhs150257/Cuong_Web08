@@ -7,4 +7,5 @@
         height: 18px;
         margin: 0 10px;
     }
+
 </style>
