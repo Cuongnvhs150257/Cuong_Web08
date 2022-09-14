@@ -22,14 +22,14 @@
           <button type="button" class="toolbar-load"></button>
         </div>
       </div>
-      <m-table></m-table>
+      <MTable @custom-open-dbclick="openPopup" />
       <the-padding></the-padding>
     </div>
 
     <!-- <Teleport to="#page-employee">
     </Teleport> -->
     
-      <MPopup v-if="isShow" @custom-handle-click="closePopup"/>
+      <MPopup v-if="isShow" @custom-handle-click="closePopup" :employeesSelected="Employees"/>
   </div>
 </template>
 
@@ -44,8 +44,27 @@ import MPopup from "../MPopup/MPopup.vue";
 export default {
   setup() {
     const isShow = ref(false)
-    function openPopup() {
-      isShow.value = true;
+    const Employees = ref(null)
+    async function openPopup(id) {
+      if(id){
+        await fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees/" + id, {method:"GET"})
+        .then(res => res.json())
+        .then(data =>{
+            //this.employees = data;
+            Employees.value = data
+            isShow.value = true;
+            console.log(Employees.value);
+            
+        })
+        .catch(res =>{
+            console.log(res);
+        })
+        
+
+      }else{
+        isShow.value = true;
+      }
+      
     }
     function closePopup() {
       isShow.value = false;
@@ -54,6 +73,7 @@ export default {
       isShow,
       openPopup,
       closePopup,
+      Employees
     };
   },
   components: { MButton, MTable, ThePadding, MPopup },

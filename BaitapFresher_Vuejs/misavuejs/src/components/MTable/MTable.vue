@@ -17,7 +17,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="emp in employees" :key="emp.EmployeeID">
+                        <tr v-for="emp in employees" :key="emp.EmployeeID" @dblclick="rowDBClick(emp.EmployeeID)">
                             <td><input type="checkbox"></td>
                             <td>{{emp.EmployeeCode}}</td>
                             <td>{{emp.FullName}}</td>
@@ -46,6 +46,17 @@
 <script>
 export default {
     name: "EmployeeList",
+    props:{
+        
+    },
+    emit: ["custom-open-dbclick"],
+    methods:{
+        
+        rowDBClick(EmployeeID) {
+            //this.empSelected = employees;
+            this.$emit("custom-open-dbclick",EmployeeID);
+        },
+    },
     created(){
         fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees", {method:"GET"})
         .then(res => res.json())
@@ -59,9 +70,14 @@ export default {
     },
     data(){
         return{
-            employees:[]
+            employees:[],
+            empSelected: {
+
+            }
         }
     },
+    
+    
 }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-    <input type="text" class="item-input">
+    <input type="text" class="item-input" :value="modelValue" @input="handleInput">
 </template>
 <style>
     .item-input{
@@ -14,3 +14,17 @@
         outline: none;
         }
 </style>
+
+<script>
+export default {
+    
+    props:["modelValue"],
+    methods:{
+        handleInput(event){
+           this.$emit("update:modelValue",event.target.value);
+        }
+    }
+        
+    
+}
+</script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="popup">
+  <div class="popup ">
     <div class="Popup-form">
       <div class="popup_item input">
         <div class="input1-left">
@@ -22,16 +22,16 @@
           <div class="input_item item1">
             <label class="item-label">Mã</label>
             <label class="item-labelsao">  *</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal v-model="Employees.EmployeeCode"  ></m-input-nomal>
           </div>
           <div class="input_item item2">
             <label class="item-label">Tên</label>
             <label class="item-labelsao">  *</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal v-model="Employees.FullName"></m-input-nomal>
           </div>
           <div class="input_item item3">
             <label class="item-label label3">Ngày sinh</label>
-            <input type="datetime-local" class="item-input in3">
+            <input type="datetime-local" class="item-input in3"  v-model="Employees.DateOfBirth">
           </div>
           <div class="input_item item4">
               <label class="item-label label3 gender">Giới tính</label>
@@ -52,7 +52,7 @@
           </div>
           <div class="input_item item2">
             <label class="item-label">Số CMND</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal v-model="Employees.IdentityNumber"></m-input-nomal>
           </div>
           <div class="input_item item3">
               <label class="item-label">Ngày cấp</label>
@@ -63,23 +63,23 @@
       <div class="popup_item input4">
         <div class="input_item item1">
             <label class="item-label">Chức danh</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal v-model="Employees.PositionName"></m-input-nomal>
           </div>
         <div class="input_item item2">
             <label class="item-label">Nơi cấp</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal ></m-input-nomal>
           </div>  
       </div>
       <div class="popup_item input5">
         <div class="input_item item1">
             <label class="item-label">Địa chỉ</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal ></m-input-nomal>
           </div>
       </div>
       <div class="popup_item input6">
         <div class="input_item item1">
             <label class="item-label">ĐT di động</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal ></m-input-nomal>
           </div>
           <div class="input_item item">
             <label class="item-label">ĐT cố định</label>
@@ -93,15 +93,15 @@
       <div class="popup_item input6">
         <div class="input_item item1">
             <label class="item-label">Tài khoản ngân hàng</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal v-model="Employees.AccountBank"></m-input-nomal>
           </div>
           <div class="input_item item">
             <label class="item-label">Tên ngân hàng</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal v-model="Employees.NameBank"></m-input-nomal>
           </div>
           <div class="input_item item">
             <label class="item-label">Chi nhánh</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal v-model="Employees.BranchBank"></m-input-nomal>
           </div>
       </div>
       <div class="popup_item input8">
@@ -133,6 +133,21 @@ export default {
     MInputNomal,
     MInputRadio,
     MButton1
+  },
+  props:{
+    employeesSelected: Object
+  },
+  created(){
+    if(this.employeesSelected){
+        this.Employees = {...this.employeesSelected}
+        
+    }
+    console.log(this.employeesSelected)
+  },
+  data(){
+    return{
+      Employees:{}
+    }
   }
   
 };
