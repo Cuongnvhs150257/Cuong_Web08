@@ -90,6 +90,15 @@ export default {
     bottom: 0;
     background-color: rgba(12, 12, 12, 0.6);
 }
+
+@media (max-width: 1200px) {
+    .sidebar{
+    width: 50px;
+    
+    }.content{
+        width: calc(100% - 50px);
+    }
+}
 </style>
 
 

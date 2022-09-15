@@ -101,7 +101,6 @@
     background-repeat: no-repeat;
     background-size: 100px;
     background-position: 16px center;
-    
 }
 .sidebar-menu{
     width: 200px;
@@ -224,13 +223,27 @@
     background-repeat: no-repeat;
     background-color: #041434;
 }
+@media (max-width: 1200px) {
+    .sidebar-logo{
+    display: none;
+    }.sidebar-btn-left{
+        margin-left: 10px;
 
+    }.sidebar-item{
+        width: 50px;
+    }.sidebar-item-laber{
+        display: none;
+    }.sidebar-item-icon{
+        margin-right: 0;
+    }
+
+}
 
 </style>
 <script>
 export default {
     setup() {
         
-    },
+    }
 }
 </script>

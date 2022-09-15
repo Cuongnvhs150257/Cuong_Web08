@@ -8,6 +8,7 @@
         border: 1px solid black;
         margin-top: 5px;
         outline: none;
+        padding-left: 10px; 
     }
     .item-input:focus{
         border: 2px solid #019160;

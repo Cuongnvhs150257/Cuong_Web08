@@ -55,7 +55,7 @@
             <m-input-nomal v-model="Employees.IdentityNumber"></m-input-nomal>
           </div>
           <div class="input_item item3">
-              <label class="item-label">Ngày cấp</label>
+              <label class="item-label l3">Ngày cấp</label>
               <input type="datetime-local" class="item-input in3">
           </div>
           
@@ -67,27 +67,27 @@
           </div>
         <div class="input_item item2">
             <label class="item-label">Nơi cấp</label>
-            <m-input-nomal ></m-input-nomal>
+            <m-input-nomal v-model="Employees.IdentityPlace"></m-input-nomal>
           </div>  
       </div>
       <div class="popup_item input5">
         <div class="input_item item1">
             <label class="item-label">Địa chỉ</label>
-            <m-input-nomal ></m-input-nomal>
+            <m-input-nomal v-model="Employees.Address"></m-input-nomal>
           </div>
       </div>
       <div class="popup_item input6">
         <div class="input_item item1">
             <label class="item-label">ĐT di động</label>
-            <m-input-nomal ></m-input-nomal>
+            <m-input-nomal v-model="Employees.PhoneNumber"></m-input-nomal>
           </div>
           <div class="input_item item">
             <label class="item-label">ĐT cố định</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal v-model="Employees.PersonalTaxCode"></m-input-nomal>
           </div>
           <div class="input_item item">
             <label class="item-label">Email</label>
-            <m-input-nomal></m-input-nomal>
+            <m-input-nomal v-model="Employees.Email"></m-input-nomal>
           </div>
       </div>
       <div class="popup_item input6">
@@ -236,12 +236,12 @@ export default {
 .item-labelsao{
   color: red;
 }.input_item.item1{
-  width: 150px;
+  width: 130px;
   margin-left: 25px;
-  margin-right: 5px;
+  margin-right: 15px;
 
 }.input_item.item2{
-  width: 230px;
+  width: 235px;
 }
 .input_item.item3{
   margin-left: 30px;
@@ -254,8 +254,13 @@ export default {
   height: 28px;
   width: 150px;
   margin-top: 5px;
-}.item-label.label3.gender{
   margin-left: 10px;
+
+}.item-label.label3{
+  margin-left: 10px;
+
+}.item-label.label3.gender{
+  margin-left: 30px;
 }
 .input-radio{
   width: 100%;
@@ -263,15 +268,15 @@ export default {
   display: flex;
   position: absolute;
   top: 40%;
-
+  margin-left: 20px;
 }
 
 .popup_item.input3 .input_item.item1 {
-  width: 395px;
+  width: 390px;
   height: 73px;
 }
 .input_item.item1 select{
-  width: 395px;
+  width: 398px;
   height: 31px;
   margin-top: 5px;
   border: 1px solid #bbbbbb;
@@ -280,16 +285,21 @@ export default {
   outline: none;
 }
 .popup_item.input3 .input_item.item2{
-  width: 230px;
+  width: 225px;
   height: 73px;
   margin-left: 23px;
 }
 .popup_item.input3 .input_item.item3{
   margin-left: 10px;
-}.popup_item.input4 .input_item.item1{
-  width: 395px;
+
+}.item-label.l3{
+  margin-left: 10px;
+}
+
+.popup_item.input4 .input_item.item1{
+  width: 388px;
   height: 73px;
-  margin-right: 20px;
+  margin-right: 35px;
 }
 .popup_item.input4 .input_item.item2{
   width: 395px;
@@ -298,18 +308,18 @@ export default {
   margin-top: 10px;
 }
 .popup_item.input5 .input_item.item1{
-  width: 815px;
+  width: 825px;
   height: 73px;
 }
 .popup_item.input6 .input_item.item1{
-  width: 200px;
+  width: 190px;
   height: 73px;
-  margin-right: 0;
+  margin-right: 0px;
 }
 .popup_item.input6 .input_item.item{
-  width: 200px;
+  width: 190px;
   height: 73px;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 .popup_input8_border{
   margin-top: 30px;
