@@ -269,6 +269,9 @@ export default {
   width: 25px;
   height: 30px;
   margin-left: 10px;
+}.checkbox-1:checked{
+    accent-color: #50B83C;
+    color: #fff;
 }
 .ask-icon {
   background-image: var(--icon);
@@ -386,7 +389,7 @@ export default {
   margin-left: 25px;
   width: 93%;
   height: 70px;
-  border-top: 1px solid black;
+  border-top: 1px solid #bbbbbb;
 }
 .btn_input8_right {
   height: 36px;

@@ -7,5 +7,8 @@
         height: 18px;
         margin: 0 10px;
     }
+    .item4-input:checked{
+        accent-color: #50B83C;
+    }
 
 </style>
