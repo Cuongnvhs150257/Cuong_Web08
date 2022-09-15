@@ -33,7 +33,7 @@
         <td>{{ emp.AccountBank }}</td>
         <td>{{ emp.NameBank }}</td>
         <td>{{ emp.BranchBank }}</td>
-        <td class="tab-th-select func">
+        <td class="tab-th-select func" @click="rowDBClick(emp.EmployeeID)">
           Sửa
           <select @change="funcEmployee($event, emp.EmployeeID)">
             <option value="1">Nhân bản</option>
