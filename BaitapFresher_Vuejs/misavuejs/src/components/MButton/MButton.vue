@@ -10,7 +10,7 @@
   padding: 0 24px;
   border: none;
   text-align: center;
-  background-color: #019160;
+  background-color: #50B83C;
   color: #ffff;
   border-radius: 4px;
   cursor: pointer;

@@ -1,106 +1,128 @@
 <template>
-    <table>
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox"></th>
-                            <th >Mã nhân viên</th>
-                            <th>Tên nhân viên</th>
-                            <th>Giới tính</th>
-                            <th class="tab-th-select" >Ngày sinh</th>
-                            <th>Số CMND</th>
-                            <th>Chức danh</th>
-                            <th>Tên đơn vị</th>
-                            <th>Số tài khoản</th>
-                            <th>Tên ngân hàng</th>
-                            <th>Chi nhánh ngân hàng</th>
-                            <th class="tab-th-select">Chức năng</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="emp in employees" :key="emp.EmployeeID" @dblclick="rowDBClick(emp.EmployeeID)" >
-                            <td><input type="checkbox"></td>
-                            <td>{{emp.EmployeeCode}}</td>
-                            <td>{{emp.FullName}}</td>
-                            <td>{{emp.Gender}}</td>
-                            <td class="tab-th-select">{{emp.DateOfBirth}}</td>
-                            <td>{{emp.IdentityNumber}}</td>
-                            <td>{{emp.PositionName}}</td>
-                            <td>{{emp.DepartmentName}}</td>
-                            <td>{{emp.AccountBank}}</td>
-                            <td>{{emp.NameBank}}</td>
-                            <td>{{emp.BranchBank}}</td>
-                            <td class="tab-th-select func">Sửa
-                                <select>
-                                   <option value="1">Nhân bản</option>
-                                   <option value="2" >Xóa</option>
-                                   <option value="3">Ngưng sử dụng</option>
-                                </select>
-                            </td>
-                        </tr>
-
-                        
-                    </tbody>
-                </table>
+  <table>
+    <thead>
+      <tr>
+        <th><input type="checkbox" /></th>
+        <th>Mã nhân viên</th>
+        <th>Tên nhân viên</th>
+        <th>Giới tính</th>
+        <th class="tab-th-select">Ngày sinh</th>
+        <th>Số CMND</th>
+        <th>Chức danh</th>
+        <th>Tên đơn vị</th>
+        <th>Số tài khoản</th>
+        <th>Tên ngân hàng</th>
+        <th>Chi nhánh ngân hàng</th>
+        <th class="tab-th-select">Chức năng</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="emp in employees"
+        :key="emp.EmployeeID"
+        @dblclick="rowDBClick(emp.EmployeeID)"
+      >
+        <td><input type="checkbox" /></td>
+        <td>{{ emp.EmployeeCode }}</td>
+        <td>{{ emp.FullName }}</td>
+        <td>{{ emp.Gender }}</td>
+        <td class="tab-th-select">{{ emp.DateOfBirth }}</td>
+        <td>{{ emp.IdentityNumber }}</td>
+        <td>{{ emp.PositionName }}</td>
+        <td>{{ emp.DepartmentName }}</td>
+        <td>{{ emp.AccountBank }}</td>
+        <td>{{ emp.NameBank }}</td>
+        <td>{{ emp.BranchBank }}</td>
+        <td class="tab-th-select func">
+          Sửa
+          <select @change="funcEmployee($event, emp.EmployeeID)">
+            <option value="1">Nhân bản</option>
+            <option value="2">Xóa</option>
+            <option value="3">Ngưng sử dụng</option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
 export default {
-    name: "EmployeeList",
-    props:{
-        
-    },
-    emit: ["custom-open-dbclick"],
-    methods:{
-        
-        rowDBClick(EmployeeID) {
-            //this.empSelected = employees;
+  name: "EmployeeList",
+  props: {},
+  emit: ["custom-open-dbclick"],
+  methods: {
+    rowDBClick(EmployeeID) {
+      //this.empSelected = employees;
 
-            this.$emit("custom-open-dbclick",EmployeeID);
-            this.detailFormMode = 2;
-        },
+      this.$emit("custom-open-dbclick", EmployeeID);
+      this.detailFormMode = 2;
     },
-    created(){
-        fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees", {method:"GET"})
-        .then(res => res.json())
-        .then(data =>{
-            this.employees = data;
-            console.log(data);
+    async funcEmployee(event, id) {
+      var checkDelete = event.target.value;
+      if (checkDelete == 2) {
+        confirm("Bạn có muốn xóa Nhân viên này không" + id);
+          if(confirm == true){
+              await fetch(
+            "https://63215c8cfd698dfa29f620da.mockapi.io/Employees/" + id,
+            { method: "DELETE" }
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              this.loadData();
+              console.log(data);
+            })
+            .catch((res) => {
+              console.log(res);
+            });
+          }
+        
+      }
+      console.log(checkDelete);
+    },
+    loadData() {
+      fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees", {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          this.employees = data;
+          console.log(data);
         })
-        .catch(res =>{
-            console.log(res);
-        })
+        .catch((res) => {
+          console.log(res);
+        });
     },
-    data(){
-        return{
-            employees:[],
-            empSelected: {},
-            detailFormMode:1
-        }
-    },
-    
-    
-}
+  },
+  created() {
+      this.loadData();
+  },
+  data() {
+    return {
+      employees: [],
+      empSelected: {},
+      detailFormMode: 1,
+    };
+  },
+};
 </script>
 
 <style>
-    .content-table{
-    height: calc(100% - 115px);
-    width: calc(100% - 30px);
-    background-color: #fff;
-    border: 10px solid #fff;
-    padding-left: 10px;
-    overflow: scroll;
-
+.content-table {
+  height: calc(100% - 115px);
+  width: calc(100% - 30px);
+  background-color: #fff;
+  border: 10px solid #fff;
+  padding-left: 10px;
+  overflow: scroll;
 }
 ::-webkit-scrollbar {
   height: 8px;
   width: 8px;
-  
 }
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 4px;
-  
 }
 
 /* Handle */
@@ -112,39 +134,42 @@ export default {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #7C869C;
+  background: #7c869c;
 }
-.content-table table{
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: unset;
-    font-size: 13px;
-    
+.content-table table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: unset;
+  font-size: 13px;
 }
 
-.content-table tr, .content-table th, .content-table td{
-    border-bottom: 1px solid rgb(216, 211, 211);
-    border-right: 1px solid rgb(216, 211, 211);
-    height: 35px;
-   
+.content-table tr,
+.content-table th,
+.content-table td {
+  border-bottom: 1px solid rgb(216, 211, 211);
+  border-right: 1px solid rgb(216, 211, 211);
+  height: 35px;
 }
-.content-table tr td, .content-table tr th{
-    padding-left: 5px;
-    text-align: left;
+.content-table tr td,
+.content-table tr th {
+  padding-left: 5px;
+  text-align: left;
 }
-.tab-th-select{
-    text-align: center !important;
+.tab-th-select {
+  text-align: center !important;
 }
-.content-table thead{
-    background-color: rgb(236,238,241);
-}.tab-th-select select{
-    width: 20px;
-    height: 15px;
-    border: none;
-    outline: none;
-    color: blue;
-}.tab-th-select.func{
-    color: blue;
+.content-table thead {
+  background-color: rgb(236, 238, 241);
+}
+.tab-th-select select {
+  width: 20px;
+  height: 15px;
+  border: none;
+  outline: none;
+  color: blue;
+}
+.tab-th-select.func {
+  color: blue;
 }
 </style>
 
