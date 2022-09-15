@@ -29,7 +29,7 @@
     <!-- <Teleport to="#page-employee">
     </Teleport> -->
     
-      <MPopup v-if="isShow" @custom-handle-click="closePopup" :employeesSelected="Employees"/>
+      <MPopup v-if="isShow" @custom-handle-click="closePopup" :employeesSelected="Employees" />
   </div>
 </template>
 
@@ -57,11 +57,13 @@ export default {
             
         })
         .catch(res =>{
+            
             console.log(res);
         })
         
 
       }else{
+        Employees.value = {},
         isShow.value = true;
       }
       

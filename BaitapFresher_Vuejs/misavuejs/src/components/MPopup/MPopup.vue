@@ -108,7 +108,7 @@
         <div class="popup_input8_border">
           <div class="input_item_right">
             <m-button-1></m-button-1>
-            <button class="btn_input8_right">Cất</button>
+            <button class="btn_input8_right" @click="btnSaveonClick" :formMode="chageFormMode" >Cất</button>
           </div>
           <div class="input_item_left">
             <button class="btn_input8_left" @click="handleClosePopup">Hủy</button>
@@ -128,6 +128,33 @@ export default {
     handleClosePopup() {
       this.$emit("custom-handle-click");
     },
+    btnSaveonClick(){
+      var method = "POST";
+      var url = "https://63215c8cfd698dfa29f620da.mockapi.io/Employees";
+
+      //Cat du lieu
+      if(this.Employees.EmployeeID){
+          method = "PUT"
+          url = url + `/${this.Employees.EmployeeID}`;
+
+
+      }fetch(url, {method: method, 
+      
+      headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(this.Employees)})
+      .then(res => res.json())
+      .then(res =>{
+          alert("Thanh cong")
+          console.log(res);
+          this.$emit("custom-handle-click");
+      })
+      .catch(res =>{
+        alert("Loi")
+        console.log(res);
+      })
+    }
   },
   components: {
     MInputNomal,
@@ -135,7 +162,11 @@ export default {
     MButton1
   },
   props:{
-    employeesSelected: Object
+    employeesSelected: Object,
+    formMode:{
+      type: Number,
+      default: 1
+    }
   },
   created(){
     if(this.employeesSelected){

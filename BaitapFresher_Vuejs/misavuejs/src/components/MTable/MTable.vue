@@ -17,7 +17,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="emp in employees" :key="emp.EmployeeID" @dblclick="rowDBClick(emp.EmployeeID)">
+                        <tr v-for="emp in employees" :key="emp.EmployeeID" @dblclick="rowDBClick(emp.EmployeeID)" >
                             <td><input type="checkbox"></td>
                             <td>{{emp.EmployeeCode}}</td>
                             <td>{{emp.FullName}}</td>
@@ -29,10 +29,10 @@
                             <td>{{emp.AccountBank}}</td>
                             <td>{{emp.NameBank}}</td>
                             <td>{{emp.BranchBank}}</td>
-                            <td class="tab-th-select">Sửa
+                            <td class="tab-th-select func">Sửa
                                 <select>
                                    <option value="1">Nhân bản</option>
-                                   <option value="2">Xóa</option>
+                                   <option value="2" >Xóa</option>
                                    <option value="3">Ngưng sử dụng</option>
                                 </select>
                             </td>
@@ -54,7 +54,9 @@ export default {
         
         rowDBClick(EmployeeID) {
             //this.empSelected = employees;
+
             this.$emit("custom-open-dbclick",EmployeeID);
+            this.detailFormMode = 2;
         },
     },
     created(){
@@ -71,9 +73,8 @@ export default {
     data(){
         return{
             employees:[],
-            empSelected: {
-
-            }
+            empSelected: {},
+            detailFormMode:1
         }
     },
     
@@ -141,7 +142,9 @@ export default {
     height: 15px;
     border: none;
     outline: none;
+    color: blue;
+}.tab-th-select.func{
+    color: blue;
 }
-
 </style>
 
