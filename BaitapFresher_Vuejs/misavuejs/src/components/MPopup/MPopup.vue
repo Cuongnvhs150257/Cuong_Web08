@@ -144,13 +144,12 @@ export default {
     btnSaveonClick() {
       var method = "POST";
       var url = "https://63215c8cfd698dfa29f620da.mockapi.io/Employees";
-      var isNull = 1;
+      
       
       //validate du lieu
       if (this.Employees.EmployeeCode || this.Employees.EmployeeName) {
-        isNull = 2;
-        this.$emit("checkNull", isNull);
-
+        
+       
         //Cat du lieu
         if (this.Employees.EmployeeID) {
           method = "PUT";
@@ -176,9 +175,9 @@ export default {
             console.log(res);
           });
       }else{
-        this.$emit("checkNull", isNull);
+        
         alert("Thiếu dữ liệu");
-        console.log(isNull);
+        
       }
     },
 

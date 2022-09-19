@@ -19,7 +19,7 @@
             class="toolbar-input"
             placeholder="Tìm theo mã, tên nhân viên"
           />
-          <button type="button" class="toolbar-load"></button>
+          <button type="button" class="toolbar-load" @click="loadData"></button>
         </div>
       </div>
       <MTable @custom-open-dbclick="openPopup" :EmployeesLoad="EmployeesTable" @data-load-delete="loadData"/>
@@ -94,6 +94,8 @@ export default {
         });
     }
     loadData()
+
+    
     return {
       isShow,
       LoadingShow,

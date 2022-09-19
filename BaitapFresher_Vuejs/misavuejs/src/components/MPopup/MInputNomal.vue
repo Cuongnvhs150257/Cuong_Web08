@@ -1,5 +1,5 @@
 <template>
-    <input type="text" class="item-input" :class="{'item-input-red':!inValue}" :value="modelValue" @input="handleInput" @checkNull="inNull">
+    <input type="text" class="item-input" :class="{'item-input-red':!inValue}" :value="modelValue" @input="handleInput" >
 </template>
 <style>
     .item-input{
@@ -19,24 +19,24 @@
 </style>
 
 <script>
+
 export default {
     
     props:["modelValue"],
-    methods:{
-        handleInput(event){
-           this.$emit("update:modelValue",event.target.value);
-           
-        },
-        inNull(){
-            this.inValid = false;
-        }
-    },
-    data(){
-        return{
-            inValid: true
-        }
-    }
+    
+    setup(props, { emit }){
         
+        function handleInput(event){
+           emit("update:modelValue",event.target.value);
+           
+        }
+        
+        return {
+        handleInput,
+        
+    };
+    }
+
     
 }
 </script>
