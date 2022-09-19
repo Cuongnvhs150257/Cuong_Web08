@@ -22,14 +22,16 @@
           <button type="button" class="toolbar-load"></button>
         </div>
       </div>
-      <MTable @custom-open-dbclick="openPopup" />
+      <MTable @custom-open-dbclick="openPopup" :EmployeesLoad="EmployeesTable" @data-load-delete="loadData"/>
       <the-padding></the-padding>
     </div>
 
     <!-- <Teleport to="#page-employee">
     </Teleport> -->
     
-      <MPopup v-if="isShow" @custom-handle-click="closePopup" :employeesSelected="Employees" />
+      <MPopup v-if="isShow" @custom-handle-click="closePopup" :employeesSelected="Employees" @data-load="loadData" />
+
+      <MLoading v-if="LoadingShow"  />
   </div>
 </template>
 
@@ -41,16 +43,21 @@ import ThePadding from "../ThePadding/ThePadding.vue";
 import { ref } from "vue";
 
 import MPopup from "../MPopup/MPopup.vue";
+import MLoading from "../MLoading/MLoading.vue"
 export default {
   setup() {
     const isShow = ref(false)
     const Employees = ref(null)
+    const EmployeesTable = ref(null)
+    const LoadingShow = ref(false)
     async function openPopup(id) {
       if(id){
+        LoadingShow.value = true;
         await fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees/" + id, {method:"GET"})
         .then(res => res.json())
         .then(data =>{
             //this.employees = data;
+            LoadingShow.value = false;
             Employees.value = data
             isShow.value = true;
             console.log(Employees.value);
@@ -71,14 +78,35 @@ export default {
     function closePopup() {
       isShow.value = false;
     }
+    function loadData() {
+      LoadingShow.value = true;
+      fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees", {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          EmployeesTable.value = data;
+          LoadingShow.value = false;
+          console.log(data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    }
+    loadData()
     return {
       isShow,
+      LoadingShow,
       openPopup,
       closePopup,
-      Employees
+      Employees,
+      EmployeesTable,
+      loadData
     };
   },
-  components: { MButton, MTable, ThePadding, MPopup },
+  components: { MButton, MTable, ThePadding, MPopup, MLoading},
+
+
 };
 </script>
 

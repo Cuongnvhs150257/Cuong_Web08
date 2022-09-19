@@ -1,5 +1,6 @@
 <template>
-  <table>
+  <div>
+    <table>
     <thead>
       <tr>
         <th><input type="checkbox" /></th>
@@ -18,7 +19,7 @@
     </thead>
     <tbody>
       <tr
-        v-for="emp in employees"
+        v-for="emp in EmployeesLoad"
         :key="emp.EmployeeID"
         @dblclick="rowDBClick(emp.EmployeeID)"
       >
@@ -33,8 +34,8 @@
         <td>{{ emp.AccountBank }}</td>
         <td>{{ emp.NameBank }}</td>
         <td>{{ emp.BranchBank }}</td>
-        <td class="tab-th-select func" @click="rowDBClick(emp.EmployeeID)">
-          Sửa
+        <td class="tab-th-select func" >
+          <label @click="rowDBClick(emp.EmployeeID)">Sửa</label>
           <select @change="funcEmployee($event, emp.EmployeeID)">
             <option value="1">Nhân bản</option>
             <option value="2">Xóa</option>
@@ -44,13 +45,23 @@
       </tr>
     </tbody>
   </table>
+  <div class="loading">
+    
+  </div>
+  </div>
+  
 </template>
 
 <script>
+
+
+
 export default {
   name: "EmployeeList",
-  props: {},
-  emit: ["custom-open-dbclick"],
+  props: {
+    EmployeesLoad: Object,
+  },
+  
   methods: {
     rowDBClick(EmployeeID) {
       //this.empSelected = employees;
@@ -62,14 +73,14 @@ export default {
       var checkDelete = event.target.value;
       if (checkDelete == 2) {
         confirm("Bạn có muốn xóa Nhân viên này không" + id);
-          if(confirm == true){
+          {
               await fetch(
             "https://63215c8cfd698dfa29f620da.mockapi.io/Employees/" + id,
             { method: "DELETE" }
           )
             .then((res) => res.json())
             .then((data) => {
-              this.loadData();
+              this.$emit("data-load-delete");
               console.log(data);
             })
             .catch((res) => {
@@ -80,12 +91,16 @@ export default {
       }
       console.log(checkDelete);
     },
+    
+    /*
     loadData() {
+      this.LoadingShow = true
       fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees", {
         method: "GET",
       })
         .then((res) => res.json())
         .then((data) => {
+          this.LoadingShow = false
           this.employees = data;
           console.log(data);
         })
@@ -93,21 +108,29 @@ export default {
           console.log(res);
         });
     },
+    */
   },
   created() {
-      this.loadData();
+    
+    
   },
   data() {
     return {
       employees: [],
       empSelected: {},
       detailFormMode: 1,
+      
+     
     };
   },
+  components: {
+    
+  }
 };
 </script>
 
 <style>
+
 .content-table {
   height: calc(100% - 115px);
   width: calc(100% - 30px);

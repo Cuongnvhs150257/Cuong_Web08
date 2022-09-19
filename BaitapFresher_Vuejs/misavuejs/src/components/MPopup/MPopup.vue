@@ -116,7 +116,7 @@
             <button
               class="btn_input8_right"
               @click="btnSaveonClick"
-              :formMode="chageFormMode"
+              
             >
               Cất
             </button>
@@ -136,7 +136,7 @@ import MInputNomal from "./MInputNomal.vue";
 import MInputRadio from "./MInputRadio.vue";
 import MButton1 from "./MButton1.vue";
 export default {
-  emit: ["custom-handle-click"],
+ 
   methods: {
     handleClosePopup() {
       this.$emit("custom-handle-click");
@@ -169,6 +169,7 @@ export default {
             alert("Thanh cong");
             console.log(res);
             this.$emit("custom-handle-click");
+            this.$emit("data-load");
           })
           .catch((res) => {
             alert("Loi");
