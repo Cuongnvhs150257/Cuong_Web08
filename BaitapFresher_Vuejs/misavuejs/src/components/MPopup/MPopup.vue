@@ -22,10 +22,11 @@
         </div>
       </div>
       <div class="popup_item input2">
-        <div class="input_item item1">
+        <div class="input_item item1" >
           <label class="item-label">Mã</label>
           <label class="item-labelsao"> *</label>
-          <MInputNomal  :class="{'item-input-red':!inValue}" v-model="Employees.EmployeeCode"/>
+          
+          <MInputNomal :class="{'item-input-red':!inValue}" v-model="Employees.EmployeeCode" />
         </div>
         <div class="input_item item2">
           <label class="item-label">Tên</label>
@@ -58,7 +59,7 @@
         </div>
         <div class="input_item item2">
           <label class="item-label">Số CMND</label>
-          <m-input-nomal v-model="Employees.IdentityNumber"></m-input-nomal>
+          <m-input-nomal :toolTip="'Số chứng minh nhân dân'" v-model="Employees.IdentityNumber"></m-input-nomal>
         </div>
         <div class="input_item item3">
           <label class="item-label l3">Ngày cấp</label>
@@ -84,11 +85,11 @@
       <div class="popup_item input6">
         <div class="input_item item1">
           <label class="item-label">ĐT di động</label>
-          <m-input-nomal v-model="Employees.PhoneNumber"></m-input-nomal>
+          <m-input-nomal :toolTip="'Điện thoại di động'" v-model="Employees.PhoneNumber"></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">ĐT cố định</label>
-          <m-input-nomal v-model="Employees.PersonalTaxCode"></m-input-nomal>
+          <m-input-nomal :toolTip="'Điện thoại cố định'" v-model="Employees.PersonalTaxCode"></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">Email</label>
@@ -112,7 +113,7 @@
       <div class="popup_item input8">
         <div class="popup_input8_border">
           <div class="input_item_right">
-            <m-button-1 @click="btnSaveonClick" ></m-button-1>
+            <m-button-1 @click="btnSaveonClick" :toolTip="'Điện thoại cố định'"></m-button-1>
             <button
               class="btn_input8_right"
               @click="btnSaveonClick"
@@ -125,6 +126,9 @@
             <button class="btn_input8_left" @click="handleClosePopup">
               Hủy
             </button>
+            <span v-if="toolTip" class="tool-tip">
+              {{ toolTip }}
+            </span>
           </div>
         </div>
       </div>
@@ -433,5 +437,6 @@ export default {
 }.item-input-red{
         border: 1px solid #ff0000;
     }
+  
 </style>
 
