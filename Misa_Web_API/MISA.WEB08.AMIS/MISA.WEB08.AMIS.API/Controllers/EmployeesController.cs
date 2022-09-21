@@ -4,11 +4,11 @@ using MISA.WEB08.AMIS.API.Entities;
 
 namespace MISA.WEB08.AMIS.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-
+        #region API GET Employees
         /// <summary>
         /// Lấy danh sách nhân viên
         /// </summary>
@@ -46,6 +46,9 @@ namespace MISA.WEB08.AMIS.API.Controllers
             };
         }
 
+        #endregion
+
+        #region GET Employee By ID
 
         /// <summary>
         /// API lấy thông tin một nhân viên bằng id
@@ -53,6 +56,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// <param name="employeeid">ID nhân viên</param>
         /// <returns>thông tin một nhân viên</returns>
         /// 
+
 
         [HttpGet("{employeeid}")]
         public Employee GetEmployeeByID([FromBody] Guid employeeid)
@@ -67,6 +71,11 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
             };
         }
+
+        #endregion
+
+        #region API Filter 
+
         /*
         [HttpGet("filter")]
         public PagingData FilterEmployees(
@@ -87,6 +96,10 @@ namespace MISA.WEB08.AMIS.API.Controllers
         }
         */
 
+        #endregion
+
+        #region API POST Employee
+
         [HttpPost("")]
 
         public IActionResult InsertEmployee([FromBody] Employee employee)
@@ -94,11 +107,20 @@ namespace MISA.WEB08.AMIS.API.Controllers
             return StatusCode(StatusCodes.Status201Created, Guid.NewGuid());
         }
 
+        #endregion
+
+        #region API PUT Employee
+
+
         [HttpPut("{employeeid}")]
         public IActionResult UpdateEmployee([FromRoute] Guid employeeid, [FromBody] Employee employee)
         {
             return StatusCode(StatusCodes.Status200OK, employeeid);
         }
+
+        #endregion
+
+        #region API Detele Employee by ID
 
         [HttpDelete("{employeeid}")]
         public IActionResult DeleteEmployee([FromRoute] Guid employeeid)
@@ -106,9 +128,15 @@ namespace MISA.WEB08.AMIS.API.Controllers
             return StatusCode(StatusCodes.Status200OK, employeeid);
         }
 
+        #endregion
+
+        #region API Delete All Employee
+
         [HttpPost("batch-delete")]
         public IActionResult DeleteMultipleEmployee([FromBody] List<string> employeeid){
             return StatusCode(StatusCodes.Status200OK);
         }
+
+        #endregion
     }
 }

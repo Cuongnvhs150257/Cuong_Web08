@@ -1,6 +1,6 @@
 <template>
-  <button type="button" class="content-top-btn" @click="handleOpenPopup">
-    Thêm nhân viên
+  <button type="button" class="content-top-btn">
+    Đồng ý
   </button>
 </template>
 
@@ -10,7 +10,7 @@
   padding: 0 24px;
   border: none;
   text-align: center;
-  background-color: #50B83C;
+  background-color: #29A21A;
   color: #ffff;
   border-radius: 4px;
   cursor: pointer;
@@ -26,11 +26,7 @@
 export default {
   emit: ["custom-handle-click"],
   methods: {
-
-    //hàm mở popup thêm nhân viên
-    handleOpenPopup() {
-      this.$emit("custom-handle-click");
-    },
+    
   },
 };
 </script>

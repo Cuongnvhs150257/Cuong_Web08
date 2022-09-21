@@ -1,5 +1,5 @@
 <template>
-    <input type="text" class="item-input" :class="{'item-input-red':!inValue}" :value="modelValue" @input="handleInput" >
+    <input type="text" class="item-input" :value="modelValue" @input="handleInput" >
 </template>
 <style>
     .item-input{
@@ -9,8 +9,6 @@
         margin-top: 5px;
         outline: none;
         padding-left: 10px; 
-    }.item-input-red{
-        border: 1px solid #ff0000;
     }
     .item-input:focus{
         border: 2px solid #019160;
@@ -25,7 +23,7 @@ export default {
     props:["modelValue"],
     
     setup(props, { emit }){
-        
+        //hàm lưu giá trị nhập
         function handleInput(event){
            emit("update:modelValue",event.target.value);
            

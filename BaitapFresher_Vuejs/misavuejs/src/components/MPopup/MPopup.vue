@@ -25,12 +25,12 @@
         <div class="input_item item1">
           <label class="item-label">Mã</label>
           <label class="item-labelsao"> *</label>
-          <m-input-nomal v-model="Employees.EmployeeCode"></m-input-nomal>
+          <MInputNomal  :class="{'item-input-red':!inValue}" v-model="Employees.EmployeeCode"/>
         </div>
         <div class="input_item item2">
           <label class="item-label">Tên</label>
           <label class="item-labelsao"> *</label>
-          <m-input-nomal v-model="Employees.FullName"></m-input-nomal>
+          <MInputNomal :class="{'item-input-red':!inValue}" v-model="Employees.FullName"/>
         </div>
         <div class="input_item item3">
           <label class="item-label label3">Ngày sinh</label>
@@ -129,18 +129,22 @@
         </div>
       </div>
     </div>
+    
   </div>
 </template>
 <script>
 import MInputNomal from "./MInputNomal.vue";
 import MInputRadio from "./MInputRadio.vue";
 import MButton1 from "./MButton1.vue";
+
 export default {
  
   methods: {
+    //hàm đóng popup thêm nhân viên
     handleClosePopup() {
       this.$emit("custom-handle-click");
     },
+    //hàm sửa hoặc thêm nhân viên mới
     btnSaveonClick() {
       var method = "POST";
       var url = "https://63215c8cfd698dfa29f620da.mockapi.io/Employees";
@@ -149,8 +153,8 @@ export default {
       //validate du lieu
       if (this.Employees.EmployeeCode || this.Employees.EmployeeName) {
         
-       
-        //Cat du lieu
+        
+        //Hàm lưu dữ liệu nhân viên vừa sửa
         if (this.Employees.EmployeeID) {
           method = "PUT";
           url = url + `/${this.Employees.EmployeeID}`;
@@ -165,9 +169,7 @@ export default {
         })
           .then((res) => res.json())
           .then((res) => {
-            alert("Thanh cong");
             console.log(res);
-            this.$emit("custom-handle-click");
             this.$emit("data-load");
           })
           .catch((res) => {
@@ -175,7 +177,7 @@ export default {
             console.log(res);
           });
       }else{
-        
+        this.inValue = false;
         alert("Thiếu dữ liệu");
         
       }
@@ -194,6 +196,7 @@ export default {
       default: 1,
     },
     
+    
   },
   created() {
     if (this.employeesSelected) {
@@ -204,6 +207,10 @@ export default {
   data() {
     return {
       Employees: {},
+      inValue:{
+      type: Boolean,
+      default: true
+    }
       
     };
   },
@@ -211,7 +218,7 @@ export default {
 </script>
 <style>
 :root {
-  --icon: url("http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg");
+  --icon: url("../../assets/Resource/img/Sprites.64af8f61.svg");
 }
 .Popup-form {
   width: 900px;
@@ -423,6 +430,8 @@ export default {
 }
 .item-input {
   border: 1px solid #bbbbbb;
-}
+}.item-input-red{
+        border: 1px solid #ff0000;
+    }
 </style>
 

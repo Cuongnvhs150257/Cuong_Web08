@@ -3,7 +3,7 @@
     <table>
     <thead>
       <tr>
-        <th><input type="checkbox" /></th>
+        <th><input type="checkbox" class="tab-checkbox" /></th>
         <th>Mã nhân viên</th>
         <th>Tên nhân viên</th>
         <th>Giới tính</th>
@@ -23,7 +23,7 @@
         :key="emp.EmployeeID"
         @dblclick="rowDBClick(emp.EmployeeID)"
       >
-        <td><input type="checkbox" /></td>
+        <td><input type="checkbox" class="tab-checkbox"/></td>
         <td>{{ emp.EmployeeCode }}</td>
         <td>{{ emp.FullName }}</td>
         <td>{{ emp.Gender }}</td>
@@ -36,7 +36,7 @@
         <td>{{ emp.BranchBank }}</td>
         <td class="tab-th-select func" >
           <label @click="rowDBClick(emp.EmployeeID)">Sửa</label>
-          <select @change="funcEmployee($event, emp.EmployeeID)">
+          <select @change="openPopupAsk($event, emp.EmployeeID)">
             <option value="1">Nhân bản</option>
             <option value="2">Xóa</option>
             <option value="3">Ngưng sử dụng</option>
@@ -45,8 +45,8 @@
       </tr>
     </tbody>
   </table>
-  <div class="loading">
-    
+  <div class="mpopup-ask">
+    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteEmployee"/>
   </div>
   </div>
   
@@ -54,7 +54,7 @@
 
 <script>
 
-
+import MPopupAsk from '../MPopupAsk/MPopupAsk.vue'
 
 export default {
   name: "EmployeeList",
@@ -63,52 +63,62 @@ export default {
   },
   
   methods: {
+
+    //hàm hiện thông tin trên popup khi nhấn vào Sửa
+
     rowDBClick(EmployeeID) {
       //this.empSelected = employees;
-
+      
       this.$emit("custom-open-dbclick", EmployeeID);
       this.detailFormMode = 2;
     },
-    async funcEmployee(event, id) {
-      var checkDelete = event.target.value;
-      if (checkDelete == 2) {
-        confirm("Bạn có muốn xóa Nhân viên này không" + id);
+    
+    //hàm mở popup hỏi người dùng có xóa không
+
+    openPopupAsk(event, id){
+        this.checkDelete = event.target.value; //lưu lựa chọn sửa 
+        if (this.checkDelete == 2){
+            this.isShowAskDelete = true; //hiện popup hỏi người dùng
+            this.idEmployeeDelete = id; //lưu id employee cần xóa
+        }
+    },
+
+    //Hàm đóng popup hỏi người dùng có xóa không
+
+    ClosePopupAsk(){
+       this.isShowAskDelete = false; //đóng popup hỏi người dùng
+       this.popupAskCance = false; //lưu trạng thái đóng popup hỏi người dùng
+    },
+
+    //Hàm xóa employee theo id
+
+    async deleteEmployee() {
+
+          var id = this.idEmployeeDelete; //lấy employeeid đã lưu 
+          if(this.popupAskCance == true){ //check xem người dùng có ấn hủy hay không
           {
+            this.ClosePopupAsk(); //đóng popup hỏi người dùng
               await fetch(
             "https://63215c8cfd698dfa29f620da.mockapi.io/Employees/" + id,
             { method: "DELETE" }
           )
             .then((res) => res.json())
             .then((data) => {
-              this.$emit("data-load-delete");
+              this.$emit("data-load-delete");  //load lại data
+              
               console.log(data);
+             
             })
             .catch((res) => {
               console.log(res);
             });
           }
+          }
         
-      }
-      console.log(checkDelete);
+      
+      
     },
     
-    /*
-    loadData() {
-      this.LoadingShow = true
-      fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees", {
-        method: "GET",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          this.LoadingShow = false
-          this.employees = data;
-          console.log(data);
-        })
-        .catch((res) => {
-          console.log(res);
-        });
-    },
-    */
   },
   created() {
     
@@ -119,12 +129,16 @@ export default {
       employees: [],
       empSelected: {},
       detailFormMode: 1,
-      
+      isShowAskDelete: false,
+      popupAskCance: true,
+      idEmployeeDelete:0,
+      checkDelete: 2
+     
      
     };
   },
   components: {
-    
+    MPopupAsk
   }
 };
 </script>
@@ -193,6 +207,9 @@ export default {
 }
 .tab-th-select.func {
   color: blue;
+}.tab-checkbox{
+  width: 15px;
+  height: 15px;
 }
 </style>
 

@@ -31,7 +31,10 @@
     
       <MPopup v-if="isShow" @custom-handle-click="closePopup" :employeesSelected="Employees" @data-load="loadData" />
 
+      
       <MLoading v-if="LoadingShow"  />
+
+      
   </div>
 </template>
 
@@ -50,16 +53,20 @@ export default {
     const Employees = ref(null)
     const EmployeesTable = ref(null)
     const LoadingShow = ref(false)
+
+    //Hàm mở popup thêm nhân viên
+    //và lấy dữ liệu nhân viên theo id dể hiện trên popup
+
     async function openPopup(id) {
-      if(id){
-        LoadingShow.value = true;
+      if(id){ //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
+        LoadingShow.value = true; //hiển thị loading
         await fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees/" + id, {method:"GET"})
         .then(res => res.json())
         .then(data =>{
             //this.employees = data;
-            LoadingShow.value = false;
+            LoadingShow.value = false; //Đóng loading
             Employees.value = data
-            isShow.value = true;
+            isShow.value = true; //Hiển thị popup
             console.log(Employees.value);
             
         })
@@ -69,15 +76,17 @@ export default {
         })
         
 
-      }else{
+      }else{  //trường hợp chỉ mở popup
         Employees.value = {},
-        isShow.value = true;
+        isShow.value = true; 
       }
       
     }
+    //hàm đóng popup thêm nhân viên
     function closePopup() {
       isShow.value = false;
     }
+    //hàm load dữ liệu
     function loadData() {
       LoadingShow.value = true;
       fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees", {
@@ -114,7 +123,7 @@ export default {
 
 <style>
 :root {
-  --icon: url("http://localhost:8080/img/Sprites.64af8f61.2ff7618a.svg");
+  --icon: url("../../assets/Resource/img/Sprites.64af8f61.svg");
 }
 .content-top {
   width: 100%;
