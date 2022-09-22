@@ -105,7 +105,7 @@ export default {
             .then((res) => res.json())
             .then((data) => {
               this.$emit("data-load-delete");  //load lại data
-              
+              this.popupAskCance = true;
               console.log(data);
              
             })
@@ -194,6 +194,7 @@ export default {
 }
 .tab-th-select {
   text-align: center !important;
+  padding: 0 !important;
 }
 .content-table thead {
   background-color: rgb(236, 238, 241);

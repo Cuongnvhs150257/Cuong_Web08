@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MISA.WEB08.AMIS.API.Entities;
+using MySqlConnector;
+using System;
 
 namespace MISA.WEB08.AMIS.API.Controllers
 {
@@ -23,27 +26,38 @@ namespace MISA.WEB08.AMIS.API.Controllers
             //Phim tat Ctrl M O = thu gọn
             //         Ctrl M L = mở ra
 
-            return new List<Employee>
+
+            //Khởi tạo kết nối với MySQl
+
+            try
             {
-                new Employee
-                {
-                    employeeid = Guid.NewGuid(),
-                    employeecode = "NV00001",
-                    fullname = "Nguyễn Văn Cương",
-                    dateofbirth = DateTime.Now,
-                    gender = Enums.Gender.Male,
 
-                },
-                new Employee
-                {
-                    employeeid = Guid.NewGuid(),
-                    employeecode = "NV00001",
-                    fullname = "Nguyễn Văn Cương",
-                    dateofbirth = DateTime.Now,
-                    gender = Enums.Gender.Male,
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.nvcuong;Uid=root;Pwd=012346789;";
+                var mysqlConnection = new MySqlConnection(connectionString);
 
-                }
-            };
+                //Chuẩn bị câu lệnh MySQL
+                //string getAllEmployeesCommand = "SELECT * FROM employee;";
+
+                //khai bao ten stored produre
+                string storeProdureName = "Proc-emp";
+
+                //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
+
+
+                //Thực hiện gọi vào DB
+                var employees = mysqlConnection.Query(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
+
+                return StatusCode(StatusCodes.Status200OK, employees);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+               
+                //return StatusCode(StatusCodes.Status500InternalServerError, "e001");
+            //Try catch exception
+
         }
 
         #endregion
@@ -133,7 +147,8 @@ namespace MISA.WEB08.AMIS.API.Controllers
         #region API Delete All Employee
 
         [HttpPost("batch-delete")]
-        public IActionResult DeleteMultipleEmployee([FromBody] List<string> employeeid){
+        public IActionResult DeleteMultipleEmployee([FromBody] List<string> employeeid)
+        {
             return StatusCode(StatusCodes.Status200OK);
         }
 

@@ -1,17 +1,16 @@
 <template>
     <div class="cover-popup">
 
-        <div class="popupask">
+        <div class="popupnoti">
             <div class="popupask-top">
-                <div class="popupask-icon icon-ask"></div>
+                <div class="popupask-icon icon-noti"></div>
                 <div class="popupask-icon-label">
-                    <label class="label-ask">Bạn có muốn xóa nhân viên này không?</label>
+                    <label class="label-ask">{{errors}}</label>
                 </div>
-                <button class="popupask-icon2 icon-cance" @click="popupaskcance"></button>
-                
+
             </div>
             <div class="popupask-bottom">
-                <MButtonAgree @click="agreedelete"/>
+                <MButtonClose @click="closeNotification"/>
             </div>
         </div>
 
@@ -19,22 +18,19 @@
 </template>
 
 <script>
-import MButtonAgree from './MButtonAgree.vue'
+import MButtonClose from './MButtonClose.vue'
 
 export default ({
-
+    props:["errors"],
     methods: {
 
-    //hàm nhấn nút hủy xóa nhân viên
-    popupaskcance(){
-        this.$emit("popup-ask-cance");
-    },
+
     //hàm đồng ý xóa nhân viên
-    agreedelete() {
-      this.$emit("agree-delete-click");
+    closeNotification() {
+      this.$emit("close-notification-click");
     },
   },
-    components: { MButtonAgree},
+    components: { MButtonClose},
 })
 </script>
 
@@ -53,8 +49,8 @@ export default ({
         bottom: 0;
         background-color: rgba(12, 12, 12, 0.3);
         z-index: 1000;
-    }.popupask{
-        width: 450px;
+    }.popupnoti{
+        width: 400px;
         height: 180px;
         position: relative;
         top: 40%;
@@ -72,13 +68,13 @@ export default ({
         margin-left: 50px;
         margin-top: 50px;
         border-bottom: 1px solid;
-    }.icon-ask{
+    }.icon-noti{
         background-image: var(--icon);
-        background-position: -598px -463px;
+        background-position: -752px -462px;
         background-repeat: no-repeat;
 
     }.popupask-icon-label{
-        width: 300px;
+        width: 270px;
         margin-top: 50px;
         border-bottom: 1px solid;
         padding-top: 10px;
@@ -94,6 +90,8 @@ export default ({
         background-position: -128px -131px;
         background-repeat: no-repeat;
         
+    }.popupask-bottom{
+
     }
 </style>
 

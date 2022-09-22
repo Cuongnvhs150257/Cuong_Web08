@@ -2,14 +2,14 @@
      
      <div class="data-input-button">
          <button type="button" class="content-top-btn1">Cất và Thêm</button>
-        <span v-if="toolTip" class="tool-tip">
-            {{ toolTip }}
+        <span v-if="toolTip2" class="tool-tip2">
+            {{ toolTip2 }}
         </span>
      </div>
 </template>
 
 <style>
-
+   
     .content-top-btn1{
     height: 35px;
     padding: 0 24px;
@@ -25,8 +25,9 @@
     margin-top: 15px;
     margin-right: 40px;
     }
-    .tool-tip {
+    .tool-tip2 {
         position: absolute;
+        width: 80px;
         left: 30px;
         top: 20px;
         background-color: #505050;
@@ -38,7 +39,7 @@
         visibility: hidden;
         
     }
-    .data-input-button:hover .tool-tip {
+    .data-input-button:hover .tool-tip2 {
         visibility: visible;
         opacity: 1;
     }

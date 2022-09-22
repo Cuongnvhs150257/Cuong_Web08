@@ -14,24 +14,41 @@
           </div>
         </div>
         <div class="input1-right">
-          <div class="input1-checkbox-icon ask-icon"></div>
+          <div class="input1-checkbox-icon ask-icon">
+            <span class="tool-tip"> Hỏi </span>
+          </div>
+
           <div
             class="input1-checkbox-icon question-icon"
             @click="handleClosePopup"
-          ></div>
+          >
+            <span class="tool-tip"> Đóng </span>
+          </div>
         </div>
       </div>
       <div class="popup_item input2">
-        <div class="input_item item1" >
+        <div class="input_item item1">
           <label class="item-label">Mã</label>
           <label class="item-labelsao"> *</label>
-          
-          <MInputNomal :class="{'item-input-red':!inValue}" v-model="Employees.EmployeeCode" />
+
+          <MInputSpecial
+            class="input-spe"
+            :class="{ 'item-input-red': !inValue }"
+            v-model="Employees.EmployeeCode"
+          />
+
+          <span class="error-code"> Mã không được để trống </span>
         </div>
         <div class="input_item item2">
           <label class="item-label">Tên</label>
           <label class="item-labelsao"> *</label>
-          <MInputNomal :class="{'item-input-red':!inValue}" v-model="Employees.FullName"/>
+          <MInputSpecial
+            class="input-spe"
+            :class="{ 'item-input-red': !inValue }"
+            v-model="Employees.FullName"
+          />
+
+          <span class="error-name"> Tên không được để trống </span>
         </div>
         <div class="input_item item3">
           <label class="item-label label3">Ngày sinh</label>
@@ -59,7 +76,10 @@
         </div>
         <div class="input_item item2">
           <label class="item-label">Số CMND</label>
-          <m-input-nomal :toolTip="'Số chứng minh nhân dân'" v-model="Employees.IdentityNumber"></m-input-nomal>
+          <m-input-nomal
+            :toolTip="'Số chứng minh nhân dân'"
+            v-model="Employees.IdentityNumber"
+          ></m-input-nomal>
         </div>
         <div class="input_item item3">
           <label class="item-label l3">Ngày cấp</label>
@@ -85,11 +105,17 @@
       <div class="popup_item input6">
         <div class="input_item item1">
           <label class="item-label">ĐT di động</label>
-          <m-input-nomal :toolTip="'Điện thoại di động'" v-model="Employees.PhoneNumber"></m-input-nomal>
+          <m-input-nomal
+            :toolTip="'Điện thoại di động'"
+            v-model="Employees.PhoneNumber"
+          ></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">ĐT cố định</label>
-          <m-input-nomal :toolTip="'Điện thoại cố định'" v-model="Employees.PersonalTaxCode"></m-input-nomal>
+          <m-input-nomal
+            :toolTip="'Điện thoại cố định'"
+            v-model="Employees.PersonalTaxCode"
+          ></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">Email</label>
@@ -113,52 +139,118 @@
       <div class="popup_item input8">
         <div class="popup_input8_border">
           <div class="input_item_right">
-            <m-button-1 @click="btnSaveonClick" :toolTip="'Điện thoại cố định'"></m-button-1>
-            <button
-              class="btn_input8_right"
+            <m-button-1
+              :toolTip2="'Ctrl + Shift + S'"
+              class="input_item_right_btn"
               @click="btnSaveonClick"
-              
             >
+            </m-button-1>
+
+            <button class="btn_input8_right" @click="btnSaveonClick">
               Cất
+              <span class="tool-tip"> Ctrl + S </span>
             </button>
           </div>
           <div class="input_item_left">
             <button class="btn_input8_left" @click="handleClosePopup">
               Hủy
             </button>
-            <span v-if="toolTip" class="tool-tip">
-              {{ toolTip }}
-            </span>
           </div>
         </div>
       </div>
+      <MPopupNotification
+        v-if="isShowNotification"
+        @close-notification-click="closeNoti"
+        :errors="errors"
+      />
     </div>
-    
   </div>
 </template>
 <script>
 import MInputNomal from "./MInputNomal.vue";
 import MInputRadio from "./MInputRadio.vue";
 import MButton1 from "./MButton1.vue";
+import MInputSpecial from "./MInputSpecial.vue";
+import MPopupNotification from "../MPopupNotification/MPopupNotification.vue";
 
 export default {
- 
   methods: {
     //hàm đóng popup thêm nhân viên
     handleClosePopup() {
       this.$emit("custom-handle-click");
     },
+    /*
+    validName(name) {
+      var re = /^[a-zA-Z ]{10,20}$/;
+      return re.test(name);
+    },
+    
+    validCode(code){
+      var re = ;
+      return re.test(code);
+    }
+    */
+
+
+    //hàm regex kiểm tra email
+    validEmail(email) {
+      var re =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
+
+    //hàm regex kiểm tra số điện thoại
+
+    valiPhoneNumber(phonenumber) {
+      var re = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+      return re.test(phonenumber);
+    },
+
     //hàm sửa hoặc thêm nhân viên mới
     btnSaveonClick() {
       var method = "POST";
       var url = "https://63215c8cfd698dfa29f620da.mockapi.io/Employees";
-      
-      
-      //validate du lieu
-      if (this.Employees.EmployeeCode || this.Employees.EmployeeName) {
+      var validate = true;
+      this.errors = [];
+
+      //validate dữ liệu
+
+      //kiểm tra xem mã nhân viên hoặc tên nhân viên có chưa
+      if (this.Employees.EmployeeCode && this.Employees.FullName) {
+          validate = true;
+
+          //hàm validate số điện thoại
+          if (this.Employees.PhoneNumber) {
+            if (!this.valiPhoneNumber(this.Employees.PhoneNumber)) {
+              this.isShowNotification = true;
+              this.errors = "Số điện thoại không hợp lệ";
+              validate = false;
+            }
+          } else {
+            validate = true;
+          }
+          //hàm validate email
+          if (this.Employees.Email) {
+            if (!this.validEmail(this.Employees.Email)) {
+              this.isShowNotification = true;
+              this.errors = "Email không hợp lệ";
+              validate = false;
+            }
+          } else if (this.Employees.PhoneNumber == null) {
+            //nếu số điện thoại k có thì mới dc thêm
+            validate = true;
+          }
         
-        
-        //Hàm lưu dữ liệu nhân viên vừa sửa
+      } else {
+        //chưa có mã hoặc tên thì yêu cầu nhập
+        this.inValue = false; //đỏ input mã và tên
+        this.isShowNotification = true; //mở popup thông báo
+        this.errors = "Không được để trống dữ liệu";
+        validate = false;
+      }
+
+      if (validate == true) {
+        //Hàm sửa nhân viên
         if (this.Employees.EmployeeID) {
           method = "PUT";
           url = url + `/${this.Employees.EmployeeID}`;
@@ -180,18 +272,21 @@ export default {
             alert("Loi");
             console.log(res);
           });
-      }else{
-        this.inValue = false;
-        alert("Thiếu dữ liệu");
-        
       }
     },
-
+    //hàm đóng popup thông báo
+    closeNoti() {
+      this.isShowNotification = false;
+      this.inValue = true; //ẩn đỏ input mã và tên
+      this.validate = false;
+    },
   },
   components: {
     MInputNomal,
     MInputRadio,
     MButton1,
+    MInputSpecial,
+    MPopupNotification,
   },
   props: {
     employeesSelected: Object,
@@ -199,8 +294,6 @@ export default {
       type: Number,
       default: 1,
     },
-    
-    
   },
   created() {
     if (this.employeesSelected) {
@@ -211,11 +304,12 @@ export default {
   data() {
     return {
       Employees: {},
-      inValue:{
-      type: Boolean,
-      default: true
-    }
-      
+      inValue: {
+        type: Boolean,
+        default: true,
+      },
+      errors: [],
+      isShowNotification: false,
     };
   },
 };
@@ -223,6 +317,25 @@ export default {
 <style>
 :root {
   --icon: url("../../assets/Resource/img/Sprites.64af8f61.svg");
+}
+.input1-checkbox-icon:hover .tool-tip {
+  left: 10px;
+  top: 30px;
+  visibility: visible;
+  opacity: 1;
+}
+.input1-checkbox-icon.question-icon:hover .tool-tip {
+  left: 35px;
+  top: 30px;
+  visibility: visible;
+  opacity: 1;
+}
+.btn_input8_right:hover .tool-tip {
+  width: 50px;
+  top: 40px;
+  left: 10px;
+  visibility: visible;
+  opacity: 1;
 }
 .Popup-form {
   width: 900px;
@@ -280,9 +393,10 @@ export default {
   width: 25px;
   height: 30px;
   margin-left: 10px;
-}.checkbox-1:checked{
-    accent-color: #50B83C;
-    color: #fff;
+}
+.checkbox-1:checked {
+  accent-color: #50b83c;
+  color: #fff;
 }
 .ask-icon {
   background-image: var(--icon);
@@ -311,6 +425,7 @@ export default {
   width: 130px;
   margin-left: 25px;
   margin-right: 15px;
+  position: relative;
 }
 .input_item.item2 {
   width: 235px;
@@ -394,6 +509,7 @@ export default {
   width: 190px;
   height: 73px;
   margin-left: 20px;
+  position: relative;
 }
 .popup_input8_border {
   margin-top: 30px;
@@ -434,9 +550,48 @@ export default {
 }
 .item-input {
   border: 1px solid #bbbbbb;
-}.item-input-red{
-        border: 1px solid #ff0000;
-    }
-  
+}
+.item-input-red {
+  border: 1px solid #ff0000;
+}
+.error-code {
+  position: absolute;
+  left: 5px;
+  top: 40px;
+  background-color: #505050;
+  border-radius: 2px;
+  padding: 2px 4px;
+  z-index: 3;
+  text-align: center;
+  color: #fff;
+  width: 120px;
+  height: 18px;
+  font-size: 10px;
+  visibility: hidden;
+}
+.input_item.item1:hover .error-code {
+  visibility: visible;
+}
+.input-spe:active .error-code {
+  visibility: hidden;
+}
+.error-name {
+  position: absolute;
+  left: 240px;
+  top: 40px;
+  background-color: #505050;
+  border-radius: 2px;
+  padding: 2px 4px;
+  z-index: 3;
+  text-align: center;
+  color: #fff;
+  width: 120px;
+  height: 18px;
+  font-size: 10px;
+  visibility: hidden;
+}
+.input_item.item2:hover .error-name {
+  visibility: visible;
+}
 </style>
 
