@@ -218,6 +218,7 @@ export default {
       //kiểm tra xem mã nhân viên hoặc tên nhân viên có chưa
       if (this.Employees.EmployeeCode && this.Employees.FullName) {
           validate = true;
+          
 
           //hàm validate số điện thoại
           if (this.Employees.PhoneNumber) {
@@ -240,6 +241,8 @@ export default {
             //nếu số điện thoại k có thì mới dc thêm
             validate = true;
           }
+          
+
         
       } else {
         //chưa có mã hoặc tên thì yêu cầu nhập
