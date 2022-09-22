@@ -21,7 +21,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         [HttpGet]
         [Route("")]
-        public List<Employee> GetAllEmployees()
+        public IActionResult GetAllEmployees()
         {
             //Phim tat Ctrl M O = thu gọn
             //         Ctrl M L = mở ra
@@ -52,6 +52,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
             
                
@@ -90,25 +91,22 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #region API Filter 
 
-        /*
+        
         [HttpGet("filter")]
-        public PagingData FilterEmployees(
+        public IActionResult FilterEmployees(
             [FromQuery] string? keyword,
             [FromQuery] Guid? postionID,
             [FromQuery] Guid? departmentID,
             [FromQuery] int? limit,
             [FromQuery] int? offset)
         {
-            return new PagingData
+            return StatusCode(StatusCodes.Status200OK, new PagingData
             {
-                Data = new List<Employee>
-                {
-
-
-                }
-            };
+                
+            }) ;
+                          
         }
-        */
+        
 
         #endregion
 
