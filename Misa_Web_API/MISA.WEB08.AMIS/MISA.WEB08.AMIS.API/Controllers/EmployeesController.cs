@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MISA.WEB08.AMIS.API.Entities;
+using MISA.WEB08.AMIS.API.Enums;
 using MySqlConnector;
 using System;
 
@@ -32,14 +33,14 @@ namespace MISA.WEB08.AMIS.API.Controllers
             try
             {
 
-                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.nvcuong;Uid=root;Pwd=012346789;";
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
                 var mysqlConnection = new MySqlConnection(connectionString);
 
                 //Chuẩn bị câu lệnh MySQL
                 //string getAllEmployeesCommand = "SELECT * FROM employee;";
 
                 //khai bao ten stored produre
-                string storeProdureName = "Proc-emp";
+                string storeProdureName = "pro_selectallemployee";
 
                 //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
 
@@ -52,12 +53,18 @@ namespace MISA.WEB08.AMIS.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AMITErrorCode.Exception,
+                    "It was not possible to connect to the redis server",
+                    "Có lỗi xảy ra, vui lòng liên hệ Misa",
+                    "http",
+                    HttpContext.TraceIdentifier));
             }
-            
-               
-                //return StatusCode(StatusCodes.Status500InternalServerError, "e001");
+
+
             //Try catch exception
+
+
 
         }
 
