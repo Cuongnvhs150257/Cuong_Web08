@@ -3,7 +3,8 @@
 namespace MISA.WEB08.AMIS.API.Entities
 {
     /// <summary>
-    /// Nhân viên
+    /// Nhân viên ứng với bảng employee
+    /// create by: Nguyễn Văn Cương 16/8/2022
     /// </summary>
     public class Employee
     {
@@ -43,7 +44,7 @@ namespace MISA.WEB08.AMIS.API.Entities
         //số điện thoại
         public string phonenumber { get; set; }
 
-        //fax
+        //điện thoại cố định
 
         public string fax { get; set; }
 
@@ -51,30 +52,32 @@ namespace MISA.WEB08.AMIS.API.Entities
 
         public string email { get; set; }
 
-        //bankaccount
+        //tài khoản ngân hàng
 
         public string bankaccount { get; set; }
 
-        //backname
+        //tên ngân hàng
         public string bankname { get; set; }
 
-        //bankunit  
+        //chi nhánh ngân hàng 
         public string bankunit { get; set; }
-
+        
+        //mã đơn vị 
         public Guid unitid { get; set; }
-
+        
+        //tên đơn vị 
         public string unitname { get; set; }
-
-        //createdate
+        
+        //ngày tạo
         public DateTime createdate { get; set; }
 
-        //createby
+        //người tạo
         public string createby { get; set; }
 
-        //moditifieddate  
+        //ngày chỉnh sửa gần nhất 
         public DateTime moditifieddate { get; set; }
 
-        //moditifiedby
+        //người chỉnh sửa gần nhất
         public string moditifiedby { get; set; }
     }
 

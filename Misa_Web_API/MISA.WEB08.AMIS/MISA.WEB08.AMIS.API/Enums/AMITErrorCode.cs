@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Danh sach ma loi
+    /// createby: Nguyễn Văn Cương 20/08/2022
     /// </summary>
     public enum AMITErrorCode
     {
@@ -17,13 +18,19 @@
 
         EmptyCode = 3,
 
-        //Khong them moi duoc
+        //Lỗi không thêm mới thành công
 
         InsertError = 4,
 
+        //Lỗi không cập nhật thành công
+
         UpdateError = 5,
 
+        //Lỗi xóa không thành công
+
         DeleteError = 6,
+
+        //lỗi xóa toàn bộ không thành công
 
         DeleteAllEror = 7
     }

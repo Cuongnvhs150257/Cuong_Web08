@@ -6,6 +6,11 @@ using MISA.WEB08.AMIS.API.Enums;
 using MySqlConnector;
 using System;
 
+//Phim tat Ctrl M O = thu gọn
+//         Ctrl M L = mở ra
+
+
+
 namespace MISA.WEB08.AMIS.API.Controllers
 {
     [Route("api/v1/[controller]")]
@@ -24,14 +29,10 @@ namespace MISA.WEB08.AMIS.API.Controllers
         [Route("")]
         public IActionResult GetAllEmployees()
         {
-            //Phim tat Ctrl M O = thu gọn
-            //         Ctrl M L = mở ra
-
-
-            //Khởi tạo kết nối với MySQl
 
             try
             {
+                //Khởi tạo kết nối với MySQl
 
                 string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
                 var mysqlConnection = new MySqlConnection(connectionString);
@@ -77,28 +78,52 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// </summary>
         /// <param name="employeeid">ID nhân viên</param>
         /// <returns>thông tin một nhân viên</returns>
-        /// 
+        /// createdby: Nguyễn Văn Cương 16/08/2022
 
 
         [HttpGet("{employeeid}")]
-        public Employee GetEmployeeByID([FromBody] Guid employeeid)
+        public IActionResult GetEmployeeByID([FromBody] Guid employeeid)
         {
-            return new Employee
+            try
             {
-                employeeid = employeeid,
-                employeecode = "NV00001",
-                fullname = "Nguyễn Văn Cương",
-                dateofbirth = DateTime.Now,
-                gender = Enums.Gender.Male
+                //Khởi tạo kết nối với MySQl
 
-            };
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
+                var mysqlConnection = new MySqlConnection(connectionString);
+
+                //Chuẩn bị câu lệnh MySQL
+                //string getAllEmployeesCommand = "SELECT * FROM employee;";
+
+                //khai bao ten stored produre
+                string storeProdureName = "pro_selectallemployee";
+
+                //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
+                var parameters = employeeid;
+
+                //Thực hiện gọi vào DB
+                var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+                return StatusCode(StatusCodes.Status200OK, employeeid);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AMITErrorCode.Exception,
+                    "It was not possible to connect to the redis server",
+                    "Có lỗi xảy ra, vui lòng liên hệ Misa",
+                    "http",
+                    HttpContext.TraceIdentifier));
+            }
+
         }
 
         #endregion
 
         #region API Filter 
 
-        
+
         [HttpGet("filter")]
         public IActionResult FilterEmployees(
             [FromQuery] string? keyword,
@@ -113,11 +138,18 @@ namespace MISA.WEB08.AMIS.API.Controllers
             }) ;
                           
         }
-        
+
 
         #endregion
 
         #region API POST Employee
+
+        // <summary>
+        /// API thêm mới nhân viên
+        /// </summary>
+        /// <param name="employee">đối tượng nhân viên</param>
+        /// <returns>số lượng bản ghi ảnh hưởng</returns>
+        /// createdby: Nguyễn Văn Cương 16/08/2022
 
         [HttpPost("")]
 
@@ -197,6 +229,13 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #region API PUT Employee
 
+        // <summary>
+        /// API sửa thông tin một nhân viên bằng id
+        /// </summary>
+        /// <param name="employeeid">ID nhân viên</param>
+        /// <param name="employeeid">đối tượng nhân viên</param>
+        /// <returns>số lượng bản ghi ảnh hưởng</returns>
+        /// createdby: Nguyễn Văn Cương 16/08/2022
 
         [HttpPut("{employeeid}")]
         public IActionResult UpdateEmployee([FromRoute] Guid employeeid, [FromBody] Employee employee)
@@ -278,6 +317,13 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #region API Detele Employee by ID
 
+        // <summary>
+        /// API xóa một nhân viên bằng id
+        /// </summary>
+        /// <param name="employeeid">ID nhân viên</param>
+        /// <returns>số lượng bản ghi ảnh hưởng</returns>
+        /// createdby: Nguyễn Văn Cương 16/08/2022
+
         [HttpDelete("{employeeid}")]
         public IActionResult DeleteEmployee([FromRoute] Guid employeeid)
         {
@@ -328,6 +374,13 @@ namespace MISA.WEB08.AMIS.API.Controllers
         #endregion
 
         #region API Delete All Employee
+
+        // <summary>
+        /// API xóa nhiều nhân viên bằng id
+        /// </summary>
+        /// <param name="List<string>employeeid">danh sách ID nhân viên muốn xóa</param>
+        /// <returns>số lượng bản ghi ảnh hưởng</returns>
+        /// createdby: Nguyễn Văn Cương 16/08/2022
 
         [HttpPost("batch-delete")]
         public IActionResult DeleteMultipleEmployee([FromBody] List<string> employeeid)
