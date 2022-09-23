@@ -5,16 +5,26 @@
     /// </summary>
     public enum AMITErrorCode
     {
-        //Loi Exception
+        //Lỗi Exception
 
         Exception = 1,
 
-        //Loi trung ma
+        //lỗi trùng mã
 
         Duplicate = 2,
 
-        //Loi trong ma
+        //lỗi trống mã
 
-        EmptyCode = 3
+        EmptyCode = 3,
+
+        //Khong them moi duoc
+
+        InsertError = 4,
+
+        UpdateError = 5,
+
+        DeleteError = 6,
+
+        DeleteAllEror = 7
     }
 }

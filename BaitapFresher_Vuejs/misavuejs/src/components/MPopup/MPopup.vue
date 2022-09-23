@@ -219,7 +219,7 @@ export default {
       if (this.Employees.EmployeeCode && this.Employees.FullName) {
           validate = true;
           
-
+         
           //hàm validate số điện thoại
           if (this.Employees.PhoneNumber) {
             if (!this.valiPhoneNumber(this.Employees.PhoneNumber)) {

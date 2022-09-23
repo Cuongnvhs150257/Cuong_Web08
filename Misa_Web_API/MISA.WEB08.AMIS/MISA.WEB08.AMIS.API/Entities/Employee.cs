@@ -61,6 +61,10 @@ namespace MISA.WEB08.AMIS.API.Entities
         //bankunit  
         public string bankunit { get; set; }
 
+        public Guid unitid { get; set; }
+
+        public string unitname { get; set; }
+
         //createdate
         public DateTime createdate { get; set; }
 
