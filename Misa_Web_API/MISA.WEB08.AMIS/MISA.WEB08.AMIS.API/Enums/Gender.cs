@@ -6,10 +6,20 @@
     /// </summary>
     public enum Gender
     {
-        Male = 0, //Nam
+        /// <summary>
+        /// Nam
+        /// </summary>
+        Male = 0, 
 
-        Female = 1, //Nữ
+        /// <summary>
+        /// Nữ
+        /// </summary>
+        Female = 1, 
 
-        Other = 2,  //Khác
+
+        /// <summary>
+        /// Khác
+        /// </summary>
+        Other = 2, 
     }
 }

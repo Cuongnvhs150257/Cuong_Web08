@@ -1,8 +1,10 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MISA.WEB08.AMIS.API.Atrribute;
 using MISA.WEB08.AMIS.API.Entities;
 using MISA.WEB08.AMIS.API.Enums;
+using MISA.WEB08.AMIS.API.Properties;
 using MySqlConnector;
 using System;
 
@@ -24,27 +26,19 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// <returns>Danh sách toàn bộ nhân viên</returns>
         /// Createdby: Nguyễn Văn Cương
         /// Createddate: 16/09/2022
-
         [HttpGet]
         [Route("")]
         public IActionResult GetAllEmployees()
         {
-
+            //Try catch exception
             try
             {
                 //Khởi tạo kết nối với MySQl
-
-                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;UID=root;Password=012346789";
                 var mysqlConnection = new MySqlConnection(connectionString);
-
-                //Chuẩn bị câu lệnh MySQL
-                //string getAllEmployeesCommand = "SELECT * FROM employee;";
 
                 //khai bao ten stored produre
                 string storeProdureName = "pro_selectallemployee";
-
-                //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
-
 
                 //Thực hiện gọi vào DB
                 var employees = mysqlConnection.Query(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
@@ -56,17 +50,11 @@ namespace MISA.WEB08.AMIS.API.Controllers
                 Console.WriteLine(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
                     AMITErrorCode.Exception,
-                    "It was not possible to connect to the redis server",
-                    "Có lỗi xảy ra, vui lòng liên hệ Misa",
-                    "http",
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
                     HttpContext.TraceIdentifier));
             }
-
-
-            //Try catch exception
-
-
-
         }
 
         #endregion
@@ -87,12 +75,8 @@ namespace MISA.WEB08.AMIS.API.Controllers
             try
             {
                 //Khởi tạo kết nối với MySQl
-
                 string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
                 var mysqlConnection = new MySqlConnection(connectionString);
-
-                //Chuẩn bị câu lệnh MySQL
-                //string getAllEmployeesCommand = "SELECT * FROM employee;";
 
                 //khai bao ten stored produre
                 string storeProdureName = "pro_selectallemployee";
@@ -111,9 +95,9 @@ namespace MISA.WEB08.AMIS.API.Controllers
                 Console.WriteLine(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
                     AMITErrorCode.Exception,
-                    "It was not possible to connect to the redis server",
-                    "Có lỗi xảy ra, vui lòng liên hệ Misa",
-                    "http",
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
                     HttpContext.TraceIdentifier));
             }
 
@@ -127,16 +111,42 @@ namespace MISA.WEB08.AMIS.API.Controllers
         [HttpGet("filter")]
         public IActionResult FilterEmployees(
             [FromQuery] string? keyword,
-            [FromQuery] Guid? postionID,
-            [FromQuery] Guid? departmentID,
+            [FromQuery] string? phonenumber,
             [FromQuery] int? limit,
             [FromQuery] int? offset)
         {
-            return StatusCode(StatusCodes.Status200OK, new PagingData
+            try
             {
-                
-            }) ;
-                          
+                //Khởi tạo kết nối với MySQl
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
+                var mysqlConnection = new MySqlConnection(connectionString);
+
+                //khai bao ten stored produre
+                string storeProdureName = "pro_selectallemployee";
+
+                //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
+                var parameters = new DynamicParameters();
+
+                parameters.Add("v_limit", limit);
+                parameters.Add("v_offset", offset);
+                parameters.Add("v_where", keyword);
+                parameters.Add("v_phonenumber", phonenumber);
+
+                //Thực hiện gọi vào DB
+                var numberOfAffectedRows = mysqlConnection.QueryMultiple(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AMITErrorCode.Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
+                    HttpContext.TraceIdentifier));
+            }
         }
 
 
@@ -150,13 +160,36 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// <param name="employee">đối tượng nhân viên</param>
         /// <returns>số lượng bản ghi ảnh hưởng</returns>
         /// createdby: Nguyễn Văn Cương 16/08/2022
-
         [HttpPost("")]
 
         public IActionResult InsertEmployee([FromBody] Employee employee)
         {
             try
             {
+                //validate dữ liệu đầu vào
+                var properties = typeof(Employee).GetProperties();
+                var validateFailures = new List<string>();
+                foreach(var property in properties)
+                {
+                    string propertyName = property.Name;
+                    var properyValue = property.GetValue(employee);
+                    var isNotNullOrEmptyAtrribute = (IsNotNullOrEmptyAtrribute?)Atrribute.PrimarKeyAttribute(property, typeof(IsNotNullOrEmptyAtrribute));
+                    if (isNotNullOrEmptyAtrribute != null && string.IsNullOrEmpty(properyValue?.ToString()))
+                    {
+                        validateFailures.Add(isNotNullOrEmptyAtrribute.ErrorMessage);
+                    }
+                }
+
+                if(validateFailures.Count > 0)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult(
+                    AMITErrorCode.InsertError,
+                    Resource.DevMsg_InsertFailed,
+                    Resource.UserMsg_InsertFaild,
+                    Resource.MoreInfo_InsertFaild,
+                    HttpContext.TraceIdentifier));
+                }
+
                 //Khởi tạo kết nối với MySQl
                 string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
                 var mysqlConnection = new MySqlConnection(connectionString);
@@ -169,34 +202,32 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
                 var employeeID = Guid.NewGuid();
                 parameters.Add("@employeeid", employeeID);
-                parameters.Add("@employeecode", employee.employeecode);
-                parameters.Add("@fullname", employee.fullname);
-                parameters.Add("@dateofbirth", employee.dateofbirth);
-                parameters.Add("@gender", employee.gender);
-                parameters.Add("@positions", employee.prostions);
-                parameters.Add("@@identitynumber", employee.cmndcode);
-                parameters.Add("@identityplace", employee.cmndadress);
-                parameters.Add("@identifydate", employee.cmnddate);
-                parameters.Add("@address", employee.adress);
-                parameters.Add("@phonenumber", employee.phonenumber);
-                parameters.Add("@fax", employee.fax);
-                parameters.Add("@email", employee.email);
-                parameters.Add("@bankaccount", employee.bankaccount);
-                parameters.Add("@bankname", employee.bankname);
-                parameters.Add("@bankunit", employee.bankunit);
-                parameters.Add("@unitid", employee.unitid);
-                parameters.Add("@unitname", employee.unitname);
+                parameters.Add("@employeecode", employee.EmployeeCode);
+                parameters.Add("@fullname", employee.FullName);
+                parameters.Add("@dateofbirth", employee.DateOfBirth);
+                parameters.Add("@gender", employee.Gender);
+                parameters.Add("@positions", employee.Postions);
+                parameters.Add("@identitycode", employee.IndentifyCode);
+                parameters.Add("@identityplace", employee.IndentifyAddress);
+                parameters.Add("@identifydate", employee.IndentifyDate);
+                parameters.Add("@address", employee.Address);
+                parameters.Add("@phonenumber", employee.Phonenumber);
+                parameters.Add("@fax", employee.Fax);
+                parameters.Add("@email", employee.Email);
+                parameters.Add("@bankaccount", employee.BankAccount);
+                parameters.Add("@bankname", employee.BankName);
+                parameters.Add("@bankunit", employee.BankUnit);
+                parameters.Add("@unitid", employee.UnitID);
+                parameters.Add("@unitname", employee.UnitName);
                 parameters.Add("@createdate", DateTime.Now);
-                parameters.Add("@createby", employee.createby);
+                parameters.Add("@createby", employee.CreateBy);
                 parameters.Add("@modifieddate", DateTime.Now);
-                parameters.Add("@modifiedby", employee.moditifiedby);
+                parameters.Add("@modifiedby", employee.ModitifiedBy);
 
                 //Thực hiện gọi vào DB
-  
                 var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
             
                 //Xử lý giá trị trả về
-
                 if(numberOfAffectedRows > 0)
                 {
                     return StatusCode(StatusCodes.Status201Created, employeeID);
@@ -205,9 +236,9 @@ namespace MISA.WEB08.AMIS.API.Controllers
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult(
                     AMITErrorCode.InsertError,
-                    "It was not possible to connect to the redis server",
-                    "Có lỗi xảy ra, vui lòng liên hệ Misa",
-                    "http",
+                    Resource.DevMsg_InsertFailed,
+                    Resource.UserMsg_InsertFaild,
+                    Resource.MoreInfo_InsertFaild,
                     HttpContext.TraceIdentifier));
                 }
             
@@ -217,9 +248,9 @@ namespace MISA.WEB08.AMIS.API.Controllers
                 Console.WriteLine(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
                     AMITErrorCode.Exception,
-                    "It was not possible to connect to the redis server",
-                    "Có lỗi xảy ra, vui lòng liên hệ Misa",
-                    "http",
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
                     HttpContext.TraceIdentifier));
             }
 
@@ -236,49 +267,47 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// <param name="employeeid">đối tượng nhân viên</param>
         /// <returns>số lượng bản ghi ảnh hưởng</returns>
         /// createdby: Nguyễn Văn Cương 16/08/2022
-
         [HttpPut("{employeeid}")]
         public IActionResult UpdateEmployee([FromRoute] Guid employeeid, [FromBody] Employee employee)
         {
-            //Khởi tạo kết nối với MySQl
+           
 
             try
             {
-
+                //Khởi tạo kết nối với MySQl
                 string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
                 var mysqlConnection = new MySqlConnection(connectionString);
-
 
                 //khai bao ten stored produre
                 string storeProdureName = "pro_update_employee";
 
                 //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
-
                 var parameters = new DynamicParameters();
 
-                var employeeID = employee.employeeid;
+                var employeeID = employee.EmployeeID;
                 parameters.Add("@employeeid", employeeID);
-                parameters.Add("@employeecode", employee.employeecode);
-                parameters.Add("@fullname", employee.fullname);
-                parameters.Add("@dateofbirth", employee.dateofbirth);
-                parameters.Add("@gender", employee.gender);
-                parameters.Add("@positions", employee.prostions);
-                parameters.Add("@@identitynumber", employee.cmndcode);
-                parameters.Add("@identityplace", employee.cmndadress);
-                parameters.Add("@identifydate", employee.cmnddate);
-                parameters.Add("@address", employee.adress);
-                parameters.Add("@phonenumber", employee.phonenumber);
-                parameters.Add("@fax", employee.fax);
-                parameters.Add("@email", employee.email);
-                parameters.Add("@bankaccount", employee.bankaccount);
-                parameters.Add("@bankname", employee.bankname);
-                parameters.Add("@bankunit", employee.bankunit);
-                parameters.Add("@unitid", employee.unitid);
-                parameters.Add("@unitname", employee.unitname);
+                parameters.Add("@employeeid", employeeID);
+                parameters.Add("@employeecode", employee.EmployeeCode);
+                parameters.Add("@fullname", employee.FullName);
+                parameters.Add("@dateofbirth", employee.DateOfBirth);
+                parameters.Add("@gender", employee.Gender);
+                parameters.Add("@positions", employee.Postions);
+                parameters.Add("@identitycode", employee.IndentifyCode);
+                parameters.Add("@identityplace", employee.IndentifyAddress);
+                parameters.Add("@identifydate", employee.IndentifyDate);
+                parameters.Add("@address", employee.Address);
+                parameters.Add("@phonenumber", employee.Phonenumber);
+                parameters.Add("@fax", employee.Fax);
+                parameters.Add("@email", employee.Email);
+                parameters.Add("@bankaccount", employee.BankAccount);
+                parameters.Add("@bankname", employee.BankName);
+                parameters.Add("@bankunit", employee.BankUnit);
+                parameters.Add("@unitid", employee.UnitID);
+                parameters.Add("@unitname", employee.UnitName);
                 parameters.Add("@createdate", DateTime.Now);
-                parameters.Add("@createby", employee.createby);
+                parameters.Add("@createby", employee.CreateBy);
                 parameters.Add("@modifieddate", DateTime.Now);
-                parameters.Add("@modifiedby", employee.moditifiedby);
+                parameters.Add("@modifiedby", employee.ModitifiedBy);
 
                 //Thực hiện gọi vào DB
                 var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -291,26 +320,26 @@ namespace MISA.WEB08.AMIS.API.Controllers
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult(
                     AMITErrorCode.UpdateError,
-                    "It was not possible to connect to the redis server",
-                    "Có lỗi xảy ra, vui lòng liên hệ Misa",
-                    "http",
+                    Resource.DevMsg_UpdateFailed,
+                    Resource.UserMsg_UpdateFaild,
+                    Resource.MoreInfo_Request,
                     HttpContext.TraceIdentifier));
                 }
 
-            }
+            }//Try catch exception
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
                     AMITErrorCode.UpdateError,
-                    "It was not possible to connect to the redis server",
-                    "Có lỗi xảy ra, vui lòng liên hệ Misa",
-                    "http",
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
                     HttpContext.TraceIdentifier));
             }
 
 
-            //Try catch exception
+            
         }
 
         #endregion
@@ -338,7 +367,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
                 string storeProdureName = "pro_deleteemployee";
 
                 //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
-
                 var parameters = employeeid;
 
                 //Thực hiện gọi vào DB
@@ -352,9 +380,9 @@ namespace MISA.WEB08.AMIS.API.Controllers
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult(
                     AMITErrorCode.DeleteError,
-                    "It was not possible to connect to the redis server",
-                    "Có lỗi xảy ra, vui lòng liên hệ Misa",
-                    "http",
+                    Resource.DevMsg_DeleteFailed,
+                    Resource.UserMsg_DeleteFailed,
+                    Resource.MoreInfo_Request,
                     HttpContext.TraceIdentifier));
                 }
 
@@ -364,9 +392,9 @@ namespace MISA.WEB08.AMIS.API.Controllers
                 Console.WriteLine(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
                     AMITErrorCode.DeleteError,
-                    "It was not possible to connect to the redis server",
-                    "Có lỗi xảy ra, vui lòng liên hệ Misa",
-                    "http",
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
                     HttpContext.TraceIdentifier));
             }
         }

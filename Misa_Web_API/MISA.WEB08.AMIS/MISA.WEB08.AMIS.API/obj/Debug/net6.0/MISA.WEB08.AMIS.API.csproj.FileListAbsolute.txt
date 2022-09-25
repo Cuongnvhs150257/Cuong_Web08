@@ -27,3 +27,5 @@ C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIS\MISA.WEB08.
 C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIS\MISA.WEB08.AMIS.API\obj\Debug\net6.0\ref\MISA.WEB08.AMIS.API.dll
 C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIS\MISA.WEB08.AMIS.API\bin\Debug\net6.0\Dapper.dll
 C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIS\MISA.WEB08.AMIS.API\bin\Debug\net6.0\MySqlConnector.dll
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIS\MISA.WEB08.AMIS.API\obj\Debug\net6.0\MISA.WEB08.AMIS.API.Properties.Resource.resources
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIS\MISA.WEB08.AMIS.API\obj\Debug\net6.0\MISA.WEB08.AMIS.API.csproj.GenerateResource.cache

@@ -1,4 +1,5 @@
-﻿using MISA.WEB08.AMIS.API.Enums;
+﻿using MISA.WEB08.AMIS.API.Atrribute;
+using MISA.WEB08.AMIS.API.Enums;
 
 namespace MISA.WEB08.AMIS.API.Entities
 {
@@ -8,77 +9,119 @@ namespace MISA.WEB08.AMIS.API.Entities
     /// </summary>
     public class Employee
     {
-        //Id nhân viên
-        public Guid employeeid { get; set; }
+        /// <summary>
+        /// ID nhân viên
+        /// </summary>
+        [PrimarKeyAttribute]
+        public Guid EmployeeID { get; set; }
 
-        //mã nhân viên
-        public string employeecode { get; set; }
+        /// <summary>
+        /// mã nhân viên
+        /// </summary>
+        [IsNotNullOrEmptyAtrribute("Mã nhân viên không được để trống")]
+        public string EmployeeCode { get; set; }
 
-        //tên nhân viên
-        public string fullname { get; set; }
+        /// <summary>
+        /// tên nhân viên
+        /// </summary>
+        [IsNotNullOrEmptyAtrribute("Tên nhân viên không được để trống")]
+        public string FullName { get; set; }
 
-        //ngày tháng năm sinh
-        public DateTime dateofbirth { get; set; }
+        /// <summary>
+        /// ngày tháng năm sinh
+        /// </summary>
+        public DateTime DateOfBirth { get; set; }
 
-        //giới tính
-        public Gender gender { get; set; }
+        /// <summary>
+        /// giới tính
+        /// </summary>
+        public Gender Gender { get; set; }
 
-        //chức vụ
+        /// <summary>
+        /// chức vụ
+        /// </summary>
+        public string Postions { get; set; }
 
-        public string prostions { get; set; }
+        /// <summary>
+        /// số cmnd
+        /// </summary>
+        public string  IndentifyCode { get; set; }
 
-        //số cmnd
+        /// <summary>
+        /// ngày cấp cmnd
+        /// </summary>
+        public DateTime IndentifyDate { get; set; }
 
-        public string  cmndcode { get; set; }
+        /// <summary>
+        /// nơi cấp cmnd
+        /// </summary>
+        public string IndentifyAddress { get; set; }
 
-        //ngày cấp cmnd
+        /// <summary>
+        /// địa chỉ 
+        /// </summary>
+        public string Address { get; set; }
 
-        public DateTime cmnddate { get; set; }
+        /// <summary>
+        /// số điện thoại
+        /// </summary>
+        public string Phonenumber { get; set; }
 
-        //nơi cấp cmnd
-        public string cmndadress { get; set; }
+        /// <summary>
+        /// điện thoại cố định
+        /// </summary>
+        public string Fax { get; set; }
 
-        //địa chỉ 
-        public string adress { get; set; }
+        /// <summary>
+        /// email
+        /// </summary>
+        public string Email { get; set; }
 
-        //số điện thoại
-        public string phonenumber { get; set; }
+        /// <summary>
+        /// tài khoản ngân hàng
+        /// </summary>
+        public string BankAccount { get; set; }
 
-        //điện thoại cố định
+        /// <summary>
+        /// tên ngân hàng
+        /// </summary>
+        public string BankName { get; set; }
 
-        public string fax { get; set; }
+        /// <summary>
+        /// chi nhánh ngân hàng 
+        /// </summary>
+        public string BankUnit { get; set; }
 
-        //email
+        /// <summary>
+        /// mã đơn vị 
+        /// </summary>
+        [IsNotNullOrEmptyAtrribute("Mã đơn vị không được để trống")]
+        public Guid UnitID { get; set; }
 
-        public string email { get; set; }
+        /// <summary>
+        /// tên đơn vị 
+        /// </summary>
+        public string UnitName { get; set; }
 
-        //tài khoản ngân hàng
+        /// <summary>
+        /// ngày tạo
+        /// </summary>
+        public DateTime CreateDate { get; set; }
 
-        public string bankaccount { get; set; }
+        /// <summary>
+        /// người tạo
+        /// </summary>
+        public string CreateBy { get; set; }
 
-        //tên ngân hàng
-        public string bankname { get; set; }
+        /// <summary>
+        /// ngày chỉnh sửa gần nhất 
+        /// </summary>
+        public DateTime ModitifiedDate { get; set; }
 
-        //chi nhánh ngân hàng 
-        public string bankunit { get; set; }
-        
-        //mã đơn vị 
-        public Guid unitid { get; set; }
-        
-        //tên đơn vị 
-        public string unitname { get; set; }
-        
-        //ngày tạo
-        public DateTime createdate { get; set; }
-
-        //người tạo
-        public string createby { get; set; }
-
-        //ngày chỉnh sửa gần nhất 
-        public DateTime moditifieddate { get; set; }
-
-        //người chỉnh sửa gần nhất
-        public string moditifiedby { get; set; }
+        /// <summary>
+        /// người chỉnh sửa gần nhất
+        /// </summary>
+        public string ModitifiedBy { get; set; }
     }
 
 }

@@ -7,7 +7,6 @@
     public enum AMITErrorCode
     {
         //Lỗi Exception
-
         Exception = 1,
 
         //lỗi trùng mã
