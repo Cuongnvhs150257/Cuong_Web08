@@ -23,7 +23,7 @@
     position: absolute;
     right: 0;
     margin-top: 15px;
-    margin-right: 40px;
+    margin-right: 35px;
     }
     .tool-tip2 {
         position: absolute;

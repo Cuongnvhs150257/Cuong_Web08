@@ -11,8 +11,6 @@ using System;
 //Phim tat Ctrl M O = thu gọn
 //         Ctrl M L = mở ra
 
-
-
 namespace MISA.WEB08.AMIS.API.Controllers
 {
     [Route("api/v1/[controller]")]
@@ -34,11 +32,11 @@ namespace MISA.WEB08.AMIS.API.Controllers
             try
             {
                 //Khởi tạo kết nối với MySQl
-                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;UID=root;Password=012346789";
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
                 var mysqlConnection = new MySqlConnection(connectionString);
 
                 //khai bao ten stored produre
-                string storeProdureName = "pro_selectallemployee";
+                string storeProdureName = "Pro_employee_SelectAllEmployee";
 
                 //Thực hiện gọi vào DB
                 var employees = mysqlConnection.Query(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
@@ -67,27 +65,27 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// <param name="employeeid">ID nhân viên</param>
         /// <returns>thông tin một nhân viên</returns>
         /// createdby: Nguyễn Văn Cương 16/08/2022
-
-
         [HttpGet("{employeeid}")]
-        public IActionResult GetEmployeeByID([FromBody] Guid employeeid)
+        public IActionResult GetEmployeeByID([FromRoute] Guid employeeid)
         {
+            
             try
             {
                 //Khởi tạo kết nối với MySQl
-                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
                 var mysqlConnection = new MySqlConnection(connectionString);
 
                 //khai bao ten stored produre
-                string storeProdureName = "pro_selectallemployee";
+                string storeProdureName = "Pro_employee_SelectEmployee";
 
                 //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
-                var parameters = employeeid;
+                var parameters = new DynamicParameters();
+                parameters.Add("v_EmployeeID", employeeid);
 
                 //Thực hiện gọi vào DB
-                var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                var numberOfAffectedRows = mysqlConnection.QueryFirstOrDefault(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
-                return StatusCode(StatusCodes.Status200OK, employeeid);
+                return StatusCode(StatusCodes.Status200OK, numberOfAffectedRows);
 
             }
             catch (Exception ex)
@@ -107,33 +105,31 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #region API Filter 
 
-
         [HttpGet("filter")]
         public IActionResult FilterEmployees(
-            [FromQuery] string? keyword,
-            [FromQuery] string? phonenumber,
+            [FromQuery] string? employeeid,
             [FromQuery] int? limit,
             [FromQuery] int? offset)
         {
             try
             {
                 //Khởi tạo kết nối với MySQl
-                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
                 var mysqlConnection = new MySqlConnection(connectionString);
 
                 //khai bao ten stored produre
-                string storeProdureName = "pro_selectallemployee";
+                string storeProdureName = "Pro_employee_Filter";
 
                 //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
                 var parameters = new DynamicParameters();
 
                 parameters.Add("v_limit", limit);
                 parameters.Add("v_offset", offset);
-                parameters.Add("v_where", keyword);
-                parameters.Add("v_phonenumber", phonenumber);
+                parameters.Add("v_where", employeeid);
 
                 //Thực hiện gọi vào DB
                 var numberOfAffectedRows = mysqlConnection.QueryMultiple(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
 
                 return StatusCode(StatusCodes.Status200OK);
             }
@@ -161,19 +157,19 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// <returns>số lượng bản ghi ảnh hưởng</returns>
         /// createdby: Nguyễn Văn Cương 16/08/2022
         [HttpPost("")]
-
         public IActionResult InsertEmployee([FromBody] Employee employee)
         {
             try
             {
                 //validate dữ liệu đầu vào
+                
                 var properties = typeof(Employee).GetProperties();
                 var validateFailures = new List<string>();
                 foreach(var property in properties)
                 {
                     string propertyName = property.Name;
                     var properyValue = property.GetValue(employee);
-                    var isNotNullOrEmptyAtrribute = (IsNotNullOrEmptyAtrribute?)Atrribute.PrimarKeyAttribute(property, typeof(IsNotNullOrEmptyAtrribute));
+                    var isNotNullOrEmptyAtrribute = (IsNotNullOrEmptyAtrribute?)Attribute.GetCustomAttribute(property, typeof(IsNotNullOrEmptyAtrribute));
                     if (isNotNullOrEmptyAtrribute != null && string.IsNullOrEmpty(properyValue?.ToString()))
                     {
                         validateFailures.Add(isNotNullOrEmptyAtrribute.ErrorMessage);
@@ -189,40 +185,41 @@ namespace MISA.WEB08.AMIS.API.Controllers
                     Resource.MoreInfo_InsertFaild,
                     HttpContext.TraceIdentifier));
                 }
+                
 
                 //Khởi tạo kết nối với MySQl
-                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
                 var mysqlConnection = new MySqlConnection(connectionString);
 
                 //khai bao ten stored produre
-                string storeProdureName = "pro_addnewemployee";
+                string storeProdureName = "Pro_employee_InsertEmployee";
 
                 //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
                 var parameters = new DynamicParameters();
 
                 var employeeID = Guid.NewGuid();
-                parameters.Add("@employeeid", employeeID);
-                parameters.Add("@employeecode", employee.EmployeeCode);
-                parameters.Add("@fullname", employee.FullName);
-                parameters.Add("@dateofbirth", employee.DateOfBirth);
-                parameters.Add("@gender", employee.Gender);
-                parameters.Add("@positions", employee.Postions);
-                parameters.Add("@identitycode", employee.IndentifyCode);
-                parameters.Add("@identityplace", employee.IndentifyAddress);
-                parameters.Add("@identifydate", employee.IndentifyDate);
-                parameters.Add("@address", employee.Address);
-                parameters.Add("@phonenumber", employee.Phonenumber);
-                parameters.Add("@fax", employee.Fax);
-                parameters.Add("@email", employee.Email);
-                parameters.Add("@bankaccount", employee.BankAccount);
-                parameters.Add("@bankname", employee.BankName);
-                parameters.Add("@bankunit", employee.BankUnit);
-                parameters.Add("@unitid", employee.UnitID);
-                parameters.Add("@unitname", employee.UnitName);
-                parameters.Add("@createdate", DateTime.Now);
-                parameters.Add("@createby", employee.CreateBy);
-                parameters.Add("@modifieddate", DateTime.Now);
-                parameters.Add("@modifiedby", employee.ModitifiedBy);
+                parameters.Add("v_EmployeeID", employeeID);
+                parameters.Add("v_EmployeeCode", employee.EmployeeCode);
+                parameters.Add("v_FullName", employee.FullName);
+                parameters.Add("v_DateOfBirth", employee.DateOfBirth);
+                parameters.Add("v_Gender", employee.Gender);
+                parameters.Add("v_Postions", employee.Postions);
+                parameters.Add("v_IdentifyCode", employee.IdentifyCode);
+                parameters.Add("v_IdentifyPlace", employee.IdentifyPlace);
+                parameters.Add("v_IdentifyDate", employee.IdentifyDate);
+                parameters.Add("v_Address", employee.Address);
+                parameters.Add("v_PhoneNumber", employee.Phonenumber);
+                parameters.Add("v_Fax", employee.Fax);
+                parameters.Add("v_Email", employee.Email);
+                parameters.Add("v_BankAccount", employee.BankAccount);
+                parameters.Add("v_BankName", employee.BankName);
+                parameters.Add("v_BankUnit", employee.BankUnit);
+                parameters.Add("v_UnitID", employee.UnitID);
+                parameters.Add("v_UnitName", employee.UnitName);
+                parameters.Add("v_CreateDate", DateTime.Now);
+                parameters.Add("v_CreateBy", employee.CreateBy);
+                parameters.Add("v_ModifiedDate", DateTime.Now);
+                parameters.Add("v_ModifiedBy", employee.ModitifiedBy);
 
                 //Thực hiện gọi vào DB
                 var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -275,46 +272,44 @@ namespace MISA.WEB08.AMIS.API.Controllers
             try
             {
                 //Khởi tạo kết nối với MySQl
-                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
                 var mysqlConnection = new MySqlConnection(connectionString);
 
                 //khai bao ten stored produre
-                string storeProdureName = "pro_update_employee";
+                string storeProdureName = "Pro_employee_UpdateEmployee";
 
                 //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
                 var parameters = new DynamicParameters();
 
-                var employeeID = employee.EmployeeID;
-                parameters.Add("@employeeid", employeeID);
-                parameters.Add("@employeeid", employeeID);
-                parameters.Add("@employeecode", employee.EmployeeCode);
-                parameters.Add("@fullname", employee.FullName);
-                parameters.Add("@dateofbirth", employee.DateOfBirth);
-                parameters.Add("@gender", employee.Gender);
-                parameters.Add("@positions", employee.Postions);
-                parameters.Add("@identitycode", employee.IndentifyCode);
-                parameters.Add("@identityplace", employee.IndentifyAddress);
-                parameters.Add("@identifydate", employee.IndentifyDate);
-                parameters.Add("@address", employee.Address);
-                parameters.Add("@phonenumber", employee.Phonenumber);
-                parameters.Add("@fax", employee.Fax);
-                parameters.Add("@email", employee.Email);
-                parameters.Add("@bankaccount", employee.BankAccount);
-                parameters.Add("@bankname", employee.BankName);
-                parameters.Add("@bankunit", employee.BankUnit);
-                parameters.Add("@unitid", employee.UnitID);
-                parameters.Add("@unitname", employee.UnitName);
-                parameters.Add("@createdate", DateTime.Now);
-                parameters.Add("@createby", employee.CreateBy);
-                parameters.Add("@modifieddate", DateTime.Now);
-                parameters.Add("@modifiedby", employee.ModitifiedBy);
+                parameters.Add("v_EmployeeID", employeeid);
+                parameters.Add("v_EmployeeCode", employee.EmployeeCode);
+                parameters.Add("v_FullName", employee.FullName);
+                parameters.Add("v_DateOfBirth", employee.DateOfBirth);
+                parameters.Add("v_Gender", employee.Gender);
+                parameters.Add("v_Postions", employee.Postions);
+                parameters.Add("v_IdentifyCode", employee.IdentifyCode);
+                parameters.Add("v_IdentifyPlace", employee.IdentifyPlace);
+                parameters.Add("v_IdentifyDate", employee.IdentifyDate);
+                parameters.Add("v_Address", employee.Address);
+                parameters.Add("v_PhoneNumber", employee.Phonenumber);
+                parameters.Add("v_Fax", employee.Fax);
+                parameters.Add("v_Email", employee.Email);
+                parameters.Add("v_BankAccount", employee.BankAccount);
+                parameters.Add("v_BankName", employee.BankName);
+                parameters.Add("v_BankUnit", employee.BankUnit);
+                parameters.Add("v_UnitID", employee.UnitID);
+                parameters.Add("v_UnitName", employee.UnitName);
+                parameters.Add("v_CreateDate", DateTime.Now);
+                parameters.Add("v_CreateBy", employee.CreateBy);
+                parameters.Add("v_ModifiedDate", DateTime.Now);
+                parameters.Add("v_ModifiedBy", employee.ModitifiedBy);
 
                 //Thực hiện gọi vào DB
                 var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
                 if (numberOfAffectedRows > 0)
                 {
-                    return StatusCode(StatusCodes.Status201Created, employeeID);
+                    return StatusCode(StatusCodes.Status201Created, employeeid);
                 }
                 else
                 {
@@ -352,29 +347,29 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// <param name="employeeid">ID nhân viên</param>
         /// <returns>số lượng bản ghi ảnh hưởng</returns>
         /// createdby: Nguyễn Văn Cương 16/08/2022
-
         [HttpDelete("{employeeid}")]
         public IActionResult DeleteEmployee([FromRoute] Guid employeeid)
         {
             try
             {
                 //Khởi tạo kết nối với MySQl
-                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
+                string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
                 var mysqlConnection = new MySqlConnection(connectionString);
 
 
                 //khai bao ten stored produre
-                string storeProdureName = "pro_deleteemployee";
+                string storeProdureName = "Pro_employee_DeleteEmployee";
 
                 //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
-                var parameters = employeeid;
+                var parameters = new DynamicParameters();
+                parameters.Add("v_EmployeeID", employeeid);
 
                 //Thực hiện gọi vào DB
                 var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
                 if (numberOfAffectedRows > 0)
                 {
-                    return StatusCode(StatusCodes.Status201Created);
+                    return StatusCode(StatusCodes.Status200OK,employeeid);
                 }
                 else
                 {

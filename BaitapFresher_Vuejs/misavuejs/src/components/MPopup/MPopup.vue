@@ -37,7 +37,7 @@
             v-model="Employees.EmployeeCode"
           />
 
-          <span class="error-code"> Mã không được để trống </span>
+          <span v-show="Spanempty" class="error-code"> Mã không được để trống </span>
         </div>
         <div class="input_item item2">
           <label class="item-label">Tên</label>
@@ -48,7 +48,7 @@
             v-model="Employees.FullName"
           />
 
-          <span class="error-name"> Tên không được để trống </span>
+          <span v-show="Spanempty" class="error-name"> Tên không được để trống </span>
         </div>
         <div class="input_item item3">
           <label class="item-label label3">Ngày sinh</label>
@@ -244,12 +244,27 @@ export default {
           
 
         
-      } else {
+      } else if(this.Employees.EmployeeCode == null){
         //chưa có mã hoặc tên thì yêu cầu nhập
         this.inValue = false; //đỏ input mã và tên
         this.isShowNotification = true; //mở popup thông báo
-        this.errors = "Không được để trống dữ liệu";
+        this.errors = "Mã Không được để trống";
         validate = false;
+        this.Spanempty = true;
+      }else if(this.Employees.FullName == null){
+        //chưa có mã hoặc tên thì yêu cầu nhập
+        this.inValue = false; //đỏ input mã và tên
+        this.isShowNotification = true; //mở popup thông báo
+        this.errors = "Tên Không được để trống";
+        validate = false;
+        this.Spanempty = true;
+      }else {
+        //chưa có mã hoặc tên thì yêu cầu nhập
+        this.inValue = false; //đỏ input mã và tên
+        this.isShowNotification = true; //mở popup thông báo
+        this.errors = "Mã Không được để trống";
+        validate = false;
+        this.Spanempty = true;
       }
 
       if (validate == true) {
@@ -280,7 +295,7 @@ export default {
     //hàm đóng popup thông báo
     closeNoti() {
       this.isShowNotification = false;
-      this.inValue = true; //ẩn đỏ input mã và tên
+      //this.inValue = true; //ẩn đỏ input mã và tên
       this.validate = false;
     },
   },
@@ -313,6 +328,7 @@ export default {
       },
       errors: [],
       isShowNotification: false,
+      Spanempty: false
     };
   },
 };
@@ -557,6 +573,7 @@ export default {
 .item-input-red {
   border: 1px solid #ff0000;
 }
+
 .error-code {
   position: absolute;
   left: 5px;

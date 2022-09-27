@@ -45,17 +45,17 @@ namespace MISA.WEB08.AMIS.API.Entities
         /// <summary>
         /// số cmnd
         /// </summary>
-        public string  IndentifyCode { get; set; }
+        public string  IdentifyCode { get; set; }
 
         /// <summary>
         /// ngày cấp cmnd
         /// </summary>
-        public DateTime IndentifyDate { get; set; }
+        public DateTime IdentifyDate { get; set; }
 
         /// <summary>
         /// nơi cấp cmnd
         /// </summary>
-        public string IndentifyAddress { get; set; }
+        public string IdentifyPlace { get; set; }
 
         /// <summary>
         /// địa chỉ 
