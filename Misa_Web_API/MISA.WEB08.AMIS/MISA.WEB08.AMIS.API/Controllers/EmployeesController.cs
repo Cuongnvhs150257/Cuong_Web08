@@ -107,12 +107,13 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         [HttpGet("filter")]
         public IActionResult FilterEmployees(
-            [FromQuery] string? employeeid,
+            [FromQuery] string? wnere,
             [FromQuery] int? limit,
             [FromQuery] int? offset)
         {
             try
             {
+                var result = new PagingData();
                 //Khởi tạo kết nối với MySQl
                 string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
                 var mysqlConnection = new MySqlConnection(connectionString);
@@ -125,13 +126,18 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
                 parameters.Add("v_limit", limit);
                 parameters.Add("v_offset", offset);
-                parameters.Add("v_where", employeeid);
+                parameters.Add("v_where", wnere);
 
                 //Thực hiện gọi vào DB
-                var numberOfAffectedRows = mysqlConnection.QueryMultiple(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                var ListEmployees = mysqlConnection.QueryMultiple(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                result.Data = ListEmployees.Read<Employee>().ToList();
+                result.TotalCount = ListEmployees.Read<Int32>().First();
 
-
-                return StatusCode(StatusCodes.Status200OK);
+                return StatusCode(StatusCodes.Status200OK, new PagingData()
+                {
+                    Data = result.Data,
+                    TotalCount = result.TotalCount,
+                });
             }
             catch (Exception ex)
             {

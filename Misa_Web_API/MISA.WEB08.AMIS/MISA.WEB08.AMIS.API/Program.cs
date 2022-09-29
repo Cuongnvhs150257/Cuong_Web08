@@ -1,4 +1,10 @@
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));\
 
 // Add services to the container.
 
@@ -15,6 +21,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("corsapp");
 
 app.UseAuthorization();
 

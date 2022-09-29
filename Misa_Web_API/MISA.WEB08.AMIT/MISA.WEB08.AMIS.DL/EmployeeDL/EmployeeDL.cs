@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
+using MISA.WEB08.AMIS.Common.Resource;
 using MISA.WEB08.AMIS.DL;
 using MySqlConnector;
 using System;
@@ -12,30 +13,16 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.DL
 {
-    public class EmployeeDL : IEmployeeDL
+    public class EmployeeDL : BaseDL<Employee>, IEmployeeDL
     {
-        public IEnumerable<Employee> GetAllEmployees()
-        {
-            //Khởi tạo kết nối với MySQl
-            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
-            var mysqlConnection = new MySqlConnection(connectionString);
-
-            //khai bao ten stored produre
-            string storeProdureName = "Pro_employee_SelectAllEmployee";
-
-            //Thực hiện gọi vào DB
-            var employees = mysqlConnection.Query<Employee>(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
-
-            return employees;
-        }
 
         public Employee GetEmployeeByID(Guid employeeid)
         {
-            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
+            string connectionString = DataContext.MySqlConnectionString;
             var mysqlConnection = new MySqlConnection(connectionString);
 
             //khai bao ten stored produre
-            string storeProdureName = "Pro_employee_SelectEmployee";
+            string storeProdureName = String.Format(Resource.Pro_SelectEmployee, typeof(Employee).Name);
 
             //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
             var parameters = new DynamicParameters();
@@ -47,36 +34,20 @@ namespace MISA.WEB08.AMIS.DL
             return numberOfAffectedRows;
         }
 
-        public int InsertEmployee(Employee employee)
+        public Guid InsertEmployee(Employee employee)
         {
-            var properties = typeof(Employee).GetProperties();
-            var validateFailures = new List<string>();
-            foreach (var property in properties)
-            {
-                string propertyName = property.Name;
-                var properyValue = property.GetValue(employee);
-                var isNotNullOrEmptyAtrribute = (IsNotNullOrEmptyAtrribute?)Attribute.GetCustomAttribute(property, typeof(IsNotNullOrEmptyAtrribute));
-                if (isNotNullOrEmptyAtrribute != null && string.IsNullOrEmpty(properyValue?.ToString()))
-                {
-                    validateFailures.Add(isNotNullOrEmptyAtrribute.ErrorMessage);
-                }
-            }
-
-            if (validateFailures.Count > 0)
-            {
-                
-            }
+            
             //Khởi tạo kết nối với MySQl
-            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
+            string connectionString = DataContext.MySqlConnectionString;
             var mysqlConnection = new MySqlConnection(connectionString);
 
             //khai bao ten stored produre
-            string storeProdureName = "Pro_employee_InsertEmployee";
+            string storeProdureName = String.Format(Resource.Pro_InsertEmployee, typeof(Employee).Name);
 
             //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
             var parameters = new DynamicParameters();
 
-            var employeeID = Guid.NewGuid();
+            Guid employeeID = Guid.NewGuid();
             parameters.Add("v_EmployeeID", employeeID);
             parameters.Add("v_EmployeeCode", employee.EmployeeCode);
             parameters.Add("v_FullName", employee.FullName);
@@ -103,19 +74,30 @@ namespace MISA.WEB08.AMIS.DL
             //Thực hiện gọi vào DB
             var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
             
-            return numberOfAffectedRows;
+            if(numberOfAffectedRows > 0)
+            {
+                return employeeID;
+            }
+            else
+            {
+
+                return Guid.Empty;
+            }
+
+            
 
         }
+
 
         public int DeleteEmployee([FromRoute] Guid employeeid)
         {
             //Khởi tạo kết nối với MySQl
-            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.ctm.cuong;Uid=root;Pwd=012346789;";
+            string connectionString = DataContext.MySqlConnectionString;
             var mysqlConnection = new MySqlConnection(connectionString);
 
 
             //khai bao ten stored produre
-            string storeProdureName = "pro_deleteemployee";
+            string storeProdureName = String.Format(Resource.Pro_DeleteEmployee, typeof(Employee).Name);
 
             //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
             var parameters = employeeid;
@@ -129,11 +111,11 @@ namespace MISA.WEB08.AMIS.DL
         public int UpdateEmployee(Guid employeeid, Employee employee)
         {
             //Khởi tạo kết nối với MySQl
-            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
+            string connectionString = DataContext.MySqlConnectionString;
             var mysqlConnection = new MySqlConnection(connectionString);
 
             //khai bao ten stored produre
-            string storeProdureName = "Pro_employee_UpdateEmployee";
+            string storeProdureName = String.Format(Resource.Pro_UpdateEmployee, typeof(Employee).Name);
 
             //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
             var parameters = new DynamicParameters();
@@ -167,13 +149,14 @@ namespace MISA.WEB08.AMIS.DL
             return numberOfAffectedRows;
         }
 
-        public IEnumerable<Employee> FilterEmployees(
-            string keyword,
-            int limit,
-            int offset)
+        public PagingData FilterEmployees(
+            string where,
+            int? limit,
+            int? offset)
         {
+            var result = new PagingData();
             //Khởi tạo kết nối với MySQl
-            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
+            string connectionString = DataContext.MySqlConnectionString;
             var mysqlConnection = new MySqlConnection(connectionString);
 
             //khai bao ten stored produre
@@ -184,12 +167,18 @@ namespace MISA.WEB08.AMIS.DL
 
             parameters.Add("v_limit", limit);
             parameters.Add("v_offset", offset);
-            parameters.Add("v_where", keyword);
+            parameters.Add("v_where", where);
 
             //Thực hiện gọi vào DB
-            var numberOfAffectedRows = mysqlConnection.QueryMultiple(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+            var ListEmployees = mysqlConnection.QueryMultiple(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+            result.Data = ListEmployees.Read<Employee>().ToList();
+            result.TotalCount = ListEmployees.Read<Int32>().First();
 
-            return numberOfAffectedRows;
+            return new PagingData()
+            {
+                Data = result.Data,
+                TotalCount = result.TotalCount,
+            };
         }
 
         public IEnumerable<Employee> DeleteMultipleEmployee(List<string> employeeid)

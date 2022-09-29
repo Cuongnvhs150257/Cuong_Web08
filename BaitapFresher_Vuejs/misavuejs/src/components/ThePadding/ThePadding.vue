@@ -1,15 +1,14 @@
 <template>
     <div class="padding">
-                    <div class="padding-left">
+                    <div class="padding-left" v-if="TotalCount">
                         <label>Tổng số: </label>
-                        <label class="padding-left-bold">5 </label>
-                        <label>bản ghi</label>
+                        <label class="padding-left-bold">{{TotalCount.totalCount}}</label>
+                        <label> bản ghi</label>
                     </div>
                     <div class="padding-right">
-                        <select >
-                            <option value="1">20 bản ghi trên 1 trang</option>
-                            <option value="2">20 nhân viên/trang</option>
-                        </select>
+                        <div class="drop-box">
+                            <MDropBox />
+                        </div>
                         <div class="padding-center">
                             <button class="btn-first">Trước</button>
                             <div class="page-group">
@@ -91,14 +90,23 @@
 }
 .btn-first:hover, .btn-last:hover{
     color: #666666;
+}.drop-box{
+    width: 200px;
+    height: 30px;
+    border: 1px solid #bbbbbb;
+    outline: none;
 }
 
 </style>
 
 <script>
+import MDropBox from "./MDropBox.vue";
 export default {
-    setup() {
-        
+    props:{
+        TotalCount: Object
     },
+    components: {
+        MDropBox
+    }
 }
 </script>

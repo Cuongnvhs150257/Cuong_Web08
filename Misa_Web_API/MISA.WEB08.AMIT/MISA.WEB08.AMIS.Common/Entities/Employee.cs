@@ -1,5 +1,5 @@
-﻿using MISA.WEB08.AMIS.Common.Atrribute;
-using MISA.WEB08.AMIS.Common.Enums;
+﻿using MISA.WEB08.AMIS.Common;
+using MISA.WEB08.AMIS.Common;
 
 namespace MISA.WEB08.AMIS.Common.Entities
 {
@@ -7,7 +7,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
     /// Nhân viên ứng với bảng employee
     /// create by: Nguyễn Văn Cương 16/8/2022
     /// </summary>
-    public class Employee
+    public class Employee : BaseEntities
     {
         /// <summary>
         /// ID nhân viên
@@ -106,22 +106,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// ngày tạo
         /// </summary>
-        public DateTime CreateDate { get; set; }
-
-        /// <summary>
-        /// người tạo
-        /// </summary>
-        public string CreateBy { get; set; }
-
-        /// <summary>
-        /// ngày chỉnh sửa gần nhất 
-        /// </summary>
-        public DateTime ModitifiedDate { get; set; }
-
-        /// <summary>
-        /// người chỉnh sửa gần nhất
-        /// </summary>
-        public string ModitifiedBy { get; set; }
+        
     }
 
 }

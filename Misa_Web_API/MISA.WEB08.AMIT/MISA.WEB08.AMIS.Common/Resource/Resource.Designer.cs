@@ -133,6 +133,51 @@ namespace MISA.WEB08.AMIS.Common.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pro_{0}_DeleteEmployee.
+        /// </summary>
+        public static string Pro_DeleteEmployee {
+            get {
+                return ResourceManager.GetString("Pro_DeleteEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pro_{0}_InsertEmployee.
+        /// </summary>
+        public static string Pro_InsertEmployee {
+            get {
+                return ResourceManager.GetString("Pro_InsertEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pro_{0}_SelectEmployee.
+        /// </summary>
+        public static string Pro_SelectEmployee {
+            get {
+                return ResourceManager.GetString("Pro_SelectEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pro_{0}_SelectAllEmployee.
+        /// </summary>
+        public static string Pro_SeleteAll {
+            get {
+                return ResourceManager.GetString("Pro_SeleteAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pro_{0}_UpdateEmployee.
+        /// </summary>
+        public static string Pro_UpdateEmployee {
+            get {
+                return ResourceManager.GetString("Pro_UpdateEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Xóa nhân viên thất bật.
         /// </summary>
         public static string UserMsg_DeleteFailed {

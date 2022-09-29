@@ -14,16 +14,12 @@
     <div class="content-table">
       <div class="content-toolbar">
         <div class="content-toolbar-right">
-          <input
-            type="text"
-            class="toolbar-input"
-            placeholder="Tìm theo mã, tên nhân viên"
-          />
+          <MInputSearch v-model="Where" />
           <button type="button" class="toolbar-load" @click="loadData"></button>
         </div>
       </div>
       <MTable @custom-open-dbclick="openPopup" :EmployeesLoad="EmployeesTable" @data-load-delete="loadData"/>
-      <the-padding></the-padding>
+      <ThePadding :TotalCount="EmployeesTable" />
     </div>
 
     <!-- <Teleport to="#page-employee">
@@ -47,6 +43,7 @@ import { ref } from "vue";
 
 import MPopup from "../MPopup/MPopup.vue";
 import MLoading from "../MLoading/MLoading.vue"
+import MInputSearch from "./MInputSearch.vue"
 export default {
   setup() {
     const isShow = ref(false)
@@ -60,7 +57,7 @@ export default {
     async function openPopup(id) {
       if(id){ //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
         LoadingShow.value = true; //hiển thị loading
-        await fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees/" + id, {method:"GET"})
+        await fetch("http://localhost:17703/api/v1/Employees/" + id, {method:"GET"})
         .then(res => res.json())
         .then(data =>{
             //this.employees = data;
@@ -89,7 +86,10 @@ export default {
     //hàm load dữ liệu
     function loadData() {
       LoadingShow.value = true;
-      fetch("https://63215c8cfd698dfa29f620da.mockapi.io/Employees", {
+      const limit = 5;
+      const offset = 1;
+      const filter = `filter?limit=${limit}&offset=${offset}`;
+      fetch("http://localhost:17703/api/v1/Employees/" + filter, {
         method: "GET",
       })
         .then((res) => res.json())
@@ -103,7 +103,24 @@ export default {
         });
     }
     loadData()
-
+    function Search(){
+      const limit = 5;
+      const offset = 1;
+      const filter = `filter?limit=${limit}&offset=${offset}`;
+      fetch("http://localhost:17703/api/v1/Employees/" + filter, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          EmployeesTable.value = data;
+          LoadingShow.value = false;
+          console.log(data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    }
+    Search()
     
     return {
       isShow,
@@ -112,10 +129,11 @@ export default {
       closePopup,
       Employees,
       EmployeesTable,
-      loadData
+      loadData,
+      Where: {},
     };
   },
-  components: { MButton, MTable, ThePadding, MPopup, MLoading},
+  components: { MButton, MTable, ThePadding, MPopup, MLoading, MInputSearch},
 
 
 };

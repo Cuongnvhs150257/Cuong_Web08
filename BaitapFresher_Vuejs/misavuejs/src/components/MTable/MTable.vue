@@ -3,7 +3,7 @@
     <table>
     <thead>
       <tr>
-        <th><input type="checkbox" class="tab-checkbox" /></th>
+        <th class="box"><input type="checkbox" class="tab-checkbox" /></th>
         <th>Mã nhân viên</th>
         <th>Tên nhân viên</th>
         <th>Giới tính</th>
@@ -17,26 +17,26 @@
         <th class="tab-th-select">Chức năng</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody v-if="EmployeesLoad">
       <tr
-        v-for="emp in EmployeesLoad"
-        :key="emp.EmployeeID"
-        @dblclick="rowDBClick(emp.EmployeeID)"
+        v-for="emp in EmployeesLoad.data"
+        :key="emp.employeeID"
+        @dblclick="rowDBClick(emp.employeeID)"
       >
-        <td><input type="checkbox" class="tab-checkbox"/></td>
-        <td>{{ emp.EmployeeCode }}</td>
-        <td>{{ emp.FullName }}</td>
-        <td>{{ emp.Gender }}</td>
-        <td class="tab-th-select">{{ emp.DateOfBirth }}</td>
-        <td>{{ emp.IdentityNumber }}</td>
-        <td>{{ emp.PositionName }}</td>
-        <td>{{ emp.DepartmentName }}</td>
-        <td>{{ emp.AccountBank }}</td>
-        <td>{{ emp.NameBank }}</td>
-        <td>{{ emp.BranchBank }}</td>
+        <td class="box"><input type="checkbox" class="tab-checkbox"/></td>
+        <td>{{ emp.employeeCode }}</td>
+        <td>{{ emp.fullName }}</td>
+        <td>{{ emp.gender }}</td>
+        <td class="tab-th-select">{{ emp.dateOfBirth }}</td>
+        <td>{{ emp.identifyCode }}</td>
+        <td>{{ emp.postions }}</td>
+        <td>{{ emp.unitName }}</td>
+        <td>{{ emp.bankAccount }}</td>
+        <td>{{ emp.bankName }}</td>
+        <td>{{ emp.bankUnit }}</td>
         <td class="tab-th-select func" >
-          <label @click="rowDBClick(emp.EmployeeID)">Sửa</label>
-          <select @change="openPopupAsk($event, emp.EmployeeID)">
+          <label @click="rowDBClick(emp.employeeID)">Sửa</label>
+          <select @change="openPopupAsk($event, emp.employeeID)">
             <option value="1">Nhân bản</option>
             <option value="2">Xóa</option>
             <option value="3">Ngưng sử dụng</option>
@@ -66,10 +66,10 @@ export default {
 
     //hàm hiện thông tin trên popup khi nhấn vào Sửa
 
-    rowDBClick(EmployeeID) {
+    rowDBClick(employeeID) {
       //this.empSelected = employees;
       
-      this.$emit("custom-open-dbclick", EmployeeID);
+      this.$emit("custom-open-dbclick", employeeID);
       this.detailFormMode = 2;
     },
     
@@ -99,7 +99,7 @@ export default {
           {
             this.ClosePopupAsk(); //đóng popup hỏi người dùng
               await fetch(
-            "https://63215c8cfd698dfa29f620da.mockapi.io/Employees/" + id,
+            "http://localhost:17703/api/v1/Employees/" + id,
             { method: "DELETE" }
           )
             .then((res) => res.json())

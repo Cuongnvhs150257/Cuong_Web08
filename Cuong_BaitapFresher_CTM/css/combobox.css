@@ -34,12 +34,17 @@
     top: 50px;
     width: 100%;
     box-shadow: 0 3px 6px #000;
+    z-index: 1;
+    background-color: #fff;
 }
 .combobox-item{
     height: 40px;
     display: flex;
     align-items: center;
+    padding-left: 54px;
 
 }.combobox-item:hover{
     background-color: gray;
+}.combobox-item.selected{
+    background-color: #019060;
 }

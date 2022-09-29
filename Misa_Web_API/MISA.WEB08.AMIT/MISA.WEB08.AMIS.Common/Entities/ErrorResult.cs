@@ -1,4 +1,4 @@
-﻿using MISA.WEB08.AMIS.Common.Enums;
+﻿using MISA.WEB08.AMIS.Common;
 
 namespace MISA.WEB08.AMIS.Common.Entities
 {
@@ -31,23 +31,18 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// ID thông tin lỗi
         /// </summary>
-        public string TraceID { get; set; }
+        public string? TraceID { get; set; }
 
         /// <summary>
         /// contructor không thông số
         /// </summary>
+        
         public ErrorResult()
         {
+
         }
-        /// <summary>
-        /// contructor có thông số
-        /// </summary>
-        /// <param name="errorCode"></param>
-        /// <param name="devMsg"></param>
-        /// <param name="userMsg"></param>
-        /// <param name="moreInfo"></param>
-        /// <param name="traceID"></param>
-        public ErrorResult(AMITErrorCode errorCode, string devMsg, string userMsg, string moreInfo, string traceID)
+
+        public ErrorResult(AMITErrorCode errorCode, string devMsg, string userMsg, string moreInfo, string? traceID = null)
         {
             ErrorCode = errorCode;
             DevMsg = devMsg;

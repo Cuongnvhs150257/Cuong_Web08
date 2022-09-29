@@ -1,0 +1,15 @@
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\obj\Debug\net6.0\MISA.WEB08.AMIS.DL.csproj.AssemblyReference.cache
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\obj\Debug\net6.0\MISA.WEB08.AMIS.DL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\obj\Debug\net6.0\MISA.WEB08.AMIS.DL.AssemblyInfoInputs.cache
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\obj\Debug\net6.0\MISA.WEB08.AMIS.DL.AssemblyInfo.cs
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\obj\Debug\net6.0\MISA.WEB08.AMIS.DL.csproj.CoreCompileInputs.cache
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\bin\Debug\net6.0\MISA.WEB08.AMIS.DL.deps.json
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\bin\Debug\net6.0\MISA.WEB08.AMIS.DL.dll
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\bin\Debug\net6.0\MISA.WEB08.AMIS.DL.pdb
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\bin\Debug\net6.0\MISA.WEB08.AMIS.Common.dll
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\bin\Debug\net6.0\MISA.WEB08.AMIS.Common.pdb
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\obj\Debug\net6.0\MISA.WEB08.AMIS.DL.csproj.CopyComplete
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\obj\Debug\net6.0\MISA.WEB08.AMIS.DL.dll
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\obj\Debug\net6.0\refint\MISA.WEB08.AMIS.DL.dll
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\obj\Debug\net6.0\MISA.WEB08.AMIS.DL.pdb
+C:\Users\s\Documents\GitHub\Cuong_Web08\Misa_Web_API\MISA.WEB08.AMIT\MISA.WEB08.AMIS.DL\obj\Debug\net6.0\ref\MISA.WEB08.AMIS.DL.dll

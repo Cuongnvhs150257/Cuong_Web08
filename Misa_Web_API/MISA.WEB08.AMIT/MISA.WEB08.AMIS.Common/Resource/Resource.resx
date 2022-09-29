@@ -149,6 +149,26 @@
     <value>http://openapi.google.com/api/errorrcode</value>
     <comment>Link thông tin thêm về lỗi  request</comment>
   </data>
+  <data name="Pro_DeleteEmployee" xml:space="preserve">
+    <value>Pro_{0}_DeleteEmployee</value>
+    <comment>Template string cho procudues xóa</comment>
+  </data>
+  <data name="Pro_InsertEmployee" xml:space="preserve">
+    <value>Pro_{0}_InsertEmployee</value>
+    <comment>Template string cho procudues thêm mới</comment>
+  </data>
+  <data name="Pro_SelectEmployee" xml:space="preserve">
+    <value>Pro_{0}_SelectEmployee</value>
+    <comment>Template string cho procudues lấy một</comment>
+  </data>
+  <data name="Pro_SeleteAll" xml:space="preserve">
+    <value>Pro_{0}_SelectAllEmployee</value>
+    <comment>Template string cho procudues lấy toàn bộ</comment>
+  </data>
+  <data name="Pro_UpdateEmployee" xml:space="preserve">
+    <value>Pro_{0}_UpdateEmployee</value>
+    <comment>Template string cho procudues cập nhật</comment>
+  </data>
   <data name="UserMsg_DeleteFailed" xml:space="preserve">
     <value>Xóa nhân viên thất bật</value>
     <comment>Messeage dành cho người dùng khi xóa không thành công</comment>

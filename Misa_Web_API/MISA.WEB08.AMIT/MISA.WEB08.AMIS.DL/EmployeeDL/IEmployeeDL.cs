@@ -7,17 +7,16 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.DL
 {
-    public interface IEmployeeDL
+    public interface IEmployeeDL : IBaseDL<Employee>
     {
-        public IEnumerable<Employee> GetAllEmployees();
 
         public Employee GetEmployeeByID(Guid employeeid);
 
-        public int InsertEmployee(Employee employee);
+        public Guid InsertEmployee(Employee employee);
 
         public int UpdateEmployee(Guid employeeid, Employee employee);
 
-        public IEnumerable<Employee> FilterEmployees(string keyword, int limit, int offset);
+        public PagingData FilterEmployees(string where, int? limit, int? offset);
 
         public int DeleteEmployee(Guid employeeid);
 

@@ -70,30 +70,28 @@
         <div class="input_item item1">
           <label class="item-label">Đơn vị</label>
           <label class="item-labelsao"> *</label>
-          <select>
-            <option value="1">Phòng nhân sự</option>
-          </select>
+          <MComboxbox />
         </div>
         <div class="input_item item2">
           <label class="item-label">Số CMND</label>
           <m-input-nomal
             :toolTip="'Số chứng minh nhân dân'"
-            v-model="Employees.IdentityNumber"
+            v-model="Employees.IdentifyCode"
           ></m-input-nomal>
         </div>
         <div class="input_item item3">
           <label class="item-label l3">Ngày cấp</label>
-          <input type="datetime-local" class="item-input in3" />
+          <input type="datetime-local" class="item-input in3" v-model="Employees.IdentifyDate"/>
         </div>
       </div>
       <div class="popup_item input4">
         <div class="input_item item1">
           <label class="item-label">Chức danh</label>
-          <m-input-nomal v-model="Employees.PositionName"></m-input-nomal>
+          <m-input-nomal v-model="Employees.Postions"></m-input-nomal>
         </div>
         <div class="input_item item2">
           <label class="item-label">Nơi cấp</label>
-          <m-input-nomal v-model="Employees.IdentityPlace"></m-input-nomal>
+          <m-input-nomal v-model="Employees.IdentifyPlace"></m-input-nomal>
         </div>
       </div>
       <div class="popup_item input5">
@@ -114,7 +112,7 @@
           <label class="item-label">ĐT cố định</label>
           <m-input-nomal
             :toolTip="'Điện thoại cố định'"
-            v-model="Employees.PersonalTaxCode"
+            v-model="Employees.Fax"
           ></m-input-nomal>
         </div>
         <div class="input_item item">
@@ -125,15 +123,15 @@
       <div class="popup_item input6">
         <div class="input_item item1">
           <label class="item-label">Tài khoản ngân hàng</label>
-          <m-input-nomal v-model="Employees.AccountBank"></m-input-nomal>
+          <m-input-nomal v-model="Employees.BankAccount"></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">Tên ngân hàng</label>
-          <m-input-nomal v-model="Employees.NameBank"></m-input-nomal>
+          <m-input-nomal v-model="Employees.BankName"></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">Chi nhánh</label>
-          <m-input-nomal v-model="Employees.BranchBank"></m-input-nomal>
+          <m-input-nomal v-model="Employees.BankUnit"></m-input-nomal>
         </div>
       </div>
       <div class="popup_item input8">
@@ -172,6 +170,7 @@ import MInputRadio from "./MInputRadio.vue";
 import MButton1 from "./MButton1.vue";
 import MInputSpecial from "./MInputSpecial.vue";
 import MPopupNotification from "../MPopupNotification/MPopupNotification.vue";
+import MComboxbox from "./MCombobox.vue";
 
 export default {
   methods: {
@@ -209,7 +208,7 @@ export default {
     //hàm sửa hoặc thêm nhân viên mới
     btnSaveonClick() {
       var method = "POST";
-      var url = "https://63215c8cfd698dfa29f620da.mockapi.io/Employees";
+      var url = "http://localhost:17703/api/v1/Employees/";
       var validate = true;
       this.errors = [];
 
@@ -305,6 +304,7 @@ export default {
     MButton1,
     MInputSpecial,
     MPopupNotification,
+    MComboxbox
   },
   props: {
     employeesSelected: Object,
@@ -478,19 +478,11 @@ export default {
 }
 
 .popup_item.input3 .input_item.item1 {
-  width: 390px;
-  height: 73px;
-}
-.input_item.item1 select {
   width: 398px;
-  height: 31px;
-  margin-top: 5px;
-  border: 1px solid #bbbbbb;
+  height: 73px;
+  margin-right: 5px;
 }
-.input_item.item1 select:focus {
-  border: 2px solid #019160;
-  outline: none;
-}
+
 .popup_item.input3 .input_item.item2 {
   width: 225px;
   height: 73px;
