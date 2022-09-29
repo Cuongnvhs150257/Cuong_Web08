@@ -208,7 +208,7 @@ export default {
     //hàm sửa hoặc thêm nhân viên mới
     btnSaveonClick() {
       var method = "POST";
-      var url = "http://localhost:17703/api/v1/Employees/";
+      var url = "http://localhost:17703/api/v1/Employees";
       var validate = true;
       this.errors = [];
 
@@ -530,7 +530,7 @@ export default {
   border-top: 1px solid #bbbbbb;
 }
 .btn_input8_right {
-  height: 36px;
+  height: 35px;
   width: 80px;
   border: 1px solid black;
   text-align: center;
@@ -545,7 +545,7 @@ export default {
   right: 0;
 }
 .btn_input8_left {
-  height: 36px;
+  height: 35px;
   width: 80px;
   border: 1px solid black;
   text-align: center;

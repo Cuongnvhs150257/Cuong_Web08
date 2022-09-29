@@ -277,6 +277,30 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
             try
             {
+                //validate dữ liệu đầu vào
+                var properties = typeof(Employee).GetProperties();
+                var validateFailures = new List<string>();
+                foreach (var property in properties)
+                {
+                    string propertyName = property.Name;
+                    var properyValue = property.GetValue(employee);
+                    var isNotNullOrEmptyAtrribute = (IsNotNullOrEmptyAtrribute?)Attribute.GetCustomAttribute(property, typeof(IsNotNullOrEmptyAtrribute));
+                    if (isNotNullOrEmptyAtrribute != null && string.IsNullOrEmpty(properyValue?.ToString()))
+                    {
+                        validateFailures.Add(isNotNullOrEmptyAtrribute.ErrorMessage);
+                    }
+                }
+
+                if (validateFailures.Count > 0)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult(
+                    AMITErrorCode.InsertError,
+                    Resource.DevMsg_InsertFailed,
+                    Resource.UserMsg_InsertFaild,
+                    Resource.MoreInfo_InsertFaild,
+                    HttpContext.TraceIdentifier));
+                }
+
                 //Khởi tạo kết nối với MySQl
                 string connectionString = "Server=localhost;Port=3306;Database=misa.web08.cmt.cuong;Uid=root;Pwd=123456789";
                 var mysqlConnection = new MySqlConnection(connectionString);

@@ -11,7 +11,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
     [Route("api/v1/[controller]")]
     [ApiController]
-
     public class BaseController<T> : ControllerBase
     {
         #region Field
@@ -43,9 +42,9 @@ namespace MISA.WEB08.AMIS.API.Controllers
             //Try catch exception
             try
             {
-                var employees = _baseBL.GetAllRecords;
+                var records = _baseBL.GetAllRecords();
 
-                return StatusCode(StatusCodes.Status200OK, employees);
+                return StatusCode(StatusCodes.Status200OK, records);
             }
             catch (Exception ex)
             {

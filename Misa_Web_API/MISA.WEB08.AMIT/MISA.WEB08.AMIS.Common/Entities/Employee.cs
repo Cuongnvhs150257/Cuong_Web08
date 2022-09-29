@@ -1,5 +1,4 @@
 ﻿using MISA.WEB08.AMIS.Common;
-using MISA.WEB08.AMIS.Common;
 
 namespace MISA.WEB08.AMIS.Common.Entities
 {

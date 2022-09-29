@@ -2,15 +2,12 @@
   <div class="combobox">
     <input type="text" />
     <button @click="btnComboboxOnClick"></button>
-    <div class="combobox-data" v-show="OpenComboxbox" >
+    <div class="combobox-data" v-for="u in UnitItem" :key="u.unitID">
       <div class="combobox-item">
-          <div class="combobox-item-left">Mã đơn vị</div>
-          <div class="combobox-item-right">Tên đơn vị</div>
+          <div class="combobox-item-left">{{e.unitCode}}</div>
+          <div class="combobox-item-right">{{e.unitName}}</div>
       </div>
-      <div class="combobox-item">
-          <div class="combobox-item-left">DA NANG</div>
-          <div class="combobox-item-right">Chi nhánh Đà Nẵng</div>
-      </div>
+      <!-- 
       <div class="combobox-item">
           <div class="combobox-item-left">HA NOI</div>
           <div class="combobox-item-right">Chi nhánh Hà Nội</div>
@@ -18,7 +15,10 @@
       <div class="combobox-item">
           <div class="combobox-item-left">HCM</div>
           <div class="combobox-item-right">Chi nhánh HCM</div>
-      </div>
+      </div> -->
+
+      
+      
     </div>
   </div>
 </template>
@@ -26,14 +26,33 @@
 <script>
 export default {
   methods:{
-      
+
+        
         btnComboboxOnClick() {
             this.OpenComboxbox = true;
+            this.loadUnit();
+            
         },
+
+        loadUnit(){
+            fetch("http://localhost:17703/api/Unit", {
+            method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          this.UnitItem = data;
+          console.log(this.UnitItem);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+        },
+
 
     data(){
         return{
             OpenComboxbox: false,
+            UnitItem: {}
         }
     }
   }
