@@ -61,6 +61,15 @@ namespace MISA.WEB08.AMIS.Common.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to admin.
+        /// </summary>
+        public static string Default_User {
+            get {
+                return ResourceManager.GetString("Default_User", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete to database return 0.
         /// </summary>
         public static string DevMsg_DeleteFailed {

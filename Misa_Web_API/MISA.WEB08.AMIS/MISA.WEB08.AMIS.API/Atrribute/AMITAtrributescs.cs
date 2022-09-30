@@ -10,7 +10,9 @@
         
     }
 
-
+    /// <summary>
+    /// Atrribute kiếm tra có rỗng không
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     public class IsNotNullOrEmptyAtrribute : Attribute
     {

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Resource;
 using MySqlConnector;
 using System;
@@ -30,6 +31,59 @@ namespace MISA.WEB08.AMIS.DL
                 var employees = mysqlConnection.Query<T>(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
                 return employees;
             };
+        }
+
+        /// <summary>
+        /// Hàm kết nối DB để thêm mới đối tượng
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        public Guid InsertRecords(T record)
+        {
+
+            //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
+            var parameters = new DynamicParameters();
+            var newRecordID = Guid.NewGuid();
+            var properties = typeof(T).GetProperties();
+
+            foreach (var property in properties)
+            {
+                string propertyName = property.Name;
+                object propertyValue;
+                var primaryKeyAttribue = (PrimarKeyAttribute?)Attribute.GetCustomAttribute(property, typeof(PrimarKeyAttribute));
+                if(primaryKeyAttribue != null)
+                {
+                    propertyValue = newRecordID;
+                }
+                else
+                {
+                    propertyValue = property.GetValue(record, null);
+                }
+                parameters.Add($"v_{propertyName}", propertyValue);
+            }
+            
+            //Khởi tạo kết nối với MySQl
+            string connectionString = DataContext.MySqlConnectionString;
+            int numberOfAffectedRows = 0;
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                //khai bao ten stored produre
+                string storeProdureName = String.Format(Resource.Pro_InsertEmployee, typeof(T).Name);
+
+                //Thực hiện gọi vào DB
+                numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);        
+            }
+            if (numberOfAffectedRows > 0)
+            {
+                return newRecordID;
+            }
+            else
+            {
+
+                return Guid.Empty;
+            }
+
         }
     }
 }

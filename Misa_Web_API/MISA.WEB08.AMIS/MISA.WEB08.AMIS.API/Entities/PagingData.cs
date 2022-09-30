@@ -12,7 +12,6 @@
         public List<Employee> Data { get; set; }
 
         //Tổng số nhân viên trả về
-
         public int TotalCount { get; set; }
     }
 }

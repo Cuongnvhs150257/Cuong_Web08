@@ -17,13 +17,7 @@ namespace MISA.WEB08.AMIS.DL
         /// <returns>numberOfAffectedRows</returns>
         public Employee GetEmployeeByID(Guid employeeid);
 
-        /// <summary>
-        /// Hàm kết nối DB để thêm mới nhân viên
-        /// Createby: Nguyễn Văn Cương 26/09/2022
-        /// </summary>
-        /// <param name="employee"></param>
-        /// <returns>employeeID</returns>
-        public Guid InsertEmployee(Employee employee);
+        
 
         /// <summary>
         /// Hàm kết nối DB để xóa nhân viên theo ID

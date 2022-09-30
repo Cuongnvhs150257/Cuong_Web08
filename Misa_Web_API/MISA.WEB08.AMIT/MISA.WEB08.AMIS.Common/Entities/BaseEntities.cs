@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using MISA.WEB08.AMIS.Common.Resource;
 namespace MISA.WEB08.AMIS.Common
 {
     /// <summary>
@@ -15,21 +10,21 @@ namespace MISA.WEB08.AMIS.Common
         /// <summary>
         /// ngày tạo
         /// </summary>
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// người tạo
         /// </summary>
-        public string CreateBy { get; set; }
+        public string CreateBy { get; set; } = "Admin";
 
         /// <summary>
         /// ngày chỉnh sửa gần nhất 
         /// </summary>
-        public DateTime ModitifiedDate { get; set; }
+        public DateTime ModitifiedDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// người chỉnh sửa gần nhất
         /// </summary>
-        public string ModitifiedBy { get; set; }
+        public string ModitifiedBy { get; set; } = "Admin";
     }
 }

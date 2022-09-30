@@ -41,66 +41,6 @@ namespace MISA.WEB08.AMIS.DL
         }
 
         /// <summary>
-        /// Hàm kết nối DB để thêm mới nhân viên
-        /// Createby: Nguyễn Văn Cương 26/09/2022
-        /// </summary>
-        /// <param name="employee"></param>
-        /// <returns>employeeID</returns>
-        public Guid InsertEmployee(Employee employee)
-        {
-            
-            //Khởi tạo kết nối với MySQl
-            string connectionString = DataContext.MySqlConnectionString;
-            var mysqlConnection = new MySqlConnection(connectionString);
-
-            //khai bao ten stored produre
-            string storeProdureName = String.Format(Resource.Pro_InsertEmployee, typeof(Employee).Name);
-
-            //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
-            var parameters = new DynamicParameters();
-
-            Guid employeeID = Guid.NewGuid();
-            parameters.Add("v_EmployeeID", employeeID);
-            parameters.Add("v_EmployeeCode", employee.EmployeeCode);
-            parameters.Add("v_FullName", employee.FullName);
-            parameters.Add("v_DateOfBirth", employee.DateOfBirth);
-            parameters.Add("v_Gender", employee.Gender);
-            parameters.Add("v_Postions", employee.Postions);
-            parameters.Add("v_IdentifyCode", employee.IdentifyCode);
-            parameters.Add("v_IdentifyPlace", employee.IdentifyPlace);
-            parameters.Add("v_IdentifyDate", employee.IdentifyDate);
-            parameters.Add("v_Address", employee.Address);
-            parameters.Add("v_PhoneNumber", employee.Phonenumber);
-            parameters.Add("v_Fax", employee.Fax);
-            parameters.Add("v_Email", employee.Email);
-            parameters.Add("v_BankAccount", employee.BankAccount);
-            parameters.Add("v_BankName", employee.BankName);
-            parameters.Add("v_BankUnit", employee.BankUnit);
-            parameters.Add("v_UnitID", employee.UnitID);
-            parameters.Add("v_UnitName", employee.UnitName);
-            parameters.Add("v_CreateDate", DateTime.Now);
-            parameters.Add("v_CreateBy", employee.CreateBy);
-            parameters.Add("v_ModifiedDate", DateTime.Now);
-            parameters.Add("v_ModifiedBy", employee.ModitifiedBy);
-
-            //Thực hiện gọi vào DB
-            var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-            
-            if(numberOfAffectedRows > 0)
-            {
-                return employeeID;
-            }
-            else
-            {
-
-                return Guid.Empty;
-            }
-
-            
-
-        }
-
-        /// <summary>
         /// Hàm kết nối DB để xóa nhân viên theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
         /// </summary>

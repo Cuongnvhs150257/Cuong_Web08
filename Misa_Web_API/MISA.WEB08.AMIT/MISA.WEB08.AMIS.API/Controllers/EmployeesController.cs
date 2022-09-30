@@ -101,51 +101,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #endregion
 
-        #region API POST Employee
-
-        // <summary>
-        /// API thêm mới nhân viên
-        /// </summary>
-        /// <param name="employee">đối tượng nhân viên</param>
-        /// <returns>số lượng bản ghi ảnh hưởng</returns>
-        /// createdby: Nguyễn Văn Cương 16/08/2022
-        [HttpPost("")]
-        public IActionResult InsertEmployee([FromBody] Employee employee)
-        {
-            try
-            {
-                //Xử lý giá trị trả về
-                var result = _employeeBL.InsertEmployee(employee);
-
-                if (!result.Success)
-                {
-                    return StatusCode(StatusCodes.Status201Created, result.Data);
-                }
-                else
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult(
-                    AMITErrorCode.InsertError,
-                    Resource.DevMsg_InsertFailed,
-                    Resource.UserMsg_InsertFaild,
-                    Resource.MoreInfo_InsertFaild,
-                    HttpContext.TraceIdentifier));
-                }
-            
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
-                    AMITErrorCode.Exception,
-                    Resource.DevMsg_Exception,
-                    Resource.UserMsg_Exception,
-                    Resource.MoreInfo_Exception,
-                    HttpContext.TraceIdentifier));
-            }
-
-        }
-
-        #endregion
 
         #region API PUT Employee
 
