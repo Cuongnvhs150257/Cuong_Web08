@@ -8,6 +8,9 @@ namespace MISA.WEB08.AMIS.Common
 {
     public class Unit : BaseEntities
     {
+        /// <summary>
+        /// ID phòng ban
+        /// </summary>
         public Guid UnitID { get; set; }   
     }
 }

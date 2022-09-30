@@ -26,6 +26,12 @@ namespace MISA.WEB08.AMIS.BL
 
         #region Method
 
+        /// <summary>
+        /// Hàm kết nối DL để lấy danh sách đối tượng
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <returns></returns>
         public IEnumerable<T> GetAllRecords()
         {
             return _baseDL.GetAllRecords();

@@ -8,6 +8,7 @@ namespace MISA.WEB08.AMIS.Common
 {
     /// <summary>
     /// Dữ liệu trả về từ tầng BL
+    /// Createdby: Nguyễn Văn Cương 27/09/2022
     /// </summary>
     public class ServiceRespone
     {

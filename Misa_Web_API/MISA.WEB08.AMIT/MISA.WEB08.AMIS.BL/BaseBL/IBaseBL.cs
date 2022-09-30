@@ -9,6 +9,12 @@ namespace MISA.WEB08.AMIS.BL
 {
     public interface IBaseBL<T>
     {
+        /// <summary>
+        /// Hàm kết nối DL để lấy toàn bộ danh sách đối tượng
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <returns></returns>
         public IEnumerable<T> GetAllRecords();
     }
 }

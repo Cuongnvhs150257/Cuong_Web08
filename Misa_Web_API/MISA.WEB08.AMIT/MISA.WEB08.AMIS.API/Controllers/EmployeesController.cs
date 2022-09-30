@@ -66,6 +66,14 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #region API Filter 
 
+        /// <summary>
+        /// API tìm kiếm phân trang
+        /// Createdby: Nguyễn Văn Cương 16/08/2022
+        /// </summary>
+        /// <param name="wnere"></param>
+        /// <param name="limit"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         [HttpGet("filter")]
         public IActionResult FilterEmployees(
             [FromQuery] string? wnere,

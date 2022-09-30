@@ -15,9 +15,15 @@ namespace MISA.WEB08.AMIS.DL
 {
     public class EmployeeDL : BaseDL<Employee>, IEmployeeDL
     {
-
+        /// <summary>
+        /// Hàm kết nối DB để lấy nhân viên theo ID
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <returns>numberOfAffectedRows</returns>
         public Employee GetEmployeeByID(Guid employeeid)
         {
+            //khởi tạo kết nối Database
             string connectionString = DataContext.MySqlConnectionString;
             var mysqlConnection = new MySqlConnection(connectionString);
 
@@ -34,6 +40,12 @@ namespace MISA.WEB08.AMIS.DL
             return numberOfAffectedRows;
         }
 
+        /// <summary>
+        /// Hàm kết nối DB để thêm mới nhân viên
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns>employeeID</returns>
         public Guid InsertEmployee(Employee employee)
         {
             
@@ -88,7 +100,12 @@ namespace MISA.WEB08.AMIS.DL
 
         }
 
-
+        /// <summary>
+        /// Hàm kết nối DB để xóa nhân viên theo ID
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <returns>numberOfAffectedRows</returns>
         public int DeleteEmployee([FromRoute] Guid employeeid)
         {
             //Khởi tạo kết nối với MySQl
@@ -108,6 +125,14 @@ namespace MISA.WEB08.AMIS.DL
             return numberOfAffectedRows;
         }
 
+
+        /// <summary>
+        /// Hàm kết nối DB để sửa nhân viên theo ID
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <param name="employee"></param>
+        /// <returns>numberOfAffectedRows</returns>
         public int UpdateEmployee(Guid employeeid, Employee employee)
         {
             //Khởi tạo kết nối với MySQl
@@ -149,6 +174,14 @@ namespace MISA.WEB08.AMIS.DL
             return numberOfAffectedRows;
         }
 
+        /// <summary>
+        /// Hàm kết nối DB để phân trang, tìm kiếm
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="limit"></param>
+        /// <param name="offset"></param>
+        /// <returns>Data, TotalCount</returns>
         public PagingData FilterEmployees(
             string where,
             int? limit,
@@ -180,7 +213,13 @@ namespace MISA.WEB08.AMIS.DL
                 TotalCount = result.TotalCount,
             };
         }
-
+        
+        /// <summary>
+        /// Hàm kết nối DB để xóa nhiều nhân viên
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public IEnumerable<Employee> DeleteMultipleEmployee(List<string> employeeid)
         {
             throw new NotImplementedException();

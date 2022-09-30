@@ -41,7 +41,9 @@ namespace MISA.WEB08.AMIS.Common.Entities
         {
 
         }
-
+        /// <summary>
+        /// contructor có thông số
+        /// </summary>
         public ErrorResult(AMITErrorCode errorCode, string devMsg, string userMsg, string moreInfo, string? traceID = null)
         {
             ErrorCode = errorCode;

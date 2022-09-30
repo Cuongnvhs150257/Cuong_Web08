@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Atrribute dùng để khai báo khóa chính
+    /// Createdby: Nguyễn Văn Cương 25/09/2022
     /// </summary>
     /// 
     [AttributeUsage(AttributeTargets.Property)]
@@ -10,7 +11,11 @@
         
     }
 
-
+    /// <summary>
+    /// Atrribute dùng để kiểm tra có null hay không
+    /// Createdby: Nguyễn Văn Cương 25/09/2022
+    /// </summary>
+    /// 
     [AttributeUsage(AttributeTargets.Property)]
     public class IsNotNullOrEmptyAtrribute : Attribute
     {
