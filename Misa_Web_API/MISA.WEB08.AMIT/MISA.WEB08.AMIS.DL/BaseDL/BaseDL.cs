@@ -160,5 +160,37 @@ namespace MISA.WEB08.AMIS.DL
                 TotalCount = result.TotalCount,
             };
         }
+
+        /// <summary>
+        /// Hàm kết nối DB để xóa nhân viên theo ID
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <returns>numberOfAffectedRows</returns>
+        public int DeleteRecord(Guid recordid)
+        {
+            //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
+            var parameters = new DynamicParameters();
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
+            {
+                string propertyName = property.Name;
+                parameters.Add($"v_{propertyName}", recordid);
+                break;
+            }
+
+            //Khởi tạo kết nối với MySQl
+            string connectionString = DataContext.MySqlConnectionString;
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                //khai bao ten stored produre
+                string storeProdureName = String.Format(Resource.Pro_DeleteEmployee, typeof(Employee).Name);
+
+                //Thực hiện gọi vào DB
+                var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                return numberOfAffectedRows;
+            }
+    
+        }
     }
 }

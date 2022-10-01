@@ -80,49 +80,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #endregion
 
-        #region API Detele Employee by ID
-
-        // <summary>
-        /// API xóa một nhân viên bằng id
-        /// </summary>
-        /// <param name="employeeid">ID nhân viên</param>
-        /// <returns>số lượng bản ghi ảnh hưởng</returns>
-        /// createdby: Nguyễn Văn Cương 16/08/2022
-        [HttpDelete("{employeeid}")]
-        public IActionResult DeleteEmployee([FromRoute] Guid employeeid)
-        {
-            try
-            {
-                var numberOfAffectedRows = _employeeBL.DeleteEmployee(employeeid);
-                
-                if (numberOfAffectedRows > 0)
-                {
-                    return StatusCode(StatusCodes.Status200OK,employeeid);
-                }
-                else
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult(
-                    AMITErrorCode.DeleteError,
-                    Resource.DevMsg_DeleteFailed,
-                    Resource.UserMsg_DeleteFailed,
-                    Resource.MoreInfo_Request,
-                    HttpContext.TraceIdentifier));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
-                    AMITErrorCode.DeleteError,
-                    Resource.DevMsg_Exception,
-                    Resource.UserMsg_Exception,
-                    Resource.MoreInfo_Exception,
-                    HttpContext.TraceIdentifier));
-            }
-        }
-
-        #endregion
 
         #region API Delete All Employee
 

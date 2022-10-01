@@ -18,16 +18,6 @@ namespace MISA.WEB08.AMIS.DL
         /// <returns>numberOfAffectedRows</returns>
         public int UpdateEmployee(Guid employeeid, Employee employee);
 
-
-        /// <summary>
-        /// Hàm kết nối DB để xóa nhân viên theo ID
-        /// Createby: Nguyễn Văn Cương 26/09/2022
-        /// </summary>
-        /// <param name="employeeid"></param>
-        /// <returns>numberOfAffectedRows</returns>
-        /// <summary>
-        public int DeleteEmployee(Guid employeeid);
-
         /// <summary>
         /// Hàm kết nối DB để xóa nhiều nhân viên
         /// </summary>

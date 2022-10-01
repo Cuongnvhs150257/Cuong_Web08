@@ -35,11 +35,7 @@ namespace MISA.WEB08.AMIS.BL
             return _employeeDL.UpdateEmployee(employeeid, employee);
         }
 
-        public int DeleteEmployee(Guid employeeid)
-        {
-            return _employeeDL.DeleteEmployee(employeeid);
-        }
-
+       
         public IEnumerable<Employee> DeleteMultipleEmployee(List<string> employeeid)
         {
             return _employeeDL.DeleteMultipleEmployee(employeeid);

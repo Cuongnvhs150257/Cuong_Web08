@@ -149,6 +149,18 @@ namespace MISA.WEB08.AMIS.BL
             return _baseDL.Filter(keyword, limit, offset);
         }
 
+        /// <summary>
+        /// Hàm kết nối DB để xóa đối tượng theo ID
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="recordid"></param>
+        /// <returns>numberOfAffectedRows</returns>
+        /// <summary>
+        public int DeleteRecord(Guid recordid)
+        {
+            return _baseDL.DeleteRecord(recordid);
+        }
+
 
         #endregion
     }

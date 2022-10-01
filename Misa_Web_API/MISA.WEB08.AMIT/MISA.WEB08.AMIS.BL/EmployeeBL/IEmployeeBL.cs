@@ -21,15 +21,6 @@ namespace MISA.WEB08.AMIS.BL
         public int UpdateEmployee(Guid employeeid, Employee employee);
 
         /// <summary>
-        /// Hàm kết nối DL để xóa nhân viên theo ID
-        /// Createby: Nguyễn Văn Cương 26/09/2022
-        /// </summary>
-        /// <param name="employeeid"></param>
-        /// <returns>numberOfAffectedRows</returns>
-
-        public int DeleteEmployee(Guid employeeid);
-
-        /// <summary>
         /// Hàm kết nối DL để xóa nhiều nhân viên
         /// </summary>
         /// <param name="employeeid"></param>

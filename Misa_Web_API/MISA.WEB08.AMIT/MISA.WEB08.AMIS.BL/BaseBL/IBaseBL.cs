@@ -45,6 +45,12 @@ namespace MISA.WEB08.AMIS.BL
         /// <returns>Data, TotalCount</returns>
         public PagingData Filter(string where, int? limit, int? offset);
 
-
+        /// <summary>
+        /// Hàm kết nối DL để xóa nhân viên theo ID
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <returns>numberOfAffectedRows</returns>
+        public int DeleteRecord(Guid employeeid);
     }
 }
