@@ -30,17 +30,6 @@ namespace MISA.WEB08.AMIS.BL
 
         #region Method
 
-        public int UpdateEmployee(Guid employeeid, Employee employee)
-        {
-            return _employeeDL.UpdateEmployee(employeeid, employee);
-        }
-
-       
-        public IEnumerable<Employee> DeleteMultipleEmployee(List<string> employeeid)
-        {
-            return _employeeDL.DeleteMultipleEmployee(employeeid);
-        }
-
         #endregion
     }
 

@@ -32,6 +32,13 @@ namespace MISA.WEB08.AMIS.DL
         /// <returns>numberOfAffectedRows</returns>
         public object GetRecordByID(Guid record);
 
+        /// Hàm kết nối DB để sửa đối tượng theo ID
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="recordid"></param>
+        /// <param name="record"></param>
+        /// <returns>numberOfAffectedRows</returns>
+        public int UpdateRecord(Guid recordid, T record);
 
         /// <summary>
         /// Hàm kết nối DB để phân trang, tìm kiếm
@@ -51,5 +58,13 @@ namespace MISA.WEB08.AMIS.DL
         /// <returns>numberOfAffectedRows</returns>
         /// <summary>
         public int DeleteRecord(Guid recordid);
+
+        /// <summary>
+        /// Hàm kết nối DB để xóa nhiều đối tượng
+        /// </summary>
+        /// <param name="recordid"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public IEnumerable<T> DeleteMultipleRecord(List<string> recordid);
     }
 }

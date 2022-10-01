@@ -117,6 +117,50 @@ namespace MISA.WEB08.AMIS.DL
                 return OJ;
             }
         }
+
+        /// <summary>
+        /// Hàm kết nối DB để sửa đối tượng theo ID
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="recordid"></param>
+        /// <param name="record"></param>
+        /// <returns>numberOfAffectedRows</returns>
+        public int UpdateRecord(Guid recordid, T record)
+        {
+
+            //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
+            var parameters = new DynamicParameters();
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
+            {
+                string propertyName = property.Name;
+                object propertyValue;
+                var primaryKeyAttribue = (PrimarKeyAttribute?)Attribute.GetCustomAttribute(property, typeof(PrimarKeyAttribute));
+                if (primaryKeyAttribue != null)
+                {
+                    propertyValue = recordid;
+                }
+                else
+                {
+                    propertyValue = property.GetValue(record, null);
+                }
+                parameters.Add($"v_{propertyName}", propertyValue);
+            }
+
+            //Khởi tạo kết nối với MySQl
+            string connectionString = DataContext.MySqlConnectionString;
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                //khai bao ten stored produre
+                string storeProdureName = String.Format(Resource.Pro_UpdateEmployee, typeof(Employee).Name);
+
+                //Thực hiện gọi vào DB
+                var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+                return numberOfAffectedRows;
+            }    
+        }
+
         /// <summary>
         /// Hàm kết nối DB để phân trang, tìm kiếm
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -162,10 +206,10 @@ namespace MISA.WEB08.AMIS.DL
         }
 
         /// <summary>
-        /// Hàm kết nối DB để xóa nhân viên theo ID
+        /// Hàm kết nối DB để xóa đối tượng theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
         /// </summary>
-        /// <param name="employeeid"></param>
+        /// <param name="recordid"></param>
         /// <returns>numberOfAffectedRows</returns>
         public int DeleteRecord(Guid recordid)
         {
@@ -191,6 +235,17 @@ namespace MISA.WEB08.AMIS.DL
                 return numberOfAffectedRows;
             }
     
+        }
+
+        /// <summary>
+        /// Hàm kết nối DB để xóa nhiều đối tượng
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public IEnumerable<T> DeleteMultipleRecord(List<string> employeeid)
+        {
+            throw new NotImplementedException();
         }
     }
 }

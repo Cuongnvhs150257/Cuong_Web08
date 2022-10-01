@@ -139,6 +139,51 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #endregion
 
+        #region API PUT Record
+
+        // <summary>
+        /// API sửa thông tin một nhân viên bằng id
+        /// </summary>
+        /// <param name="employeeid">ID nhân viên</param>
+        /// <param name="employeeid">đối tượng nhân viên</param>
+        /// <returns>số lượng bản ghi ảnh hưởng</returns>
+        /// createdby: Nguyễn Văn Cương 16/08/2022
+        [HttpPut("{recordid}")]
+        public IActionResult UpdateRecord([FromRoute] Guid recordid, [FromBody] T record)
+        {
+            try
+            {
+                var numberOfAffectedRows = _baseBL.UpdateRecord(recordid, record);
+
+                if (numberOfAffectedRows > 0)
+                {
+                    return StatusCode(StatusCodes.Status201Created, recordid);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult(
+                    AMITErrorCode.UpdateError,
+                    Resource.DevMsg_UpdateFailed,
+                    Resource.UserMsg_UpdateFaild,
+                    Resource.MoreInfo_Request,
+                    HttpContext.TraceIdentifier));
+                }
+
+            }//Try catch exception
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AMITErrorCode.UpdateError,
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
+                    HttpContext.TraceIdentifier));
+            }
+        }
+
+        #endregion
+
         #region API Filter 
 
         /// <summary>
@@ -216,6 +261,24 @@ namespace MISA.WEB08.AMIS.API.Controllers
                     Resource.MoreInfo_Exception,
                     HttpContext.TraceIdentifier));
             }
+        }
+
+        #endregion
+
+
+        #region API Delete All Employee
+
+        // <summary>
+        /// API xóa nhiều nhân viên bằng id
+        /// </summary>
+        /// <param name="List<string>employeeid">danh sách ID nhân viên muốn xóa</param>
+        /// <returns>số lượng bản ghi ảnh hưởng</returns>
+        /// createdby: Nguyễn Văn Cương 16/08/2022
+
+        [HttpPost("batch-delete")]
+        public IActionResult DeleteMultipleRecord([FromBody] List<string> recordid)
+        {
+            return StatusCode(StatusCodes.Status200OK);
         }
 
         #endregion
