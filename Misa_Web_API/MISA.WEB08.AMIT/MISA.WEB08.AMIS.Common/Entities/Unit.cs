@@ -11,6 +11,19 @@ namespace MISA.WEB08.AMIS.Common
         /// <summary>
         /// ID phòng ban
         /// </summary>
-        public Guid UnitID { get; set; }   
+        [PrimarKeyAttribute]
+        public Guid UnitID { get; set; }
+
+        /// <summary>
+        /// Mã phòng ban
+        /// </summary>
+        [IsNotNullOrEmptyAtrribute("Mã phòng ban không được để trống")]
+        public string UnitCode { get; set; }
+
+        /// <summary>
+        /// Tên phòng ban
+        /// </summary>
+        [IsNotNullOrEmptyAtrribute("Tên phòng ban không được để trống")]
+        public string UnitName { get; set; }
     }
 }

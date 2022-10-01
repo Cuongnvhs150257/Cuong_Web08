@@ -1,6 +1,5 @@
 ﻿using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
-using MISA.WEB08.AMIS.Common.Resource;
 using MISA.WEB08.AMIS.DL;
 using System;
 using System.Collections.Generic;
@@ -125,6 +124,31 @@ namespace MISA.WEB08.AMIS.BL
                 };
             }
         }
+
+        /// <summary>
+        /// Hàm kết nối DL để lấy nhân viên theo ID
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <returns>numberOfAffectedRows</returns>
+        public object GetRecordByID(Guid record)
+        {
+            return _baseDL.GetRecordByID(record);
+        }
+
+        /// <summary>
+        /// Hàm kết nối DL để phân trang, tìm kiếm
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="limit"></param>
+        /// <param name="offset"></param>
+        /// <returns>Data, TotalCount</returns>
+        public PagingData Filter(string keyword, int? limit, int? offset)
+        {
+            return _baseDL.Filter(keyword, limit, offset);
+        }
+
 
         #endregion
     }

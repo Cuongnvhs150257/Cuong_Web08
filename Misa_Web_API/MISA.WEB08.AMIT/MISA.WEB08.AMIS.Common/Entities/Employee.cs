@@ -44,7 +44,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// số cmnd
         /// </summary>
-        public string  IdentifyCode { get; set; }
+        public string IdentifyCode { get; set; }
 
         /// <summary>
         /// ngày cấp cmnd
@@ -64,7 +64,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// số điện thoại
         /// </summary>
-        public string Phonenumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         /// <summary>
         /// điện thoại cố định

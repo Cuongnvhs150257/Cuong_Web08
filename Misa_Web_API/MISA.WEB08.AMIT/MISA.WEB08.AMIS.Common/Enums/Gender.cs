@@ -4,7 +4,7 @@
     /// Giới tính
     /// createby: Nguyễn Văn Cương 18/08/2022
     /// </summary>
-    public enum Gender
+    public enum Gender: int
     {
         /// <summary>
         /// Nam

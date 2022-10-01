@@ -53,9 +53,10 @@
         <div class="input_item item3">
           <label class="item-label label3">Ngày sinh</label>
           <input
-            type="datetime-local"
+            type="date" 
             class="item-input in3"
-            v-model="Employees.DateOfBirth"
+            value="formatDate(Employees.DateOfBirth)"
+            
           />
         </div>
         <div class="input_item item4">
@@ -70,7 +71,7 @@
         <div class="input_item item1">
           <label class="item-label">Đơn vị</label>
           <label class="item-labelsao"> *</label>
-          <MComboxbox />
+          <MComboxbox @get-unitid= getUnitID />
         </div>
         <div class="input_item item2">
           <label class="item-label">Số CMND</label>
@@ -81,7 +82,7 @@
         </div>
         <div class="input_item item3">
           <label class="item-label l3">Ngày cấp</label>
-          <input type="datetime-local" class="item-input in3" v-model="Employees.IdentifyDate"/>
+          <input type="date" class="item-input in3" value="formatDate(Employees.IdentifyDate)"/>
         </div>
       </div>
       <div class="popup_item input4">
@@ -178,6 +179,10 @@ export default {
     handleClosePopup() {
       this.$emit("custom-handle-click");
     },
+    getUnitID(Uid){
+        this.Employees.UnitID = Uid;
+        console.log(this.Employees);
+    },
     /*
     validName(name) {
       var re = /^[a-zA-Z ]{10,20}$/;
@@ -204,11 +209,33 @@ export default {
       var re = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
       return re.test(phonenumber);
     },
-
+    formatDate(date) {
+    try {
+      
+      if (date) {
+        var format = "nn/mm/YYYY";
+        date = new Date(date);
+        // Lấy ra ngày
+        let day = date.getDate();
+        day = day < 10 ? `0${day}` : day;
+        // Lấy ra tháng
+        let month = date.getMonth() + 1;
+        month = month < 10 ? `0${month}` : month;
+        // Lấy ra năm
+        let year = date.getFullYear();
+        if(format == "dd/MM/YYYY") return `${day}/${month}/${year}`
+        return `${year}-${month}-${day}`;
+      } else {
+        return "";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
     //hàm sửa hoặc thêm nhân viên mới
     btnSaveonClick() {
       var method = "POST";
-      var url = "http://localhost:17703/api/v1/Employees";
+      var url = "https://localhost:44335/api/v1/Employees";
       var validate = true;
       this.errors = [];
 
@@ -240,7 +267,11 @@ export default {
             //nếu số điện thoại k có thì mới dc thêm
             validate = true;
           }
-          
+          //hàm fomat date
+          if(this.Employees.DateOfBirth || this.Employees.IdentifyDate){
+             var dateofbird = this.Employees.DateOfBirth;
+             this.Employees.DateOfBirth = this.formatDate(dateofbird);
+          }
 
         
       } else if(this.Employees.EmployeeCode == null){
@@ -328,7 +359,10 @@ export default {
       },
       errors: [],
       isShowNotification: false,
-      Spanempty: false
+      Spanempty: false,
+      UidP:{
+        type: Number,
+      },
     };
   },
 };

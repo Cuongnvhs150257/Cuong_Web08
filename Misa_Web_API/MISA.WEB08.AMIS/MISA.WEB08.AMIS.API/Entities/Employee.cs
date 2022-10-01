@@ -12,7 +12,7 @@ namespace MISA.WEB08.AMIS.API.Entities
         /// <summary>
         /// ID nhân viên
         /// </summary>
-        [PrimarKeyAttribute]
+        [PrimarKey]
         public Guid EmployeeID { get; set; }
 
         /// <summary>

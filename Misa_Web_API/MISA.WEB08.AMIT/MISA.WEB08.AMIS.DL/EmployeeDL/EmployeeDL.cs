@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
-using MISA.WEB08.AMIS.Common.Resource;
 using MISA.WEB08.AMIS.DL;
 using MySqlConnector;
 using System;
@@ -15,31 +14,6 @@ namespace MISA.WEB08.AMIS.DL
 {
     public class EmployeeDL : BaseDL<Employee>, IEmployeeDL
     {
-        /// <summary>
-        /// Hàm kết nối DB để lấy nhân viên theo ID
-        /// Createby: Nguyễn Văn Cương 26/09/2022
-        /// </summary>
-        /// <param name="employeeid"></param>
-        /// <returns>numberOfAffectedRows</returns>
-        public Employee GetEmployeeByID(Guid employeeid)
-        {
-            //khởi tạo kết nối Database
-            string connectionString = DataContext.MySqlConnectionString;
-            var mysqlConnection = new MySqlConnection(connectionString);
-
-            //khai bao ten stored produre
-            string storeProdureName = String.Format(Resource.Pro_SelectEmployee, typeof(Employee).Name);
-
-            //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
-            var parameters = new DynamicParameters();
-            parameters.Add("v_EmployeeID", employeeid);
-
-            //Thực hiện gọi vào DB
-            var numberOfAffectedRows = mysqlConnection.QueryFirstOrDefault(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-
-            return numberOfAffectedRows;
-        }
-
         /// <summary>
         /// Hàm kết nối DB để xóa nhân viên theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -95,7 +69,7 @@ namespace MISA.WEB08.AMIS.DL
             parameters.Add("v_IdentifyPlace", employee.IdentifyPlace);
             parameters.Add("v_IdentifyDate", employee.IdentifyDate);
             parameters.Add("v_Address", employee.Address);
-            parameters.Add("v_PhoneNumber", employee.Phonenumber);
+            parameters.Add("v_PhoneNumber", employee.PhoneNumber);
             parameters.Add("v_Fax", employee.Fax);
             parameters.Add("v_Email", employee.Email);
             parameters.Add("v_BankAccount", employee.BankAccount);
@@ -106,7 +80,7 @@ namespace MISA.WEB08.AMIS.DL
             parameters.Add("v_CreateDate", DateTime.Now);
             parameters.Add("v_CreateBy", employee.CreateBy);
             parameters.Add("v_ModifiedDate", DateTime.Now);
-            parameters.Add("v_ModifiedBy", employee.ModitifiedBy);
+            parameters.Add("v_ModifiedBy", employee.ModifiedBy);
 
             //Thực hiện gọi vào DB
             var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -114,46 +88,6 @@ namespace MISA.WEB08.AMIS.DL
             return numberOfAffectedRows;
         }
 
-        /// <summary>
-        /// Hàm kết nối DB để phân trang, tìm kiếm
-        /// Createby: Nguyễn Văn Cương 26/09/2022
-        /// </summary>
-        /// <param name="where"></param>
-        /// <param name="limit"></param>
-        /// <param name="offset"></param>
-        /// <returns>Data, TotalCount</returns>
-        public PagingData FilterEmployees(
-            string where,
-            int? limit,
-            int? offset)
-        {
-            var result = new PagingData();
-            //Khởi tạo kết nối với MySQl
-            string connectionString = DataContext.MySqlConnectionString;
-            var mysqlConnection = new MySqlConnection(connectionString);
-
-            //khai bao ten stored produre
-            string storeProdureName = "pro_selectallemployee";
-
-            //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
-            var parameters = new DynamicParameters();
-
-            parameters.Add("v_limit", limit);
-            parameters.Add("v_offset", offset);
-            parameters.Add("v_where", where);
-
-            //Thực hiện gọi vào DB
-            var ListEmployees = mysqlConnection.QueryMultiple(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-            result.Data = ListEmployees.Read<Employee>().ToList();
-            result.TotalCount = ListEmployees.Read<Int32>().First();
-
-            return new PagingData()
-            {
-                Data = result.Data,
-                TotalCount = result.TotalCount,
-            };
-        }
-        
         /// <summary>
         /// Hàm kết nối DB để xóa nhiều nhân viên
         /// </summary>

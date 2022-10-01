@@ -99,7 +99,7 @@ export default {
           {
             this.ClosePopupAsk(); //đóng popup hỏi người dùng
               await fetch(
-            "http://localhost:17703/api/v1/Employees/" + id,
+            "https://localhost:44335/api/v1/Employees/" + id,
             { method: "DELETE" }
           )
             .then((res) => res.json())

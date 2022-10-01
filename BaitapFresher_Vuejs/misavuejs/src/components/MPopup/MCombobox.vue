@@ -1,11 +1,11 @@
 <template>
   <div class="combobox">
-    <input type="text" />
+    <input type="text" v-model="this.UnitSle.unitName"/>
     <button @click="btnComboboxOnClick"></button>
-    <div class="combobox-data" v-for="u in UnitItem" :key="u.unitID">
-      <div class="combobox-item">
-          <div class="combobox-item-left">{{e.unitCode}}</div>
-          <div class="combobox-item-right">{{e.unitName}}</div>
+    <div class="combobox-data" >
+      <div class="combobox-item" v-for="u in UnitItem" :key="u.unitID" @click="selectedUnit(u)">
+          <div class="combobox-item-left">{{u.unitCode}}</div>
+          <div class="combobox-item-right">{{u.unitName}}</div>
       </div>
       <!-- 
       <div class="combobox-item">
@@ -25,17 +25,23 @@
 
 <script>
 export default {
+
+
   methods:{
 
         
         btnComboboxOnClick() {
-            this.OpenComboxbox = true;
-            this.loadUnit();
-            
+            this.OpenComboxbox = !this.OpenComboxbox;
+            if(this.OpenComboxbox){
+                this.loadUnit();
+            }else{
+                this.UnitItem = {};
+            }
+            console.log(this.UnitItem);
         },
 
         loadUnit(){
-            fetch("http://localhost:17703/api/Unit", {
+            fetch("https://localhost:44335/api/v1/Unit", {
             method: "GET",
       })
         .then((res) => res.json())
@@ -48,14 +54,22 @@ export default {
         });
         },
 
+        selectedUnit(un){
+          this.UnitSle = un;
+          this.UnitItem = {};
+          this.$emit("get-unitid", un.unitID);
+          console.log(un.unitID);
+        }
 
-    data(){
+
+   
+  }, data(){
         return{
             OpenComboxbox: false,
-            UnitItem: {}
+            UnitItem: {},
+            UnitSle: {},
         }
     }
-  }
 };
 </script>
 
@@ -111,7 +125,8 @@ export default {
   top: 40px;
   width: 100%;
   z-index: 1;
-
+   overflow-y: scroll ;
+  
 }
 .combobox-item {
   height: 32px;
@@ -119,9 +134,9 @@ export default {
   align-items: center;
   padding-left: 10px;
   border: 1px solid #bbbbbb;
-  font-weight: bold;
   font-size: 13px;
   background-color: #fff;
+ 
 }
 .combobox-item-left{
     width: 100px;
@@ -129,5 +144,24 @@ export default {
 .combobox-item:hover {
   background-color: #50b83c;
   color: #fff;
+}::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #7c869c;
 }
 </style>

@@ -39,6 +39,7 @@ namespace MISA.WEB08.AMIS.API.Entities
         public ErrorResult()
         {
         }
+
         /// <summary>
         /// contructor có thông số
         /// </summary>

@@ -57,7 +57,7 @@ export default {
     async function openPopup(id) {
       if(id){ //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
         LoadingShow.value = true; //hiển thị loading
-        await fetch("http://localhost:17703/api/v1/Employees/" + id, {method:"GET"})
+        await fetch("https://localhost:44335/api/v1/Employees/" + id, {method:"GET"})
         .then(res => res.json())
         .then(data =>{
             //this.employees = data;
@@ -89,7 +89,7 @@ export default {
       const limit = 5;
       const offset = 1;
       const filter = `filter?limit=${limit}&offset=${offset}`;
-      fetch("http://localhost:17703/api/v1/Employees/" + filter, {
+      fetch("https://localhost:44335/api/v1/Employees/" + filter, {
         method: "GET",
       })
         .then((res) => res.json())
@@ -107,7 +107,7 @@ export default {
       const limit = 5;
       const offset = 1;
       const filter = `filter?limit=${limit}&offset=${offset}`;
-      fetch("http://localhost:17703/api/v1/Employees/" + filter, {
+      fetch("https://localhost:44335/api/v1/Employees/" + filter, {
         method: "GET",
       })
         .then((res) => res.json())

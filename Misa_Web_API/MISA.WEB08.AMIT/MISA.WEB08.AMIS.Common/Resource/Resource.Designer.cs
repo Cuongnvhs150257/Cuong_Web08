@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MISA.WEB08.AMIS.Common.Resource {
+namespace MISA.WEB08.AMIS.Common {
     using System;
     
     
@@ -147,6 +147,15 @@ namespace MISA.WEB08.AMIS.Common.Resource {
         public static string Pro_DeleteEmployee {
             get {
                 return ResourceManager.GetString("Pro_DeleteEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pro_{0}_Filter.
+        /// </summary>
+        public static string Pro_Filter {
+            get {
+                return ResourceManager.GetString("Pro_Filter", resourceCulture);
             }
         }
         

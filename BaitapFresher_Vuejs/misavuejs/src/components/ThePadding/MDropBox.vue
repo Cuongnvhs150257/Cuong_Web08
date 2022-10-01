@@ -2,7 +2,7 @@
   <div class="drop">
     <div class="drop-label"><label>20 bảng ghi trên 1 trang</label></div>
     <button class="drop" @click="btnDropClick"></button>
-    <div class="drop-data">
+    <div class="drop-data" v-if="OpenDropbox === true">
       <div class="drop-item">10 bảng ghi trên 1 trang</div>
       <div class="drop-item">20 bảng ghi trên 1 trang</div>
       <div class="drop-item">30 bảng ghi trên 1 trang</div>
@@ -17,17 +17,18 @@ export default {
   methods:{
       
         btnDropClick() {
-            this.OpenDropbox = true;
-            this.inValue = true;
-            console.log(this.inValue);
+            this.OpenDropbox = !this.OpenDropbox;
+            // this.inValue = true;
+            console.log(this.OpenDropbox);
         },
 
-    data(){
+    
+  },
+  data(){
         return{
             OpenDropbox: false,
         }
     }
-  }
 };
 </script>
 

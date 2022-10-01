@@ -1,4 +1,4 @@
-﻿using MISA.WEB08.AMIS.Common.Resource;
+﻿using MISA.WEB08.AMIS.Common;
 namespace MISA.WEB08.AMIS.Common
 {
     /// <summary>
@@ -15,16 +15,16 @@ namespace MISA.WEB08.AMIS.Common
         /// <summary>
         /// người tạo
         /// </summary>
-        public string CreateBy { get; set; } = "Admin";
+        public string CreateBy { get; set; } = Resource.Default_User; 
 
         /// <summary>
         /// ngày chỉnh sửa gần nhất 
         /// </summary>
-        public DateTime ModitifiedDate { get; set; } = DateTime.Now;
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// người chỉnh sửa gần nhất
         /// </summary>
-        public string ModitifiedBy { get; set; } = "Admin";
+        public string ModifiedBy { get; set; } = Resource.Default_User;
     }
 }

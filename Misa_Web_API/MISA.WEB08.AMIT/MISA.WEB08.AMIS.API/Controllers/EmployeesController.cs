@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using MISA.WEB08.AMIS.BL;
 using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
-using MISA.WEB08.AMIS.Common.Resource;
 using MySqlConnector;
 using System;
 
@@ -27,77 +26,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
         {
             _employeeBL = employeeBL;
         }
-
-        #endregion
-
-        #region GET Employee By ID
-
-        /// <summary>
-        /// API lấy thông tin một nhân viên bằng id
-        /// </summary>
-        /// <param name="employeeid">ID nhân viên</param>
-        /// <returns>thông tin một nhân viên</returns>
-        /// createdby: Nguyễn Văn Cương 16/08/2022
-        [HttpGet("{employeeid}")]
-        public IActionResult GetEmployeeByID([FromRoute] Guid employeeid)
-        {
-            
-            try
-            {
-                var employee = _employeeBL.GetEmployeeByID(employeeid);
-
-                return StatusCode(StatusCodes.Status200OK, employee);
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
-                    AMITErrorCode.Exception,
-                    Resource.DevMsg_Exception,
-                    Resource.UserMsg_Exception,
-                    Resource.MoreInfo_Exception,
-                    HttpContext.TraceIdentifier));
-            }
-
-        }
-
-        #endregion
-
-        #region API Filter 
-
-        /// <summary>
-        /// API tìm kiếm phân trang
-        /// Createdby: Nguyễn Văn Cương 16/08/2022
-        /// </summary>
-        /// <param name="wnere"></param>
-        /// <param name="limit"></param>
-        /// <param name="offset"></param>
-        /// <returns></returns>
-        [HttpGet("filter")]
-        public IActionResult FilterEmployees(
-            [FromQuery] string? wnere,
-            [FromQuery] int? limit,
-            [FromQuery] int? offset)
-        {
-            try
-            {
-                var ListEmployees = _employeeBL.FilterEmployees(wnere, limit, offset);
-
-                return StatusCode(StatusCodes.Status200OK, ListEmployees);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
-                    AMITErrorCode.Exception,
-                    Resource.DevMsg_Exception,
-                    Resource.UserMsg_Exception,
-                    Resource.MoreInfo_Exception,
-                    HttpContext.TraceIdentifier));
-            }
-        }
-
 
         #endregion
 

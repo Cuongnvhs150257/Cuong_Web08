@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MISA.WEB08.AMIS.Common.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,26 @@ namespace MISA.WEB08.AMIS.DL
         /// <param name="record"></param>
         /// <returns></returns>
         public Guid InsertRecords(T record);
+
+        /// <summary>
+        /// Hàm kết nối DB để lấy nhân viên theo ID
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="employeeid"></param>
+        /// <returns>numberOfAffectedRows</returns>
+        public object GetRecordByID(Guid record);
+
+
+        /// <summary>
+        /// Hàm kết nối DB để phân trang, tìm kiếm
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="limit"></param>
+        /// <param name="offset"></param>
+        /// <returns>Data, TotalCount</returns>
+        public PagingData Filter(string where, int? limit, int? offset);
+
 
     }
 }

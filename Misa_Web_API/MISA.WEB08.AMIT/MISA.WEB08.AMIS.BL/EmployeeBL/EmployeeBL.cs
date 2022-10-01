@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
-using MISA.WEB08.AMIS.Common.Resource;
 using MISA.WEB08.AMIS.DL;
 using System;
 using System.Collections.Generic;
@@ -30,12 +29,6 @@ namespace MISA.WEB08.AMIS.BL
 
 
         #region Method
-        
-
-        public Employee GetEmployeeByID(Guid employeeid)
-        {
-            return _employeeDL.GetEmployeeByID(employeeid);
-        }
 
         public int UpdateEmployee(Guid employeeid, Employee employee)
         {
@@ -51,12 +44,6 @@ namespace MISA.WEB08.AMIS.BL
         {
             return _employeeDL.DeleteMultipleEmployee(employeeid);
         }
-
-        public PagingData FilterEmployees(string keyword, int? limit, int? offset)
-        {
-            return _employeeDL.FilterEmployees(keyword, limit, offset);
-        }
-
 
         #endregion
     }
