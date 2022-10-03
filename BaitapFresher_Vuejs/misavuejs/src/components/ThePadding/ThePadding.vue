@@ -7,7 +7,7 @@
                     </div>
                     <div class="padding-right">
                         <div class="drop-box">
-                            <MDropBox />
+                            <MDropBox @padding-value ="getPaddingValue"/>
                         </div>
                         <div class="padding-center">
                             <button class="btn-first">Trước</button>
@@ -107,6 +107,16 @@ export default {
     },
     components: {
         MDropBox
+    },
+    methods:{
+         getPaddingValue(value){
+             this.$emit("filter-padding", value);
+         }   
+    }, 
+    data(){
+        return{
+            
+        }
     }
 }
 </script>

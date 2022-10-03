@@ -3,19 +3,18 @@
             type="text"
             class="toolbar-input"
             placeholder="Tìm theo mã, tên nhân viên"
-            :value="modelValue" @input="handleInput"
+            :value="InputWhere" @input="handleInput"
           />
 </template>
 
 <script>
 export default {
-    props:["modelValue"],
     
     setup(props, { emit }){
         
         //hàm lưu giá trị nhập
         function handleInput(event){
-           emit("update:modelValue",event.target.value);
+           emit("InputWhere",event.target.value);
            
         }
        

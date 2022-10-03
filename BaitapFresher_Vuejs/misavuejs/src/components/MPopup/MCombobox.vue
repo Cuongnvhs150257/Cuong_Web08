@@ -1,6 +1,6 @@
 <template>
   <div class="combobox">
-    <input type="text" v-model="this.UnitSle.unitName"/>
+    <input class="combobox-input" type="text" v-model="this.UnitSle.unitName"/>
     <button @click="btnComboboxOnClick"></button>
     <div class="combobox-data" >
       <div class="combobox-item" v-for="u in UnitItem" :key="u.unitID" @click="selectedUnit(u)">
@@ -26,6 +26,7 @@
 <script>
 export default {
 
+  props:["EmployeeUnit"],
 
   methods:{
 
@@ -84,19 +85,22 @@ export default {
   box-sizing: border-box;
   display: flex;
   position: relative;
+  margin-top: 5px;
+  border: 1px solid #bbbbbb;
 }
-.combobox input {
+.combobox-input{
   width: calc(100%);
   float: left;
   height: 100%;
-  border: 1px solid #bbbbbb;
+  border: none;
   outline: none;
-  margin-top: 5px;
   padding-left: 10px;
 }
-.combobox input:focus {
+.combobox-input:focus {
+  height: 28px;
   border: 2px solid #019160;
   outline: none;
+  z-index: 1;
 }
 
 .combobox button{
@@ -105,11 +109,10 @@ export default {
   right: 1px;
   top: 1px;
   width: 40px;
-  height: 28px;
+  height: 27px;
   flex-shrink: 0;
   flex-basis: 40px;
   cursor: pointer;
-  margin-top: 7px;
   margin-right: 1px;
   background: #fff;
 }

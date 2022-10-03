@@ -23,6 +23,7 @@ namespace MISA.WEB08.AMIS.BL
         public EmployeeBL(IEmployeeDL employeeDL) : base(employeeDL)
         {
             _employeeDL = employeeDL;
+            
         }
 
         #endregion

@@ -21,7 +21,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
         #endregion
 
         #region Constutor
-            
+
         public EmployeesController(IEmployeeBL employeeBL) : base(employeeBL)
         {
             _employeeBL = employeeBL;

@@ -14,12 +14,12 @@
     <div class="content-table">
       <div class="content-toolbar">
         <div class="content-toolbar-right">
-          <MInputSearch v-model="Where" />
+          <MInputSearch @InputWhere="search" />
           <button type="button" class="toolbar-load" @click="loadData"></button>
         </div>
       </div>
       <MTable @custom-open-dbclick="openPopup" :EmployeesLoad="EmployeesTable" @data-load-delete="loadData"/>
-      <ThePadding :TotalCount="EmployeesTable" />
+      <ThePadding :TotalCount="EmployeesTable" @filter-padding="getLimitValue" />
     </div>
 
     <!-- <Teleport to="#page-employee">
@@ -50,6 +50,7 @@ export default {
     const Employees = ref(null)
     const EmployeesTable = ref(null)
     const LoadingShow = ref(false)
+    const LimitValue = ref(null)
 
     //Hàm mở popup thêm nhân viên
     //và lấy dữ liệu nhân viên theo id dể hiện trên popup
@@ -83,10 +84,19 @@ export default {
     function closePopup() {
       isShow.value = false;
     }
+    function getLimitValue(limits){
+       LimitValue.value = limits;
+       console.log(LimitValue.value);
+       loadData();
+    }
     //hàm load dữ liệu
     function loadData() {
       LoadingShow.value = true;
-      const limit = 5;
+      var limit = LimitValue.value;
+      console.log(limit);
+      if(limit == null){
+        limit = 5;
+      }
       const offset = 1;
       const filter = `filter?limit=${limit}&offset=${offset}`;
       fetch("https://localhost:44335/api/v1/Employees/" + filter, {
@@ -103,10 +113,11 @@ export default {
         });
     }
     loadData()
-    function Search(){
+    function search(where){
+      console.log(where);
       const limit = 5;
       const offset = 1;
-      const filter = `filter?limit=${limit}&offset=${offset}`;
+      const filter = `filter?wnere=${where}&limit=${limit}&offset=${offset}`;
       fetch("https://localhost:44335/api/v1/Employees/" + filter, {
         method: "GET",
       })
@@ -120,7 +131,6 @@ export default {
           console.log(res);
         });
     }
-    Search()
     
     return {
       isShow,
@@ -130,7 +140,8 @@ export default {
       Employees,
       EmployeesTable,
       loadData,
-      Where: {},
+      search,
+      getLimitValue,
     };
   },
   components: { MButton, MTable, ThePadding, MPopup, MLoading, MInputSearch},

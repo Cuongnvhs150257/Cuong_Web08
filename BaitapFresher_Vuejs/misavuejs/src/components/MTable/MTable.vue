@@ -3,18 +3,18 @@
     <table>
     <thead>
       <tr>
-        <th class="box"><input type="checkbox" class="tab-checkbox" /></th>
-        <th>Mã nhân viên</th>
-        <th>Tên nhân viên</th>
-        <th>Giới tính</th>
-        <th class="tab-th-select">Ngày sinh</th>
-        <th>Số CMND</th>
-        <th>Chức danh</th>
-        <th>Tên đơn vị</th>
-        <th>Số tài khoản</th>
-        <th>Tên ngân hàng</th>
-        <th>Chi nhánh ngân hàng</th>
-        <th class="tab-th-select">Chức năng</th>
+        <th style="min-width: 30px;" class="box"><input type="checkbox" class="tab-checkbox" /></th>
+        <th style="min-width: 110px;">MÃ NHÂN VIÊN</th>
+        <th style="min-width: 140px;">TÊN NHÂN VIÊN</th>
+        <th style="min-width: 100px;">GIỚI TÍNH</th>
+        <th style="min-width: 100px;" class="tab-th-select">NGÀY SINH</th>
+        <th style="min-width: 100px;" >SỐ CMND</th>
+        <th style="min-width: 130px;">CHỨC DANH</th>
+        <th style="min-width: 130px;">TÊN ĐƠN VỊ</th>
+        <th style="min-width: 110px;">SỐ TÀI KHOẢN</th>
+        <th style="min-width: 130px;">TÊN NGÂN HÀNG</th>
+        <th style="min-width: 180px;">CHI NHÁNH NGÂN HÀNG</th>
+        <th style="min-width: 110px;" class="tab-th-select">CHỨC NĂNG</th>
       </tr>
     </thead>
     <tbody v-if="EmployeesLoad">
@@ -26,8 +26,8 @@
         <td class="box"><input type="checkbox" class="tab-checkbox"/></td>
         <td>{{ emp.employeeCode }}</td>
         <td>{{ emp.fullName }}</td>
-        <td>{{ emp.gender }}</td>
-        <td class="tab-th-select">{{ emp.dateOfBirth }}</td>
+        <td>{{ this.fomatGender(emp.gender) }}</td>
+        <td class="tab-th-select">{{ this.formatDate(emp.dateOfBirth) }}</td>
         <td>{{ emp.identifyCode }}</td>
         <td>{{ emp.postions }}</td>
         <td>{{ emp.unitName }}</td>
@@ -35,12 +35,8 @@
         <td>{{ emp.bankName }}</td>
         <td>{{ emp.bankUnit }}</td>
         <td class="tab-th-select func" >
-          <label @click="rowDBClick(emp.employeeID)">Sửa</label>
-          <select @change="openPopupAsk($event, emp.employeeID)">
-            <option value="1">Nhân bản</option>
-            <option value="2">Xóa</option>
-            <option value="3">Ngưng sử dụng</option>
-          </select>
+          <label class="tab-th-select-lable" @click="rowDBClick(emp.employeeID)">Sửa</label>
+          <div class="btnopendrop"><MDropItem @edit-value="openPopupAsk" /></div>
         </td>
       </tr>
     </tbody>
@@ -55,11 +51,13 @@
 <script>
 
 import MPopupAsk from '../MPopupAsk/MPopupAsk.vue'
+import MDropItem from './MDropItem.vue'
 
 export default {
   name: "EmployeeList",
   props: {
     EmployeesLoad: Object,
+    
   },
   
   methods: {
@@ -75,8 +73,9 @@ export default {
     
     //hàm mở popup hỏi người dùng có xóa không
 
-    openPopupAsk(event, id){
-        this.checkDelete = event.target.value; //lưu lựa chọn sửa 
+    openPopupAsk(selectedit, id){
+        this.checkDelete = selectedit; //lưu lựa chọn sửa 
+        console.log(this.checkDelete);
         if (this.checkDelete == 2){
             this.isShowAskDelete = true; //hiện popup hỏi người dùng
             this.idEmployeeDelete = id; //lưu id employee cần xóa
@@ -89,7 +88,42 @@ export default {
        this.isShowAskDelete = false; //đóng popup hỏi người dùng
        this.popupAskCance = false; //lưu trạng thái đóng popup hỏi người dùng
     },
-
+    fomatGender(gender){
+      
+       if(gender == 1){
+         return gender = "Nữ";
+       }else if(gender == 2){
+         return gender = "Nam";
+       }else if (gender == 0){
+         return gender = "Khác";
+       }else{
+         return gender = "";
+       }
+    },
+    
+    formatDate(date) {
+    try {
+      
+      if (date) {
+        var format = "nn/mm/YYYY";
+        date = new Date(date);
+        // Lấy ra ngày
+        let day = date.getDate();
+        day = day < 10 ? `0${day}` : day;
+        // Lấy ra tháng
+        let month = date.getMonth() + 1;
+        month = month < 10 ? `0${month}` : month;
+        // Lấy ra năm
+        let year = date.getFullYear();
+        if(format != "dd/MM/YYYY") return `${day}/${month}/${year}`
+        return `${year}-${month}-${day}`;
+      } else {
+        return "";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
     //Hàm xóa employee theo id
 
     async deleteEmployee() {
@@ -138,7 +172,8 @@ export default {
     };
   },
   components: {
-    MPopupAsk
+    MPopupAsk,
+    MDropItem
   }
 };
 </script>
@@ -186,11 +221,14 @@ export default {
   border-bottom: 1px solid rgb(216, 211, 211);
   border-right: 1px solid rgb(216, 211, 211);
   height: 35px;
+  font-size: 13px;
+
 }
 .content-table tr td,
 .content-table tr th {
   padding-left: 5px;
   text-align: left;
+  cursor: pointer;
 }
 .tab-th-select {
   text-align: center !important;
@@ -208,9 +246,23 @@ export default {
 }
 .tab-th-select.func {
   color: blue;
+  display: flex;
+  justify-content: center;
 }.tab-checkbox{
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
+  margin-top: 5px;
+  margin-left: 5px;
+  
+}.tab-th-select-lable{
+   margin-top: 10px;
+   margin-left: 30px;
+}.btnopendrop{
+  position: relative;
+  width: 5px;
+  height: 5px;
+  margin-top: 5px;
+  margin-left: 30px;
 }
 </style>
 

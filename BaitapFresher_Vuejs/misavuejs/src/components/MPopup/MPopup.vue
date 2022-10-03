@@ -5,11 +5,11 @@
         <div class="input1-left">
           <label class="input1-label">Thông tin nhân viên</label>
           <div class="input1-checkbox">
-            <input type="checkbox" class="checkbox-1" />
+            <input type="checkbox" class="checkbox-1" @click="isShowPhoneNumber" />
             <label class="checkbox-label">Là khách hàng</label>
           </div>
           <div class="input1-checkbox">
-            <input type="checkbox" class="checkbox-1" />
+            <input type="checkbox" class="checkbox-1" @click="isShowFax"  />
             <label class="checkbox-label">Là nhà cung cấp</label>
           </div>
         </div>
@@ -62,8 +62,9 @@
         <div class="input_item item4">
           <label class="item-label label3 gender">Giới tính</label>
           <div class="input-radio">
-            <m-input-radio></m-input-radio>Nam <m-input-radio></m-input-radio>Nữ
-            <m-input-radio></m-input-radio>Khác
+            <MInputRadio @click="getGender(2)" />Nam 
+            <MInputRadio @click="getGender(1)"  />Nữ
+            <MInputRadio @click="getGender(0)"  />Khác
           </div>
         </div>
       </div>
@@ -71,7 +72,7 @@
         <div class="input_item item1">
           <label class="item-label">Đơn vị</label>
           <label class="item-labelsao"> *</label>
-          <MComboxbox @get-unitid= getUnitID />
+          <MComboxbox @get-unitid= getUnitID :class="{ 'combobox-input-red': !inValue }" />
         </div>
         <div class="input_item item2">
           <label class="item-label">Số CMND</label>
@@ -82,7 +83,7 @@
         </div>
         <div class="input_item item3">
           <label class="item-label l3">Ngày cấp</label>
-          <input type="date" class="item-input in3" value="formatDate(Employees.IdentifyDate)"/>
+          <input type="date" class="item-input in3" value="formatDate(Employees.IdentifyDate)" />
         </div>
       </div>
       <div class="popup_item input4">
@@ -101,15 +102,15 @@
           <m-input-nomal v-model="Employees.Address"></m-input-nomal>
         </div>
       </div>
-      <div class="popup_item input6">
-        <div class="input_item item1">
+      <div class="popup_item input6" >
+        <div class="input_item item1" v-if="PhoneNumbers">
           <label class="item-label">ĐT di động</label>
           <m-input-nomal
             :toolTip="'Điện thoại di động'"
             v-model="Employees.PhoneNumber"
           ></m-input-nomal>
         </div>
-        <div class="input_item item">
+        <div class="input_item item" v-if="Faxs">
           <label class="item-label">ĐT cố định</label>
           <m-input-nomal
             :toolTip="'Điện thoại cố định'"
@@ -175,6 +176,13 @@ import MComboxbox from "./MCombobox.vue";
 
 export default {
   methods: {
+    isShowPhoneNumber(){
+        this.PhoneNumbers = !this.PhoneNumbers;
+    },
+    isShowFax(){
+        this.Faxs = !this.Faxs;
+    },
+
     //hàm đóng popup thêm nhân viên
     handleClosePopup() {
       this.$emit("custom-handle-click");
@@ -182,6 +190,10 @@ export default {
     getUnitID(Uid){
         this.Employees.UnitID = Uid;
         console.log(this.Employees);
+    },
+    getGender(Ge){
+       this.Employees.Gender = Ge;
+       console.log(Ge);
     },
     /*
     validName(name) {
@@ -242,7 +254,7 @@ export default {
       //validate dữ liệu
 
       //kiểm tra xem mã nhân viên hoặc tên nhân viên có chưa
-      if (this.Employees.EmployeeCode && this.Employees.FullName) {
+      if (this.Employees.EmployeeCode && this.Employees.FullName && this.Employees.UnitID) {
           validate = true;
           
          
@@ -278,21 +290,28 @@ export default {
         //chưa có mã hoặc tên thì yêu cầu nhập
         this.inValue = false; //đỏ input mã và tên
         this.isShowNotification = true; //mở popup thông báo
-        this.errors = "Mã Không được để trống";
+        this.errors = "Mã không được để trống";
         validate = false;
         this.Spanempty = true;
       }else if(this.Employees.FullName == null){
         //chưa có mã hoặc tên thì yêu cầu nhập
         this.inValue = false; //đỏ input mã và tên
         this.isShowNotification = true; //mở popup thông báo
-        this.errors = "Tên Không được để trống";
+        this.errors = "Tên không được để trống";
+        validate = false;
+        this.Spanempty = true;
+      }else if(this.Employees.UnitID == null){
+        //chưa có mã hoặc tên thì yêu cầu nhập
+        this.inValue = false; //đỏ input mã và tên
+        this.isShowNotification = true; //mở popup thông báo
+        this.errors = "Đơn vị không được để trống";
         validate = false;
         this.Spanempty = true;
       }else {
         //chưa có mã hoặc tên thì yêu cầu nhập
         this.inValue = false; //đỏ input mã và tên
         this.isShowNotification = true; //mở popup thông báo
-        this.errors = "Mã Không được để trống";
+        this.errors = "Mã không được để trống";
         validate = false;
         this.Spanempty = true;
       }
@@ -363,6 +382,8 @@ export default {
       UidP:{
         type: Number,
       },
+      PhoneNumbers: true,
+      Faxs: true,
     };
   },
 };
@@ -597,6 +618,8 @@ export default {
   border: 1px solid #bbbbbb;
 }
 .item-input-red {
+  border: 1px solid #ff0000;
+}.combobox-input-red{
   border: 1px solid #ff0000;
 }
 

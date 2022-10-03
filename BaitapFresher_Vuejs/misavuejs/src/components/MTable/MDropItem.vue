@@ -1,13 +1,10 @@
 <template>
-  <div class="drop">
-    <div class="drop-label"><label>{{PaddingValue}} bảng ghi trên 1 trang</label></div>
-    <button class="drop" @click="btnDropClick"></button>
-    <div class="drop-data" v-if="OpenDropbox === true">
-      <div class="drop-item"  @click="SelectedPadding(10)">10 bảng ghi trên 1 trang</div>
-      <div class="drop-item"  @click="SelectedPadding(20)">20 bảng ghi trên 1 trang</div>
-      <div class="drop-item" @click="SelectedPadding(30)">30 bảng ghi trên 1 trang</div>
-      <div class="drop-item" @click="SelectedPadding(50)">50 bảng ghi trên 1 trang</div>
-      <div class="drop-item" @click="SelectedPadding(100)">100 bảng ghi trên 1 trang</div>
+  <div class="droptbl">
+    <button class="droptbl" @click="btnDropClick"></button>
+    <div class="drop-datatbl" v-if="OpenDropbox === true">
+      <div class="drop-itemtbl"  @click="SelectedEdit(1)">Nhân bản</div>
+      <div class="drop-itemtbl"  @click="SelectedEdit(2)">Xóa</div>
+      <div class="drop-itemtbl" @click="SelectedEdit(3)">Ngưng sử dụng</div>
     </div>
   </div>
 </template>
@@ -21,17 +18,15 @@ export default {
             // this.inValue = true;
             console.log(this.OpenDropbox);
         },
-        SelectedPadding(value){
-          this.$emit("padding-value", value);
+        SelectedEdit(value){
+          this.$emit("edit-value", value);
           this.OpenDropbox = false;
-          this.PaddingValue = value;
         }
     
   },
   data(){
         return{
             OpenDropbox: false,
-            PaddingValue: 10,
         }
     }
 };
@@ -42,24 +37,15 @@ export default {
 :root{
     --icon: url("../../assets/Resource/img/Sprites.64af8f61.svg");
 }
-.drop {
+.droptbl {
   height: 30px;
   width: 100%;
   box-sizing: border-box;
   display: flex;
   position: relative;
-}.drop-label{
-    margin-top: 5px;
-    margin-left: 10px;
-}
-.drop input:focus {
-  border: 2px solid #019160;
-  outline: none;
-}.drop label{
-    font-size: 13px;
 }
 
-.drop .drop{
+.droptbl .droptbl{
   position: absolute;
   border: none;
   right: 1px;
@@ -72,30 +58,35 @@ export default {
   background: #fff;
   margin: 0;
 }
-.drop .drop{
+.droptbl .droptbl{
     background-image: var(--icon);
     background-position: -1067px -26px;
     background-repeat: no-repeat;
-}.drop .drop:hover{
+}.droptbl .drop:hover{
     background-color: #dddd;
 }
-.drop-data {
+.drop-datatbl {
   position: absolute;
-  bottom: 32px;
-  width: 100%;
+  top: 32px;
+  width: 49px;
+  right: 50px;
+  background-color: #fff;
+  z-index: 1;
+  border-bottom: 1px solid #bbbb;
 
 }
-.drop-item {
+.drop-itemtbl {
   height: 32px;
+  width: 100px;
   display: flex;
   align-items: center;
   padding-left: 10px;
-  border: 1px solid #bbbbbb;
   background-color: #fff;
   font-size: 13px;
+  color: #000;
 }
 
-.drop-item:hover {
+.drop-itemtbl:hover {
   color: #50b83c;
   background-color: #EBEDF0;
 }.drop-data-hide{

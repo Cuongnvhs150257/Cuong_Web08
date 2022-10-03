@@ -73,7 +73,7 @@
     width: 37px;
     height: 32px;
     border-radius: 50%;
-    margin-left: 30px;
+    margin-left: 20px;
  
     background: var(--icon) no-repeat -353px -893px;
 
