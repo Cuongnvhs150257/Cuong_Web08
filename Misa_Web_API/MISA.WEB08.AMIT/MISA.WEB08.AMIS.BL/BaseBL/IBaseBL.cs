@@ -70,5 +70,13 @@ namespace MISA.WEB08.AMIS.BL
         /// <exception cref="NotImplementedException"></exception>
         public IEnumerable<T> DeleteMultipleRecord(List<string> employeeid);
 
+        /// <summary>
+        /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <returns></returns>
+        public object GetMaxRecord();
+
+
     }
 }

@@ -19,7 +19,7 @@
         </div>
       </div>
       <MTable @custom-open-dbclick="openPopup" :EmployeesLoad="EmployeesTable" @data-load-delete="loadData"/>
-      <ThePadding :TotalCount="EmployeesTable" @filter-padding="getLimitValue" />
+      <ThePadding :TotalCount="EmployeesTable" @filter-padding="getLimitValue" @offset-value="getOffSetValue"/>
     </div>
 
     <!-- <Teleport to="#page-employee">
@@ -51,10 +51,10 @@ export default {
     const EmployeesTable = ref(null)
     const LoadingShow = ref(false)
     const LimitValue = ref(null)
+    const OffSetValue = ref(null)
 
     //Hàm mở popup thêm nhân viên
     //và lấy dữ liệu nhân viên theo id dể hiện trên popup
-
     async function openPopup(id) {
       if(id){ //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
         LoadingShow.value = true; //hiển thị loading
@@ -75,7 +75,20 @@ export default {
         
 
       }else{  //trường hợp chỉ mở popup
-        Employees.value = {},
+        Employees.value = {}, //dữ liệu trên popup rỗng
+        await fetch("https://localhost:44335/api/v1/Employees/getmax", { 
+            method: "GET", //lấy mã nhân viên cao nhất
+          })
+            .then(response => response.json())
+            .then((data) => {
+              var s = JSON.stringify(data); 
+              var d = s.replace(/[^0-9]*/g, ''); //lấy mã nhân viên cao nhất, loại bỏ dữ liệu thừa
+              var e = "NV"+ d; //thêm nv
+              Employees.value.EmployeeCode = e;
+            })
+            .catch((res) => {
+              console.log(res);
+            });
         isShow.value = true; 
       }
       
@@ -83,29 +96,39 @@ export default {
     //hàm đóng popup thêm nhân viên
     function closePopup() {
       isShow.value = false;
+      if(Employees.value.EmployeeID == null){
+         Employees.value = {};
+      }
     }
+    //lấy số lượng bản ghi hiển thị
     function getLimitValue(limits){
        LimitValue.value = limits;
-       console.log(LimitValue.value);
        loadData();
+    }
+    //lấy trang hiển thị
+    function getOffSetValue(offset){
+        OffSetValue.value = offset;
+        loadData();
     }
     //hàm load dữ liệu
     function loadData() {
       LoadingShow.value = true;
-      var limit = LimitValue.value;
-      console.log(limit);
-      if(limit == null){
-        limit = 5;
+      var limit = LimitValue.value; //lưu số lượng bản ghi
+      if(limit == null){ //nếu không có, mặc định là 10
+        limit = 10;
       }
-      const offset = 1;
+      var offset = OffSetValue.value; //lưu trang hiển thị
+      if(offset == null){  //nếu không có, mặc định là 0
+        offset = 0;
+      }
       const filter = `filter?limit=${limit}&offset=${offset}`;
       fetch("https://localhost:44335/api/v1/Employees/" + filter, {
         method: "GET",
       })
         .then((res) => res.json())
         .then((data) => {
-          EmployeesTable.value = data;
-          LoadingShow.value = false;
+          EmployeesTable.value = data; //lưu dữ liệu
+          LoadingShow.value = false; //tắt loading
           console.log(data);
         })
         .catch((res) => {
@@ -113,17 +136,24 @@ export default {
         });
     }
     loadData()
+
+    //hàm tìm kiếm
     function search(where){
-      console.log(where);
-      const limit = 5;
-      const offset = 1;
+      var limit = LimitValue.value; //lưu số lượng bản ghi
+      if(limit == null){
+        limit = 10; //nếu không có, mặc định là 10
+      }
+      var offset = getOffSetValue.value; //lưu trang hiển thị
+      if(offset == null){ 
+        offset = 0; //nếu không có, mặc định là 0
+      }
       const filter = `filter?wnere=${where}&limit=${limit}&offset=${offset}`;
       fetch("https://localhost:44335/api/v1/Employees/" + filter, {
         method: "GET",
       })
         .then((res) => res.json())
         .then((data) => {
-          EmployeesTable.value = data;
+          EmployeesTable.value = data; //lưu dữ liệu vừa tìm kiếm
           LoadingShow.value = false;
           console.log(data);
         })
@@ -133,15 +163,16 @@ export default {
     }
     
     return {
-      isShow,
-      LoadingShow,
-      openPopup,
-      closePopup,
-      Employees,
-      EmployeesTable,
-      loadData,
-      search,
-      getLimitValue,
+      isShow, //gọi popup thêm nhân viên
+      LoadingShow, //gọi màn hình loading
+      openPopup, //lưu giá trị hàm mở popup thêm nhân viên
+      closePopup, //lưu giá trị hàm đóng popup thêm nhân viên
+      Employees, //lưu giá trị nhân viên
+      EmployeesTable, //lưu giá trị bảng nhân viên
+      loadData, //lưu giá trị hàm load dữ liệu
+      search, //lưu giá trị hàm tìm kiếm
+      getLimitValue, //lưu giá trị hàm lấy số lượng bản ghi
+      getOffSetValue, //lưu giá trị hàm lấy trang
     };
   },
   components: { MButton, MTable, ThePadding, MPopup, MLoading, MInputSearch},
@@ -178,8 +209,8 @@ export default {
 .content-top-label {
   height: 80px;
   width: 300px;
-  font-size: x-large;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 700;
 }
 .content-top-right {
   width: 70%;
@@ -190,7 +221,7 @@ export default {
 }
 .content-toolbar {
   display: flex;
-  position: relative;
+  position: sticky;
   height: 50px;
   background-color: #ffff;
 }

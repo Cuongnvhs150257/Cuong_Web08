@@ -15,12 +15,13 @@
 <script>
 export default {
   methods:{
-      
+        //hàm đóng mở dropbox
         btnDropClick() {
             this.OpenDropbox = !this.OpenDropbox;
             // this.inValue = true;
             console.log(this.OpenDropbox);
         },
+        //hàm chọn số lượng bản ghi
         SelectedPadding(value){
           this.$emit("padding-value", value);
           this.OpenDropbox = false;
@@ -30,8 +31,8 @@ export default {
   },
   data(){
         return{
-            OpenDropbox: false,
-            PaddingValue: 10,
+            OpenDropbox: false, //gọi dropbox
+            PaddingValue: 10, //giá trị mặc định của số lượng bản ghi
         }
     }
 };
@@ -81,8 +82,10 @@ export default {
 }
 .drop-data {
   position: absolute;
-  bottom: 32px;
+  bottom: 31px;
   width: 100%;
+  right: -1px;
+  border: 1px solid #bbbbbb;
 
 }
 .drop-item {
@@ -90,7 +93,6 @@ export default {
   display: flex;
   align-items: center;
   padding-left: 10px;
-  border: 1px solid #bbbbbb;
   background-color: #fff;
   font-size: 13px;
 }

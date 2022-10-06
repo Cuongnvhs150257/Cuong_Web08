@@ -50,7 +50,7 @@ export default ({
         background-color: rgba(12, 12, 12, 0.3);
         z-index: 1000;
     }.popupnoti{
-        width: 400px;
+        width: 450px;
         height: 180px;
         position: relative;
         top: 40%;
@@ -67,7 +67,7 @@ export default ({
         height: 49px;
         margin-left: 50px;
         margin-top: 50px;
-        border-bottom: 1px solid;
+        border-bottom: 1px solid #bbbb;
     }.icon-noti{
         background-image: var(--icon);
         background-position: -752px -462px;
@@ -76,10 +76,10 @@ export default ({
     }.popupask-icon-label{
         width: 270px;
         margin-top: 50px;
-        border-bottom: 1px solid;
+        border-bottom: 1px solid #bbbb;
         padding-top: 10px;
     }.label-ask{
-        color: #6B6B6B;
+        color: #000;
     }.popupask-icon2{
         width: 50px;
         height: 50px;
@@ -90,8 +90,6 @@ export default ({
         background-position: -128px -131px;
         background-repeat: no-repeat;
         
-    }.popupask-bottom{
-
     }
 </style>
 

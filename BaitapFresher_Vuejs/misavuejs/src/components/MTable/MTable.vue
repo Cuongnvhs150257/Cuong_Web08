@@ -1,20 +1,20 @@
 <template>
-  <div>
+  <div class="contentner">
     <table>
     <thead>
       <tr>
         <th style="min-width: 30px;" class="box"><input type="checkbox" class="tab-checkbox" /></th>
-        <th style="min-width: 110px;">MÃ NHÂN VIÊN</th>
-        <th style="min-width: 140px;">TÊN NHÂN VIÊN</th>
-        <th style="min-width: 100px;">GIỚI TÍNH</th>
-        <th style="min-width: 100px;" class="tab-th-select">NGÀY SINH</th>
-        <th style="min-width: 100px;" >SỐ CMND</th>
-        <th style="min-width: 130px;">CHỨC DANH</th>
-        <th style="min-width: 130px;">TÊN ĐƠN VỊ</th>
-        <th style="min-width: 110px;">SỐ TÀI KHOẢN</th>
-        <th style="min-width: 130px;">TÊN NGÂN HÀNG</th>
-        <th style="min-width: 180px;">CHI NHÁNH NGÂN HÀNG</th>
-        <th style="min-width: 110px;" class="tab-th-select">CHỨC NĂNG</th>
+        <th style="min-width: 110px; font-family: Misa Fonts Bold;">MÃ NHÂN VIÊN</th>
+        <th style="min-width: 140px;  font-family: Misa Fonts Bold;">TÊN NHÂN VIÊN</th>
+        <th style="min-width: 100px;  font-family: Misa Fonts Bold;">GIỚI TÍNH</th>
+        <th style="min-width: 100px;  font-family: Misa Fonts Bold;" class="tab-th-select">NGÀY SINH</th>
+        <th style="min-width: 100px;  font-family: Misa Fonts Bold;" >SỐ CMND</th>
+        <th style="min-width: 130px;  font-family: Misa Fonts Bold;">CHỨC DANH</th>
+        <th style="min-width: 130px;  font-family: Misa Fonts Bold;">TÊN ĐƠN VỊ</th>
+        <th style="min-width: 110px;  font-family: Misa Fonts Bold;">SỐ TÀI KHOẢN</th>
+        <th style="min-width: 130px;  font-family: Misa Fonts Bold;">TÊN NGÂN HÀNG</th>
+        <th style="min-width: 180px; font-family: Misa Fonts Bold;">CHI NHÁNH NGÂN HÀNG</th>
+        <th style="min-width: 110px;position: sticky; font-family: Misa Fonts Bold;" class="tab-th-select">CHỨC NĂNG</th>
       </tr>
     </thead>
     <tbody v-if="EmployeesLoad">
@@ -34,15 +34,15 @@
         <td>{{ emp.bankAccount }}</td>
         <td>{{ emp.bankName }}</td>
         <td>{{ emp.bankUnit }}</td>
-        <td class="tab-th-select func" >
+        <td style="min-width: 110px;" class="tab-th-select func" >
           <label class="tab-th-select-lable" @click="rowDBClick(emp.employeeID)">Sửa</label>
-          <div class="btnopendrop"><MDropItem @edit-value="openPopupAsk" /></div>
+          <div class="btnopendrop"><MDropItem @edit-value="openPopupAsk" @click="getEmployeeDetele(emp.employeeID, emp.employeeCode)" /></div>
         </td>
       </tr>
     </tbody>
   </table>
   <div class="mpopup-ask">
-    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteEmployee"/>
+    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteEmployee" :getEmployeeCode="getemployeedeteteCode"/>
   </div>
   </div>
   
@@ -57,50 +57,52 @@ export default {
   name: "EmployeeList",
   props: {
     EmployeesLoad: Object,
-    
   },
   
   methods: {
 
     //hàm hiện thông tin trên popup khi nhấn vào Sửa
-
     rowDBClick(employeeID) {
-      //this.empSelected = employees;
-      
       this.$emit("custom-open-dbclick", employeeID);
       this.detailFormMode = 2;
     },
-    
-    //hàm mở popup hỏi người dùng có xóa không
 
-    openPopupAsk(selectedit, id){
+    //hàm lấy thông tin nhân viên khi xóa
+    getEmployeeDetele(employeeID, employeeCode){
+        this.getemployeedetetevalue = employeeID;
+        this.getemployeedeteteCode = employeeCode;
+        
+    },
+
+    //hàm mở popup hỏi người dùng có xóa không
+    openPopupAsk(selectedit){
         this.checkDelete = selectedit; //lưu lựa chọn sửa 
         console.log(this.checkDelete);
         if (this.checkDelete == 2){
             this.isShowAskDelete = true; //hiện popup hỏi người dùng
-            this.idEmployeeDelete = id; //lưu id employee cần xóa
+            this.idEmployeeDelete = this.getemployeedetetevalue; //lưu id employee cần xóa
         }
     },
 
     //Hàm đóng popup hỏi người dùng có xóa không
-
     ClosePopupAsk(){
        this.isShowAskDelete = false; //đóng popup hỏi người dùng
        this.popupAskCance = false; //lưu trạng thái đóng popup hỏi người dùng
     },
+    //hàm format giới tính
     fomatGender(gender){
       
-       if(gender == 1){
+       if(gender == 1){ //giá trị 1 là nữ 
          return gender = "Nữ";
-       }else if(gender == 2){
+       }else if(gender == 2){ //giá trị 2 là nam
          return gender = "Nam";
-       }else if (gender == 0){
+       }else if (gender == 0){ //giá trị 0 là khác
          return gender = "Khác";
-       }else{
+       }else{ //không có cho thành rỗng
          return gender = "";
        }
     },
-    
+    //hàm format ngày tháng
     formatDate(date) {
     try {
       
@@ -124,8 +126,8 @@ export default {
       console.log(error);
     }
   },
-    //Hàm xóa employee theo id
 
+    //Hàm xóa employee theo id
     async deleteEmployee() {
 
           var id = this.idEmployeeDelete; //lấy employeeid đã lưu 
@@ -160,14 +162,15 @@ export default {
   },
   data() {
     return {
-      employees: [],
-      empSelected: {},
-      detailFormMode: 1,
-      isShowAskDelete: false,
-      popupAskCance: true,
-      idEmployeeDelete:0,
-      checkDelete: 2
-     
+      employees: [], //lưu dữ liệu nhân viên
+      empSelected: {}, //lưu nhân viên đã chọn
+      detailFormMode: 1, 
+      isShowAskDelete: false, //gọi popup hỏi có xóa không
+      popupAskCance: true, //nút hủy xóa
+      idEmployeeDelete:0, //lưu id nhân viên cần xóa
+      checkDelete: 2,  //trạng thái xóa
+      getemployeedetetevalue: 0, //lưu id nhân viên cần xóa
+      getemployeedetetecode: '', //lưu code nhân viên cần xóa
      
     };
   },
@@ -186,6 +189,11 @@ export default {
   background-color: #fff;
   border: 10px solid #fff;
   padding-left: 10px;
+
+}
+.contentner{
+  height: calc(100% - 98px);
+  width: calc(100% - 30px);
   overflow: scroll;
 }
 ::-webkit-scrollbar {
@@ -213,6 +221,7 @@ export default {
   border-collapse: collapse;
   border-spacing: unset;
   font-size: 13px;
+
 }
 
 .content-table tr,
@@ -226,7 +235,7 @@ export default {
 }
 .content-table tr td,
 .content-table tr th {
-  padding-left: 5px;
+  padding-left: 8px;
   text-align: left;
   cursor: pointer;
 }
@@ -245,9 +254,10 @@ export default {
   color: blue;
 }
 .tab-th-select.func {
-  color: blue;
+  color: #0075CC;
   display: flex;
   justify-content: center;
+  font-weight: 600;
 }.tab-checkbox{
   width: 18px;
   height: 18px;
@@ -257,6 +267,7 @@ export default {
 }.tab-th-select-lable{
    margin-top: 10px;
    margin-left: 30px;
+   font-weight: 600;
 }.btnopendrop{
   position: relative;
   width: 5px;

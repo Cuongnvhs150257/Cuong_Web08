@@ -29,7 +29,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// ngày tháng năm sinh
         /// </summary>
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         /// <summary>
         /// giới tính
@@ -49,7 +49,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// ngày cấp cmnd
         /// </summary>
-        public DateTime IdentifyDate { get; set; }
+        public DateTime? IdentifyDate { get; set; }
 
         /// <summary>
         /// nơi cấp cmnd

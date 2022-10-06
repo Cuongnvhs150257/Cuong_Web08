@@ -25,6 +25,9 @@
         DeleteError = 6,
 
         //lỗi xóa toàn bộ không thành công
-        DeleteAllEror = 7
+        DeleteAllError = 7,
+
+        //lỗi validate dữ liệu
+        ValidateError = 8,
     }
 }

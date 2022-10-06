@@ -161,6 +161,10 @@
     <value>Pro_{0}_Filter</value>
     <comment>Template string cho procudes lọc, tìm kiếm</comment>
   </data>
+  <data name="Pro_GetMaxEmployee" xml:space="preserve">
+    <value>Pro_employee_GetMaxEmployee</value>
+    <comment>Template string cho procudes lấy mã nhân viên cao nhất</comment>
+  </data>
   <data name="Pro_InsertEmployee" xml:space="preserve">
     <value>Pro_{0}_InsertEmployee</value>
     <comment>Template string cho procudues thêm mới</comment>

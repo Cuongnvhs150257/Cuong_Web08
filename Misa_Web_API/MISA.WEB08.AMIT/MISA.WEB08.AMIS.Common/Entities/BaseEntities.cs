@@ -10,7 +10,7 @@ namespace MISA.WEB08.AMIS.Common
         /// <summary>
         /// ngày tạo
         /// </summary>
-        public DateTime CreateDate { get; set; } = DateTime.Now;
+        public DateTime? CreateDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// người tạo
@@ -20,7 +20,7 @@ namespace MISA.WEB08.AMIS.Common
         /// <summary>
         /// ngày chỉnh sửa gần nhất 
         /// </summary>
-        public DateTime ModifiedDate { get; set; } = DateTime.Now;
+        public DateTime? ModifiedDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// người chỉnh sửa gần nhất

@@ -12,12 +12,11 @@
 <script>
 export default {
   methods:{
-      
+        //hàm mở dropbox
         btnDropClick() {
             this.OpenDropbox = !this.OpenDropbox;
-            // this.inValue = true;
-            console.log(this.OpenDropbox);
         },
+        //hàm chọn giá trị trong dropbox
         SelectedEdit(value){
           this.$emit("edit-value", value);
           this.OpenDropbox = false;
@@ -43,6 +42,8 @@ export default {
   box-sizing: border-box;
   display: flex;
   position: relative;
+  background-color: #fff;
+  
 }
 
 .droptbl .droptbl{
@@ -60,7 +61,7 @@ export default {
 }
 .droptbl .droptbl{
     background-image: var(--icon);
-    background-position: -1067px -26px;
+    background-position: -888px -354px;
     background-repeat: no-repeat;
 }.droptbl .drop:hover{
     background-color: #dddd;
@@ -83,7 +84,9 @@ export default {
   padding-left: 10px;
   background-color: #fff;
   font-size: 13px;
+  font-weight: lighter;
   color: #000;
+  z-index: 1000;
 }
 
 .drop-itemtbl:hover {

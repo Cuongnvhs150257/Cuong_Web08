@@ -160,6 +160,15 @@ namespace MISA.WEB08.AMIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pro_employee_GetMaxEmployee.
+        /// </summary>
+        public static string Pro_GetMaxEmployee {
+            get {
+                return ResourceManager.GetString("Pro_GetMaxEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pro_{0}_InsertEmployee.
         /// </summary>
         public static string Pro_InsertEmployee {

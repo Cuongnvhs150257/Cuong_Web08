@@ -61,10 +61,18 @@ namespace MISA.WEB08.AMIS.DL
 
         /// <summary>
         /// Hàm kết nối DB để xóa nhiều đối tượng
+        /// Createby: Nguyễn Văn Cương 26/09/2022
         /// </summary>
         /// <param name="recordid"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         public IEnumerable<T> DeleteMultipleRecord(List<string> recordid);
+
+        /// <summary>
+        /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <returns></returns>
+        public Object GetMaxRecord();
     }
 }

@@ -5,11 +5,15 @@
         <div class="input1-left">
           <label class="input1-label">Thông tin nhân viên</label>
           <div class="input1-checkbox">
-            <input type="checkbox" class="checkbox-1" @click="isShowPhoneNumber" />
+            <input
+              type="checkbox"
+              class="checkbox-1"
+              @click="isShowPhoneNumber"
+            />
             <label class="checkbox-label">Là khách hàng</label>
           </div>
           <div class="input1-checkbox">
-            <input type="checkbox" class="checkbox-1" @click="isShowFax"  />
+            <input type="checkbox" class="checkbox-1" @click="isShowFax" />
             <label class="checkbox-label">Là nhà cung cấp</label>
           </div>
         </div>
@@ -20,7 +24,7 @@
 
           <div
             class="input1-checkbox-icon question-icon"
-            @click="handleClosePopup"
+            @click="handleOpenPopupAskEdit"
           >
             <span class="tool-tip"> Đóng </span>
           </div>
@@ -37,7 +41,9 @@
             v-model="Employees.EmployeeCode"
           />
 
-          <span v-show="Spanempty" class="error-code"> Mã không được để trống </span>
+          <span v-show="Spanempty" class="error-code">
+            Mã không được để trống
+          </span>
         </div>
         <div class="input_item item2">
           <label class="item-label">Tên</label>
@@ -48,23 +54,29 @@
             v-model="Employees.FullName"
           />
 
-          <span v-show="Spanempty" class="error-name"> Tên không được để trống </span>
+          <span v-show="Spanempty" class="error-name">
+            Tên không được để trống
+          </span>
         </div>
         <div class="input_item item3">
           <label class="item-label label3">Ngày sinh</label>
-          <input
-            type="date" 
-            class="item-input in3"
-            value="formatDate(Employees.DateOfBirth)"
-            
-          />
+          <MDatetime v-model="Employees.DateOfBirth" />
         </div>
         <div class="input_item item4">
           <label class="item-label label3 gender">Giới tính</label>
           <div class="input-radio">
-            <MInputRadio @click="getGender(2)" />Nam 
-            <MInputRadio @click="getGender(1)"  />Nữ
-            <MInputRadio @click="getGender(0)"  />Khác
+            <MInputRadio
+              @click="getGender(2)"
+              :checked="Employees.Gender == 2"
+            />Nam
+            <MInputRadio
+              @click="getGender(1)"
+              :checked="Employees.Gender == 1"
+            />Nữ
+            <MInputRadio
+              @click="getGender(0)"
+              :checked="Employees.Gender == 0"
+            />Khác
           </div>
         </div>
       </div>
@@ -72,7 +84,11 @@
         <div class="input_item item1">
           <label class="item-label">Đơn vị</label>
           <label class="item-labelsao"> *</label>
-          <MComboxbox @get-unitid= getUnitID :class="{ 'combobox-input-red': !inValue }" />
+          <MComboxbox
+            @get-unitid="getUnitID"
+            :class="{ 'combobox-input-red': !inValue }"
+            :EmployeeUnit="Employees.UnitName"
+          />
         </div>
         <div class="input_item item2">
           <label class="item-label">Số CMND</label>
@@ -83,7 +99,7 @@
         </div>
         <div class="input_item item3">
           <label class="item-label l3">Ngày cấp</label>
-          <input type="date" class="item-input in3" value="formatDate(Employees.IdentifyDate)" />
+          <MDatetime v-model="Employees.IdentifyDate" />
         </div>
       </div>
       <div class="popup_item input4">
@@ -102,7 +118,7 @@
           <m-input-nomal v-model="Employees.Address"></m-input-nomal>
         </div>
       </div>
-      <div class="popup_item input6" >
+      <div class="popup_item input6">
         <div class="input_item item1" v-if="PhoneNumbers">
           <label class="item-label">ĐT di động</label>
           <m-input-nomal
@@ -157,6 +173,14 @@
             </button>
           </div>
         </div>
+        <div>
+          <MPopupAskEdit
+            v-if="isShowPopupAskEdit"
+            @popup-ask-no="handleCloseAll"
+            @popup-ask-cance="handleCloseAskEdit"
+            @agree-save-click="agreeSaveClick"
+          />
+        </div>
       </div>
       <MPopupNotification
         v-if="isShowNotification"
@@ -173,40 +197,68 @@ import MButton1 from "./MButton1.vue";
 import MInputSpecial from "./MInputSpecial.vue";
 import MPopupNotification from "../MPopupNotification/MPopupNotification.vue";
 import MComboxbox from "./MCombobox.vue";
+import MDatetime from "./MDatetime.vue";
+import MPopupAskEdit from "./MPopupAskEdit/MPopupAskEdit.vue";
 
 export default {
   methods: {
-    isShowPhoneNumber(){
-        this.PhoneNumbers = !this.PhoneNumbers;
+    //hàm đóng mở trường phone number khi là khách hàng
+    isShowPhoneNumber() {
+      this.PhoneNumbers = !this.PhoneNumbers;
     },
-    isShowFax(){
-        this.Faxs = !this.Faxs;
+    //hàm đóng mở trường fax khi là nhà cung cấp
+    isShowFax() {
+      this.Faxs = !this.Faxs;
     },
 
     //hàm đóng popup thêm nhân viên
     handleClosePopup() {
       this.$emit("custom-handle-click");
     },
-    getUnitID(Uid){
-        this.Employees.UnitID = Uid;
-        console.log(this.Employees);
-    },
-    getGender(Ge){
-       this.Employees.Gender = Ge;
-       console.log(Ge);
-    },
-    /*
-    validName(name) {
-      var re = /^[a-zA-Z ]{10,20}$/;
-      return re.test(name);
-    },
-    
-    validCode(code){
-      var re = ;
-      return re.test(code);
-    }
-    */
+    //hàm mở popup lưu thay đổi sau khi người dùng sửa
+    handleOpenPopupAskEdit() {
+      //so sánh xem người dùng có thay đổi trường nào không
+      for (const prop in this.employeesSelected) {
+        if (this.employeesSelected[prop] != this.Employees[prop]) {
+          this.isShowPopupAskEdit = true; //nếu có thì hiện popup hỏi
+          return;
+        }
+      }
+      if (
+        this.Employees.EmployeeCode != null &&
+        this.Employees.FullName == null
+      ) {
+        //trong trường hợp mở popup thêm nhân viên
+        this.isShowPopupAskEdit = true;
+        return;
+      }
 
+      this.$emit("custom-handle-click");
+    },
+    //hàm đóng popup lưu thay đổi và popup thêm nhân viên
+    handleCloseAll() {
+      this.isShowPopupAskEdit = false;
+      this.$emit("custom-handle-click");
+    },
+    //hàm đóng popup lưu thay đổi
+    handleCloseAskEdit() {
+      this.isShowPopupAskEdit = false;
+    },
+    //hàm chấp nhận lưu
+    agreeSaveClick() {
+      this.isShowPopupAskEdit = false;
+      this.btnSaveonClick();
+    },
+    //hàm lấy id đơn vị
+    getUnitID(Uid) {
+      this.Employees.UnitID = Uid;
+      console.log(this.Employees);
+    },
+    //hàm lấy giới tính
+    getGender(Ge) {
+      this.Employees.Gender = Ge;
+      console.log(Ge);
+    },
 
     //hàm regex kiểm tra email
     validEmail(email) {
@@ -221,93 +273,89 @@ export default {
       var re = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
       return re.test(phonenumber);
     },
+    //hàm format lại ngày tháng năm
     formatDate(date) {
-    try {
-      
-      if (date) {
-        var format = "nn/mm/YYYY";
-        date = new Date(date);
-        // Lấy ra ngày
-        let day = date.getDate();
-        day = day < 10 ? `0${day}` : day;
-        // Lấy ra tháng
-        let month = date.getMonth() + 1;
-        month = month < 10 ? `0${month}` : month;
-        // Lấy ra năm
-        let year = date.getFullYear();
-        if(format == "dd/MM/YYYY") return `${day}/${month}/${year}`
-        return `${year}-${month}-${day}`;
-      } else {
-        return "";
+      try {
+        if (date) {
+          var format = "nn/mm/YYYY";
+          date = new Date(date);
+          // Lấy ra ngày
+          let day = date.getDate();
+          day = day < 10 ? `0${day}` : day;
+          // Lấy ra tháng
+          let month = date.getMonth() + 1;
+          month = month < 10 ? `0${month}` : month;
+          // Lấy ra năm
+          let year = date.getFullYear();
+          if (format == "dd/MM/YYYY") return `${day}/${month}/${year}`;
+          return `${year}-${month}-${day}`;
+        } else {
+          return "";
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  },
-    //hàm sửa hoặc thêm nhân viên mới
-    btnSaveonClick() {
-      var method = "POST";
-      var url = "https://localhost:44335/api/v1/Employees";
+    },
+
+    //hàm validate dữ liệu
+    validateAll() {
       var validate = true;
-      this.errors = [];
-
-      //validate dữ liệu
-
       //kiểm tra xem mã nhân viên hoặc tên nhân viên có chưa
-      if (this.Employees.EmployeeCode && this.Employees.FullName && this.Employees.UnitID) {
-          validate = true;
-          
-         
-          //hàm validate số điện thoại
-          if (this.Employees.PhoneNumber) {
-            if (!this.valiPhoneNumber(this.Employees.PhoneNumber)) {
-              this.isShowNotification = true;
-              this.errors = "Số điện thoại không hợp lệ";
-              validate = false;
-            }
-          } else {
-            validate = true;
-          }
-          //hàm validate email
-          if (this.Employees.Email) {
-            if (!this.validEmail(this.Employees.Email)) {
-              this.isShowNotification = true;
-              this.errors = "Email không hợp lệ";
-              validate = false;
-            }
-          } else if (this.Employees.PhoneNumber == null) {
-            //nếu số điện thoại k có thì mới dc thêm
-            validate = true;
-          }
-          //hàm fomat date
-          if(this.Employees.DateOfBirth || this.Employees.IdentifyDate){
-             var dateofbird = this.Employees.DateOfBirth;
-             this.Employees.DateOfBirth = this.formatDate(dateofbird);
-          }
+      if (
+        this.Employees.EmployeeCode &&
+        this.Employees.FullName &&
+        this.Employees.UnitID
+      ) {
+        validate = true;
 
-        
-      } else if(this.Employees.EmployeeCode == null){
+        //hàm validate số điện thoại
+        if (this.Employees.PhoneNumber) {
+          if (!this.valiPhoneNumber(this.Employees.PhoneNumber)) {
+            this.isShowNotification = true;
+            this.errors = "Số điện thoại không hợp lệ";
+            validate = false;
+          }
+        } else {
+          validate = true;
+        }
+        //hàm validate email
+        if (this.Employees.Email) {
+          if (!this.validEmail(this.Employees.Email)) {
+            this.isShowNotification = true;
+            this.errors = "Email không hợp lệ";
+            validate = false;
+          }
+        } else if (this.Employees.PhoneNumber == null) {
+          //nếu số điện thoại k có thì mới dc thêm
+          validate = true;
+        }
+        //hàm fomat date
+        if (this.Employees.DateOfBirth || this.Employees.IdentifyDate) {
+          var dateofbird = this.Employees.DateOfBirth;
+          this.Employees.DateOfBirth = this.formatDate(dateofbird);
+        }
+      } else if (this.Employees.EmployeeCode == null) {
         //chưa có mã hoặc tên thì yêu cầu nhập
         this.inValue = false; //đỏ input mã và tên
         this.isShowNotification = true; //mở popup thông báo
         this.errors = "Mã không được để trống";
         validate = false;
         this.Spanempty = true;
-      }else if(this.Employees.FullName == null){
+      } else if (this.Employees.FullName == null) {
         //chưa có mã hoặc tên thì yêu cầu nhập
         this.inValue = false; //đỏ input mã và tên
         this.isShowNotification = true; //mở popup thông báo
         this.errors = "Tên không được để trống";
         validate = false;
         this.Spanempty = true;
-      }else if(this.Employees.UnitID == null){
+      } else if (this.Employees.UnitID == null) {
         //chưa có mã hoặc tên thì yêu cầu nhập
         this.inValue = false; //đỏ input mã và tên
         this.isShowNotification = true; //mở popup thông báo
         this.errors = "Đơn vị không được để trống";
         validate = false;
         this.Spanempty = true;
-      }else {
+      } else {
         //chưa có mã hoặc tên thì yêu cầu nhập
         this.inValue = false; //đỏ input mã và tên
         this.isShowNotification = true; //mở popup thông báo
@@ -315,12 +363,21 @@ export default {
         validate = false;
         this.Spanempty = true;
       }
+      return validate;
+    },
 
-      if (validate == true) {
+    //hàm sửa hoặc thêm nhân viên mới
+    btnSaveonClick() {
+      var method = "POST";
+      var url = "https://localhost:44335/api/v1/Employees";
+      this.errors = [];
+
+      if (this.validateAll() == true) {
         //Hàm sửa nhân viên
         if (this.Employees.EmployeeID) {
           method = "PUT";
           url = url + `/${this.Employees.EmployeeID}`;
+          this.ClosePopup = true;
         }
         fetch(url, {
           method: method,
@@ -328,15 +385,35 @@ export default {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(this.Employees),
+          body: JSON.stringify({
+            ...this.Employees,
+            DateOfBirth:  //kiểm tra xem ngày sinh có không, nếu không thì cho bằng null
+              this.Employees.DateOfBirth === ""
+                ? null
+                : this.Employees.DateOfBirth
+                ? this.Employees.DateOfBirth
+                : null,
+            IdentifyDate: //kiểm tra xem ngày cấp có không, nếu không thì cho bằng null
+              this.Employees.IdentifyDate === ""
+                ? null
+                : this.Employees.IdentifyDate
+                ? this.Employees.IdentifyDate
+                : null,
+            Gender: this.Employees.Gender ? Number(this.Employees.Gender) : 0, //kiểm tra xem giới tính có không, nếu không thì cho bằng 0 (khác)
+          }),
         })
           .then((res) => res.json())
           .then((res) => {
             console.log(res);
             this.$emit("data-load");
+
+            if (this.ClosePopup == true) {
+              //đóng popup khi sửa
+              this.$emit("custom-handle-click");
+            }
+            //xóa form popup sau khi thêm thành công
           })
           .catch((res) => {
-            alert("Loi");
             console.log(res);
           });
       }
@@ -354,7 +431,9 @@ export default {
     MButton1,
     MInputSpecial,
     MPopupNotification,
-    MComboxbox
+    MComboxbox,
+    MDatetime,
+    MPopupAskEdit,
   },
   props: {
     employeesSelected: Object,
@@ -365,25 +444,31 @@ export default {
   },
   created() {
     if (this.employeesSelected) {
-      this.Employees = { ...this.employeesSelected };
+      this.Employees = { ...this.employeesSelected }; 
     }
-    console.log(this.employeesSelected);
+    console.log(this.Employees);
   },
   data() {
     return {
-      Employees: {},
-      inValue: {
+      Employees: {}, //lưu dữ liệu nhân viên
+      inValue: { //hiển thị đỏ khi trống
         type: Boolean,
         default: true,
       },
-      errors: [],
-      isShowNotification: false,
-      Spanempty: false,
-      UidP:{
+      errors: [], //lưu cảnh báo thiếu dữ liệu
+      isShowNotification: false, //gọi popup thiếu dữ liệu
+      isShowPopupAskEdit: false, //gọi popup hỏi lưu dữ liệu khi chỉnh sửa
+      Spanempty: false, //gọi tool-tip
+      UidP: { //lưu id đơn vị
         type: Number,
       },
-      PhoneNumbers: true,
-      Faxs: true,
+      PhoneNumbers: true, //hiển thị phonenumber
+      Faxs: true, //hiển thị fax
+      MaxEmployee: "", //lưu mã nhân viên cao nhất
+      ClosePopup: { //đóng popup thêm nhân viên
+        type: Boolean,
+        default: false,
+      },
     };
   },
 };
@@ -619,7 +704,8 @@ export default {
 }
 .item-input-red {
   border: 1px solid #ff0000;
-}.combobox-input-red{
+}
+.combobox-input-red {
   border: 1px solid #ff0000;
 }
 

@@ -10,7 +10,7 @@
   padding: 0 24px;
   border: none;
   text-align: center;
-  background-color: #50B83C;
+  background-color: #2CA01C;
   color: #ffff;
   border-radius: 4px;
   cursor: pointer;
@@ -19,6 +19,8 @@
   right: 0;
   margin-top: 20px;
   margin-right: 30px;
+}.content-top-btn:hover{
+  background-color: #35BF22;
 }
 </style>
 
@@ -29,7 +31,7 @@ export default {
 
     //hàm mở popup thêm nhân viên
     handleOpenPopup() {
-      this.$emit("custom-handle-click");
+      this.$emit("custom-handle-click"); //mở popup thêm nhân viên
     },
   },
 };

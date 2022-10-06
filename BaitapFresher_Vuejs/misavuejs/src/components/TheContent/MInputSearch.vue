@@ -1,10 +1,13 @@
 <template>
-    <input
+    <div class="toolbar-search">
+      <input
             type="text"
-            class="toolbar-input"
+            class="toolbar-input-search"
             placeholder="Tìm theo mã, tên nhân viên"
             :value="InputWhere" @input="handleInput"
           />
+    <button class="icon-search"></button>
+    </div>
 </template>
 
 <script>
@@ -28,7 +31,12 @@ export default {
 </script>
 
 <style>
-    .toolbar-input {
+:root{
+    --icon: url("../../assets/Resource/img/Sprites.64af8f61.svg");
+}.toolbar-search{
+  position: relative;
+}
+    .toolbar-input-search {
   height: 30px;
   width: 200px;
   border-width: 1px;
@@ -38,8 +46,23 @@ export default {
   padding: 0 16px;
   border-style: solid;
   outline: unset;
+  font-style: italic;
+  font-size: 12px;
 }
 .toolbar-input:focus {
   border-color: #019160;
+}.icon-search{
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  right: 5px;
+  border: none;
+  background-color: #fff;
+  top: 2px;
+}
+.icon-search{
+  background-image: var(--icon);
+  background-position:  -425px -30px;
+  background-repeat: no-repeat;
 }
 </style>

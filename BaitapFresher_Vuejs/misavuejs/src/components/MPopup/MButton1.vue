@@ -15,7 +15,7 @@
     padding: 0 24px;
     border: 1px solid #bbbbbb;
     text-align: center;
-    background-color: #50B83C;
+    background-color: #2CA01C;
     color: #ffff;
     border-radius: 4px;
     cursor: pointer;
@@ -24,6 +24,8 @@
     right: 0;
     margin-top: 15px;
     margin-right: 35px;
+    }.content-top-btn1:hover{
+        background-color: #35BF22;
     }
     .tool-tip2 {
         position: absolute;

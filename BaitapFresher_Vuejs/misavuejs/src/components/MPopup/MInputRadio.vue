@@ -12,7 +12,7 @@
     <span class="radio">
       <span class="radio-focus"></span>
       <span
-        :class="{ 'radio-border-checked-true': checked }"
+        :class="{ 'radio-border-checked-true': checked }" 
         class="radio-border"
       ></span>
       <span
@@ -48,7 +48,7 @@ export default {
   emits: ["click-radio"],
   setup(props, context) {
     const handleClick = () => {
-      context.emit("click-radio", props.value);
+      context.emit("click-radio", props.value); //cập nhật giá trị giới tính
     };
     return {
       handleClick,
@@ -107,8 +107,8 @@ export default {
   position: absolute;
   width: 10px;
   height: 10px;
-  top: 4px;
-  left: 4px;
+  top: 3px;
+  left: 3px;
   border-radius: 50%;
   background: #2ca01c;
 }
@@ -117,8 +117,8 @@ export default {
   position: absolute;
   width: 10px;
   height: 10px;
-  top: 4px;
-  left: 4px;
+  top: 5px;
+  left: 5px;
   border-radius: 50%;
   background: #2ca01c;
 }

@@ -66,10 +66,10 @@ namespace MISA.WEB08.AMIS.BL
                 {
                     Success = false,
                     Data = new ErrorResult(
-                    AMITErrorCode.InsertError,
-                    Resource.DevMsg_InsertFailed,
-                    Resource.UserMsg_InsertFaild,
-                    Resource.MoreInfo_InsertFaild)
+                    AMITErrorCode.ValidateError,
+                    Resource.DevMsg_ValidateFailed,
+                    Resource.UserMsg_ValidateFaild,
+                    Resource.MoreInfo_Request)
                 };
             }
             return new ServiceRespone
@@ -170,6 +170,7 @@ namespace MISA.WEB08.AMIS.BL
         public int UpdateRecord(Guid recordid, T record)
         {
             return _baseDL.UpdateRecord(recordid, record);
+
         }
 
         /// <summary>
@@ -181,6 +182,16 @@ namespace MISA.WEB08.AMIS.BL
         public IEnumerable<T> DeleteMultipleRecord(List<string> recordid)
         {
             return _baseDL.DeleteMultipleRecord(recordid);
+        }
+
+        /// <summary>
+        /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <returns></returns>
+        public object GetMaxRecord()
+        {
+            return _baseDL.GetMaxRecord();
         }
 
         #endregion

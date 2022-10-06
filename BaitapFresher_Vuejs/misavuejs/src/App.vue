@@ -58,7 +58,7 @@ export default {
 }
 .header{
     order: 2;
-    width: calc(100%- 200px);
+    width: calc(100%- 180px);
     height: 50px;
     float: left;
     clear: right;
@@ -66,15 +66,15 @@ export default {
 
 }
 .sidebar{
-    width: 200px;
+    width: 180px;
     height: 100vh;
-    background-color: #041434;
+    background-color: #393A3D;
     
    
 }
 .content{
     order: 3;
-    width: calc(100% - 235px);
+    width: calc(100% - 185px);
     height: calc(100vh - 50px);
     float: right;
     background-color: rgb(236, 238, 241);

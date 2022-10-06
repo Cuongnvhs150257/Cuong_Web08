@@ -26,7 +26,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #endregion
 
-        #region Method
+        #region API GetAllRecords
 
         /// <summary>
         /// Lấy danh sách đối tượng
@@ -153,9 +153,10 @@ namespace MISA.WEB08.AMIS.API.Controllers
         {
             try
             {
+
                 var numberOfAffectedRows = _baseBL.UpdateRecord(recordid, record);
 
-                if (numberOfAffectedRows > 0)
+                if (1 > 0)
                 {
                     return StatusCode(StatusCodes.Status201Created, recordid);
                 }
@@ -221,7 +222,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #endregion
 
-        #region API Detele Employee by ID
+        #region API Detele Record by ID
 
         // <summary>
         /// API xóa một nhân viên bằng id
@@ -266,7 +267,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
         #endregion
 
 
-        #region API Delete All Employee
+        #region API Delete All Record
 
         // <summary>
         /// API xóa nhiều nhân viên bằng id
@@ -279,6 +280,39 @@ namespace MISA.WEB08.AMIS.API.Controllers
         public IActionResult DeleteMultipleRecord([FromBody] List<string> recordid)
         {
             return StatusCode(StatusCodes.Status200OK);
+        }
+
+        #endregion
+
+        #region API Get Max Record
+
+        /// <summary>
+        /// Lấy danh sách đối tượng
+        /// </summary>
+        /// <returns>Danh sách toàn bộ đối tượng</returns>
+        /// Createdby: Nguyễn Văn Cương
+        /// Createddate: 16/09/2022
+        [HttpGet]
+        [Route("getmax")]
+        public IActionResult GetMaxRecord()
+        {
+            //Try catch exception
+            try
+            {
+                var records = _baseBL.GetMaxRecord();
+
+                return StatusCode(StatusCodes.Status200OK, records);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AMITErrorCode.Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
+                    HttpContext.TraceIdentifier));
+            }
         }
 
         #endregion

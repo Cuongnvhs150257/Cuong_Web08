@@ -10,21 +10,76 @@
                             <MDropBox @padding-value ="getPaddingValue"/>
                         </div>
                         <div class="padding-center">
-                            <button class="btn-first">Trước</button>
+                            <button class="btn-first" @click="offSetValue(1)" >Trước</button>
                             <div class="page-group">
-                                <button class="paddingnumber button-seleced">1</button>
-                                <button class="paddingnumber">2</button>
-                                <button class="paddingnumber">3</button>
+                                <button class="paddingnumber" :class="{ 'button-seleced': seleced }" @click="offSetValue(0)">1</button>
+                                <button class="paddingnumber" :class="{ 'button-seleced': seleced2 }" @click="offSetValue(indexOffSetOn * 10)" >{{indexOffSetOn}}</button>
                             </div>
-                            <div class="page-group-last">
+                            <div class="page-group-last" v-if="TotalCount">
                                 <label >...</label>
-                                <button class="paddingnumber">52</button>
+                                <button class="paddingnumber" @click="offSetValue(TotalCount.totalCount - (TotalCount.totalCount%indexPadding))" >{{Math.floor(TotalCount.totalCount/indexPadding)+1}}</button>
                             </div>
-                            <button class="btn-last">Sau</button>
+                            <button class="btn-last" @click="offSetValue(2)">Sau</button>
                         </div>
                     </div>
                 </div>
 </template>
+
+<script>
+import MDropBox from "./MDropBox.vue";
+export default {
+    props:{
+        TotalCount: Object
+    },
+    components: {
+        MDropBox
+    },
+    methods:{
+        //lấy số lượng bản ghi hiển thị (limit)
+         getPaddingValue(value){
+             this.$emit("filter-padding", value);
+             this.indexPadding = value;
+         },
+         //lấy số trang bản ghi hiển thị (offset)
+         offSetValue(value){
+            this.$emit("offset-value", value);
+            if(value == 0 ){ //trường hợp trang 1
+                this.indexOffSetOn = 2; //trang tiếp theo là 2
+                this.indexOffSetNext = 2; //trang tiếp theo là 2
+                this.seleced = true; //bật hiển thị trang chọn
+                this.seleced2 = false;
+                return
+
+
+            }if(value == 1 && this.indexOffSetOn != 2){ //trường hợp mở trang phía trước
+                value = (this.indexOffSetOn*10) - 10; //vd: (2*10) - 10 để có được offset trước đó
+                this.$emit("offset-value", value);
+                this.indexOffSetNext = this.indexOffSetNext - 1; //giảm giá trị trang tiếp theo
+                this.indexOffSetOn = this.indexOffSetNext % value; //hiển thị giá trị trang tiếp theo
+                if(this.indexOffSetOn < 0){
+                    this.indexOffSetOn = 0; //nếu ở trang đầu tiên thì k đc ở về trang trước
+                }
+                return
+            }
+            //trường hợp mở trang tiếp theo
+            value = value + 10; //tăng giá trị vd: 20 + 10
+            this.indexOffSetNext = this.indexOffSetNext + 1; //tăng giá trị tiếp theo vd: 2+1
+            this.indexOffSetOn = this.indexOffSetNext % value; //vd:  3%30=3 lấy được trang tiếp theo sẽ chọn
+            this.seleced2 = true; //bật hiển thị trang chọn
+            this.seleced = false;
+         }   
+    }, 
+    data(){
+        return{
+            indexPadding: 10, //số lượng bản ghi
+            indexOffSetOn: 2, //trang hiện tại
+            indexOffSetNext: 2, //trang tiếp theo sẽ mở
+            seleced: true, //hiện thị trang đang chọn
+            seleced2: false, //hiện thị trang đang chọn
+        }
+    }
+}
+</script>
 
 <style>
 .padding{
@@ -99,24 +154,3 @@
 
 </style>
 
-<script>
-import MDropBox from "./MDropBox.vue";
-export default {
-    props:{
-        TotalCount: Object
-    },
-    components: {
-        MDropBox
-    },
-    methods:{
-         getPaddingValue(value){
-             this.$emit("filter-padding", value);
-         }   
-    }, 
-    data(){
-        return{
-            
-        }
-    }
-}
-</script>

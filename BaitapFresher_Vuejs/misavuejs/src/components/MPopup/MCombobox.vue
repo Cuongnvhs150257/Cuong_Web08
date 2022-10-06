@@ -3,19 +3,13 @@
     <input class="combobox-input" type="text" v-model="this.UnitSle.unitName"/>
     <button @click="btnComboboxOnClick"></button>
     <div class="combobox-data" >
-      <div class="combobox-item" v-for="u in UnitItem" :key="u.unitID" @click="selectedUnit(u)">
-          <div class="combobox-item-left">{{u.unitCode}}</div>
+      <div class="combobox-item" v-for="u in UnitItem" :key="u.unitID" @click="selectedUnit(u)" >
+          <div class="combobox-item-left" >{{u.unitCode}}</div>
           <div class="combobox-item-right">{{u.unitName}}</div>
       </div>
       <!-- 
-      <div class="combobox-item">
-          <div class="combobox-item-left">HA NOI</div>
-          <div class="combobox-item-right">Chi nhánh Hà Nội</div>
-      </div>
-      <div class="combobox-item">
-          <div class="combobox-item-left">HCM</div>
-          <div class="combobox-item-right">Chi nhánh HCM</div>
-      </div> -->
+      :class="{ 'combobox-item-checked': !inValue }" 
+       -->
 
       
       
@@ -26,11 +20,11 @@
 <script>
 export default {
 
-  props:["EmployeeUnit"],
+  props:["EmployeeUnit","modelValue"],
 
   methods:{
-
         
+        //hàm mở combobox
         btnComboboxOnClick() {
             this.OpenComboxbox = !this.OpenComboxbox;
             if(this.OpenComboxbox){
@@ -38,9 +32,8 @@ export default {
             }else{
                 this.UnitItem = {};
             }
-            console.log(this.UnitItem);
         },
-
+        //hàm lấy toàn bộ đơn vị
         loadUnit(){
             fetch("https://localhost:44335/api/v1/Unit", {
             method: "GET",
@@ -48,27 +41,38 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           this.UnitItem = data;
-          console.log(this.UnitItem);
+                //nổi bật đơn vị đã chọn
+                if(this.UnitSle.unitName == "Phòng kế toán"){
+                   this.inValue = false;
+                   
+                }
         })
         .catch((res) => {
           console.log(res);
         });
         },
-
+        //hàm chọn đơn vị
         selectedUnit(un){
           this.UnitSle = un;
           this.UnitItem = {};
           this.$emit("get-unitid", un.unitID);
-          console.log(un.unitID);
         }
 
 
    
   }, data(){
+        var UnitSle = {
+            unitName: this.EmployeeUnit //hiện thị tên đơn vị của nhân viên khi mở popup sửa nhân viên
+        };
+        console.log(this.EmployeeUnit);
         return{
-            OpenComboxbox: false,
-            UnitItem: {},
-            UnitSle: {},
+            OpenComboxbox: false, //gọi combobox
+            UnitItem: {}, //lưu giá trị từng đơn vị
+            UnitSle, //lưu id đơn vị đã chọn
+            inValue: { //nổi bật đơn vị đã chọn
+              type: Boolean,
+              default: true,
+            },
         }
     }
 };
@@ -125,10 +129,11 @@ export default {
 }
 .combobox-data {
   position: absolute;
-  top: 40px;
-  width: 100%;
+  top: 28px;
+  width: 99%;
   z-index: 1;
    overflow-y: scroll ;
+   border: 1px solid #bbbb;
   
 }
 .combobox-item {
@@ -136,7 +141,6 @@ export default {
   display: flex;
   align-items: center;
   padding-left: 10px;
-  border: 1px solid #bbbbbb;
   font-size: 13px;
   background-color: #fff;
  
@@ -166,5 +170,8 @@ export default {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #7c869c;
+}.combobox-item-checked{
+    background-color: #50b83c;
+    color: #fff;
 }
 </style>

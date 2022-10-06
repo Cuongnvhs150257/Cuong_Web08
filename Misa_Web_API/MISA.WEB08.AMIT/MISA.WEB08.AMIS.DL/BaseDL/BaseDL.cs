@@ -247,5 +247,24 @@ namespace MISA.WEB08.AMIS.DL
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
+        /// Createby: Nguyễn Văn Cương 26/09/2022
+        /// </summary>
+        /// <returns></returns>
+        public object GetMaxRecord()
+        {
+            //khai bao ten stored produre
+            string storeProdureName = String.Format(Resource.Pro_GetMaxEmployee, typeof(T).Name);
+
+            //Khởi tạo kết nối với MySQl
+            string connectionString = DataContext.MySqlConnectionString;
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                //Thực hiện gọi vào DB
+                var employeeCode = mysqlConnection.QueryFirstOrDefault(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
+                return employeeCode;
+            };
+        }
     }
 }

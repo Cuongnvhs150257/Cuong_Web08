@@ -75,7 +75,7 @@
   --logo: url('../../assets/Resource/img/Logo_Module_TiengViet_White.66947422.svg'); 
 }
     .sidebar-top{
-    width: 200px;
+    width: 180px;
     height: 48px;
     display: flex;
     align-items: center;
@@ -84,14 +84,14 @@
     width: 30px;
     height: 30px;
     border: none;
-    margin-left: 27px;
-    margin-top: 10px;
+    margin-left: 20px;
+    margin-top: 14px;
 }
 .sidebar-btn-left-open{
     background-image: var(--icon);
     background-repeat: no-repeat;
     background-position: -418px -92px;
-    background-color: #041434;
+    background-color: #393A3D;
     
 }
 .sidebar-logo{
@@ -103,16 +103,18 @@
     background-position: 16px center;
 }
 .sidebar-menu{
-    width: 200px;
+    width: 180px;
     height: calc(100vh - 48px); 
-    margin-top: 5px;
+    margin-top: 10px;
 }
 .sidebar-item{
-    width: 200px;
+    width: 172px;
     height: 40px;
     display: flex;
     cursor: pointer;
     justify-content: center;
+    padding-left: 7px;
+    margin-top: 2px;
 }
 .sidebar-item:hover {
     background-color: rgb(88,89,93);
@@ -132,96 +134,97 @@
     color: #fff;
     width: 130px;
     margin-top: 10px;
+    font-size: 13px;
 
 }
 .sicon1{
     background-image: var(--icon);
     background-position: -34px -1630px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon2{
     background-image: var(--icon);
     background-position: -78px -1631px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon3{
     background-image: var(--icon);
     background-position: -121px -1633px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon4{
     background-image: var(--icon);
     background-position: -165px -1632px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }.sicon5{
     background-image: var(--icon);
     background-position: -208px -1631px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon6{
     background-image: var(--icon);
     background-position: -254px -1632px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon7{
     background-image: var(--icon);
     background-position: -294px -1632px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon8{
     background-image: var(--icon);
     background-position: -339px -1633px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon9{
     background-image: var(--icon);
     background-position: -382px -1632px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon10{
     background-image: var(--icon);
     background-position: -427px -1634px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon11{
     background-image: var(--icon);
     background-position: -471px -1633px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon12{
     background-image: var(--icon);
     background-position: -514px -1632px;        
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon13{
     background-image: var(--icon);
     background-position: -382px -1664px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon14{
     background-image: var(--icon);
     background-position: -552px -1636px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 .sicon15{
     background-image: var(--icon);
     background-position: -207px -1667px;
     background-repeat: no-repeat;
-    background-color: #041434;
+    background-color: #393A3D;
 }
 @media (max-width: 1200px) {
     .sidebar-logo{
@@ -231,6 +234,7 @@
 
     }.sidebar-item{
         width: 50px;
+        padding: 0;
     }.sidebar-item-laber{
         display: none;
     }.sidebar-item-icon{
