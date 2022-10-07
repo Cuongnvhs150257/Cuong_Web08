@@ -125,23 +125,28 @@ export default {
 }
 .page-group .paddingnumber.button-seleced {
     font-weight: bold;
-    border: 1px solid black;
+    border: 1px solid #bbbb;
 
 }
 .page-group .paddingnumber, .page-group-last .paddingnumber{
-    width: 30px;
-    height: 30px;
+    margin-top: 5px;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    padding-top: 2px;
     cursor: pointer;
     border: none;
     outline: none;
     background-color: #fff;
 }
+
 .btn-first, .btn-last{
-    width: 50px;
+    width: 40px;
     height: 30px;
     border: none;
     background-color: #fff;
     cursor: pointer;
+    margin-right: 10px;
 }
 .btn-first:hover, .btn-last:hover{
     color: #666666;

@@ -11,6 +11,7 @@
         margin-top: 5px;
         outline: none;
         padding-left: 10px; 
+        border-radius: 3px;
     }
     .item-input:focus{
         border: 2px solid #019160;

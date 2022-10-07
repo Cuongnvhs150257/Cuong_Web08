@@ -1,42 +1,40 @@
 <template>
-    <div class="toolbar-search">
-      <input
-            type="text"
-            class="toolbar-input-search"
-            placeholder="Tìm theo mã, tên nhân viên"
-            :value="InputWhere" @input="handleInput"
-          />
+  <div class="toolbar-search">
+    <input
+      type="text"
+      class="toolbar-input-search"
+      placeholder="Tìm theo mã, tên nhân viên"
+      :value="InputWhere"
+      @input="handleInput"
+    />
     <button class="icon-search"></button>
-    </div>
+  </div>
 </template>
 
 <script>
 export default {
-    
-    setup(props, { emit }){
-        
-        //hàm lưu giá trị nhập
-        function handleInput(event){
-           emit("InputWhere",event.target.value);
-           
-        }
-       
-        
-        return {
-        handleInput,
-       
-    };
+  setup(props, { emit }) {
+
+    //hàm lưu giá trị nhập
+    function handleInput(event) {
+      emit("InputWhere", event.target.value);
     }
-}
+
+    return {
+      handleInput,
+    };
+  },
+};
 </script>
 
 <style>
-:root{
-    --icon: url("../../assets/Resource/img/Sprites.64af8f61.svg");
-}.toolbar-search{
+:root {
+  --icon: url("../../assets/Resource/img/Sprites.64af8f61.svg");
+}
+.toolbar-search {
   position: relative;
 }
-    .toolbar-input-search {
+.toolbar-input-search {
   height: 30px;
   width: 200px;
   border-width: 1px;
@@ -49,9 +47,10 @@ export default {
   font-style: italic;
   font-size: 12px;
 }
-.toolbar-input:focus {
-  border-color: #019160;
-}.icon-search{
+.toolbar-input-search:focus {
+  border: 2px solid #019160;
+}
+.icon-search {
   width: 28px;
   height: 28px;
   position: absolute;
@@ -60,9 +59,9 @@ export default {
   background-color: #fff;
   top: 2px;
 }
-.icon-search{
+.icon-search {
   background-image: var(--icon);
-  background-position:  -425px -30px;
+  background-position: -425px -30px;
   background-repeat: no-repeat;
 }
 </style>

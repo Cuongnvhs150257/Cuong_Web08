@@ -136,7 +136,7 @@ export default {
         });
     }
     loadData()
-
+    
     //hàm tìm kiếm
     function search(where){
       var limit = LimitValue.value; //lưu số lượng bản ghi

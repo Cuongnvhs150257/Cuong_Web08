@@ -24,6 +24,7 @@
     right: 0;
     margin-top: 15px;
     margin-right: 35px;
+    font-weight: 700;
     }.content-top-btn1:hover{
         background-color: #35BF22;
     }

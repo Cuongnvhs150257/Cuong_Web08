@@ -91,9 +91,11 @@ export default {
   position: relative;
   margin-top: 5px;
   border: 1px solid #bbbbbb;
+  border-bottom: none;
+  border-radius: 3px;
 }
 .combobox-input{
-  width: calc(100%);
+  width: 100%;
   float: left;
   height: 100%;
   border: none;
@@ -101,8 +103,9 @@ export default {
   padding-left: 10px;
 }
 .combobox-input:focus {
-  height: 28px;
+  height: 27px;
   border: 2px solid #019160;
+  border-radius: 3px;
   outline: none;
   z-index: 1;
 }

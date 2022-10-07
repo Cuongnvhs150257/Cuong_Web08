@@ -74,7 +74,7 @@ export default {
 }
 .content{
     order: 3;
-    width: calc(100% - 185px);
+    width: calc(100% - 215px);
     height: calc(100vh - 50px);
     float: right;
     background-color: rgb(236, 238, 241);

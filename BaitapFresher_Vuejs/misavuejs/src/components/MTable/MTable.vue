@@ -4,16 +4,16 @@
     <thead>
       <tr>
         <th style="min-width: 30px;" class="box"><input type="checkbox" class="tab-checkbox" /></th>
-        <th style="min-width: 110px; font-family: Misa Fonts Bold;">MÃ NHÂN VIÊN</th>
-        <th style="min-width: 140px;  font-family: Misa Fonts Bold;">TÊN NHÂN VIÊN</th>
+        <th style="min-width: 130px; font-family: Misa Fonts Bold;">MÃ NHÂN VIÊN</th>
+        <th style="min-width: 170px;  font-family: Misa Fonts Bold;">TÊN NHÂN VIÊN</th>
         <th style="min-width: 100px;  font-family: Misa Fonts Bold;">GIỚI TÍNH</th>
-        <th style="min-width: 100px;  font-family: Misa Fonts Bold;" class="tab-th-select">NGÀY SINH</th>
-        <th style="min-width: 100px;  font-family: Misa Fonts Bold;" >SỐ CMND</th>
-        <th style="min-width: 130px;  font-family: Misa Fonts Bold;">CHỨC DANH</th>
-        <th style="min-width: 130px;  font-family: Misa Fonts Bold;">TÊN ĐƠN VỊ</th>
-        <th style="min-width: 110px;  font-family: Misa Fonts Bold;">SỐ TÀI KHOẢN</th>
-        <th style="min-width: 130px;  font-family: Misa Fonts Bold;">TÊN NGÂN HÀNG</th>
-        <th style="min-width: 180px; font-family: Misa Fonts Bold;">CHI NHÁNH NGÂN HÀNG</th>
+        <th style="min-width: 120px;  font-family: Misa Fonts Bold;" class="tab-th-select">NGÀY SINH</th>
+        <th class="cmnd" style="min-width: 140px;  font-family: Misa Fonts Bold; position: relative;" >SỐ CMND <span class="tool-tip-table">Số chứng minh nhân dân</span></th>
+        <th style="min-width: 170px;  font-family: Misa Fonts Bold;">CHỨC DANH</th>
+        <th style="min-width: 170px;  font-family: Misa Fonts Bold;">TÊN ĐƠN VỊ</th>
+        <th style="min-width: 130px;  font-family: Misa Fonts Bold;">SỐ TÀI KHOẢN</th>
+        <th style="min-width: 170px;  font-family: Misa Fonts Bold;">TÊN NGÂN HÀNG</th>
+        <th style="min-width: 200px; font-family: Misa Fonts Bold;">CHI NHÁNH NGÂN HÀNG</th>
         <th style="min-width: 110px;position: sticky; font-family: Misa Fonts Bold;" class="tab-th-select">CHỨC NĂNG</th>
       </tr>
     </thead>
@@ -189,11 +189,10 @@ export default {
   background-color: #fff;
   border: 10px solid #fff;
   padding-left: 10px;
-
 }
 .contentner{
   height: calc(100% - 98px);
-  width: calc(100% - 30px);
+  width: calc(100% - 10px);
   overflow: scroll;
 }
 ::-webkit-scrollbar {
@@ -238,6 +237,10 @@ export default {
   padding-left: 8px;
   text-align: left;
   cursor: pointer;
+}.content-table tbody tr:hover{
+  background-color: #F2F9FF;
+}.content-table tr:active{
+  background-color: #E5F3FF;
 }
 .tab-th-select {
   text-align: center !important;
@@ -258,11 +261,12 @@ export default {
   display: flex;
   justify-content: center;
   font-weight: 600;
+
 }.tab-checkbox{
   width: 18px;
   height: 18px;
   margin-top: 5px;
-  margin-left: 5px;
+  margin-left: 3px;
   
 }.tab-th-select-lable{
    margin-top: 10px;
@@ -274,6 +278,24 @@ export default {
   height: 5px;
   margin-top: 5px;
   margin-left: 30px;
-}
+}.tool-tip-table {
+        width: 140px;
+        font-size: 11px;
+        position: absolute;
+        top: 30px;
+        right: 0;
+        background-color: #505050;
+        border-radius: 2px;
+        padding: 2px 4px;
+        z-index: 3;
+        text-align: center;
+        color: #fff;
+        visibility: hidden;
+        
+    }
+    .cmnd:hover .tool-tip-table {
+        visibility: visible;
+        opacity: 1;
+    }
 </style>
 

@@ -1,6 +1,6 @@
 <template>
   <button type="button" class="content-top-btn" @click="handleOpenPopup">
-    Thêm nhân viên
+    Thêm mới nhân viên
   </button>
 </template>
 
@@ -19,6 +19,7 @@
   right: 0;
   margin-top: 20px;
   margin-right: 30px;
+  font-weight: 700;
 }.content-top-btn:hover{
   background-color: #35BF22;
 }

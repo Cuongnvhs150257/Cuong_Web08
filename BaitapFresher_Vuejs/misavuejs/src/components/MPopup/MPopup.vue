@@ -19,7 +19,7 @@
         </div>
         <div class="input1-right">
           <div class="input1-checkbox-icon ask-icon">
-            <span class="tool-tip"> Hỏi </span>
+            <span class="tool-tip"> Giúp </span>
           </div>
 
           <div
@@ -520,10 +520,10 @@ export default {
 
 .input1-label {
   height: 100%;
-  width: 250px;
+  width: 245px;
   font-size: x-large;
   font-weight: bold;
-  margin-left: 20px;
+  margin-left: 25px;
 }
 .input1-checkbox {
   width: 150px;
@@ -671,7 +671,7 @@ export default {
 }
 .btn_input8_right {
   height: 35px;
-  width: 80px;
+  width: 70px;
   border: 1px solid black;
   text-align: center;
   color: black;
@@ -686,7 +686,7 @@ export default {
 }
 .btn_input8_left {
   height: 35px;
-  width: 80px;
+  width: 70px;
   border: 1px solid black;
   text-align: center;
   color: black;
