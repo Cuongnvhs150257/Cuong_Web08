@@ -28,15 +28,27 @@ export default {
     getEmployeeCode: String,
   },
   methods: {
-    //hàm nhấn nút không lưu dữ liệu thay đổi
+
+    /**
+     * hàm nhấn nút không lưu dữ liệu thay đổi
+     * Nguyễn Văn Cương 05/10/2022
+     */
     popupaskno() {
       this.$emit("popup-ask-no");
     },
-    //hàm đóng popup hỏi khi dữ liệu thay đổi
+
+    /**
+     * hàm đóng popup hỏi khi dữ liệu thay đổi
+     * Nguyễn Văn Cương 05/10/2022
+     */
     popupaskcance(){
       this.$emit("popup-ask-cance");
     },
-    //hàm đồng ý lưu dữ liệu nhân viên
+
+    /**
+     * hàm đồng ý lưu dữ liệu nhân viên 
+     * Nguyễn Văn Cương 05/10/2022
+     */
     agreesave() {
       this.$emit("agree-save-click");
     },
@@ -68,6 +80,7 @@ export default {
   top: 40%;
   margin: 0 auto;
   background-color: #fff;
+  border-radius: 4px;
 }
 .popupask-top {
   width: 100%;

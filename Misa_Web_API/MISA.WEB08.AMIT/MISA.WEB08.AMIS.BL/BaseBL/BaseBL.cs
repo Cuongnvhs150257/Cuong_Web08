@@ -28,6 +28,8 @@ namespace MISA.WEB08.AMIS.BL
 
         #region Method
 
+        #region GetAll Records
+
         /// <summary>
         /// Hàm kết nối DL để lấy danh sách đối tượng
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -78,7 +80,9 @@ namespace MISA.WEB08.AMIS.BL
 
             };
         }
+        #endregion
 
+        #region InsertRecords
 
         /// <summary>
         /// Hàm kết nối DB để thêm mới đối tượng
@@ -125,6 +129,10 @@ namespace MISA.WEB08.AMIS.BL
             }
         }
 
+        #endregion
+
+        #region GetRecordByID
+
         /// <summary>
         /// Hàm kết nối DL để lấy nhân viên theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -135,6 +143,10 @@ namespace MISA.WEB08.AMIS.BL
         {
             return _baseDL.GetRecordByID(record);
         }
+
+        #endregion
+
+        #region Filter
 
         /// <summary>
         /// Hàm kết nối DL để phân trang, tìm kiếm
@@ -149,6 +161,10 @@ namespace MISA.WEB08.AMIS.BL
             return _baseDL.Filter(keyword, limit, offset);
         }
 
+        #endregion
+
+        #region DeleteRecord
+
         /// <summary>
         /// Hàm kết nối DB để xóa đối tượng theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -160,6 +176,10 @@ namespace MISA.WEB08.AMIS.BL
         {
             return _baseDL.DeleteRecord(recordid);
         }
+
+        #endregion
+
+        #region UpdateRecord
 
         /// Hàm kết nối DB để sửa đối tượng theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -173,6 +193,10 @@ namespace MISA.WEB08.AMIS.BL
 
         }
 
+        #endregion
+
+        #region DeleteMultipleRecord
+
         /// <summary>
         /// Hàm kết nối DB để xóa nhiều đối tượng
         /// </summary>
@@ -184,6 +208,10 @@ namespace MISA.WEB08.AMIS.BL
             return _baseDL.DeleteMultipleRecord(recordid);
         }
 
+        #endregion
+
+        #region GetMaxRecord
+
         /// <summary>
         /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -193,6 +221,8 @@ namespace MISA.WEB08.AMIS.BL
         {
             return _baseDL.GetMaxRecord();
         }
+
+        #endregion
 
         #endregion
     }

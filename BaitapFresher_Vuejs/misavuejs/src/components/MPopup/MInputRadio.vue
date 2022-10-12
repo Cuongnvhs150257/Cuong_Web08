@@ -1,7 +1,7 @@
 <template>
     <label class="con-radio">
     <input
-      :tabindex="tabindex"
+      :tabindex="tab"
       :name="name"
       :value="value"
       :checked="checked"
@@ -40,7 +40,7 @@ export default {
     name: {
       type: String,
     },
-    tabindex: {
+    tab: {
       type: Number,
       default: -1,
     },
@@ -73,10 +73,10 @@ export default {
 }
 .radio--input:focus + .radio .radio-focus {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  top: -2px;
-  left: -2px;
+  width: 18px;
+  height: 18px;
+  top: 0;
+  left: 0;
   border-radius: 50%;
   border: 1px solid #2ca01c;
 }
@@ -115,10 +115,10 @@ export default {
 .radio--input:checked + .radio .radio-circle {
   display: block;
   position: absolute;
-  width: 10px;
-  height: 10px;
-  top: 5px;
-  left: 5px;
+  width: 12px;
+  height: 12px;
+  top: 4px;
+  left: 4px;
   border-radius: 50%;
   background: #2ca01c;
 }

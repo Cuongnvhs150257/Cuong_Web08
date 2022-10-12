@@ -24,8 +24,10 @@ export default ({
     props:["errors"],
     methods: {
 
-
-    //hàm đồng ý xóa nhân viên
+    /**
+     * hàm đồng ý xóa nhân viên 
+     * Nguyễn Văn Cương 01/10/2022
+     */
     closeNotification() {
       this.$emit("close-notification-click");
     },

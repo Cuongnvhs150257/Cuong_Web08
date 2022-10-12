@@ -153,32 +153,32 @@
     <value>http://openapi.google.com/api/errorrcode</value>
     <comment>Link thông tin thêm về lỗi  request</comment>
   </data>
-  <data name="Pro_DeleteEmployee" xml:space="preserve">
-    <value>Pro_{0}_DeleteEmployee</value>
+  <data name="Proc_DeleteRecord" xml:space="preserve">
+    <value>Proc_{0}_DeleteRecord</value>
     <comment>Template string cho procudues xóa</comment>
   </data>
-  <data name="Pro_Filter" xml:space="preserve">
-    <value>Pro_{0}_Filter</value>
+  <data name="Proc_Filter" xml:space="preserve">
+    <value>Proc_{0}_Filter</value>
     <comment>Template string cho procudes lọc, tìm kiếm</comment>
   </data>
-  <data name="Pro_GetMaxEmployee" xml:space="preserve">
-    <value>Pro_employee_GetMaxEmployee</value>
+  <data name="Proc_GetMaxRecord" xml:space="preserve">
+    <value>Proc_{0}_GetMaxRecord</value>
     <comment>Template string cho procudes lấy mã nhân viên cao nhất</comment>
   </data>
-  <data name="Pro_InsertEmployee" xml:space="preserve">
-    <value>Pro_{0}_InsertEmployee</value>
+  <data name="Proc_InsertRecord" xml:space="preserve">
+    <value>Proc_{0}_InsertRecord</value>
     <comment>Template string cho procudues thêm mới</comment>
   </data>
-  <data name="Pro_SelectEmployee" xml:space="preserve">
-    <value>Pro_{0}_SelectEmployee</value>
-    <comment>Template string cho procudues lấy một</comment>
-  </data>
-  <data name="Pro_SeleteAll" xml:space="preserve">
-    <value>Pro_{0}_SelectAllEmployee</value>
+  <data name="Proc_SelectAllRecord" xml:space="preserve">
+    <value>Proc_{0}_SelectAllRecord</value>
     <comment>Template string cho procudues lấy toàn bộ</comment>
   </data>
-  <data name="Pro_UpdateEmployee" xml:space="preserve">
-    <value>Pro_{0}_UpdateEmployee</value>
+  <data name="Proc_SelectRecord" xml:space="preserve">
+    <value>Proc_{0}_SelectRecord</value>
+    <comment>Template string cho procudues lấy một</comment>
+  </data>
+  <data name="Proc_UpdateRecord" xml:space="preserve">
+    <value>Proc_{0}_UpdateRecord</value>
     <comment>Template string cho procudues cập nhật</comment>
   </data>
   <data name="UserMsg_DeleteFailed" xml:space="preserve">

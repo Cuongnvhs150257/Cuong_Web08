@@ -12,11 +12,18 @@
 <script>
 export default {
   methods:{
-        //hàm mở dropbox
+        /** 
+         * hàm mở dropbox
+         * Nguyễn Văn Cương 01/10/2022
+        */
         btnDropClick() {
             this.OpenDropbox = !this.OpenDropbox;
         },
-        //hàm chọn giá trị trong dropbox
+
+        /**
+         * hàm chọn giá trị trong dropbox 
+         * Nguyễn Văn Cương 01/10/2022
+         */
         SelectedEdit(value){
           this.$emit("edit-value", value);
           this.OpenDropbox = false;
@@ -43,6 +50,7 @@ export default {
   display: flex;
   position: relative;
   background-color: #fff;
+ 
   
 }
 
@@ -69,12 +77,11 @@ export default {
 .drop-datatbl {
   position: absolute;
   top: 32px;
-  width: 49px;
-  right: 50px;
+  width: 110px;
+  right: 3px;
   background-color: #fff;
-  z-index: 1;
-  border-bottom: 1px solid #bbbb;
-
+  border: 1px solid #bbbb;
+  z-index: 3;
 }
 .drop-itemtbl {
   height: 32px;
@@ -86,7 +93,7 @@ export default {
   font-size: 13px;
   font-weight: lighter;
   color: #000;
-  z-index: 1000;
+  z-index: 100;
 }
 
 .drop-itemtbl:hover {

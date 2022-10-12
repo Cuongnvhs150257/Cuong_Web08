@@ -10,6 +10,11 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.BL
 {
+    /// <summary>
+    /// EmployeeBL kết nối với Dl
+    /// Createdby: Nguyễn Văn Cương 20/09/2022
+    /// </summary>
+
     public class EmployeeBL : BaseBL<Employee>, IEmployeeBL
     {
         #region Field
@@ -19,6 +24,11 @@ namespace MISA.WEB08.AMIS.BL
         #endregion
 
         #region Contructor
+
+        /// <summary>
+        /// Contructor có thông số
+        /// </summary>
+        /// <param name="employeeDL"></param>
 
         public EmployeeBL(IEmployeeDL employeeDL) : base(employeeDL)
         {

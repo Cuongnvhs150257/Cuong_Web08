@@ -1,17 +1,26 @@
 <template>
      
      <div class="data-input-button">
-         <button type="button" class="content-top-btn1">Cất và Thêm</button>
+         <button type="button" class="content-top-btn1" :tabindex="tab">Cất và Thêm</button>
         <span v-if="toolTip2" class="tool-tip2">
             {{ toolTip2 }}
         </span>
      </div>
 </template>
 
+<script>
+
+export default {
+    
+    props:["tab"],
+    
+}
+</script>
+
 <style>
    
     .content-top-btn1{
-    height: 35px;
+    height: 36px;
     padding: 0 24px;
     border: 1px solid #bbbbbb;
     text-align: center;

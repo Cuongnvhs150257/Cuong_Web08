@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.BL
 {
+    
+    /// <summary>
+    /// hàm kết nối dl lấy dữ liệu
+    /// Createdby: Nguyễn Văn Cương 26/9/2022
+    /// </summary>
     public interface IEmployeeBL : IBaseBL<Employee>
     {
 

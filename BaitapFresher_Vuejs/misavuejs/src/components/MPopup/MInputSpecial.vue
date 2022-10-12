@@ -1,5 +1,5 @@
 <template>
-        <input type="text" class="item-input" :value="modelValue" @input="handleInput">
+        <input type="text" class="item-input"  :class="{ 'item-input-red': !inValue }" :value="modelValue" @input="handleInput" :tabindex="tab">
 
 </template>
 <style>
@@ -14,7 +14,7 @@
         border-radius: 3px;
     }
     .item-input:focus{
-        border: 2px solid #019160;
+        border: 2px solid #50B83C;
         outline: none;
     }
    
@@ -26,11 +26,14 @@
 
 export default {
     
-    props:["modelValue","toolTip"],
+    props:["modelValue","toolTip","inValue", "tab", "focus"],
     
     setup(props, { emit }){
         
-        //hàm lưu giá trị nhập
+        /**
+         * hàm lưu giá trị nhập
+         * Nguyễn Văn Cương 26/09/2022
+         */
         function handleInput(event){
            emit("update:modelValue",event.target.value);
            

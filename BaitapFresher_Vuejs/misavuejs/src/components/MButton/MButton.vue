@@ -1,11 +1,11 @@
 <template>
-  <button type="button" class="content-top-btn" @click="handleOpenPopup">
+  <button type="button" class="content-top-btn-content" @click="handleOpenPopup">
     Thêm mới nhân viên
   </button>
 </template>
 
 <style>
-.content-top-btn {
+.content-top-btn-content {
   height: 40px;
   padding: 0 24px;
   border: none;
@@ -17,10 +17,8 @@
   min-width: 100px;
   position: absolute;
   right: 0;
-  margin-top: 20px;
-  margin-right: 30px;
   font-weight: 700;
-}.content-top-btn:hover{
+}.content-top-btn-content:hover{
   background-color: #35BF22;
 }
 </style>
@@ -29,8 +27,8 @@
 export default {
   emit: ["custom-handle-click"],
   methods: {
-
-    //hàm mở popup thêm nhân viên
+ 
+    //hàm mở popup thêm nhân viên (Nguyễn Văn Cương 05/10/2022)
     handleOpenPopup() {
       this.$emit("custom-handle-click"); //mở popup thêm nhân viên
     },

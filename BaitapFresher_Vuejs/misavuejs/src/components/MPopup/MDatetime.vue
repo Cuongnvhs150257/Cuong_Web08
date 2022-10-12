@@ -4,22 +4,29 @@
             class="item-input in3"
             :value="formatDate(modelValue)"
             @input="handleInput"
-            
+            :tabindex="tab"  
      />
 </template>
 
 <script>
 export default {
-    props:["modelValue"],
+    props:["modelValue", "tab"],
 
     setup(props, { emit }){
         
-        //hàm lưu giá trị nhập
+        /**
+         * hàm lưu giá trị nhập 
+         * Nguyễn Văn Cương 05/10/2022
+         */
         function handleInput(event){
            emit("update:modelValue",event.target.value);
            console.log(event.target.value);
         }
-        //hàm format ngày tháng năm
+
+        /**
+         * hàm format ngày tháng năm 
+         * Nguyễn Văn Cương 05/10/2022
+         */
         function formatDate(date) {
         try {
         if (date) {

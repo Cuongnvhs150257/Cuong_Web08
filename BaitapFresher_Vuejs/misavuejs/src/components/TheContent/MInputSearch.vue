@@ -13,18 +13,17 @@
 
 <script>
 export default {
-  setup(props, { emit }) {
-
-    //hàm lưu giá trị nhập
-    function handleInput(event) {
-      emit("InputWhere", event.target.value);
+  methods:{
+    handleInput(event) {
+      this.$emit("InputWhere", event.target.value);
     }
+  },data(){
+    return{
 
-    return {
-      handleInput,
-    };
-  },
-};
+    }
+  }
+}
+
 </script>
 
 <style>
@@ -41,7 +40,7 @@ export default {
   border-radius: 4px;
   border-color: #bbbbbb;
   color: #000;
-  padding: 0 16px;
+  padding: 0 8px;
   border-style: solid;
   outline: unset;
   font-style: italic;

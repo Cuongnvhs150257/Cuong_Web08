@@ -14,18 +14,20 @@
     <div class="content-table">
       <div class="content-toolbar">
         <div class="content-toolbar-right">
-          <MInputSearch @InputWhere="search" />
+          <MInputSearch @InputWhere="getWhereValue" />
           <button type="button" class="toolbar-load" @click="loadData"></button>
         </div>
       </div>
       <MTable @custom-open-dbclick="openPopup" :EmployeesLoad="EmployeesTable" @data-load-delete="loadData"/>
+    </div>
+    <div class="content-bottom">
       <ThePadding :TotalCount="EmployeesTable" @filter-padding="getLimitValue" @offset-value="getOffSetValue"/>
     </div>
 
     <!-- <Teleport to="#page-employee">
     </Teleport> -->
     
-      <MPopup v-if="isShow" @custom-handle-click="closePopup" :employeesSelected="Employees" @data-load="loadData" />
+      <MPopup v-if="isShow" @custom-handle-click="closePopup" :employeesSelected="Employees" @data-load="loadData" @get-new-code="getNewCode"/>
 
       
       <MLoading v-if="LoadingShow"  />
@@ -39,143 +41,149 @@
 import MButton from "../MButton/MButton.vue";
 import MTable from "../MTable/MTable.vue";
 import ThePadding from "../ThePadding/ThePadding.vue";
-import { ref } from "vue";
 
 import MPopup from "../MPopup/MPopup.vue";
 import MLoading from "../MLoading/MLoading.vue"
 import MInputSearch from "./MInputSearch.vue"
-export default {
-  setup() {
-    const isShow = ref(false)
-    const Employees = ref(null)
-    const EmployeesTable = ref(null)
-    const LoadingShow = ref(false)
-    const LimitValue = ref(null)
-    const OffSetValue = ref(null)
+import configs from "../../configs/index"
 
-    //Hàm mở popup thêm nhân viên
-    //và lấy dữ liệu nhân viên theo id dể hiện trên popup
-    async function openPopup(id) {
-      if(id){ //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
-        LoadingShow.value = true; //hiển thị loading
-        await fetch("https://localhost:44335/api/v1/Employees/" + id, {method:"GET"})
+export default{
+  methods: {
+
+    /**
+     * Hàm mở popup thêm nhân viên 
+     * và lấy dữ liệu nhân viên theo id dể hiện trên popup
+     * Nguyễn Văn Cương 25/09/2022
+     */
+    async openPopup(id) {
+      //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
+      if(id){ 
+        this.LoadingShow = true; //hiển thị loading
+        await fetch(configs.baseURL + id, {method:"GET"})
         .then(res => res.json())
         .then(data =>{
-            //this.employees = data;
-            LoadingShow.value = false; //Đóng loading
-            Employees.value = data
-            isShow.value = true; //Hiển thị popup
-            console.log(Employees.value);
-            
+            this.LoadingShow = false; //Đóng loading
+            this.Employees = data
+            this.isShow = true; //Hiển thị popup   
         })
         .catch(res =>{
-            
             console.log(res);
         })
-        
-
-      }else{  //trường hợp chỉ mở popup
-        Employees.value = {}, //dữ liệu trên popup rỗng
-        await fetch("https://localhost:44335/api/v1/Employees/getmax", { 
+      //trường hợp chỉ mở popup
+      }else{ 
+        this.Employees = {}, //dữ liệu trên popup rỗng
+        await this.getNewCode();
+        this.isShow = true; 
+      }
+      
+    },
+    /**
+     * Hàm lấy mã nhân viên mới
+     * Nguyễn Văn Cương 01/10/2022
+     */
+    async getNewCode(){
+      await fetch(configs.baseURL + "getmax", { 
             method: "GET", //lấy mã nhân viên cao nhất
-          })
+              })
             .then(response => response.json())
             .then((data) => {
               var s = JSON.stringify(data); 
               var d = s.replace(/[^0-9]*/g, ''); //lấy mã nhân viên cao nhất, loại bỏ dữ liệu thừa
-              var e = "NV"+ d; //thêm nv
-              Employees.value.EmployeeCode = e;
+              var e = "NV-"+ d; //thêm chữ nv đằng trước
+              this.Employees.EmployeeCode = e;
             })
             .catch((res) => {
               console.log(res);
             });
-        isShow.value = true; 
+    },
+
+    /**
+     * hàm đóng popup thêm nhân viên 
+     * Nguyễn Văn Cương 25/09/2022
+     */
+    closePopup() {
+      this.isShow = false;
+      if(this.Employees.EmployeeID == null){
+         this.Employees = {};
       }
-      
-    }
-    //hàm đóng popup thêm nhân viên
-    function closePopup() {
-      isShow.value = false;
-      if(Employees.value.EmployeeID == null){
-         Employees.value = {};
-      }
-    }
-    //lấy số lượng bản ghi hiển thị
-    function getLimitValue(limits){
-       LimitValue.value = limits;
-       loadData();
-    }
-    //lấy trang hiển thị
-    function getOffSetValue(offset){
-        OffSetValue.value = offset;
-        loadData();
-    }
-    //hàm load dữ liệu
-    function loadData() {
-      LoadingShow.value = true;
-      var limit = LimitValue.value; //lưu số lượng bản ghi
+    },
+
+    /**
+     * lấy số lượng bản ghi hiển thị 
+     * Nguyễn Văn Cương 25/09/2022
+     */
+    getLimitValue(limits){
+       this.LimitValue = limits;
+       this.loadData();
+    },
+
+    /**
+     * lấy trang hiển thị
+     * 
+     */
+    getOffSetValue(offset){
+        this.OffSetValue = offset;
+        this.loadData();
+    },
+
+    /**
+     * lấy dữ liệu cần tìm kiếm
+     * Nguyễn Văn Cương 25/09/2022
+     */
+    getWhereValue(where){
+      this.WhereValue = where;
+      this.loadData();
+    },
+
+    /**
+     * hàm load dữ liệu 
+     * Nguyễn Văn Cương 15/09/2022
+     */
+    loadData() {
+      this.LoadingShow = true;
+      var limit = this.LimitValue; //lưu số lượng bản ghi
       if(limit == null){ //nếu không có, mặc định là 10
         limit = 10;
       }
-      var offset = OffSetValue.value; //lưu trang hiển thị
+      var offset = this.OffSetValue; //lưu trang hiển thị
       if(offset == null){  //nếu không có, mặc định là 0
         offset = 0;
       }
-      const filter = `filter?limit=${limit}&offset=${offset}`;
-      fetch("https://localhost:44335/api/v1/Employees/" + filter, {
-        method: "GET",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          EmployeesTable.value = data; //lưu dữ liệu
-          LoadingShow.value = false; //tắt loading
-          console.log(data);
-        })
-        .catch((res) => {
-          console.log(res);
-        });
-    }
-    loadData()
-    
-    //hàm tìm kiếm
-    function search(where){
-      var limit = LimitValue.value; //lưu số lượng bản ghi
-      if(limit == null){
-        limit = 10; //nếu không có, mặc định là 10
-      }
-      var offset = getOffSetValue.value; //lưu trang hiển thị
-      if(offset == null){ 
-        offset = 0; //nếu không có, mặc định là 0
+      var where = this.WhereValue; //lưu dữ liệu tìm kiếm
+      if(where == null){ //nếu không có, mặc định là rỗng
+        where = '';
       }
       const filter = `filter?wnere=${where}&limit=${limit}&offset=${offset}`;
-      fetch("https://localhost:44335/api/v1/Employees/" + filter, {
+      fetch(configs.baseURL + filter, {
         method: "GET",
       })
         .then((res) => res.json())
         .then((data) => {
-          EmployeesTable.value = data; //lưu dữ liệu vừa tìm kiếm
-          LoadingShow.value = false;
-          console.log(data);
+          this.EmployeesTable= data; //lưu dữ liệu
+          this.LoadingShow = false; //tắt loading
         })
         .catch((res) => {
           console.log(res);
         });
-    }
-    
-    return {
-      isShow, //gọi popup thêm nhân viên
-      LoadingShow, //gọi màn hình loading
-      openPopup, //lưu giá trị hàm mở popup thêm nhân viên
-      closePopup, //lưu giá trị hàm đóng popup thêm nhân viên
-      Employees, //lưu giá trị nhân viên
-      EmployeesTable, //lưu giá trị bảng nhân viên
-      loadData, //lưu giá trị hàm load dữ liệu
-      search, //lưu giá trị hàm tìm kiếm
-      getLimitValue, //lưu giá trị hàm lấy số lượng bản ghi
-      getOffSetValue, //lưu giá trị hàm lấy trang
-    };
+    },
+  
+},components: { MButton, MTable, ThePadding, MPopup, MLoading, MInputSearch, },
+
+created() {
+    this.loadData();
   },
-  components: { MButton, MTable, ThePadding, MPopup, MLoading, MInputSearch},
+
+data(){
+  return{
+      isShow: false, //gọi popup thêm nhân viên
+      LoadingShow: false, //gọi màn hình loadind
+      Employees: null, //lưu giá trị nhân viên
+      EmployeesTable: null, //lưu giá trị bảng nhân viên
+      LimitValue: null,
+      OffSetValue: null,
+      WhereValue: null,
+  }
+}
 
 
 };
@@ -187,7 +195,7 @@ export default {
 }
 .content-top {
   width: 100%;
-  height: 80px;
+  height: 60px;
   display: flex;
 }
 .popup {
@@ -195,26 +203,24 @@ export default {
 }
 .content-top-left {
   width: 30%;
-  height: 80px;
+  height: 60px;
   float: left;
   position: relative;
   background-color: rgb(236, 238, 241);
 }
 .content-top-left-label {
   width: 200px;
-  height: 80px;
-  margin-top: 20px;
-  margin-left: 15px;
+  height: 60px;
 }
 .content-top-label {
-  height: 80px;
+  height: 60px;
   width: 300px;
   font-size: 24px;
   font-weight: 700;
 }
 .content-top-right {
   width: 70%;
-  height: 80px;
+  height: 60px;
   float: right;
   position: relative;
   background-color: rgb(236, 238, 241);
@@ -229,7 +235,6 @@ export default {
   position: absolute;
   right: 0;
   display: flex;
-  margin-right: 10px;
   margin-top: 5px;
 }
 .toolbar-input {

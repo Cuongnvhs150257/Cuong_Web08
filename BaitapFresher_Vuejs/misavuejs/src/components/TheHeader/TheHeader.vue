@@ -20,13 +20,13 @@
 }
 .header-left{
     width: calc(100%-300px);
-    height: 48px;
+    height: 56px;
     display: flex;
     align-items: center;
     flex-direction: row;
     float: left;
     column-gap: 10px;
-    margin-left: 10px;
+    margin-left: 16px;
 }
 .header-left-btn{
     width: 24px;
@@ -50,7 +50,7 @@
 }
 .header-right{
     width: 250px;
-    height: 48px;
+    height: 56px;
     display: flex;
     float: right;
     flex-direction: row;
@@ -88,7 +88,6 @@
     text-align: center;
 }.header-left-label{
     font-weight: bold;
-    margin-left: 5px;
 }
 
 </style>

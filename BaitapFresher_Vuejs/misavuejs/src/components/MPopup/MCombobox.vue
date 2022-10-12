@@ -1,30 +1,29 @@
 <template>
   <div class="combobox">
-    <input class="combobox-input" type="text" v-model="this.UnitSle.unitName"/>
+    <input class="combobox-input" type="text" v-model="this.UnitSle.unitName" :class="{ 'combobox-input-red': !inValueCombox }" :tabindex="tab"/>
     <button @click="btnComboboxOnClick"></button>
-    <div class="combobox-data" >
+    <div class="combobox-data">
       <div class="combobox-item" v-for="u in UnitItem" :key="u.unitID" @click="selectedUnit(u)" >
           <div class="combobox-item-left" >{{u.unitCode}}</div>
           <div class="combobox-item-right">{{u.unitName}}</div>
       </div>
-      <!-- 
-      :class="{ 'combobox-item-checked': !inValue }" 
-       -->
-
-      
       
     </div>
   </div>
 </template>
 
 <script>
+import configs from '../../configs/index';
 export default {
 
-  props:["EmployeeUnit","modelValue"],
+  props:["EmployeeUnit","modelValue","inValueCombox","tab"],
 
   methods:{
         
-        //hàm mở combobox
+        /**
+         * hàm mở combobox 
+         * Nguyễn Văn Cương 05/10/2022
+         */
         btnComboboxOnClick() {
             this.OpenComboxbox = !this.OpenComboxbox;
             if(this.OpenComboxbox){
@@ -33,25 +32,28 @@ export default {
                 this.UnitItem = {};
             }
         },
-        //hàm lấy toàn bộ đơn vị
+
+        /**
+         * hàm lấy toàn bộ đơn vị
+         * Nguyễn Văn Cương 05/10/2022
+         */
         loadUnit(){
-            fetch("https://localhost:44335/api/v1/Unit", {
+            fetch(configs.baseURLUnit, {
             method: "GET",
       })
         .then((res) => res.json())
         .then((data) => {
           this.UnitItem = data;
-                //nổi bật đơn vị đã chọn
-                if(this.UnitSle.unitName == "Phòng kế toán"){
-                   this.inValue = false;
-                   
-                }
         })
         .catch((res) => {
           console.log(res);
         });
         },
-        //hàm chọn đơn vị
+
+        /**
+         * hàm chọn đơn vị
+         * Nguyễn Văn Cương 05/10/2022
+         */
         selectedUnit(un){
           this.UnitSle = un;
           this.UnitItem = {};
@@ -62,7 +64,8 @@ export default {
    
   }, data(){
         var UnitSle = {
-            unitName: this.EmployeeUnit //hiện thị tên đơn vị của nhân viên khi mở popup sửa nhân viên
+          //hiện thị tên đơn vị của nhân viên khi mở popup sửa nhân viên
+            unitName: this.EmployeeUnit 
         };
         console.log(this.EmployeeUnit);
         return{
@@ -84,37 +87,37 @@ export default {
     --icon: url("../../assets/Resource/img/Sprites.64af8f61.svg");
 }
 .combobox {
-  height: 30px;
+  height: 28px;
   width: 100%;
   box-sizing: border-box;
   display: flex;
   position: relative;
   margin-top: 5px;
-  border: 1px solid #bbbbbb;
-  border-bottom: none;
-  border-radius: 3px;
 }
 .combobox-input{
   width: 100%;
+  height: 27px;
   float: left;
   height: 100%;
   border: none;
   outline: none;
   padding-left: 10px;
-}
-.combobox-input:focus {
-  height: 27px;
-  border: 2px solid #019160;
+  border: 1px solid #bbbbbb;
   border-radius: 3px;
+}
+.combobox-input:focus{
+  height: 28px;
+  border: 2px solid #50B83C;
+  border-radius: 4px;
   outline: none;
-  z-index: 1;
+  z-index: 2;
 }
 
 .combobox button{
   position: absolute;
   border: none;
   right: 1px;
-  top: 1px;
+  top: 2px;
   width: 40px;
   height: 27px;
   flex-shrink: 0;
@@ -122,6 +125,7 @@ export default {
   cursor: pointer;
   margin-right: 1px;
   background: #fff;
+  z-index: 2;
 }
 .combobox button{
     background-image: var(--icon);
@@ -132,28 +136,38 @@ export default {
 }
 .combobox-data {
   position: absolute;
-  top: 28px;
+  top: 29px;
   width: 99%;
   z-index: 1;
-   overflow-y: scroll ;
-   border: 1px solid #bbbb;
+  border-radius: 4px ;
+  border-right: 1px solid #bbbb;
+  border-left: 1px solid #bbbb;
+  border-bottom: 1px solid #bbbb;
+  background-color: #fff;
   
 }
 .combobox-item {
   height: 32px;
+  width: 370px;
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  margin-left: 8px;
+  padding-left: 8px;
   font-size: 13px;
   background-color: #fff;
  
+}.combobox-input-red {
+  border: 1px solid #ff0000;
+  border-radius: 3px;
+  z-index: 2;
 }
 .combobox-item-left{
     width: 100px;
 }
 .combobox-item:hover {
-  background-color: #50b83c;
-  color: #fff;
+  background-color: rgba(80,184,60,0.1);
+  color: #000;
+  border-radius: 4px;
 }::-webkit-scrollbar {
   height: 8px;
   width: 8px;

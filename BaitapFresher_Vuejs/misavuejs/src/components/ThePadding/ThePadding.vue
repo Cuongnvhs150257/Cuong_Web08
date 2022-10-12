@@ -19,7 +19,7 @@
                                 <label >...</label>
                                 <button class="paddingnumber" @click="offSetValue(TotalCount.totalCount - (TotalCount.totalCount%indexPadding))" >{{Math.floor(TotalCount.totalCount/indexPadding)+1}}</button>
                             </div>
-                            <button class="btn-last" @click="offSetValue(2)">Sau</button>
+                            <button class="btn-last" @click="offSetValue(indexOffSetOn * 10)">Sau</button>
                         </div>
                     </div>
                 </div>
@@ -35,14 +35,22 @@ export default {
         MDropBox
     },
     methods:{
-        //lấy số lượng bản ghi hiển thị (limit)
+        /**
+         * lấy số lượng bản ghi hiển thị (limit)
+         * Nguyễn Văn Cương 06/10/2022
+         */
          getPaddingValue(value){
              this.$emit("filter-padding", value);
              this.indexPadding = value;
          },
-         //lấy số trang bản ghi hiển thị (offset)
+
+         /**
+          * lấy số trang bản ghi hiển thị (offset)
+          * Nguyễn Văn Cương 06/10/2022
+          */
          offSetValue(value){
             this.$emit("offset-value", value);
+            console.log(value);
             if(value == 0 ){ //trường hợp trang 1
                 this.indexOffSetOn = 2; //trang tiếp theo là 2
                 this.indexOffSetNext = 2; //trang tiếp theo là 2
@@ -61,7 +69,7 @@ export default {
                 }
                 return
             }
-            //trường hợp mở trang tiếp theo
+            //trường hợp mở trang tiếp theo 
             value = value + 10; //tăng giá trị vd: 20 + 10
             this.indexOffSetNext = this.indexOffSetNext + 1; //tăng giá trị tiếp theo vd: 2+1
             this.indexOffSetOn = this.indexOffSetNext % value; //vd:  3%30=3 lấy được trang tiếp theo sẽ chọn
@@ -84,12 +92,15 @@ export default {
 <style>
 .padding{
     width: 100%;
-    height: 60px;
+    border-left: 2px solid #fff;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     order: 5;
+    background-color: #fff;
+    border-radius: 0px 0px 4px 4px;
 }
 .padding-center{
     display: flex;
@@ -130,6 +141,7 @@ export default {
 }
 .page-group .paddingnumber, .page-group-last .paddingnumber{
     margin-top: 5px;
+    margin-left: 3px;
     width: 20px;
     height: 20px;
     margin-right: 5px;
@@ -152,10 +164,10 @@ export default {
     color: #666666;
 }.drop-box{
     width: 200px;
-    height: 30px;
+    height: 33px;
     border: 1px solid #bbbbbb;
     outline: none;
+    border-radius: 4px;
 }
-
 </style>
 

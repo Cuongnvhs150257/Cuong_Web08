@@ -26,11 +26,19 @@ export default {
     getEmployeeCode: String,
   },
   methods: {
-    //hàm nhấn nút hủy xóa nhân viên
+
+    /**
+     * hàm nhấn nút hủy xóa nhân viên 
+     * Nguyễn Văn Cương 01/10/2022
+     */
     popupaskcance() {
       this.$emit("popup-ask-cance");
     },
-    //hàm đồng ý xóa nhân viên
+
+    /**
+     * hàm đồng ý xóa nhân viên
+     * Nguyễn Văn Cương 01/10/2022
+     */
     agreedelete() {
       this.$emit("agree-delete-click");
     },
@@ -61,6 +69,7 @@ export default {
   top: 40%;
   margin: 0 auto;
   background-color: #fff;
+  border-radius: 4px;
 }
 .popupask-top {
   width: 100%;
@@ -83,7 +92,7 @@ export default {
 .popupask-icon-label-ask {
   width: 320px;
   margin-top: 30px;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid #bbb;
   padding-top: 10px;
   line-height: 25px;
 }

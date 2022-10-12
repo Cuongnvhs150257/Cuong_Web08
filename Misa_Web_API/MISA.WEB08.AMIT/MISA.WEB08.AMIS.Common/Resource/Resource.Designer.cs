@@ -142,65 +142,65 @@ namespace MISA.WEB08.AMIS.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pro_{0}_DeleteEmployee.
+        ///   Looks up a localized string similar to Proc_{0}_DeleteRecord.
         /// </summary>
-        public static string Pro_DeleteEmployee {
+        public static string Proc_DeleteRecord {
             get {
-                return ResourceManager.GetString("Pro_DeleteEmployee", resourceCulture);
+                return ResourceManager.GetString("Proc_DeleteRecord", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pro_{0}_Filter.
+        ///   Looks up a localized string similar to Proc_{0}_Filter.
         /// </summary>
-        public static string Pro_Filter {
+        public static string Proc_Filter {
             get {
-                return ResourceManager.GetString("Pro_Filter", resourceCulture);
+                return ResourceManager.GetString("Proc_Filter", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pro_employee_GetMaxEmployee.
+        ///   Looks up a localized string similar to Proc_{0}_GetMaxRecord.
         /// </summary>
-        public static string Pro_GetMaxEmployee {
+        public static string Proc_GetMaxRecord {
             get {
-                return ResourceManager.GetString("Pro_GetMaxEmployee", resourceCulture);
+                return ResourceManager.GetString("Proc_GetMaxRecord", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pro_{0}_InsertEmployee.
+        ///   Looks up a localized string similar to Proc_{0}_InsertRecord.
         /// </summary>
-        public static string Pro_InsertEmployee {
+        public static string Proc_InsertRecord {
             get {
-                return ResourceManager.GetString("Pro_InsertEmployee", resourceCulture);
+                return ResourceManager.GetString("Proc_InsertRecord", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pro_{0}_SelectEmployee.
+        ///   Looks up a localized string similar to Proc_{0}_SelectAllRecord.
         /// </summary>
-        public static string Pro_SelectEmployee {
+        public static string Proc_SelectAllRecord {
             get {
-                return ResourceManager.GetString("Pro_SelectEmployee", resourceCulture);
+                return ResourceManager.GetString("Proc_SelectAllRecord", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pro_{0}_SelectAllEmployee.
+        ///   Looks up a localized string similar to Proc_{0}_SelectRecord.
         /// </summary>
-        public static string Pro_SeleteAll {
+        public static string Proc_SelectRecord {
             get {
-                return ResourceManager.GetString("Pro_SeleteAll", resourceCulture);
+                return ResourceManager.GetString("Proc_SelectRecord", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pro_{0}_UpdateEmployee.
+        ///   Looks up a localized string similar to Proc_{0}_UpdateRecord.
         /// </summary>
-        public static string Pro_UpdateEmployee {
+        public static string Proc_UpdateRecord {
             get {
-                return ResourceManager.GetString("Pro_UpdateEmployee", resourceCulture);
+                return ResourceManager.GetString("Proc_UpdateRecord", resourceCulture);
             }
         }
         

@@ -36,7 +36,6 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// contructor không thông số
         /// </summary>
-        
         public ErrorResult()
         {
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.DL
 {
+    #region interface dl
     public interface IBaseDL<T>
     {
         /// <summary>
@@ -75,4 +76,6 @@ namespace MISA.WEB08.AMIS.DL
         /// <returns></returns>
         public Object GetMaxRecord();
     }
+
+    #endregion
 }

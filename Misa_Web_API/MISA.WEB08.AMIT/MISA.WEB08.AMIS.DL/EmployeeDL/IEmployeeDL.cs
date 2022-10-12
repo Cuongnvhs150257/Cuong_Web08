@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.DL
 {
+    /// <summary>
+    /// interface EmployeeDL
+    /// Createdby: Nguyễn Văn Cương 26/09/2022
+    /// </summary>
     public interface IEmployeeDL : IBaseDL<Employee>
     {
-
-
     }
 }

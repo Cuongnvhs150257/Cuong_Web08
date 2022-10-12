@@ -37,8 +37,11 @@
 
           <MInputSpecial
             class="input-spe"
-            :class="{ 'item-input-red': !inValue }"
+            :focus="true"
+            :inValue="inValue"
+            :tab="1"
             v-model="Employees.EmployeeCode"
+            
           />
 
           <span v-show="Spanempty" class="error-code">
@@ -50,7 +53,8 @@
           <label class="item-labelsao"> *</label>
           <MInputSpecial
             class="input-spe"
-            :class="{ 'item-input-red': !inValue }"
+            :inValue="inValue"
+            :tab="2"
             v-model="Employees.FullName"
           />
 
@@ -60,7 +64,7 @@
         </div>
         <div class="input_item item3">
           <label class="item-label label3">Ngày sinh</label>
-          <MDatetime v-model="Employees.DateOfBirth" />
+          <MDatetime v-model="Employees.DateOfBirth" :tab="5" />
         </div>
         <div class="input_item item4">
           <label class="item-label label3 gender">Giới tính</label>
@@ -68,14 +72,17 @@
             <MInputRadio
               @click="getGender(2)"
               :checked="Employees.Gender == 2"
+              :tab="6"
             />Nam
             <MInputRadio
               @click="getGender(1)"
               :checked="Employees.Gender == 1"
+              :tab="7"
             />Nữ
             <MInputRadio
               @click="getGender(0)"
               :checked="Employees.Gender == 0"
+              :tab="8"
             />Khác
           </div>
         </div>
@@ -86,36 +93,38 @@
           <label class="item-labelsao"> *</label>
           <MComboxbox
             @get-unitid="getUnitID"
-            :class="{ 'combobox-input-red': !inValue }"
+            :inValueCombox="inValue"
             :EmployeeUnit="Employees.UnitName"
+            :tab="3"
           />
         </div>
         <div class="input_item item2">
           <label class="item-label">Số CMND</label>
           <m-input-nomal
             :toolTip="'Số chứng minh nhân dân'"
+            :tab="9"
             v-model="Employees.IdentifyCode"
           ></m-input-nomal>
         </div>
         <div class="input_item item3">
           <label class="item-label l3">Ngày cấp</label>
-          <MDatetime v-model="Employees.IdentifyDate" />
+          <MDatetime v-model="Employees.IdentifyDate" :tab="10"/>
         </div>
       </div>
       <div class="popup_item input4">
         <div class="input_item item1">
           <label class="item-label">Chức danh</label>
-          <m-input-nomal v-model="Employees.Postions"></m-input-nomal>
+          <m-input-nomal v-model="Employees.Postions" :tab="4"></m-input-nomal>
         </div>
         <div class="input_item item2">
           <label class="item-label">Nơi cấp</label>
-          <m-input-nomal v-model="Employees.IdentifyPlace"></m-input-nomal>
+          <m-input-nomal v-model="Employees.IdentifyPlace" :tab="11"></m-input-nomal>
         </div>
       </div>
       <div class="popup_item input5">
         <div class="input_item item1">
           <label class="item-label">Địa chỉ</label>
-          <m-input-nomal v-model="Employees.Address"></m-input-nomal>
+          <m-input-nomal v-model="Employees.Address" :tab="12"></m-input-nomal>
         </div>
       </div>
       <div class="popup_item input6">
@@ -124,6 +133,7 @@
           <m-input-nomal
             :toolTip="'Điện thoại di động'"
             v-model="Employees.PhoneNumber"
+            :tab="13"
           ></m-input-nomal>
         </div>
         <div class="input_item item" v-if="Faxs">
@@ -131,25 +141,26 @@
           <m-input-nomal
             :toolTip="'Điện thoại cố định'"
             v-model="Employees.Fax"
+            :tab="14"
           ></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">Email</label>
-          <m-input-nomal v-model="Employees.Email"></m-input-nomal>
+          <m-input-nomal v-model="Employees.Email" :tab="15"></m-input-nomal>
         </div>
       </div>
       <div class="popup_item input6">
         <div class="input_item item1">
           <label class="item-label">Tài khoản ngân hàng</label>
-          <m-input-nomal v-model="Employees.BankAccount"></m-input-nomal>
+          <m-input-nomal v-model="Employees.BankAccount" :tab="16"></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">Tên ngân hàng</label>
-          <m-input-nomal v-model="Employees.BankName"></m-input-nomal>
+          <m-input-nomal v-model="Employees.BankName" :tab="17"></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">Chi nhánh</label>
-          <m-input-nomal v-model="Employees.BankUnit"></m-input-nomal>
+          <m-input-nomal v-model="Employees.BankUnit" :tab="18"></m-input-nomal>
         </div>
       </div>
       <div class="popup_item input8">
@@ -159,20 +170,23 @@
               :toolTip2="'Ctrl + Shift + S'"
               class="input_item_right_btn"
               @click="btnSaveonClick"
+              :tab="20" ref="focusLoop"
             >
             </m-button-1>
 
-            <button class="btn_input8_right" @click="btnSaveonClick">
+            <button class="btn_input8_right" @click="btnSaveonClick" :tabindex="20">
               Cất
-              <span class="tool-tip"> Ctrl + S </span>
+              
             </button>
+            <span class="tool-tip btn"> Ctrl + S </span>
           </div>
           <div class="input_item_left">
-            <button class="btn_input8_left" @click="handleClosePopup">
+            <button class="btn_input8_left" @click="handleClosePopup" :tabindex="21" @focus="tabIndexReturn" ref="tabIndexReturn" >
               Hủy
             </button>
           </div>
         </div>
+        <div tabindex="21" ref="focusLoop" class="focus-loop"></div>
         <div>
           <MPopupAskEdit
             v-if="isShowPopupAskEdit"
@@ -199,28 +213,51 @@ import MPopupNotification from "../MPopupNotification/MPopupNotification.vue";
 import MComboxbox from "./MCombobox.vue";
 import MDatetime from "./MDatetime.vue";
 import MPopupAskEdit from "./MPopupAskEdit/MPopupAskEdit.vue";
+import enums from "../../resouce/enums";
+import configs from "../../configs/index"
 
 export default {
+
   methods: {
-    //hàm đóng mở trường phone number khi là khách hàng
+
+    tabIndexReturn(){
+
+    },
+
+    /**
+     * hàm đóng mở trường phone number khi là khách hàng
+     * Nguyễn Văn Cương 01/10/2022
+     */
     isShowPhoneNumber() {
       this.PhoneNumbers = !this.PhoneNumbers;
     },
-    //hàm đóng mở trường fax khi là nhà cung cấp
+
+    /**
+     * hàm đóng mở trường fax khi là nhà cung cấp
+     * Nguyễn Văn Cương 01/10/2022
+     */
     isShowFax() {
       this.Faxs = !this.Faxs;
     },
 
-    //hàm đóng popup thêm nhân viên
+    /**
+     * hàm đóng popup thêm nhân viên 
+     * Nguyễn Văn Cương 20/09/2022
+     */
     handleClosePopup() {
       this.$emit("custom-handle-click");
     },
-    //hàm mở popup lưu thay đổi sau khi người dùng sửa
+
+    /**
+     * hàm mở popup lưu thay đổi sau khi người dùng sửa N
+     * guyễn Văn Cương 20/09/2022
+     */
     handleOpenPopupAskEdit() {
       //so sánh xem người dùng có thay đổi trường nào không
       for (const prop in this.employeesSelected) {
         if (this.employeesSelected[prop] != this.Employees[prop]) {
-          this.isShowPopupAskEdit = true; //nếu có thì hiện popup hỏi
+           //nếu có thì hiện popup hỏi
+          this.isShowPopupAskEdit = true;
           return;
         }
       }
@@ -232,48 +269,73 @@ export default {
         this.isShowPopupAskEdit = true;
         return;
       }
-
       this.$emit("custom-handle-click");
     },
-    //hàm đóng popup lưu thay đổi và popup thêm nhân viên
+
+    /**
+     * hàm đóng popup lưu thay đổi và popup thêm nhân viên
+     * Nguyễn Văn Cương 20/09/2022
+     */
     handleCloseAll() {
       this.isShowPopupAskEdit = false;
       this.$emit("custom-handle-click");
     },
-    //hàm đóng popup lưu thay đổi
+
+    /**
+     * hàm đóng popup lưu thay đổi 
+     * Nguyễn Văn Cương 01/10/2022
+     */
     handleCloseAskEdit() {
       this.isShowPopupAskEdit = false;
     },
-    //hàm chấp nhận lưu
+
+    /**
+     *hàm chấp nhận lưu 
+     Nguyễn Văn Cương 01/10/2022
+     */
     agreeSaveClick() {
       this.isShowPopupAskEdit = false;
       this.btnSaveonClick();
     },
-    //hàm lấy id đơn vị
+
+    /**
+     * hàm lấy id đơn vị 
+     * Nguyễn Văn Cương 01/10/2022
+     */
     getUnitID(Uid) {
       this.Employees.UnitID = Uid;
-      console.log(this.Employees);
-    },
-    //hàm lấy giới tính
-    getGender(Ge) {
-      this.Employees.Gender = Ge;
-      console.log(Ge);
     },
 
-    //hàm regex kiểm tra email
+    /**
+     * hàm lấy giới tính
+     * Nguyễn Văn Cương 01/10/2022
+     */
+    getGender(Ge) {
+      this.Employees.Gender = Ge;
+    },
+
+    /**
+     * hàm regex kiểm tra email 
+     * Nguyễn Văn Cương 25/09/2022
+     */
     validEmail(email) {
-      var re =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      var re = enums.RegexEmail;
       return re.test(email);
     },
 
-    //hàm regex kiểm tra số điện thoại
-
+    /**
+     * hàm regex kiểm tra số điện thoại
+     * Nguyễn Văn Cương 25/09/2022
+     */
     valiPhoneNumber(phonenumber) {
-      var re = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+      var re = enums.RegexPhone;
       return re.test(phonenumber);
     },
-    //hàm format lại ngày tháng năm
+    
+    /**
+     * hàm format lại ngày tháng năm 
+     * Nguyễn Văn Cương 25/09/2022
+     */
     formatDate(date) {
       try {
         if (date) {
@@ -296,87 +358,86 @@ export default {
         console.log(error);
       }
     },
-
-    //hàm validate dữ liệu
-    validateAll() {
-      var validate = true;
-      //kiểm tra xem mã nhân viên hoặc tên nhân viên có chưa
-      if (
-        this.Employees.EmployeeCode &&
-        this.Employees.FullName &&
-        this.Employees.UnitID
-      ) {
-        validate = true;
-
-        //hàm validate số điện thoại
-        if (this.Employees.PhoneNumber) {
-          if (!this.valiPhoneNumber(this.Employees.PhoneNumber)) {
-            this.isShowNotification = true;
-            this.errors = "Số điện thoại không hợp lệ";
-            validate = false;
+    /**
+     * hàm kiểm tra có rỗng mã, tên, đơn vị không
+     * Nguyễn Văn Cương 2/10/2022
+     */
+    validateEmpty(){
+      var validate = 1; //dữ liệu cần thiết không trống
+      //kiểm tra trường cần thiết có trống không
+      if(!this.Employees.EmployeeCode || !this.Employees.FullName || !this.Employees.UnitID){
+           //đỏ input mã và tên
+          this.inValue = false;
+           //mở popup thông báo 
+          this.isShowNotification = true;
+          //mã nhân viên trống
+          if(!this.Employees.EmployeeCode){
+            this.errors = enums.EmployeeCodeNull;
           }
-        } else {
-          validate = true;
-        }
-        //hàm validate email
-        if (this.Employees.Email) {
-          if (!this.validEmail(this.Employees.Email)) {
-            this.isShowNotification = true;
-            this.errors = "Email không hợp lệ";
-            validate = false;
+          //tên nhân viên trống
+          else if(!this.Employees.FullName){
+            this.errors = enums.EmployeeNameNull;
+           //đơn vị trống 
+          }else if(!this.Employees.UnitID){
+            this.errors = enums.UnitNull;
+          //trống toàn bộ dữ liệu 
+          }else{
+            this.errors = enums.NullValue;
           }
-        } else if (this.Employees.PhoneNumber == null) {
-          //nếu số điện thoại k có thì mới dc thêm
-          validate = true;
+          validate = 2; //dữ liệu cần thiết trống
         }
-        //hàm fomat date
-        if (this.Employees.DateOfBirth || this.Employees.IdentifyDate) {
-          var dateofbird = this.Employees.DateOfBirth;
-          this.Employees.DateOfBirth = this.formatDate(dateofbird);
-        }
-      } else if (this.Employees.EmployeeCode == null) {
-        //chưa có mã hoặc tên thì yêu cầu nhập
-        this.inValue = false; //đỏ input mã và tên
-        this.isShowNotification = true; //mở popup thông báo
-        this.errors = "Mã không được để trống";
-        validate = false;
-        this.Spanempty = true;
-      } else if (this.Employees.FullName == null) {
-        //chưa có mã hoặc tên thì yêu cầu nhập
-        this.inValue = false; //đỏ input mã và tên
-        this.isShowNotification = true; //mở popup thông báo
-        this.errors = "Tên không được để trống";
-        validate = false;
-        this.Spanempty = true;
-      } else if (this.Employees.UnitID == null) {
-        //chưa có mã hoặc tên thì yêu cầu nhập
-        this.inValue = false; //đỏ input mã và tên
-        this.isShowNotification = true; //mở popup thông báo
-        this.errors = "Đơn vị không được để trống";
-        validate = false;
-        this.Spanempty = true;
-      } else {
-        //chưa có mã hoặc tên thì yêu cầu nhập
-        this.inValue = false; //đỏ input mã và tên
-        this.isShowNotification = true; //mở popup thông báo
-        this.errors = "Mã không được để trống";
-        validate = false;
-        this.Spanempty = true;
-      }
-      return validate;
+      return validate;  
     },
 
-    //hàm sửa hoặc thêm nhân viên mới
-    btnSaveonClick() {
+     /**
+     * hàm validate dữ liệu
+     * Nguyễn Văn Cương 15/09/2022
+     */
+    validate(){
+        var validate = true;
+        //kiểm tra xem mã nhân viên hoặc tên nhân viên có chưa
+        if(this.validateEmpty() == 1){
+            if (this.Employees.PhoneNumber || this.Employees.Email) {
+                //validate số điện thoại (Nguyễn Văn Cương 15/09/2022)
+                if (!this.valiPhoneNumber(this.Employees.PhoneNumber)) {
+                    this.isShowNotification = true;   
+                    this.errors = enums.InvaluePhoneNumber;
+                    return validate == false;
+                  }
+                // validate email (Nguyễn Văn Cương 15/09/2022)
+                if (!this.validEmail(this.Employees.Email)&& this.Employees.Email != null) {
+                  this.isShowNotification = true;   
+                  this.errors = enums.InvalueEmail;
+                  return validate == false;
+                }
+             }
+            //fomat date (Nguyễn Văn Cương 15/09/2022)
+            if (this.Employees.DateOfBirth || this.Employees.IdentifyDate) {
+              var dateofbird = this.Employees.DateOfBirth;
+              this.Employees.DateOfBirth = this.formatDate(dateofbird);
+            }
+            return validate;
+        }
+        else {
+          return validate == false;
+        }
+
+    },
+
+    /**
+     * hàm sửa hoặc thêm nhân viên mới
+     * Nguyễn Văn Cương 15/09/2022
+     */
+    async btnSaveonClick() {
       var method = "POST";
-      var url = "https://localhost:44335/api/v1/Employees";
+      var url = configs.baseURL;
       this.errors = [];
 
-      if (this.validateAll() == true) {
+      if (this.validate() == true) {
         //Hàm sửa nhân viên
         if (this.Employees.EmployeeID) {
           method = "PUT";
-          url = url + `/${this.Employees.EmployeeID}`;
+          url = url + `${this.Employees.EmployeeID}`;
           this.ClosePopup = true;
         }
         fetch(url, {
@@ -387,41 +448,72 @@ export default {
           },
           body: JSON.stringify({
             ...this.Employees,
-            DateOfBirth:  //kiểm tra xem ngày sinh có không, nếu không thì cho bằng null
+            //kiểm tra xem ngày sinh có không, nếu không thì cho bằng null
+            DateOfBirth:  
               this.Employees.DateOfBirth === ""
                 ? null
                 : this.Employees.DateOfBirth
                 ? this.Employees.DateOfBirth
                 : null,
-            IdentifyDate: //kiểm tra xem ngày cấp có không, nếu không thì cho bằng null
+            //kiểm tra xem ngày cấp có không, nếu không thì cho bằng null    
+            IdentifyDate: 
               this.Employees.IdentifyDate === ""
                 ? null
                 : this.Employees.IdentifyDate
                 ? this.Employees.IdentifyDate
                 : null,
-            Gender: this.Employees.Gender ? Number(this.Employees.Gender) : 0, //kiểm tra xem giới tính có không, nếu không thì cho bằng 0 (khác)
+            //kiểm tra xem giới tính có không, nếu không thì cho bằng 0 (khác)
+            Gender: this.Employees.Gender ? Number(this.Employees.Gender) : enums.ELSE,
           }),
         })
           .then((res) => res.json())
           .then((res) => {
             console.log(res);
+            //load lại dữ liệu
             this.$emit("data-load");
-
+            //đóng popup khi sửa
             if (this.ClosePopup == true) {
-              //đóng popup khi sửa
               this.$emit("custom-handle-click");
+            //xóa form popup sau khi thêm thành công  
+            }else{
+              this.Employees = {};
+              this.getNewCode();
             }
-            //xóa form popup sau khi thêm thành công
+            
           })
           .catch((res) => {
             console.log(res);
+            alert("Mã nhân viên đa tồn tại ,Vui lòng kiểm tra lại")
           });
       }
     },
-    //hàm đóng popup thông báo
+    /**
+     * hàm lấy mã nhân viên cao nhất
+     * Nguyễn Văn Cương 1/10/2022
+     */
+    async getNewCode(){
+      await fetch(configs.baseURL + "getmax", { 
+            method: "GET", 
+              })
+            .then(response => response.json())
+            .then((data) => {
+              var s = JSON.stringify(data); 
+              //lấy mã nhân viên cao nhất, loại bỏ dữ liệu thừa
+              var d = s.replace(/[^0-9]*/g, ''); 
+              var e = "NV-"+ d; //thêm nv
+              this.Employees.EmployeeCode = e;
+            })
+            .catch((res) => {
+              console.log(res);
+            });
+    },
+
+    /**
+     * hàm đóng popup thông báo 
+     * Nguyễn Văn Cương 15/09/2022
+     */
     closeNoti() {
       this.isShowNotification = false;
-      //this.inValue = true; //ẩn đỏ input mã và tên
       this.validate = false;
     },
   },
@@ -445,30 +537,45 @@ export default {
   created() {
     if (this.employeesSelected) {
       this.Employees = { ...this.employeesSelected }; 
+      console.log(this.Employees.EmployeeCode);
     }
-    console.log(this.Employees);
+    
   },
+
   data() {
     return {
-      Employees: {}, //lưu dữ liệu nhân viên
-      inValue: { //hiển thị đỏ khi trống
+       //lưu dữ liệu nhân viên
+      Employees: {},
+      //hiển thị đỏ khi trống
+      inValue: { 
         type: Boolean,
         default: true,
       },
-      errors: [], //lưu cảnh báo thiếu dữ liệu
-      isShowNotification: false, //gọi popup thiếu dữ liệu
-      isShowPopupAskEdit: false, //gọi popup hỏi lưu dữ liệu khi chỉnh sửa
-      Spanempty: false, //gọi tool-tip
-      UidP: { //lưu id đơn vị
+       //lưu cảnh báo thiếu dữ liệu
+      errors: [],
+       //gọi popup thiếu dữ liệu
+      isShowNotification: false,
+       //gọi popup hỏi lưu dữ liệu khi chỉnh sửa
+      isShowPopupAskEdit: false,
+       //gọi tool-tip
+      Spanempty: false,
+       //lưu id đơn vị
+      UidP: {
         type: Number,
       },
-      PhoneNumbers: true, //hiển thị phonenumber
-      Faxs: true, //hiển thị fax
-      MaxEmployee: "", //lưu mã nhân viên cao nhất
-      ClosePopup: { //đóng popup thêm nhân viên
+       //hiển thị phonenumber
+      PhoneNumbers: true,
+       //hiển thị fax
+      Faxs: true,
+       //lưu mã nhân viên cao nhất
+      MaxEmployee: "",
+       //đóng popup thêm nhân viên
+      ClosePopup: {
         type: Boolean,
         default: false,
       },
+      //vòng lặp khi tab
+      focusLoop: null,
     };
   },
 };
@@ -489,10 +596,11 @@ export default {
   visibility: visible;
   opacity: 1;
 }
-.btn_input8_right:hover .tool-tip {
+.btn_input8_right:hover ~.tool-tip.btn {
   width: 50px;
-  top: 40px;
-  left: 10px;
+  height: 12px;
+  top: 83px;
+  left: 74%;
   visibility: visible;
   opacity: 1;
 }
@@ -503,6 +611,7 @@ export default {
   position: relative;
   top: 8%;
   margin: 0 auto;
+  border-radius: 4px;
 }
 .popup_item {
   width: 100%;
@@ -575,7 +684,7 @@ export default {
 
 .item-label {
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
 }
 .item-labelsao {
   color: red;
@@ -670,8 +779,8 @@ export default {
   border-top: 1px solid #bbbbbb;
 }
 .btn_input8_right {
-  height: 35px;
-  width: 70px;
+  height: 36px;
+  width: 66px;
   border: 1px solid black;
   text-align: center;
   color: black;
@@ -680,13 +789,13 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   margin-top: 15px;
-  margin-right: 170px;
+  margin-right: 172px;
   position: absolute;
   right: 0;
 }
 .btn_input8_left {
-  height: 35px;
-  width: 70px;
+  height: 36px;
+  width: 66px;
   border: 1px solid black;
   text-align: center;
   color: black;
@@ -705,9 +814,7 @@ export default {
 .item-input-red {
   border: 1px solid #ff0000;
 }
-.combobox-input-red {
-  border: 1px solid #ff0000;
-}
+
 
 .error-code {
   position: absolute;
@@ -747,6 +854,8 @@ export default {
 }
 .input_item.item2:hover .error-name {
   visibility: visible;
+}.focus-loop {
+  opacity: 0;
 }
 </style>
 

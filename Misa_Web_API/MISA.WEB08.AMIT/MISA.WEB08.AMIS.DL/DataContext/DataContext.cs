@@ -10,6 +10,7 @@ namespace MISA.WEB08.AMIS.DL
     {
         /// <summary>
         /// Chuỗi kết nối tới database
+        /// Createdby: Nguyễn Văn Cương 28/09/2022
         /// </summary>
         public static string MySqlConnectionString;
     }

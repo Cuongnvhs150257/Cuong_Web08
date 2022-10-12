@@ -57,14 +57,6 @@
                     <div class="sidebar-item-icon sicon13"></div>
                     <label class="sidebar-item-laber">Ngân sách</label>
                 </div>
-                <div class="sidebar-item">
-                    <div class="sidebar-item-icon sicon14"></div>
-                    <label class="sidebar-item-laber">Báo cáo</label>
-                </div>
-                <div class="sidebar-item">
-                    <div class="sidebar-item-icon sicon15"></div>
-                    <label class="sidebar-item-laber">Phân tích tài chính</label>
-                </div>
 
             </div>
     </div>
@@ -75,7 +67,7 @@
   --logo: url('../../assets/Resource/img/Logo_Module_TiengViet_White.66947422.svg'); 
 }
     .sidebar-top{
-    width: 180px;
+    width: 200px;
     height: 48px;
     display: flex;
     align-items: center;
@@ -104,17 +96,17 @@
 }
 .sidebar-menu{
     width: 180px;
-    height: calc(100vh - 48px); 
-    margin-top: 10px;
+    height: calc(100vh - 52px); 
 }
 .sidebar-item{
-    width: 172px;
-    height: 40px;
+    width: 176px;
+    height: 44px;
     display: flex;
     cursor: pointer;
     justify-content: center;
-    padding-left: 7px;
-    margin-top: 2px;
+    margin-left: 12px;
+    margin-top: 4px;
+    border-radius: 4px;
 }
 .sidebar-item:hover {
     background-color: rgb(88,89,93);
@@ -123,106 +115,94 @@
     background-color: rgb(88,89,93);
 }
 .sidebar-item-icon{
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    margin-top: 10px;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    margin-top: 14px;
     
 }
 
 .sidebar-item-laber{
     color: #fff;
     width: 130px;
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 13px;
 
 }
 .sicon1{
     background-image: var(--icon);
-    background-position: -34px -1630px;
+    background-position: -28px -1630px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon2{
     background-image: var(--icon);
-    background-position: -78px -1631px;
+    background-position: -73px -1631px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon3{
     background-image: var(--icon);
-    background-position: -121px -1633px;
+    background-position: -117px -1632px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon4{
     background-image: var(--icon);
-    background-position: -165px -1632px;
+    background-position: -161px -1632px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }.sicon5{
     background-image: var(--icon);
-    background-position: -208px -1631px;
+    background-position: -204px -1631px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon6{
     background-image: var(--icon);
-    background-position: -254px -1632px;
+    background-position: -248px -1632px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon7{
     background-image: var(--icon);
-    background-position: -294px -1632px;
+    background-position: -289px -1632px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon8{
     background-image: var(--icon);
-    background-position: -339px -1633px;
+    background-position: -334px -1633px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon9{
     background-image: var(--icon);
-    background-position: -382px -1632px;
+    background-position: -377px -1632px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon10{
     background-image: var(--icon);
-    background-position: -427px -1634px;
+    background-position: -421px -1634px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon11{
     background-image: var(--icon);
-    background-position: -471px -1633px;
+    background-position: -467px -1633px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon12{
     background-image: var(--icon);
-    background-position: -514px -1632px;        
+    background-position: -510px -1632px;        
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
 .sicon13{
     background-image: var(--icon);
-    background-position: -382px -1664px;
-    background-repeat: no-repeat;
-    background-color: #393A3D;
-}
-.sicon14{
-    background-image: var(--icon);
-    background-position: -552px -1636px;
-    background-repeat: no-repeat;
-    background-color: #393A3D;
-}
-.sicon15{
-    background-image: var(--icon);
-    background-position: -207px -1667px;
+    background-position: -377px -1664px;
     background-repeat: no-repeat;
     background-color: #393A3D;
 }
@@ -233,8 +213,8 @@
         margin-left: 10px;
 
     }.sidebar-item{
-        width: 50px;
-        padding: 0;
+        width: 56px;
+        margin: 0;
     }.sidebar-item-laber{
         display: none;
     }.sidebar-item-icon{

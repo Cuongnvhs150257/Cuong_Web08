@@ -3,18 +3,18 @@
     <table>
     <thead>
       <tr>
-        <th style="min-width: 30px;" class="box"><input type="checkbox" class="tab-checkbox" /></th>
-        <th style="min-width: 130px; font-family: Misa Fonts Bold;">MÃ NHÂN VIÊN</th>
-        <th style="min-width: 170px;  font-family: Misa Fonts Bold;">TÊN NHÂN VIÊN</th>
-        <th style="min-width: 100px;  font-family: Misa Fonts Bold;">GIỚI TÍNH</th>
-        <th style="min-width: 120px;  font-family: Misa Fonts Bold;" class="tab-th-select">NGÀY SINH</th>
-        <th class="cmnd" style="min-width: 140px;  font-family: Misa Fonts Bold; position: relative;" >SỐ CMND <span class="tool-tip-table">Số chứng minh nhân dân</span></th>
-        <th style="min-width: 170px;  font-family: Misa Fonts Bold;">CHỨC DANH</th>
-        <th style="min-width: 170px;  font-family: Misa Fonts Bold;">TÊN ĐƠN VỊ</th>
-        <th style="min-width: 130px;  font-family: Misa Fonts Bold;">SỐ TÀI KHOẢN</th>
-        <th style="min-width: 170px;  font-family: Misa Fonts Bold;">TÊN NGÂN HÀNG</th>
-        <th style="min-width: 200px; font-family: Misa Fonts Bold;">CHI NHÁNH NGÂN HÀNG</th>
-        <th style="min-width: 110px;position: sticky; font-family: Misa Fonts Bold;" class="tab-th-select">CHỨC NĂNG</th>
+        <th class="box"><input type="checkbox" class="tab-checkbox" /></th>
+        <th style="min-width: 130px;">MÃ NHÂN VIÊN</th>
+        <th style="min-width: 170px;">TÊN NHÂN VIÊN</th>
+        <th style="min-width: 100px;">GIỚI TÍNH</th>
+        <th style="min-width: 120px;" class="tab-th-select">NGÀY SINH</th>
+        <th style="min-width: 140px;" >SỐ CMND <span class="tool-tip-table">Số chứng minh nhân dân</span></th>
+        <th style="min-width: 170px;">CHỨC DANH</th>
+        <th style="min-width: 170px;">TÊN ĐƠN VỊ</th>
+        <th style="min-width: 130px;">SỐ TÀI KHOẢN</th>
+        <th style="min-width: 170px;">TÊN NGÂN HÀNG</th>
+        <th style="min-width: 200px;">CHI NHÁNH NGÂN HÀNG</th>
+        <th class="tab-th-select">CHỨC NĂNG</th>
       </tr>
     </thead>
     <tbody v-if="EmployeesLoad">
@@ -34,7 +34,7 @@
         <td>{{ emp.bankAccount }}</td>
         <td>{{ emp.bankName }}</td>
         <td>{{ emp.bankUnit }}</td>
-        <td style="min-width: 110px;" class="tab-th-select func" >
+        <td style="min-width: 110px;">
           <label class="tab-th-select-lable" @click="rowDBClick(emp.employeeID)">Sửa</label>
           <div class="btnopendrop"><MDropItem @edit-value="openPopupAsk" @click="getEmployeeDetele(emp.employeeID, emp.employeeCode)" /></div>
         </td>
@@ -50,8 +50,10 @@
 
 <script>
 
-import MPopupAsk from '../MPopupAsk/MPopupAsk.vue'
-import MDropItem from './MDropItem.vue'
+import MPopupAsk from '../MPopupAsk/MPopupAsk.vue';
+import MDropItem from './MDropItem.vue';
+import configs from "../../configs/index";
+import enums from "../../resouce/enums";
 
 export default {
   name: "EmployeeList",
@@ -61,20 +63,29 @@ export default {
   
   methods: {
 
-    //hàm hiện thông tin trên popup khi nhấn vào Sửa
+    /**
+     * hàm hiện thông tin trên popup khi nhấn vào Sửa
+     * Nguyễn Văn Cương 25/09/2022
+     */
     rowDBClick(employeeID) {
       this.$emit("custom-open-dbclick", employeeID);
       this.detailFormMode = 2;
     },
 
-    //hàm lấy thông tin nhân viên khi xóa
+    /**
+     * hàm lấy thông tin nhân viên khi xóa
+     * Nguyễn Văn Cương 25/09/2022
+     */
     getEmployeeDetele(employeeID, employeeCode){
         this.getemployeedetetevalue = employeeID;
         this.getemployeedeteteCode = employeeCode;
         
     },
-
-    //hàm mở popup hỏi người dùng có xóa không
+ 
+    /** 
+     * hàm mở popup hỏi người dùng có xóa không
+     *  Nguyễn Văn Cương 25/09/2022
+    */
     openPopupAsk(selectedit){
         this.checkDelete = selectedit; //lưu lựa chọn sửa 
         console.log(this.checkDelete);
@@ -84,25 +95,40 @@ export default {
         }
     },
 
-    //Hàm đóng popup hỏi người dùng có xóa không
+    /**
+     * Hàm đóng popup hỏi người dùng có xóa không
+     * Nguyễn Văn Cương 25/09/2022
+     */
     ClosePopupAsk(){
        this.isShowAskDelete = false; //đóng popup hỏi người dùng
        this.popupAskCance = false; //lưu trạng thái đóng popup hỏi người dùng
     },
-    //hàm format giới tính
+
+    /**
+     * hàm format giới tính 
+     * Nguyễn Văn Cương 01/10/2022
+     */
     fomatGender(gender){
-      
-       if(gender == 1){ //giá trị 1 là nữ 
+
+      //giá trị 1 là nữ 
+       if(gender == enums.FEMALE){
          return gender = "Nữ";
-       }else if(gender == 2){ //giá trị 2 là nam
+      //giá trị 2 là nam
+       }else if(gender == enums.MALE){
          return gender = "Nam";
-       }else if (gender == 0){ //giá trị 0 là khác
+       //giá trị 0 là khác
+       }else if (gender == enums.ELSE){
          return gender = "Khác";
-       }else{ //không có cho thành rỗng
+      //không có cho thành rỗng
+       }else{
          return gender = "";
        }
     },
-    //hàm format ngày tháng
+
+    /**
+     * hàm format ngày tháng 
+     * Nguyễn Văn Cương 01/10/2022
+     */
     formatDate(date) {
     try {
       
@@ -126,21 +152,27 @@ export default {
       console.log(error);
     }
   },
-
-    //Hàm xóa employee theo id
+    /**
+     * Hàm xóa employee theo id 
+     * Nguyễn Văn Cương 25/09/2022
+     */
     async deleteEmployee() {
 
-          var id = this.idEmployeeDelete; //lấy employeeid đã lưu 
-          if(this.popupAskCance == true){ //check xem người dùng có ấn hủy hay không
+          //lấy employeeid đã lưu 
+          var id = this.idEmployeeDelete; 
+           //check xem người dùng có ấn hủy hay không
+          if(this.popupAskCance == true){
           {
-            this.ClosePopupAsk(); //đóng popup hỏi người dùng
+            //đóng popup hỏi người dùng
+            this.ClosePopupAsk();
               await fetch(
-            "https://localhost:44335/api/v1/Employees/" + id,
+            configs.baseURL + id,
             { method: "DELETE" }
           )
             .then((res) => res.json())
             .then((data) => {
-              this.$emit("data-load-delete");  //load lại data
+              //load lại data
+              this.$emit("data-load-delete");
               this.popupAskCance = true;
               console.log(data);
              
@@ -150,15 +182,10 @@ export default {
             });
           }
           }
-        
-      
-      
     },
     
   },
   created() {
-    
-    
   },
   data() {
     return {
@@ -184,16 +211,17 @@ export default {
 <style>
 
 .content-table {
-  height: calc(100% - 115px);
+  height: calc(100% - 145px);
   width: calc(100% - 30px);
   background-color: #fff;
-  border: 10px solid #fff;
-  padding-left: 10px;
+  padding: 10px 16px;
+  border-radius: 4px 4px 0px 0px;
 }
 .contentner{
-  height: calc(100% - 98px);
-  width: calc(100% - 10px);
+  height: calc(100% - 40px);
+  width: 100%;
   overflow: scroll;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar {
   height: 8px;
@@ -202,6 +230,7 @@ export default {
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 4px;
+
 }
 
 /* Handle */
@@ -209,6 +238,8 @@ export default {
   background: #bbb;
   border-radius: 4px;
   cursor: pointer;
+  width: 8px;
+  height: 8px;
 }
 
 /* Handle on hover */
@@ -223,12 +254,10 @@ export default {
 
 }
 
-.content-table tr,
-.content-table th,
-.content-table td {
+td, th {
   border-bottom: 1px solid rgb(216, 211, 211);
   border-right: 1px solid rgb(216, 211, 211);
-  height: 35px;
+  height: 48px;
   font-size: 13px;
 
 }
@@ -242,25 +271,34 @@ export default {
 }.content-table tr:active{
   background-color: #E5F3FF;
 }
+.content-table table thead tr th:first-child{
+  min-width: 30px;
+}
+
 .tab-th-select {
   text-align: center !important;
   padding: 0 !important;
+  z-index: 1;
 }
 .content-table thead {
   background-color: rgb(236, 238, 241);
+}.content-table table thead tr th:last-child{
+  min-width: 110px;
+
+  background-color: rgb(236, 238, 241);
+  border-left: 1px solid rgb(216, 211, 211);
 }
-.tab-th-select select {
-  width: 20px;
-  height: 15px;
-  border: none;
-  outline: none;
-  color: blue;
-}
-.tab-th-select.func {
+.content-table table tbody tr td:last-child{
   color: #0075CC;
   display: flex;
   justify-content: center;
   font-weight: 600;
+  /*
+  position: sticky;
+  right: 0; 
+  */
+  z-index: 1;
+  background-color: #fff;
 
 }.tab-checkbox{
   width: 18px;
@@ -269,16 +307,25 @@ export default {
   margin-left: 3px;
   
 }.tab-th-select-lable{
-   margin-top: 10px;
+   margin-top: 16px;
    margin-left: 30px;
    font-weight: 600;
 }.btnopendrop{
   position: relative;
   width: 5px;
   height: 5px;
-  margin-top: 5px;
+  margin-top: 12px;
   margin-left: 30px;
-}.tool-tip-table {
+
+}.content-table table thead tr th{
+  font-family: Misa Fonts Bold;
+  position: sticky;
+  top: 0;
+  background-color: rgb(236, 238, 241);
+  z-index: 3;
+  
+}
+.tool-tip-table {
         width: 140px;
         font-size: 11px;
         position: absolute;

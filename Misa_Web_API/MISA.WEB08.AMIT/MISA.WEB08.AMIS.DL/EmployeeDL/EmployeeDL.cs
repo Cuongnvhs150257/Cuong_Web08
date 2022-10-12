@@ -12,9 +12,12 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.DL
 {
+    /// <summary>
+    /// EmployeeDl kết nối với DB
+    /// Createdby: Nguyễn Văn Cương 20/09/2022
+    /// </summary>
+
     public class EmployeeDL : BaseDL<Employee>, IEmployeeDL
-    {
-       
-        
+    { 
     }
 }

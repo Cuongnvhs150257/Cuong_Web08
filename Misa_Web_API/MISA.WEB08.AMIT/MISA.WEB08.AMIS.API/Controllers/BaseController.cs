@@ -26,6 +26,8 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         #endregion
 
+        #region Method
+
         #region API GetAllRecords
 
         /// <summary>
@@ -315,6 +317,8 @@ namespace MISA.WEB08.AMIS.API.Controllers
             }
         }
 
+        #endregion
+        
         #endregion
     }
 }

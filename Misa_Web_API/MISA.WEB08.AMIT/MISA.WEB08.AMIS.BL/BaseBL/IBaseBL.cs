@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.BL
 {
+    #region interface
     public interface IBaseBL<T>
     {
         /// <summary>
@@ -77,6 +78,6 @@ namespace MISA.WEB08.AMIS.BL
         /// <returns></returns>
         public object GetMaxRecord();
 
-
+        #endregion
     }
 }

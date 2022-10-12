@@ -2,6 +2,8 @@
 
 namespace MISA.WEB08.AMIS.Common.Entities
 {
+    #region Class Employee
+
     /// <summary>
     /// Nhân viên ứng với bảng employee
     /// create by: Nguyễn Văn Cương 16/8/2022
@@ -108,4 +110,5 @@ namespace MISA.WEB08.AMIS.Common.Entities
         
     }
 
+    #endregion
 }

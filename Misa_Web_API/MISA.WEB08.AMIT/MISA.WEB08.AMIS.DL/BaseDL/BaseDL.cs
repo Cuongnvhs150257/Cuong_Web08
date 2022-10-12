@@ -12,6 +12,8 @@ namespace MISA.WEB08.AMIS.DL
 {
     public class BaseDL<T> : IBaseDL<T>
     {
+        #region GetAllRecords
+
         // <summary>
         /// Hàm kết nối DB để lấy toàn bộ nhân viên
         /// Createdby: Nguyễn Văn Cương 28/09/2022
@@ -21,7 +23,7 @@ namespace MISA.WEB08.AMIS.DL
         {
 
             //khai bao ten stored produre
-            string storeProdureName = String.Format(Resource.Pro_SeleteAll, typeof(T).Name);
+            string storeProdureName = String.Format(Resource.Proc_SelectAllRecord, typeof(T).Name);
 
             //Khởi tạo kết nối với MySQl
             string connectionString = DataContext.MySqlConnectionString;
@@ -32,6 +34,10 @@ namespace MISA.WEB08.AMIS.DL
                 return employees;
             };
         }
+
+        #endregion
+
+        #region InsertRecords
 
         /// <summary>
         /// Hàm kết nối DB để thêm mới đối tượng
@@ -69,7 +75,7 @@ namespace MISA.WEB08.AMIS.DL
             using (var mysqlConnection = new MySqlConnection(connectionString))
             {
                 //khai bao ten stored produre
-                string storeProdureName = String.Format(Resource.Pro_InsertEmployee, typeof(T).Name);
+                string storeProdureName = String.Format(Resource.Proc_InsertRecord, typeof(T).Name);
 
                 //Thực hiện gọi vào DB
                 numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);        
@@ -85,6 +91,10 @@ namespace MISA.WEB08.AMIS.DL
             }
 
         }
+
+        #endregion
+
+        #region GetRecordByID
 
         /// <summary>
         /// Hàm kết nối DB để lấy nhân viên theo ID
@@ -109,7 +119,7 @@ namespace MISA.WEB08.AMIS.DL
             using (var mysqlConnection = new MySqlConnection(connectionString))
             {
                 //khai bao ten stored produre
-                string storeProdureName = String.Format(Resource.Pro_SelectEmployee, typeof(T).Name);
+                string storeProdureName = String.Format(Resource.Proc_SelectRecord, typeof(T).Name);
 
                 //Thực hiện gọi vào DB
                 var OJ = mysqlConnection.QueryFirstOrDefault(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -117,6 +127,9 @@ namespace MISA.WEB08.AMIS.DL
                 return OJ;
             }
         }
+        #endregion
+
+        #region UpdateRecord
 
         /// <summary>
         /// Hàm kết nối DB để sửa đối tượng theo ID
@@ -152,7 +165,7 @@ namespace MISA.WEB08.AMIS.DL
             using (var mysqlConnection = new MySqlConnection(connectionString))
             {
                 //khai bao ten stored produre
-                string storeProdureName = String.Format(Resource.Pro_UpdateEmployee, typeof(Employee).Name);
+                string storeProdureName = String.Format(Resource.Proc_UpdateRecord, typeof(Employee).Name);
 
                 //Thực hiện gọi vào DB
                 var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -160,6 +173,10 @@ namespace MISA.WEB08.AMIS.DL
                 return numberOfAffectedRows;
             }    
         }
+
+        #endregion
+
+        #region Filter
 
         /// <summary>
         /// Hàm kết nối DB để phân trang, tìm kiếm
@@ -188,7 +205,7 @@ namespace MISA.WEB08.AMIS.DL
             using (var mysqlConnection = new MySqlConnection(connectionString))
             {
                 //khai bao ten stored produre
-                string storeProdureName = String.Format(Resource.Pro_Filter, typeof(T).Name);
+                string storeProdureName = String.Format(Resource.Proc_Filter, typeof(T).Name);
 
                 //Thực hiện gọi vào DB
                 var ListOject = mysqlConnection.QueryMultiple(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -204,6 +221,10 @@ namespace MISA.WEB08.AMIS.DL
                 TotalCount = result.TotalCount,
             };
         }
+
+        #endregion
+
+        #region DeleteRecord
 
         /// <summary>
         /// Hàm kết nối DB để xóa đối tượng theo ID
@@ -228,7 +249,7 @@ namespace MISA.WEB08.AMIS.DL
             using (var mysqlConnection = new MySqlConnection(connectionString))
             {
                 //khai bao ten stored produre
-                string storeProdureName = String.Format(Resource.Pro_DeleteEmployee, typeof(Employee).Name);
+                string storeProdureName = String.Format(Resource.Proc_DeleteRecord, typeof(Employee).Name);
 
                 //Thực hiện gọi vào DB
                 var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -236,6 +257,10 @@ namespace MISA.WEB08.AMIS.DL
             }
     
         }
+
+        #endregion
+
+        #region DeleteMultipleRecord
 
         /// <summary>
         /// Hàm kết nối DB để xóa nhiều đối tượng
@@ -247,6 +272,11 @@ namespace MISA.WEB08.AMIS.DL
         {
             throw new NotImplementedException();
         }
+
+        #endregion
+
+        #region GetMaxRecord
+
         /// <summary>
         /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -255,7 +285,7 @@ namespace MISA.WEB08.AMIS.DL
         public object GetMaxRecord()
         {
             //khai bao ten stored produre
-            string storeProdureName = String.Format(Resource.Pro_GetMaxEmployee, typeof(T).Name);
+            string storeProdureName = String.Format(Resource.Proc_GetMaxRecord, typeof(T).Name);
 
             //Khởi tạo kết nối với MySQl
             string connectionString = DataContext.MySqlConnectionString;
@@ -266,5 +296,7 @@ namespace MISA.WEB08.AMIS.DL
                 return employeeCode;
             };
         }
+
+        #endregion
     }
 }
