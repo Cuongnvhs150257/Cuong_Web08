@@ -1,6 +1,6 @@
 <template>
   <div class="combobox">
-    <input class="combobox-input" type="text" v-model="this.UnitSle.unitName" :class="{ 'combobox-input-red': !inValueCombox }" :tabindex="tab"/>
+    <input class="combobox-input" type="text" v-model="this.UnitSle.unitName" :class="{ 'combobox-input-red': !inValueCombox, 'combobox-input-green': !inValueChange }" :tabindex="tab"/>
     <button @click="btnComboboxOnClick"></button>
     <div class="combobox-data">
       <div class="combobox-item" v-for="u in UnitItem" :key="u.unitID" @click="selectedUnit(u)" >
@@ -58,6 +58,7 @@ export default {
           this.UnitSle = un;
           this.UnitItem = {};
           this.$emit("get-unitid", un.unitID);
+          this.inValueChange = this.inValueCombox;
         }
 
 
@@ -76,6 +77,10 @@ export default {
               type: Boolean,
               default: true,
             },
+            inValueChange: {
+                type: Boolean,
+                default: true,
+            }
         }
     }
 };
@@ -160,6 +165,8 @@ export default {
   border: 1px solid #ff0000;
   border-radius: 3px;
   z-index: 2;
+}.combobox-input-green{
+  border: 2px solid #50B83C;
 }
 .combobox-item-left{
     width: 100px;

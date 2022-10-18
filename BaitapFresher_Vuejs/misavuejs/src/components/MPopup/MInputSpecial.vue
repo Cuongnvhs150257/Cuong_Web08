@@ -1,5 +1,5 @@
 <template>
-        <input type="text" class="item-input"  :class="{ 'item-input-red': !inValue }" :value="modelValue" @input="handleInput" :tabindex="tab" :maxlength="maxlength">
+        <input type="text" class="item-input"  :class="{ 'item-input-red': !inValue, 'item-input-green': !inValueChange }"   :value="modelValue" @input="handleInput" :tabindex="tab" :maxlength="maxlength">
 
 </template>
 <style>
@@ -25,24 +25,35 @@
 <script>
 
 export default {
-    props:["modelValue","toolTip","inValue", "tab", "refs", "maxlength"],
     
-    setup(props, { emit }){
-        
-        /**
+    props:{
+        modelValue: String,
+        toolTip: String,
+        inValue: {
+            type: Boolean,
+            default: true,
+        },
+        tab: Number,
+        refs: String,
+        maxlength: Number,
+    },
+    methods:{
+         /**
          * hàm lưu giá trị nhập
          * Nguyễn Văn Cương 26/09/2022
          */
-        function handleInput(event){
-           emit("update:modelValue",event.target.value);
-           
+        handleInput(event){
+            this.inValueChange = this.inValue;
+            this.$emit("update:modelValue",event.target.value);
         }
-       
-        
-        return {
-        handleInput,
-       
-    };
+    },
+    data(){
+        return{
+            inValueChange: {
+                type: Boolean,
+                default: true,
+            }
+        }
     }
 
     

@@ -1,12 +1,11 @@
 <template>
     <div class="cover_toast">
         <div class="toast">
-        <div class="toast_icon"></div>
+        <div :class="classcssicon"></div>
         <div class="toast_text">
             <div :class="classcss">{{text_color}}</div>
             <div class="toast_text_noti">{{text}}</div>
         </div>
-        <div class="toast_button"></div>
     </div>
     </div>
     
@@ -17,7 +16,8 @@ export default {
     props:{
         text: String,
         text_color: String,
-        classcss: String
+        classcss: String,
+        classcssicon:String
     },
     
     methods:{
@@ -43,14 +43,16 @@ export default {
     }
     .toast{
         height: 48px;
-        width: 350px;
+        width: 300px;
+        z-index: 5;
         border-radius: 4px;
         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
         background-color: #fff;
         line-height: 48px;
         padding-left: 10px;
         position: relative;
-    }.toast_icon{
+        animation: slideInLeft ease 0.7s, fadeOut linear 1s 3s forwards;
+    }.toast_icon-success{
         position: absolute;
         top: 15px;
         left: 15px;
@@ -58,6 +60,15 @@ export default {
         height: 24px;
         background-image: var(--icon);
         background-position: -848px -312px;
+        background-repeat: no-repeat;
+    }.toast_icon_failed{
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        width: 24px;
+        height: 24px;
+        background-image: var(--icon);
+        background-position: -1552px -312px;
         background-repeat: no-repeat;
     }.toast_text{
         display: flex;

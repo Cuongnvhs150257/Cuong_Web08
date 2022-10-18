@@ -37,7 +37,7 @@
 
           <MInputSpecial
             class="input-spe"
-            :inValue="inValue"
+            :inValue="inValue_Code"
             :tab="1"
             :maxlength="36"
             v-model="Employees.EmployeeCode"
@@ -53,7 +53,7 @@
           <label class="item-labelsao"> *</label>
           <MInputSpecial
             class="input-spe"
-            :inValue="inValue"
+            :inValue="inValue_Name"
             :tab="2"
             :maxlength="100"
             v-model="Employees.FullName"
@@ -94,7 +94,7 @@
           <label class="item-labelsao"> *</label>
           <MComboxbox
             @get-unitid="getUnitID"
-            :inValueCombox="inValue"
+            :inValueCombox="inValue_Unit"
             :EmployeeUnit="Employees.UnitName"
             :tab="3"
           />
@@ -191,6 +191,7 @@
           </div>
         </div>
         <div tabindex="22" ref="focusLoop" class="focus-loop" @focus="handleLoopFocus"></div>
+        
         <div>
           <MPopupAskEdit
             v-if="isShowPopupAskEdit"
@@ -205,7 +206,9 @@
         @close-notification-click="closeNoti"
         :errors="errors"
       />
+      
     </div>
+
   </div>
 </template>
 <script>
@@ -225,7 +228,7 @@ export default {
   created() {
     if (this.employeesSelected) {
       this.Employees = { ...this.employeesSelected }; 
-      console.log(this.Employees.EmployeeCode);
+      console.log(this.Employees);
     }
     
   },
@@ -398,6 +401,33 @@ export default {
     },
 
     /**
+    Hàm hiện thị thông báo
+    Nguyễn Văn Cương 15/10/2022
+     */
+    ShowToast(Tstatus){
+        this.isShowToast = true; 
+        if(Tstatus == 1){
+          this.Toastcssicon = "toast_icon-success";
+          this.Toastcss = "toast_text_color-success";
+          this.ToastMess_color = "Thành công!";
+          this.ToastMess = "Thêm thành công!";
+
+        }else if(Tstatus == 2){
+          this.Toastcssicon = "toast_icon-success";
+          this.Toastcss = "toast_text_color-success";
+          this.ToastMess_color = "Thành công!";
+          this.ToastMess = "Sửa thành công"
+
+        }else{
+          this.Toastcssicon = "toast_icon_failed";
+          this.Toastcss = "toast_text_color-failed";
+          this.ToastMess_color = "Thất bại!";
+          this.ToastMess = "Hành động thất bại!"
+        }
+        this.$emit("show-toast",this.Toastcssicon,this.Toastcss,this.ToastMess_color,this.ToastMess);
+    },
+
+    /**
      * hàm regex kiểm tra email 
      * Nguyễn Văn Cương 25/09/2022
      */
@@ -449,23 +479,26 @@ export default {
       var validate = 1; //dữ liệu cần thiết không trống
       //kiểm tra trường cần thiết có trống không
       if(!this.Employees.EmployeeCode || !this.Employees.FullName || !this.Employees.UnitID){
-           //đỏ input mã và tên
-          this.inValue = false;
            //mở popup thông báo 
           this.isShowNotification = true;
           //mã nhân viên trống
           if(!this.Employees.EmployeeCode){
             this.errors = enums.EmployeeCodeNull;
+             //đỏ input mã
+            this.inValue_Code = false;
           }
-          //tên nhân viên trống
-          else if(!this.Employees.FullName){
-            this.errors = enums.EmployeeNameNull;
-           //đơn vị trống 
-          }else if(!this.Employees.UnitID){
+          if(!this.Employees.UnitID){
             this.errors = enums.UnitNull;
+            //đỏ input đơn vị
+            this.inValue_Unit = false;
           //trống toàn bộ dữ liệu 
-          }else{
-            this.errors = enums.NullValue;
+          }
+           //tên nhân viên trống
+         if(!this.Employees.FullName){
+            this.errors = enums.EmployeeNameNull;
+            //đỏ input tên
+            this.inValue_Name = false;
+           //đơn vị trống 
           }
           validate = 2; //dữ liệu cần thiết trống
         }
@@ -517,6 +550,7 @@ export default {
           method = "PUT";
           url = url + `${this.Employees.EmployeeID}`;
           this.ClosePopup = true;
+          this.ToastAddClose = true;
         }
         fetch(url, {
           method: method,
@@ -552,14 +586,26 @@ export default {
             //đóng popup khi sửa
             if (this.ClosePopup == true) {
               this.$emit("custom-handle-click");
+
+              //hiển thị thông báo (sửa/thêm thành công)
+              if(this.ToastAddClose == true){
+                this.ShowToast(this.ToastStatus = 2);
+              }else{
+                this.ShowToast(this.ToastStatus = 1);
+              }
+              
             //xóa form popup sau khi thêm thành công  
             }else{
               this.Employees = {};
               this.getNewCode();
+              //hiển thị thông báo (thêm thành công)
+              this.ShowToast(this.ToastStatus = 1);
             }
             
           })
           .catch((res) => {
+             //hiển thị thông báo (thêm thất bại)
+            this.ShowToast(this.ToastStatus = 0);
             console.log(res);
           });
       }
@@ -616,8 +662,18 @@ export default {
     return {
        //lưu dữ liệu nhân viên
       Employees: {},
-      //hiển thị đỏ khi trống
-      inValue: { 
+      //hiển thị đỏ nhập mã khi trống
+      inValue_Code: { 
+        type: Boolean,
+        default: true,
+      },
+      //hiển thị đỏ nhập tên khi trống
+      inValue_Name: { 
+        type: Boolean,
+        default: true,
+      },
+      //hiển thị đỏ đơn vị nhập tên khi trống
+      inValue_Unit:  { 
         type: Boolean,
         default: true,
       },
@@ -650,6 +706,13 @@ export default {
       inputFocus: null,
       //mảng chưa keyCode
       arrKeyCode: [],
+      isShowToast: false, //hiển thị thông báo
+      ToastStatus: 1, //trang thái thông báo
+      ToastMess:{}, //nội dung thông báo
+      ToastMess_color: {}, //màu nội dung thông báo
+      Toastcss:{}, //css thông báo
+      Toastcssicon: {}, //icon thông báo
+      ToastAddClose: false //trạng thái thêm và đóng popup
     };
   },
 };
@@ -891,7 +954,9 @@ export default {
 .item-input-red {
   border: 1px solid #ff0000;
 }
-
+.item-input-green{
+  border: 2px solid #50B83C;
+}
 
 .error-code {
   position: absolute;

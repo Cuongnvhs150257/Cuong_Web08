@@ -47,9 +47,10 @@
       :employeesSelected="Employees"
       @data-load="loadData"
       @get-new-code="getNewCode"
+      @show-toast="showToastPopup"
     />
 
-    <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" />
+    <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
 
     <div class="mpopup-ask">
     <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteMultiple"  />
@@ -71,6 +72,7 @@ import MInputSearch from "./MInputSearch.vue";
 import MButtonDeleteMultiple from "../TheContent/MButtonDeleteMultiple.vue";
 import MPopupAsk from '../MPopupAsk/MPopupAsk.vue';
 import configs from "../../configs/index";
+import enums from "../../resouce/enums";
 
 export default {
   methods: {
@@ -115,6 +117,7 @@ export default {
             this.Mode = detailFormMode;
             console.log(this.Mode);
             this.isShow = true; //Hiển thị popup
+            this.isShowToast = false;
           })
           .catch((res) => {
             console.log(res);
@@ -142,6 +145,7 @@ export default {
       if (this.Employees.EmployeeID == null) {
         this.Employees = {};
       }
+      this.isShowToast = false;
     },
     
       /**
@@ -150,6 +154,7 @@ export default {
      */
     ClosePopupAsk(){
        this.isShowAskDelete = false; //đóng popup hỏi người dùng
+       this.isShowToast = false;
     },
 
     /**
@@ -186,18 +191,35 @@ export default {
       this.listEmpDelete = listEmpDe;
       console.log(this.listEmpDelete);
     },
-
+    
+    /**
+    Hàm hiện thị thông báo
+    Nguyễn Văn Cương 15/10/2022
+     */
     ShowToast(Tstatus){
         this.isShowToast = true; 
         if(Tstatus == true){
+          this.Toastcssicon = "toast_icon-success";
           this.Toastcss = "toast_text_color-success";
           this.ToastMess_color = "Thành công!";
           this.ToastMess = "Xóa nhiều thành công!";
         }else{
+          this.Toastcssicon = "toast_icon_failed";
           this.Toastcss = "toast_text_color-failed";
           this.ToastMess_color = "Thất bại!";
           this.ToastMess = "Xóa nhiều thất bại!"
         }
+    },
+    /**
+    Hàm hiện thị thông báo cho popup nhân viên
+    Nguyễn Văn Cương 15/10/2022
+     */
+    showToastPopup(Toastcssicon, Toastcss, ToastMess_color, ToastMess){
+        this.isShowToast = true; 
+        this.Toastcssicon = Toastcssicon;
+        this.Toastcss = Toastcss;
+        this.ToastMess_color = ToastMess_color;
+        this.ToastMess = ToastMess;
     },
 
     /**
@@ -206,6 +228,7 @@ export default {
      */
     async deleteMultiple() {
       var listD = this.listEmpDelete;
+      
       await fetch(configs.baseURL + "batch-delete", {
         method: "POST",
         headers: {
@@ -261,6 +284,11 @@ export default {
           console.log(res);
         });
     },
+    handleEventInterrupt(event){
+        if(event.keyCode == enums.ENTER){
+           this.openPopup();
+        }
+    },
   },
   components: {
     MButton,
@@ -277,6 +305,12 @@ export default {
   created() {
     this.loadData();
   },
+  mounted(){
+      window.addEventListener('keyup', this.handleEventInterrupt);
+  },
+  unmounted(){
+      window.removeEventListener('keyup', this.handleEventInterrupt);
+  },
 
   data() {
     return {
@@ -284,18 +318,21 @@ export default {
       LoadingShow: false, //gọi màn hình loadind
       Employees: null, //lưu giá trị nhân viên
       EmployeesTable: null, //lưu giá trị bảng nhân viên
-      LimitValue: null,
-      OffSetValue: null,
-      WhereValue: null,
-      listEmpDelete: [],
-      Mode: 2,
-      isShowAskDelete: false,
-      closeSelectedAll: false,
-      isShowToast: false,
-      ToastStatus: true,
-      ToastMess:{},
-      ToastMess_color: {},
-      Toastcss:{}
+      LimitValue: null, //lưu giá trị số lượng trang
+      OffSetValue: null, //lưu giá trị bản ghi hiện tại
+      WhereValue: null, //lưu giá trị tìm kiếm
+      listEmpDelete: [], //lưu danh sách mã nhân viên cần xóa
+      Mode: 2, //lưu trạng thái mở popup nhân viên 
+      isShowAskDelete: false, //gọi popup hỏi có xóa không
+      closeSelectedAll: false, //đóng chọn checkbox
+      isShowToast: false, //hiển thị thông báo
+      ToastStatus: true, //trang thái thông báo
+      ToastMess:{}, //nội dung thông báo
+      ToastMess_color: {}, //màu nội dung thông báo
+      Toastcss:{}, //css thông báo
+      Toastcssicon: {}, //icon thông báo
+      //mảng chưa keyCode
+      arrKeyCode: [],
     };
   },
 };
@@ -311,7 +348,7 @@ export default {
   display: flex;
 }
 .popup {
-  z-index: 100;
+  z-index: 4;
 }
 .content-top-left {
   width: 30%;

@@ -44,6 +44,7 @@
   <div class="mpopup-ask">
     <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteEmployee" :getEmployeeCode="getemployeedeteteCode"/>
   </div>
+  <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
   </div>
   
 </template>
@@ -53,6 +54,7 @@
 import MPopupAsk from '../MPopupAsk/MPopupAsk.vue';
 import MDropItem from './MDropItem.vue';
 import MCheckbox from "../MCheckbox/MCheckbox.vue";
+import MToast from "../MToast/MToast.vue";
 import configs from "../../configs/index";
 import enums from "../../resouce/enums";
 
@@ -192,12 +194,32 @@ export default {
       console.log(error);
     }
   },
+
+  /**
+    Hàm hiện thị thông báo
+    Nguyễn Văn Cương 15/10/2022
+     */
+    ShowToast(Tstatus){
+        this.isShowToast = true; 
+        if(Tstatus == true){
+          this.Toastcssicon = "toast_icon-success";
+          this.Toastcss = "toast_text_color-success";
+          this.ToastMess_color = "Thành công!";
+          this.ToastMess = "Xóa thành công!";
+        }else{
+          this.Toastcssicon = "toast_icon_failed";
+          this.Toastcss = "toast_text_color-failed";
+          this.ToastMess_color = "Thất bại!";
+          this.ToastMess = "Xóa thất bại!"
+        }
+    },
+
     /**
      * Hàm xóa employee theo id 
      * Nguyễn Văn Cương 25/09/2022
      */
     async deleteEmployee() {
-
+          this.isShowToast = false;
           //lấy employeeid đã lưu 
           var id = this.idEmployeeDelete; 
            //check xem người dùng có ấn hủy hay không
@@ -214,10 +236,12 @@ export default {
               //load lại data
               this.$emit("data-load-delete");
               this.popupAskCance = true;
+              this.ShowToast(this.ToastStatus = true);
               console.log(data);
              
             })
             .catch((res) => {
+              this.ShowToast(this.ToastStatus = false);
               console.log(res);
             });
           }
@@ -231,15 +255,21 @@ export default {
     return {
       employees: [], //lưu dữ liệu nhân viên
       empSelected: {}, //lưu nhân viên đã chọn
-      detailFormMode: 1, 
+      detailFormMode: 1, //lưu trạng thái mở popup
       isShowAskDelete: false, //gọi popup hỏi có xóa không
       popupAskCance: true, //nút hủy xóa
       idEmployeeDelete:0, //lưu id nhân viên cần xóa
       checkDelete: 2,  //trạng thái xóa
       getemployeedetetevalue: 0, //lưu id nhân viên cần xóa
       getemployeedetetecode: '', //lưu code nhân viên cần xóa
-      stateCheckAll: false,
-      listEmpSelected: [],
+      stateCheckAll: false, //lưu trạng thái checkbox
+      listEmpSelected: [], //lưu danh sách nhân viên cần xóa
+      isShowToast: false, //hiển thị thông báo
+      ToastStatus: true, //trang thái thông báo
+      ToastMess:{}, //nội dung thông báo
+      ToastMess_color: {}, //màu nội dung thông báo
+      Toastcss:{}, //css thông báo
+      Toastcssicon: {}, //icon thông báo
      
     };
   },
@@ -247,6 +277,7 @@ export default {
     MPopupAsk,
     MDropItem,
     MCheckbox,
+    MToast,
   }
 };
 </script>
