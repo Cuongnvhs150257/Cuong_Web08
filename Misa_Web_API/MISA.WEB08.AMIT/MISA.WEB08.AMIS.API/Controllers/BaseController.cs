@@ -279,9 +279,24 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// createdby: Nguyễn Văn Cương 16/08/2022
 
         [HttpPost("batch-delete")]
-        public IActionResult DeleteMultipleRecord([FromBody] List<string> recordid)
+        public IActionResult DeleteMultipleRecord([FromBody] List<Guid> ListEmployeeID)
         {
-            return StatusCode(StatusCodes.Status200OK);
+            try
+            {
+                var result = _baseBL.DeleteMultipleRecord(ListEmployeeID);
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AMITErrorCode.Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
+                    HttpContext.TraceIdentifier));
+            }
         }
 
         #endregion

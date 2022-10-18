@@ -19,14 +19,14 @@
         </div>
         <div class="input1-right">
           <div class="input1-checkbox-icon ask-icon">
-            <span class="tool-tip"> Giúp </span>
+            <span class="tool-tip"> Giúp (F2) </span>
           </div>
 
           <div
             class="input1-checkbox-icon question-icon"
             @click="handleOpenPopupAskEdit"
           >
-            <span class="tool-tip"> Đóng </span>
+            <span class="tool-tip"> Đóng (ESC) </span>
           </div>
         </div>
       </div>
@@ -37,11 +37,11 @@
 
           <MInputSpecial
             class="input-spe"
-            :focus="true"
             :inValue="inValue"
             :tab="1"
+            :maxlength="36"
             v-model="Employees.EmployeeCode"
-            
+            ref="inputFocus"
           />
 
           <span v-show="Spanempty" class="error-code">
@@ -55,6 +55,7 @@
             class="input-spe"
             :inValue="inValue"
             :tab="2"
+            :maxlength="100"
             v-model="Employees.FullName"
           />
 
@@ -103,6 +104,7 @@
           <m-input-nomal
             :toolTip="'Số chứng minh nhân dân'"
             :tab="9"
+            :maxlength="255"
             v-model="Employees.IdentifyCode"
           ></m-input-nomal>
         </div>
@@ -114,17 +116,17 @@
       <div class="popup_item input4">
         <div class="input_item item1">
           <label class="item-label">Chức danh</label>
-          <m-input-nomal v-model="Employees.Postions" :tab="4"></m-input-nomal>
+          <m-input-nomal v-model="Employees.Postions" :tab="4" :maxlength="100"></m-input-nomal>
         </div>
         <div class="input_item item2">
           <label class="item-label">Nơi cấp</label>
-          <m-input-nomal v-model="Employees.IdentifyPlace" :tab="11"></m-input-nomal>
+          <m-input-nomal v-model="Employees.IdentifyPlace" :tab="11" :maxlength="20"></m-input-nomal>
         </div>
       </div>
       <div class="popup_item input5">
         <div class="input_item item1">
           <label class="item-label">Địa chỉ</label>
-          <m-input-nomal v-model="Employees.Address" :tab="12"></m-input-nomal>
+          <m-input-nomal v-model="Employees.Address" :tab="12" :maxlength="255"></m-input-nomal>
         </div>
       </div>
       <div class="popup_item input6">
@@ -134,6 +136,7 @@
             :toolTip="'Điện thoại di động'"
             v-model="Employees.PhoneNumber"
             :tab="13"
+            :maxlength="50"
           ></m-input-nomal>
         </div>
         <div class="input_item item" v-if="Faxs">
@@ -142,51 +145,52 @@
             :toolTip="'Điện thoại cố định'"
             v-model="Employees.Fax"
             :tab="14"
+            :maxlength="50"
           ></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">Email</label>
-          <m-input-nomal v-model="Employees.Email" :tab="15"></m-input-nomal>
+          <m-input-nomal v-model="Employees.Email" :tab="15" :maxlength="100"></m-input-nomal>
         </div>
       </div>
       <div class="popup_item input6">
         <div class="input_item item1">
           <label class="item-label">Tài khoản ngân hàng</label>
-          <m-input-nomal v-model="Employees.BankAccount" :tab="16"></m-input-nomal>
+          <m-input-nomal v-model="Employees.BankAccount" :tab="16" :maxlength="25"></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">Tên ngân hàng</label>
-          <m-input-nomal v-model="Employees.BankName" :tab="17"></m-input-nomal>
+          <m-input-nomal v-model="Employees.BankName" :tab="17" :maxlength="255"></m-input-nomal>
         </div>
         <div class="input_item item">
           <label class="item-label">Chi nhánh</label>
-          <m-input-nomal v-model="Employees.BankUnit" :tab="18"></m-input-nomal>
+          <m-input-nomal v-model="Employees.BankUnit" :tab="18" :maxlength="255"></m-input-nomal>
         </div>
       </div>
       <div class="popup_item input8">
         <div class="popup_input8_border">
           <div class="input_item_right">
             <m-button-1
-              :toolTip2="'Ctrl + Shift + S'"
+              :toolTip="'Ctrl + ALT + C'"
               class="input_item_right_btn"
               @click="btnSaveonClick"
               :tab="20" ref="focusLoop"
             >
             </m-button-1>
 
-            <button class="btn_input8_right" @click="btnSaveonClick" :tabindex="20">
+            <button class="btn_input8_right" @click="btnSaveonClickAdd" :tabindex="20">
               Cất
               
             </button>
-            <span class="tool-tip btn"> Ctrl + S </span>
+            <span class="tool-tip">Ctrl + Shift</span>
           </div>
           <div class="input_item_left">
-            <button class="btn_input8_left" @click="handleClosePopup" :tabindex="21" @focus="tabIndexReturn" ref="tabIndexReturn" >
+            <button class="btn_input8_left" @click="handleClosePopup" :tabindex="21" >
               Hủy
             </button>
           </div>
         </div>
-        <div tabindex="21" ref="focusLoop" class="focus-loop"></div>
+        <div tabindex="22" ref="focusLoop" class="focus-loop" @focus="handleLoopFocus"></div>
         <div>
           <MPopupAskEdit
             v-if="isShowPopupAskEdit"
@@ -218,10 +222,89 @@ import configs from "../../configs/index"
 
 export default {
 
+  created() {
+    if (this.employeesSelected) {
+      this.Employees = { ...this.employeesSelected }; 
+      console.log(this.Employees.EmployeeCode);
+    }
+    
+  },
+  mounted(){
+      this.handleLoopFocus(); 
+      window.addEventListener('keydown', this.handleEvent);
+      window.addEventListener('keyup', this.handleEventInterrupt);
+  },
+  unmounted(){
+      window.removeEventListener('keydown', this.handleEvent);
+      window.removeEventListener('keyup', this.handleEventInterrupt);
+  },
+
   methods: {
+    /**
+    * hàm tabindex vòng lặp
+     Nguyễn Văn Cương 10/10/2022
+     */
+    handleLoopFocus(){
+        this.$refs.inputFocus.$el.focus()
+    },
 
-    tabIndexReturn(){
+    /**
+     * Hàm xử lý khi các phím tắt
+     * Nguyễn Văn Cương 10/10/2022
+     */
+    handleEvent(event){
+        if(event.keyCode == enums.CTRL || event.keyCode == enums.SHIFT){
+          if(!this.arrKeyCode.includes(event.keyCode)){
+             this.arrKeyCode.push(event.keyCode);
+             
+             //nếu có 2 phím tắt CTRL và SHIFT thì thực hiện lưu đóng popup
+              if(this.arrKeyCode.length == 2){
+                this.arrKeyCode.length = 0;
+                this.ClosePopup = true;
+                this.btnSaveonClick();
+              }
+          } 
+        }if(event.keyCode == enums.CTRL || event.keyCode == enums.ALT || event.keyCode == enums.C){
+             if(!this.arrKeyCode.includes(event.keyCode)){
+             this.arrKeyCode.push(event.keyCode);
 
+             //nếu có 3 phím tắt CTRL + ALT + C thì thực hiện lưu không đóng popup
+             if(this.arrKeyCode.length == 3){
+               this.arrKeyCode.length = 0;
+                this.btnSaveonClick();
+              }
+            }
+        }
+        
+        //nếu có phím tắt ESC thì đóng popup
+        if(event.keyCode == enums.ESC){
+           this.handleOpenPopupAskEdit();
+        }
+        //nếu có phím tắt F2 thì gọi trở giúp
+        if(event.keyCode == enums.F2){
+           alert("Vui lòng liên hệ với Misa");
+        }
+    },
+
+    /**
+     * Hàm xử lý khi các phím tắt ngắt quãng thì sẽ k đc thực hiện
+     * Nguyễn Văn Cương 10/10/2022
+     */
+    handleEventInterrupt(event){
+        if(event.keyCode == enums.CTRL || event.keyCode == enums.SHIFT || event.keyCode == enums.C){
+           if(this.arrKeyCode.includes(event.keyCode)){
+             this.arrKeyCode.length = 0;
+           }
+        }
+    },
+    
+    /**
+     * hàm cất và thêm không đóng popup
+     * Nguyễn Văn Cương 10/10/2022
+     */
+    btnSaveonClickAdd(){
+       this.btnSaveonClick();
+       this.ClosePopup = true;
     },
 
     /**
@@ -393,17 +476,11 @@ export default {
      * hàm validate dữ liệu
      * Nguyễn Văn Cương 15/09/2022
      */
-    validate(){
+    validateAll(){
         var validate = true;
         //kiểm tra xem mã nhân viên hoặc tên nhân viên có chưa
         if(this.validateEmpty() == 1){
-            if (this.Employees.PhoneNumber || this.Employees.Email) {
-                //validate số điện thoại (Nguyễn Văn Cương 15/09/2022)
-                if (!this.valiPhoneNumber(this.Employees.PhoneNumber)) {
-                    this.isShowNotification = true;   
-                    this.errors = enums.InvaluePhoneNumber;
-                    return validate == false;
-                  }
+            if (this.Employees.Email) {
                 // validate email (Nguyễn Văn Cương 15/09/2022)
                 if (!this.validEmail(this.Employees.Email)&& this.Employees.Email != null) {
                   this.isShowNotification = true;   
@@ -433,9 +510,10 @@ export default {
       var url = configs.baseURL;
       this.errors = [];
 
-      if (this.validate() == true) {
+      if (this.validateAll() == true) {
+        console.log(this.detailFormMode );
         //Hàm sửa nhân viên
-        if (this.Employees.EmployeeID) {
+        if (this.Employees.EmployeeID && this.detailFormMode == 2) {
           method = "PUT";
           url = url + `${this.Employees.EmployeeID}`;
           this.ClosePopup = true;
@@ -483,7 +561,6 @@ export default {
           })
           .catch((res) => {
             console.log(res);
-            alert("Mã nhân viên đa tồn tại ,Vui lòng kiểm tra lại")
           });
       }
     },
@@ -529,19 +606,12 @@ export default {
   },
   props: {
     employeesSelected: Object,
-    formMode: {
+    detailFormMode: {
       type: Number,
-      default: 1,
+      default: 2,
     },
   },
-  created() {
-    if (this.employeesSelected) {
-      this.Employees = { ...this.employeesSelected }; 
-      console.log(this.Employees.EmployeeCode);
-    }
-    
-  },
-
+  
   data() {
     return {
        //lưu dữ liệu nhân viên
@@ -575,7 +645,11 @@ export default {
         default: false,
       },
       //vòng lặp khi tab
-      focusLoop: null,
+      tabIndexReturn: null,
+      //focus vào input khi mở popup 
+      inputFocus: null,
+      //mảng chưa keyCode
+      arrKeyCode: [],
     };
   },
 };
@@ -585,31 +659,34 @@ export default {
   --icon: url("../../assets/Resource/img/Sprites.64af8f61.svg");
 }
 .input1-checkbox-icon:hover .tool-tip {
-  left: 10px;
+  left: 0px;
   top: 30px;
   visibility: visible;
   opacity: 1;
+  font-size: 12px;
 }
 .input1-checkbox-icon.question-icon:hover .tool-tip {
-  left: 35px;
+  left: 15px;
   top: 30px;
   visibility: visible;
   opacity: 1;
+   font-size: 12px;
+   width: 70px;
 }
-.btn_input8_right:hover ~.tool-tip.btn {
-  width: 50px;
-  height: 12px;
+.btn_input8_right:hover .tool-tip{
   top: 83px;
-  left: 74%;
+  left: 650px;
   visibility: visible;
   opacity: 1;
+  font-size: 12px;
+  width: 70px;
 }
 .Popup-form {
-  width: 900px;
+  width: 885px;
   height: 600px;
   background-color: #fff;
   position: relative;
-  top: 8%;
+  top: 13%;
   margin: 0 auto;
   border-radius: 4px;
 }
@@ -683,7 +760,7 @@ export default {
 }
 
 .item-label {
-  font-weight: bold;
+  font-family: Misa Fonts Semibold;
   font-size: 14px;
 }
 .item-labelsao {
@@ -857,5 +934,6 @@ export default {
 }.focus-loop {
   opacity: 0;
 }
+
 </style>
 

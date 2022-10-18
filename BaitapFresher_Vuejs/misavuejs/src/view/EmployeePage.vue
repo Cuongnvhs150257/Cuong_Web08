@@ -59,7 +59,6 @@ export default {
 }
 .header{
     order: 2;
-    width: calc(100% - 200px);
     height: 56px;
     float: left;
     clear: right;
@@ -82,6 +81,7 @@ export default {
     background-color: rgb(236, 238, 241);
     padding: 0 24px;
     padding-top: 24px;
+    position: relative;
 }
 .popup{
     position: fixed;
@@ -99,7 +99,7 @@ export default {
     width: 50px;
     
     }.content{
-        width: calc(100% - 50px);
+        width: calc(100% - 100px);
     }
 }
 </style>

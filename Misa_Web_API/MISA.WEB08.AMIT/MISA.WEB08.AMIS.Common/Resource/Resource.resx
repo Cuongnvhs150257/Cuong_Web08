@@ -153,6 +153,10 @@
     <value>http://openapi.google.com/api/errorrcode</value>
     <comment>Link thông tin thêm về lỗi  request</comment>
   </data>
+  <data name="Proc_DeleteMultiple" xml:space="preserve">
+    <value>Proc_{0}_DeleteMultiple</value>
+    <comment>Template string cho procudes xoa nhieu</comment>
+  </data>
   <data name="Proc_DeleteRecord" xml:space="preserve">
     <value>Proc_{0}_DeleteRecord</value>
     <comment>Template string cho procudues xóa</comment>

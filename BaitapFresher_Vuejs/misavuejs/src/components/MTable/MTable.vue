@@ -1,14 +1,14 @@
 <template>
-  <div class="contentner">
+  <div class="contentner"> 
     <table>
     <thead>
       <tr>
-        <th class="box"><input type="checkbox" class="tab-checkbox" /></th>
+        <th class="box"><MCheckbox @click="handleCheckBoxAll" :stateCheckAll="stateCheckAll"  /></th>
         <th style="min-width: 130px;">MÃ NHÂN VIÊN</th>
         <th style="min-width: 170px;">TÊN NHÂN VIÊN</th>
         <th style="min-width: 100px;">GIỚI TÍNH</th>
         <th style="min-width: 120px;" class="tab-th-select">NGÀY SINH</th>
-        <th style="min-width: 140px;" >SỐ CMND <span class="tool-tip-table">Số chứng minh nhân dân</span></th>
+        <th class="cmnd" style="min-width: 140px;" >SỐ CMND <span class="tool-tip-table">Số chứng minh nhân dân</span></th>
         <th style="min-width: 170px;">CHỨC DANH</th>
         <th style="min-width: 170px;">TÊN ĐƠN VỊ</th>
         <th style="min-width: 130px;">SỐ TÀI KHOẢN</th>
@@ -23,7 +23,7 @@
         :key="emp.employeeID"
         @dblclick="rowDBClick(emp.employeeID)"
       >
-        <td class="box"><input type="checkbox" class="tab-checkbox"/></td>
+        <td class="box"><MCheckbox @click="handleCheckBox(emp.employeeID)"  :stateCheckAll="stateCheckAll" /></td>
         <td>{{ emp.employeeCode }}</td>
         <td>{{ emp.fullName }}</td>
         <td>{{ this.fomatGender(emp.gender) }}</td>
@@ -52,6 +52,7 @@
 
 import MPopupAsk from '../MPopupAsk/MPopupAsk.vue';
 import MDropItem from './MDropItem.vue';
+import MCheckbox from "../MCheckbox/MCheckbox.vue";
 import configs from "../../configs/index";
 import enums from "../../resouce/enums";
 
@@ -59,17 +60,50 @@ export default {
   name: "EmployeeList",
   props: {
     EmployeesLoad: Object,
+    closeSelectedAll: Boolean
   },
   
   methods: {
+
+    /**
+     * Hàm thực hiện kích hoạt toàn bộ checkbox
+     * Nguyễn Văn Cương 15/10/2022
+     */
+    handleCheckBoxAll(){
+      //chuyển trạng thái checkbox
+      this.stateCheckAll = !this.stateCheckAll;
+      if(this.stateCheckAll == true){
+          //vòng lặp thêm mã nhân viên vào mảng
+          this.EmployeesLoad.data.forEach(emp => {
+            this.listEmpSelected.push(emp.employeeID);
+          },
+          this.$emit("get-List-Employee", this.listEmpSelected)
+          );
+      }else{
+        this.listEmpSelected = [];
+      }
+      console.log(this.listEmpSelected);
+    },
+
+    /**
+     * hàm thực hiện kích hoạt checkbox
+     */
+    handleCheckBox(EmpID){
+          //thêm mã nhân viên đã chọn vào mảng
+          this.listEmpSelected.push(EmpID);
+          this.$emit("get-List-Employee", this.listEmpSelected)
+          console.log(this.listEmpSelected);
+    },
 
     /**
      * hàm hiện thông tin trên popup khi nhấn vào Sửa
      * Nguyễn Văn Cương 25/09/2022
      */
     rowDBClick(employeeID) {
-      this.$emit("custom-open-dbclick", employeeID);
+      //bấm dbclick để sửa
       this.detailFormMode = 2;
+      this.$emit("custom-open-dbclick", employeeID, this.detailFormMode);
+      console.log(this.detailFormMode);
     },
 
     /**
@@ -92,6 +126,12 @@ export default {
         if (this.checkDelete == 2){
             this.isShowAskDelete = true; //hiện popup hỏi người dùng
             this.idEmployeeDelete = this.getemployeedetetevalue; //lưu id employee cần xóa
+        }else if(this.checkDelete == 1){
+          //bấm nhân bản
+           this.detailFormMode = 1;
+           this.$emit("custom-open-dbclick", this.getemployeedetetevalue, this.detailFormMode);
+        }else{
+           console.log(1);
         }
     },
 
@@ -198,12 +238,15 @@ export default {
       checkDelete: 2,  //trạng thái xóa
       getemployeedetetevalue: 0, //lưu id nhân viên cần xóa
       getemployeedetetecode: '', //lưu code nhân viên cần xóa
+      stateCheckAll: false,
+      listEmpSelected: [],
      
     };
   },
   components: {
     MPopupAsk,
-    MDropItem
+    MDropItem,
+    MCheckbox,
   }
 };
 </script>
@@ -211,7 +254,7 @@ export default {
 <style>
 
 .content-table {
-  height: calc(100% - 145px);
+  height: calc(100% - 135px);
   width: calc(100% - 30px);
   background-color: #fff;
   padding: 10px 16px;
@@ -267,7 +310,7 @@ td, th {
   text-align: left;
   cursor: pointer;
 }.content-table tbody tr:hover{
-  background-color: #F2F9FF;
+  background-color: rgba(80,184,60,0.1);
 }.content-table tr:active{
   background-color: #E5F3FF;
 }

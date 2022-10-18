@@ -203,9 +203,9 @@ namespace MISA.WEB08.AMIS.BL
         /// <param name="employeeid"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public IEnumerable<T> DeleteMultipleRecord(List<string> recordid)
+        public int DeleteMultipleRecord(List<Guid> ListEmployeeID)
         {
-            return _baseDL.DeleteMultipleRecord(recordid);
+            return _baseDL.DeleteMultipleRecord(ListEmployeeID);
         }
 
         #endregion

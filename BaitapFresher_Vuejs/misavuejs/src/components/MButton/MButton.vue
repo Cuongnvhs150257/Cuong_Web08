@@ -1,7 +1,10 @@
 <template>
   <button type="button" class="content-top-btn-content" @click="handleOpenPopup">
-    Thêm mới nhân viên
+    {{text}}
   </button>
+  <span v-if="toolTip" class="tool-tip">
+            {{ toolTip }}
+ </span>
 </template>
 
 <style>
@@ -26,6 +29,9 @@
 <script>
 export default {
   emit: ["custom-handle-click"],
+  props:{
+      text: String, 
+  },
   methods: {
  
     //hàm mở popup thêm nhân viên (Nguyễn Văn Cương 05/10/2022)

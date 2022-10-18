@@ -1,6 +1,6 @@
 <template>
     <div class="data-input-btn">
-        <input type="text" class="item-input" :value="modelValue" @input="handleInput" :tabindex="tab">
+        <input type="text" class="item-input" :value="modelValue" @input="handleInput" :tabindex="tab" :maxlength="maxlength">
         <span v-if="toolTip" class="tool-tip">
         {{ toolTip }}
     </span>
@@ -54,7 +54,7 @@
 
 export default {
     
-    props:["modelValue","toolTip","tab"],
+    props:["modelValue","toolTip","tab", "maxlength"],
     
     setup(props, { emit }){
         

@@ -268,9 +268,40 @@ namespace MISA.WEB08.AMIS.DL
         /// <param name="employeeid"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public IEnumerable<T> DeleteMultipleRecord(List<string> employeeid)
+        public int DeleteMultipleRecord(List<Guid> ListEmployeeID)
         {
-            throw new NotImplementedException();
+            //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
+            var parameters = new DynamicParameters();
+            var ListID = "";
+
+            /*
+            if(ListEmployeeID == null || ListEmployeeID.Count == 0)
+            {
+                return 0;
+            }
+            */
+            ListID = $"('{String.Join("','", ListEmployeeID)}')";
+            parameters.Add($"v_ListEmployeeID", ListID);
+
+
+            //Khởi tạo kết nối với MySQl
+            string connectionString = DataContext.MySqlConnectionString;
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                mysqlConnection.Open();
+                using(var transcation = mysqlConnection.BeginTransaction())
+                {
+                    //khai bao ten stored produre
+                    string storeProdureName = String.Format(Resource.Proc_DeleteMultiple, typeof(Employee).Name);
+
+                    //Thực hiện gọi vào DB
+                    var result = mysqlConnection.Execute(storeProdureName, parameters, transcation, commandType: System.Data.CommandType.StoredProcedure);
+                    transcation.Commit();
+                    mysqlConnection.Close();
+                    return result;
+                }
+            }
+
         }
 
         #endregion

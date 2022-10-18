@@ -69,7 +69,7 @@ namespace MISA.WEB08.AMIS.BL
         /// <param name="employeeid"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public IEnumerable<T> DeleteMultipleRecord(List<string> employeeid);
+        public int DeleteMultipleRecord(List<Guid> ListEmployeeID);
 
         /// <summary>
         /// Hàm kết nối DB để lấy mã đối tượng lớn nhất

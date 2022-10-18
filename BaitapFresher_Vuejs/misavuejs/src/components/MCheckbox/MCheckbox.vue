@@ -1,78 +1,66 @@
 <template>
-  <label class="con-checkbox">
-    <input
-      @click="handleClickInput"
-      type="checkbox"
-      class="checkbox--input"
-      :checked="modelValue"
-    />
-    <span class="checkbox" :class="{ 'checkbox-checked-true': modelValue }">
-      <span class="ms-checkbox-check-disabled-false ms-checkbox--check">
-        <div v-if="modelValue" class="icon icon-16 icon-checkbox-active"></div>
-      </span>
-    </span>
-  </label>
+  <div @click="() => isChecked = !isChecked" :class="{'misa-checkbox':true,'misa-checkbox-checked':isChecked}"  
+    >
+      <div></div>
+  </div>
 </template>
 
 <script>
-import { ref } from "vue";
-export default {
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false
-    }
-  },
-  setup(props, context) {
-    const isChecked = ref(props.modelValue);
-    const handleClickInput = () => {
-      isChecked.value = !isChecked.value
-      context.emit('update:modelValue', isChecked.value)
-    };
-    return {
-      isChecked,
-      handleClickInput,
-    };
-  },
-};
+  export default {
+      data(){
+          return {
+              isChecked:false,
+          }
+      },
+      props:{
+          stateCheckAll:Boolean
+      },
+      //Trạng thái checked của checkbox
+      watch:{
+          stateCheckAll(newVal,oldVal){
+              this.isChecked = newVal;
+              console.log(oldVal)
+          }
+      }
+  }
 </script>
 
-<style>
-.checkbox {
-  top: 0;
-  left: 0;
-  transition: all 0.2s ease;
-  transform: rotate(-90deg);
-  cursor: pointer;
-  position: relative;
-  display: block;
-  width: 18px;
-  height: 18px;
-  border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  border: 1px solid #000000;
-  background: #fff;
+<style scoped>
+
+@keyframes checked {
+    from {
+        transform:rotate(-90deg)
+    }
+
+    to {
+        transform:rotate(0deg)
+    }
 }
-.checkbox-checked-true {
-  border: 1px solid #2ca01c;
-  transform: rotate(0deg);
+:root{
+  --icon: url('../../assets/Resource/img/Sprites.64af8f61.svg');
 }
-.checkbox--input {
-  position: absolute;
-  width: 10%;
-  height: 100%;
-  opacity: 0;
-  z-index: 200;
-  cursor: pointer;
+.misa-checkbox{
+    width: 18px;
+    height: 18px;
+    border-radius:4px;
+    border: 1px solid #8d9096;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform:rotate(-90deg);
 }
-.con-checkbox {
-  justify-content: center !important;
-  position: relative;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+
+.misa-checkbox-checked {
+    border-color:#35bf22;
+    transform: rotate(0deg);
+    animation:checked .2s ease-in-out;
+}
+
+.misa-checkbox-checked div{
+	background: var(--icon) no-repeat -1225px -363px;
+	width: 14px;
+	height: 11px;
 }
 </style>

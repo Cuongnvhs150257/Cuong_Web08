@@ -2,8 +2,8 @@
      
      <div class="data-input-button">
          <button type="button" class="content-top-btn1" :tabindex="tab">Cất và Thêm</button>
-        <span v-if="toolTip2" class="tool-tip2">
-            {{ toolTip2 }}
+        <span v-if="toolTip" class="tool-tip">
+            {{ toolTip }}
         </span>
      </div>
 </template>
@@ -12,7 +12,7 @@
 
 export default {
     
-    props:["tab"],
+    props:["toolTip","tab"],
     
 }
 </script>
@@ -36,23 +36,11 @@ export default {
     font-weight: 700;
     }.content-top-btn1:hover{
         background-color: #35BF22;
-    }
-    .tool-tip2 {
-        position: absolute;
-        width: 80px;
-        left: 30px;
-        top: 20px;
-        background-color: #505050;
-        border-radius: 2px;
-        padding: 2px 4px;
-        z-index: 3;
-        text-align: center;
-        color: #fff;
-        visibility: hidden;
-        
-    }
-    .data-input-button:hover .tool-tip2 {
+    }.data-input-button:hover .tool-tip {
         visibility: visible;
         opacity: 1;
+        left: 750px;
+        top: 85px;
+        font-size: 12px;
     }
 </style>

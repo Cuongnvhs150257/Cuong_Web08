@@ -11,7 +11,7 @@
 namespace MISA.WEB08.AMIS.Common {
     using System;
     
-    
+   
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -138,6 +138,15 @@ namespace MISA.WEB08.AMIS.Common {
         public static string MoreInfo_Request {
             get {
                 return ResourceManager.GetString("MoreInfo_Request", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proc_{0}_DeleteMultiple.
+        /// </summary>
+        public static string Proc_DeleteMultiple {
+            get {
+                return ResourceManager.GetString("Proc_DeleteMultiple", resourceCulture);
             }
         }
         

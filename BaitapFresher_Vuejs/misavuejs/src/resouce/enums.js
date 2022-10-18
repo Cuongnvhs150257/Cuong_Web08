@@ -8,8 +8,14 @@ export default{
     // phím SHIFT
     SHIFT: 16, 
 
+    //phím ALT
+    ALT: 18,
+
     // phím S
     S: 83,
+
+    //phím C
+    C: 67,
 
     // phím UP
     UP: 38, 
@@ -22,6 +28,9 @@ export default{
 
     // phím TAB
     TAB: 9, 
+
+    //phím ESC
+    F2: 113,
     
     //nam
     MALE: 2,

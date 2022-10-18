@@ -1,5 +1,5 @@
 <template>
-        <input type="text" class="item-input"  :class="{ 'item-input-red': !inValue }" :value="modelValue" @input="handleInput" :tabindex="tab">
+        <input type="text" class="item-input"  :class="{ 'item-input-red': !inValue }" :value="modelValue" @input="handleInput" :tabindex="tab" :maxlength="maxlength">
 
 </template>
 <style>
@@ -25,8 +25,7 @@
 <script>
 
 export default {
-    
-    props:["modelValue","toolTip","inValue", "tab", "focus"],
+    props:["modelValue","toolTip","inValue", "tab", "refs", "maxlength"],
     
     setup(props, { emit }){
         
