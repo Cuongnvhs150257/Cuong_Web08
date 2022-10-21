@@ -13,5 +13,11 @@ namespace MISA.WEB08.AMIS.DL
     /// </summary>
     public interface IEmployeeDL : IBaseDL<Employee>
     {
+        /// <summary>
+        /// Hàm xuất danh sách nhân viên ra Excel
+        /// Createby: Nguyễn Văn Cương 15/10/2022
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Employee> GetEmployeeExcel();
     }
 }

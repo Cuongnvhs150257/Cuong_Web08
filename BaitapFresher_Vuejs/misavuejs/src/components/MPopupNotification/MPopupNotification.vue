@@ -3,8 +3,8 @@
 
         <div class="popupnoti">
             <div class="popupask-top">
-                <div class="popupask-icon icon-noti"></div>
-                <div class="popupask-icon-label">
+                <div :class="classcssicon"></div>
+                <div :class="classlabel">
                     <label class="label-ask">{{errors}}</label>
                 </div>
 
@@ -21,7 +21,7 @@
 import MButtonClose from './MButtonClose.vue'
 
 export default ({
-    props:["errors"],
+    props:["errors","classcssicon","classlabel"],
     methods: {
 
     /**
@@ -74,10 +74,19 @@ export default ({
         background-image: var(--icon);
         background-position: -752px -462px;
         background-repeat: no-repeat;
-
+    
+    }.icon-noti-duli{
+        background-image: var(--icon);
+        background-position: -598px -463px;
+        background-repeat: no-repeat;
     }.popupask-icon-label{
-        width: 270px;
+        width: 300px;
         margin-top: 50px;
+        border-bottom: 1px solid #bbbb;
+        padding-top: 10px;
+    }.popupask-icon-label-duli{
+         width: 300px;
+        margin-top: 40px;
         border-bottom: 1px solid #bbbb;
         padding-top: 10px;
     }.label-ask{

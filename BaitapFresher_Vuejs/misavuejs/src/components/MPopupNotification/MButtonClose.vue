@@ -16,7 +16,7 @@
   cursor: pointer;
   min-width: 100px;
   position: absolute;
-  right: 0;
+  right: 140px;
   margin-top: 20px;
   margin-right: 30px;
 }

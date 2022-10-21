@@ -19,7 +19,7 @@
   position: absolute;
   right: 0;
   margin-top: 20px;
-  margin-right: 30px;
+  margin-right: 35px;
 }
 </style>
 

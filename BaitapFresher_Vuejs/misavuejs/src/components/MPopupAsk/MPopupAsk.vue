@@ -80,7 +80,7 @@ export default {
 .popupask-icon {
   width: 50px;
   height: 49px;
-  margin-left: 50px;
+  margin-left: 43px;
   margin-top: 50px;
   border-bottom: 1px solid;
 }
@@ -122,7 +122,7 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   margin-top: 20px;
-  margin-left: 50px;
+  margin-left: 43px;
   position: absolute;
   left: 0;
 }

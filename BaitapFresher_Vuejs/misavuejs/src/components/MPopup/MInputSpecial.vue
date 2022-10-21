@@ -1,6 +1,5 @@
 <template>
         <input type="text" class="item-input"  :class="{ 'item-input-red': !inValue, 'item-input-green': !inValueChange }"   :value="modelValue" @input="handleInput" :tabindex="tab" :maxlength="maxlength">
-
 </template>
 <style>
 
@@ -17,7 +16,6 @@
         border: 2px solid #50B83C;
         outline: none;
     }
-   
 
     
 </style>

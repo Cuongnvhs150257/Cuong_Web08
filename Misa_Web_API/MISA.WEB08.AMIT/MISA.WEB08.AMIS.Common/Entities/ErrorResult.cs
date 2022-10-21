@@ -26,7 +26,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// Link thêm thông tin về lỗi
         /// </summary>
-        public string MoreInfo { get; set; }
+        public object MoreInfo { get; set; }
 
         /// <summary>
         /// ID thông tin lỗi
@@ -43,7 +43,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// contructor có thông số
         /// </summary>
-        public ErrorResult(AMITErrorCode errorCode, string devMsg, string userMsg, string moreInfo, string? traceID = null)
+        public ErrorResult(AMITErrorCode errorCode, string devMsg, string userMsg, object moreInfo, string? traceID = null)
         {
             ErrorCode = errorCode;
             DevMsg = devMsg;

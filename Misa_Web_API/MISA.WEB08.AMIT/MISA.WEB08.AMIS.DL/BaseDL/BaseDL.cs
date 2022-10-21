@@ -212,9 +212,6 @@ namespace MISA.WEB08.AMIS.DL
                 result.Data = ListOject.Read<Employee>().ToList();
                 result.TotalCount = ListOject.Read<Int32>().First();
             }
-
-                
-
             return new PagingData()
             {
                 Data = result.Data,
@@ -274,12 +271,11 @@ namespace MISA.WEB08.AMIS.DL
             var parameters = new DynamicParameters();
             var ListID = "";
 
-            /*
             if(ListEmployeeID == null || ListEmployeeID.Count == 0)
             {
                 return 0;
             }
-            */
+            
             ListID = $"('{String.Join("','", ListEmployeeID)}')";
             parameters.Add($"v_ListEmployeeID", ListID);
 
@@ -326,6 +322,35 @@ namespace MISA.WEB08.AMIS.DL
                 var employeeCode = mysqlConnection.QueryFirstOrDefault(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
                 return employeeCode;
             };
+        }
+
+        /// <summary>
+        /// Hàm check mã trùng
+        /// </summary>
+        /// <param name="employeeCode"></param>
+        /// <returns></returns>
+        public bool CheckEmployeeCodeExist(string employeeCode)
+        {
+            //Chuẩn bị tham số đầu vào
+            var parameters = new DynamicParameters();
+
+            parameters.Add("v_employeeCode", employeeCode);
+            //khai bao ten stored produre
+            var storeProdureName = String.Format(Resource.Proc_CheckDulicate, typeof(T).Name);
+
+            //Khởi tạo kết nối với MySQl
+            string connectionString = DataContext.MySqlConnectionString;
+
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                //Thực hiện gọi vào DB
+                var employeeCodeDuplicate = mysqlConnection.QueryFirstOrDefault<string>(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                if (employeeCodeDuplicate != null)
+                    return true;
+                else
+                    return false;
+            };
+            
         }
 
         #endregion

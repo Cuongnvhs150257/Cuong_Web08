@@ -75,6 +75,15 @@ namespace MISA.WEB08.AMIS.DL
         /// </summary>
         /// <returns></returns>
         public Object GetMaxRecord();
+
+        /// <summary>
+        /// Hàm kết nối DB để check mã trùng
+        /// Createby: Nguyễn Văn Cương 15/10/2022
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckEmployeeCodeExist(string EmployeeCode);
+
+
     }
 
     #endregion

@@ -55,6 +55,7 @@ import MPopupAsk from '../MPopupAsk/MPopupAsk.vue';
 import MDropItem from './MDropItem.vue';
 import MCheckbox from "../MCheckbox/MCheckbox.vue";
 import MToast from "../MToast/MToast.vue";
+import toast from "../../resouce/toast";
 import configs from "../../configs/index";
 import enums from "../../resouce/enums";
 
@@ -134,6 +135,7 @@ export default {
            this.$emit("custom-open-dbclick", this.getemployeedetetevalue, this.detailFormMode);
         }else{
            console.log(1);
+           //ngưng sử dụng
         }
     },
 
@@ -202,15 +204,15 @@ export default {
     ShowToast(Tstatus){
         this.isShowToast = true; 
         if(Tstatus == true){
-          this.Toastcssicon = "toast_icon-success";
-          this.Toastcss = "toast_text_color-success";
-          this.ToastMess_color = "Thành công!";
-          this.ToastMess = "Xóa thành công!";
+          this.Toastcssicon = toast.Toastcssicon_sus;
+          this.Toastcss = toast.Toastcss_sus;
+          this.ToastMess_color = toast.ToastMess_color_sus;
+          this.ToastMess = toast.ToastMessDelete_sus;
         }else{
-          this.Toastcssicon = "toast_icon_failed";
-          this.Toastcss = "toast_text_color-failed";
-          this.ToastMess_color = "Thất bại!";
-          this.ToastMess = "Xóa thất bại!"
+          this.Toastcssicon = toast.Toastcssicon_faild;
+          this.Toastcss = toast.Toastcss_faild;
+          this.ToastMess_color = toast.ToastMess_color_faild;
+          this.ToastMess = toast.ToastMessDelete_faild;
         }
     },
 

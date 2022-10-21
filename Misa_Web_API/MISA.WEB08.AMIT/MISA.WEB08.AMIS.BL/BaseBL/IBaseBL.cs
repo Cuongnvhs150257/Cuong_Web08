@@ -61,7 +61,7 @@ namespace MISA.WEB08.AMIS.BL
         /// <param name="recordid"></param>
         /// <param name="record"></param>
         /// <returns>numberOfAffectedRows</returns>
-        public int UpdateRecord(Guid recordid, T record);
+        public ServiceRespone UpdateRecord(Guid recordid, T record);
 
         /// <summary>
         /// Hàm kết nối DL để xóa nhiều đối tượng
@@ -77,6 +77,7 @@ namespace MISA.WEB08.AMIS.BL
         /// </summary>
         /// <returns></returns>
         public object GetMaxRecord();
+
 
         #endregion
     }

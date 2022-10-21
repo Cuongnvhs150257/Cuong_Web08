@@ -1,10 +1,12 @@
-﻿using MISA.WEB08.AMIS.Common;
+﻿using ClosedXML.Excel;
+using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
 using MISA.WEB08.AMIS.DL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.BL
@@ -47,7 +49,7 @@ namespace MISA.WEB08.AMIS.BL
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        private ServiceRespone ValidateRequestData(T record)
+        private ServiceRespone ValidateRequestData(Boolean validateStatus, T record)
         {
             var properties = typeof(T).GetProperties();
             var validateFailures = new List<string>();
@@ -60,6 +62,26 @@ namespace MISA.WEB08.AMIS.BL
                 {
                     validateFailures.Add(isNotNullOrEmptyAtrribute.ErrorMessage);
                 }
+
+                var EmailAtrribute = (EmailAtrribute?)Attribute.GetCustomAttribute(property, typeof(EmailAtrribute));
+                if(EmailAtrribute != null)
+                {
+                    var regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                    if(properyValue != null && !regex.IsMatch(properyValue?.ToString()))
+                    {
+                        validateFailures.Add(EmailAtrribute.ErrorMessage);
+                    }
+                    
+                }
+                var Dulicate = (DulicateAtrribute?)Attribute.GetCustomAttribute(property, typeof(DulicateAtrribute));
+                if(Dulicate != null && validateStatus == true)
+                {
+                    var duli = _baseDL.CheckEmployeeCodeExist(properyValue.ToString());
+                    if (properyValue != null && duli == true)
+                    {
+                        validateFailures.Add(Dulicate.ErrorMessage);
+                    }
+                }
             }
 
             if (validateFailures.Count > 0)
@@ -71,7 +93,7 @@ namespace MISA.WEB08.AMIS.BL
                     AMITErrorCode.ValidateError,
                     Resource.DevMsg_ValidateFailed,
                     Resource.UserMsg_ValidateFaild,
-                    Resource.MoreInfo_Request)
+                    validateFailures[0])
                 };
             }
             return new ServiceRespone
@@ -92,7 +114,8 @@ namespace MISA.WEB08.AMIS.BL
         /// <returns></returns>
         public ServiceRespone InsertRecords(T record)
         {
-            var validateResult = ValidateRequestData(record);
+            var validateStatus = true;
+            var validateResult = ValidateRequestData(validateStatus, record);
 
             if (validateResult != null && validateResult.Success)
             {
@@ -187,9 +210,44 @@ namespace MISA.WEB08.AMIS.BL
         /// <param name="recordid"></param>
         /// <param name="record"></param>
         /// <returns>numberOfAffectedRows</returns>
-        public int UpdateRecord(Guid recordid, T record)
+        public ServiceRespone UpdateRecord(Guid recordid, T record)
         {
-            return _baseDL.UpdateRecord(recordid, record);
+            var validateStatus = false;
+            var validateResult = ValidateRequestData(validateStatus, record);
+            if (validateResult != null && validateResult.Success)
+            {
+                var Update = _baseDL.UpdateRecord(recordid, record);
+
+                if (Update != null)
+                {
+                    return new ServiceRespone
+                    {
+                        Success = true,
+                        Data = Update
+                    };
+                }
+                else
+                {
+                    return new ServiceRespone
+                    {
+                        Success = false,
+                        Data = new ErrorResult(
+                        AMITErrorCode.UpdateError,
+                        Resource.DevMsg_UpdateFailed,
+                        Resource.UserMsg_UpdateFaild,
+                        Resource.MoreInfo_Request)
+                    };
+                }
+
+            }
+            else
+            {
+                return new ServiceRespone
+                {
+                    Success = false,
+                    Data = validateResult.Data
+                };
+            }
 
         }
 

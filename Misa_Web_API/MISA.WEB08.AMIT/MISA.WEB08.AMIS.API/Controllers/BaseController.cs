@@ -83,12 +83,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult(
-                    AMITErrorCode.InsertError,
-                    Resource.DevMsg_InsertFailed,
-                    Resource.UserMsg_InsertFaild,
-                    Resource.MoreInfo_InsertFaild,
-                    HttpContext.TraceIdentifier));
+                    return StatusCode(StatusCodes.Status400BadRequest, result.Data);
                 }
 
             }
@@ -156,23 +151,18 @@ namespace MISA.WEB08.AMIS.API.Controllers
             try
             {
 
-                var numberOfAffectedRows = _baseBL.UpdateRecord(recordid, record);
+                var result = _baseBL.UpdateRecord(recordid, record);
 
-                if (1 > 0)
+                if (result.Success)
                 {
                     return StatusCode(StatusCodes.Status201Created, recordid);
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult(
-                    AMITErrorCode.UpdateError,
-                    Resource.DevMsg_UpdateFailed,
-                    Resource.UserMsg_UpdateFaild,
-                    Resource.MoreInfo_Request,
-                    HttpContext.TraceIdentifier));
+                    return StatusCode(StatusCodes.Status400BadRequest, result.Data);
                 }
 
-            }//Try catch exception
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);

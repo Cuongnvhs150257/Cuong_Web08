@@ -18,6 +18,28 @@ namespace MISA.WEB08.AMIS.DL
     /// </summary>
 
     public class EmployeeDL : BaseDL<Employee>, IEmployeeDL
-    { 
+    {
+        /// <summary>
+        /// Hàm xuất danh sách nhân viên ra Excel
+        /// Createby: Nguyễn Văn Cương 15/10/2022
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Employee> GetEmployeeExcel()
+        {
+            //Khởi tạo kết nối với MySQl
+            string connectionString = DataContext.MySqlConnectionString;
+
+            // Khởi tạo kết nối tới DB MySQL
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                // Khai báo tên stored procedure 
+                string storedProcedureName = String.Format(Resource.Proc_SelectAllRecord, typeof(Employee).Name);
+
+                // Thực hiện gọi vào DB để chạy procedure
+                var employees = mysqlConnection.Query<Employee>(storedProcedureName, commandType: System.Data.CommandType.StoredProcedure);
+
+                return employees;
+            }
+        }
     }
 }

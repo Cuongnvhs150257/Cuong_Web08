@@ -34,6 +34,8 @@ export default {
         justify-content: center;
         position: relative;
         cursor: pointer;
+    }.deletemultple:hover{
+        background-color: rgb(236, 238, 241);
     }
     .deletemultple-lable{
         margin-top: 11px;

@@ -1,5 +1,5 @@
 <template>
-    <div class="cover_toast">
+    <div class="cover_toast" v-if="text">
         <div class="toast">
         <div :class="classcssicon"></div>
         <div class="toast_text">

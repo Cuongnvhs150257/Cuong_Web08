@@ -17,7 +17,7 @@
                             </div>
                             <div class="page-group-last" v-if="TotalCount">
                                 <label >...</label>
-                                <button class="paddingnumber" @click="offSetValue(TotalCount.totalCount - (TotalCount.totalCount%indexPadding))" >{{Math.floor(TotalCount.totalCount/indexPadding)+1}}</button>
+                                <button class="paddingnumber" :class="{ 'button-seleced': seleced3 }" @click="offSetValue(TotalCount.totalCount - (TotalCount.totalCount%indexPadding))" >{{Math.floor(TotalCount.totalCount/indexPadding)+1}}</button>
                             </div>
                             <button class="btn-last" @click="offSetValue(indexOffSetOn * 10)">Sau</button>
                         </div>
@@ -49,16 +49,30 @@ export default {
           * Nguyễn Văn Cương 06/10/2022
           */
          offSetValue(value){
-            this.$emit("offset-value", value);
+
+           if(value > 400){
+               var endOffset =  value;
+           }
             console.log(value);
+            console.log(this.indexOffSetOn);
+            console.log(this.indexOffSetNext);
             if(value == 0 ){ //trường hợp trang 1
+                this.$emit("offset-value", value);
+                this.indexOffSetOn = 2; //trang tiếp theo là 2
+                this.indexOffSetNext = 2; //trang tiếp theo là 2
+                this.seleced = true; //bật hiển thị trang chọn
+                this.seleced2 = false;
+                this.seleced3 = false;
+                return
+            }
+            if(value == 1 && this.indexOffSetOn == 2 || value == 1 && this.indexOffSetOn == 3){ //trường hợp từ 2 trở về trang 1
+                value = value - 1;
+                this.$emit("offset-value", value);
                 this.indexOffSetOn = 2; //trang tiếp theo là 2
                 this.indexOffSetNext = 2; //trang tiếp theo là 2
                 this.seleced = true; //bật hiển thị trang chọn
                 this.seleced2 = false;
                 return
-
-
             }if(value == 1 && this.indexOffSetOn != 2){ //trường hợp mở trang phía trước
                 value = (this.indexOffSetOn*10) - 10; //vd: (2*10) - 10 để có được offset trước đó
                 this.$emit("offset-value", value);
@@ -69,13 +83,26 @@ export default {
                 }
                 return
             }
+            if(endOffset != null){ //trường hợp mở trang cuối cùng
+                this.$emit("offset-value", value);
+                this.indexOffSetOn = value / 10; //vd:  3%30=3 lấy được trang tiếp theo sẽ chọn
+                this.seleced3 = true; //bật hiển thị trang chọn
+                this.seleced = false;
+                this.seleced2 = false;
+                return
+            }
             //trường hợp mở trang tiếp theo 
             value = value + 10; //tăng giá trị vd: 20 + 10
             this.indexOffSetNext = this.indexOffSetNext + 1; //tăng giá trị tiếp theo vd: 2+1
             this.indexOffSetOn = this.indexOffSetNext % value; //vd:  3%30=3 lấy được trang tiếp theo sẽ chọn
             this.seleced2 = true; //bật hiển thị trang chọn
             this.seleced = false;
-         }   
+            this.$emit("offset-value", value);
+         },
+
+         offSet(){
+
+         }  
     }, 
     data(){
         return{
@@ -84,6 +111,7 @@ export default {
             indexOffSetNext: 2, //trang tiếp theo sẽ mở
             seleced: true, //hiện thị trang đang chọn
             seleced2: false, //hiện thị trang đang chọn
+            seleced3: false, //hiện thị trang đang chọn
         }
     }
 }
@@ -135,6 +163,11 @@ export default {
     background-color: #fff;
 }
 .page-group .paddingnumber.button-seleced {
+    font-weight: bold;
+    border: 1px solid #bbbb;
+
+}
+.page-group-last .paddingnumber.button-seleced {
     font-weight: bold;
     border: 1px solid #bbbb;
 

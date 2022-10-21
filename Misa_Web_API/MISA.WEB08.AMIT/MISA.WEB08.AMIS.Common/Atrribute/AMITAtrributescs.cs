@@ -4,11 +4,39 @@
     /// Atrribute dùng để khai báo khóa chính
     /// Createdby: Nguyễn Văn Cương 25/09/2022
     /// </summary>
-    /// 
     [AttributeUsage(AttributeTargets.Property)]
     public class PrimarKeyAttribute : Attribute
     {
         
+    }
+
+    /// <summary>
+    /// Atrribute dùng để khai báo kiểm tra dulicate
+    /// Createdby: Nguyễn Văn Cương 25/09/2022
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class DulicateAtrribute : Attribute
+    {
+        #region Filed
+        /// <summary>
+        /// Lỗi trả về cho client
+        /// </summary>
+        public string ErrorMessage;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Hàm khởi tạo
+        /// </summary>
+        /// <param name="regex"></param>
+        public DulicateAtrribute(string errorMess)
+        {
+            ErrorMessage = errorMess;
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -43,6 +71,43 @@
 
 
     }
+    /// <summary>
+    /// Atrribute dùng để kiểm tra có null hay không
+    /// Createdby: Nguyễn Văn Cương 25/09/2022
+    /// </summary>
+    /// 
+    [AttributeUsage(AttributeTargets.Property)]
+    public class EmailAtrribute : Attribute
+    {
+        #region Filed
+        /// <summary>
+        /// Lỗi trả về cho client
+        /// </summary>
+        public string Regex;
+        public string ErrorMessage;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Hàm khởi tạo
+        /// </summary>
+        /// <param name="regex"></param>
+        public EmailAtrribute(string regex, string errorMess)
+        {
+            Regex = regex;
+            ErrorMessage = errorMess;
+        }
+    
+        #endregion
+
+
+
+    }
+
+   
+
 
 
 }

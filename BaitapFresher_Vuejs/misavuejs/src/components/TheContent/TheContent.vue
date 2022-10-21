@@ -17,8 +17,9 @@
           <MButtonDeleteMultiple @handle-deletemu="openPopupAsk" />
         </div>
         <div class="content-toolbar-right">
-          <MInputSearch @InputWhere="getWhereValue" />
+          <MInputSearch @InputWhere="getWhereValue"/>
           <button type="button" class="toolbar-load" @click="loadData"></button>
+          <button type="button" class="toolbar-export" @click="getExcel"></button>
         </div>
       </div>
       <MTable
@@ -55,6 +56,11 @@
     <div class="mpopup-ask">
     <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteMultiple"  />
   </div>
+    <MPopupNotification
+        v-if="isShowNotification"
+        @close-notification-click="closeNoti"
+        :errors="errors"
+    />
 
     <MLoading v-if="LoadingShow" />
   </div>
@@ -71,6 +77,8 @@ import MLoading from "../MLoading/MLoading.vue";
 import MInputSearch from "./MInputSearch.vue";
 import MButtonDeleteMultiple from "../TheContent/MButtonDeleteMultiple.vue";
 import MPopupAsk from '../MPopupAsk/MPopupAsk.vue';
+import MPopupNotification from "../MPopupNotification/MPopupNotification.vue";
+import toast from "../../resouce/toast";
 import configs from "../../configs/index";
 import enums from "../../resouce/enums";
 
@@ -134,7 +142,10 @@ export default {
      *  Nguyễn Văn Cương 25/09/2022
     */
     openPopupAsk(){
-        this.isShowAskDelete = true;
+        if(this.listEmpDelete.length != 0){
+          console.log(this.listEmpDelete);
+          this.isShowAskDelete = true;
+        } 
     },
     /**
      * hàm đóng popup thêm nhân viên
@@ -170,6 +181,7 @@ export default {
      * lấy trang hiển thị
      *
      */
+    
     getOffSetValue(offset) {
       this.OffSetValue = offset;
       this.loadData();
@@ -180,8 +192,17 @@ export default {
      * Nguyễn Văn Cương 25/09/2022
      */
     getWhereValue(where) {
-      this.WhereValue = where;
-      this.loadData();
+
+      if(this.timeout){
+        clearTimeout(this.timeout)
+        this.timeout = null;
+      }
+      else{
+        this.timeout = setTimeout(() => {
+        this.WhereValue = where;
+        this.loadData();
+        }, 1000);
+      }
     },
     /**
      * Hàm lấy danh sách mã nhân viên cần xóa
@@ -199,15 +220,15 @@ export default {
     ShowToast(Tstatus){
         this.isShowToast = true; 
         if(Tstatus == true){
-          this.Toastcssicon = "toast_icon-success";
-          this.Toastcss = "toast_text_color-success";
-          this.ToastMess_color = "Thành công!";
-          this.ToastMess = "Xóa nhiều thành công!";
+          this.Toastcssicon = toast.Toastcssicon_sus;
+          this.Toastcss = toast.Toastcss_sus;
+          this.ToastMess_color = toast.ToastMess_color_sus;
+          this.ToastMess = toast.ToastMessDeleteMuti_sus;
         }else{
-          this.Toastcssicon = "toast_icon_failed";
-          this.Toastcss = "toast_text_color-failed";
-          this.ToastMess_color = "Thất bại!";
-          this.ToastMess = "Xóa nhiều thất bại!"
+          this.Toastcssicon = toast.Toastcssicon_faild;
+          this.Toastcss = toast.Toastcss_faild;
+          this.ToastMess_color = toast.ToastMess_color_faild;
+          this.ToastMess = toast.ToastMessDeleteMuti_faild;
         }
     },
     /**
@@ -238,12 +259,21 @@ export default {
       })
         .then((res) => res.json())
         .then((data) => {
-          //load lại data
-          this.ClosePopupAsk();
-          this.loadData();
-          this.closeSelectedAll = true;
-          this.ShowToast(this.ToastStatus = true);
-          console.log(data);
+          if (data.errorCode) {
+              //mở popup thông báo
+              this.isShowNotification = true;
+              if (data.errorCode) {
+                this.errors = data.moreInfo;
+              }
+            }else{
+              //load lại data
+              this.ClosePopupAsk();
+              this.loadData();
+              this.closeSelectedAll = true;
+              this.ShowToast(this.ToastStatus = true);
+              console.log(data);
+            }
+          
         })
         .catch((res) => {
           this.ShowToast(this.ToastStatus = false);
@@ -255,6 +285,7 @@ export default {
      * Nguyễn Văn Cương 15/09/2022
      */
     loadData() {
+      console.log(1);
       this.LoadingShow = true;
       var limit = this.LimitValue; //lưu số lượng bản ghi
       if (limit == null) {
@@ -284,10 +315,52 @@ export default {
           console.log(res);
         });
     },
+
+    /**
+    Hàm tạo file excel danh sách nhân viên
+    Nguyễn Văn Cương 15/10/2022
+     */
+    getExcel(){
+      try{
+        //hiển loading
+        this.LoadingShow = true;
+       //Gọi API
+        fetch(configs.baseURL + "get-employees-excel",{method: "GET"})
+        .then((t)=>{
+            return t.blob().then((b)=>{
+              //tạo thẻ a
+              var a = document.createElement("a");
+              //lấy ra URL
+              a.href = URL.createObjectURL(b);
+              // Set attribute của thẻ a và tên của file excel
+              a.setAttribute("download", "Danh_sach_nhan_vien.xlsx");
+              a.click();
+              // Ẩn Loading
+              this.LoadingShow = false;
+            }).catch((res) => {
+              console.log(res);
+            });
+        })
+      }catch(error){
+          console.log(error)
+      }
+    },
+    /**
+     * Hàm phím tắt Enter mở popup
+     * Nguyễn Văn Cương 15/09/2022
+     */
     handleEventInterrupt(event){
         if(event.keyCode == enums.ENTER){
            this.openPopup();
         }
+    },
+    /**
+     * hàm đóng popup thông báo
+     * Nguyễn Văn Cương 15/09/2022
+     */
+    closeNoti() {
+      this.isShowNotification = false;
+      this.validate = false;
     },
   },
   components: {
@@ -299,7 +372,8 @@ export default {
     MInputSearch,
     MToast,
     MButtonDeleteMultiple,
-    MPopupAsk
+    MPopupAsk,
+    MPopupNotification,
   },
 
   created() {
@@ -333,6 +407,12 @@ export default {
       Toastcssicon: {}, //icon thông báo
       //mảng chưa keyCode
       arrKeyCode: [],
+      //lưu thời gian delay khi tìm kiếm
+      timeout: null,
+      //lưu cảnh báo thiếu dữ liệu
+      errors: [],
+      //gọi popup thiếu dữ liệu
+      isShowNotification: false,
     };
   },
 };
@@ -411,5 +491,15 @@ export default {
   background-color: #ffff;
   cursor: pointer;
   margin-left: 10px;
+}.toolbar-export{
+   width: 40px;
+  height: 30px;
+  background-image: var(--icon);
+  background-repeat: no-repeat;
+  background-position: -611px -834px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffff;
+  cursor: pointer;
 }
 </style>

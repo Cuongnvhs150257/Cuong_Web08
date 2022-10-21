@@ -19,7 +19,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// mã nhân viên
         /// </summary>
-        [IsNotNullOrEmptyAtrribute("Mã nhân viên không được để trống")]
+        [IsNotNullOrEmptyAtrribute("Mã nhân viên không được để trống")] [DulicateAtrribute("Mã nhân viên <> đã tồn tại trong hệ thống, vui lòng kiểm tra lại")]
         public string EmployeeCode { get; set; }
 
         /// <summary>
@@ -76,6 +76,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// email
         /// </summary>
+        [EmailAtrribute("", "Email không hợp lệ")]
         public string Email { get; set; }
 
         /// <summary>

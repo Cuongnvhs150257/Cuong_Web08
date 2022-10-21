@@ -1,8 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "PZPiSdHfHtcyiroj2NGUUMX3QI3Y07XjeEbbSdoStkvdgfUpaNoFpuPlASzqVcMeOXU7oXCLUzQ4+I+Suw63vA==",
+  "dgSpecHash": "XjcOsdQU6SGbNiCshptE2Pv/IQyQHDYC2h5pabbnjxknnekoFuhLwk1exIL89BI7D02Pb9St1kJ+VdhAkmi6GQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\s\\Documents\\GitHub\\Cuong_Web08\\Misa_Web_API\\MISA.WEB08.AMIT\\MISA.WEB08.AMIS.Common\\MISA.WEB08.AMIS.Common.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\s\\.nuget\\packages\\closedxml\\0.96.0\\closedxml.0.96.0.nupkg.sha512",
+    "C:\\Users\\s\\.nuget\\packages\\documentformat.openxml\\2.16.0\\documentformat.openxml.2.16.0.nupkg.sha512",
+    "C:\\Users\\s\\.nuget\\packages\\excelnumberformat\\1.1.0\\excelnumberformat.1.1.0.nupkg.sha512",
+    "C:\\Users\\s\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\s\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
+    "C:\\Users\\s\\.nuget\\packages\\microsoft.win32.systemevents\\4.5.0\\microsoft.win32.systemevents.4.5.0.nupkg.sha512",
+    "C:\\Users\\s\\.nuget\\packages\\system.drawing.common\\4.5.0\\system.drawing.common.4.5.0.nupkg.sha512",
+    "C:\\Users\\s\\.nuget\\packages\\system.io.packaging\\4.7.0\\system.io.packaging.4.7.0.nupkg.sha512"
+  ],
   "logs": []
 }

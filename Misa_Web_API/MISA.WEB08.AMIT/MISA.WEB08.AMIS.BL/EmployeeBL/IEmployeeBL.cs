@@ -15,6 +15,12 @@ namespace MISA.WEB08.AMIS.BL
     /// </summary>
     public interface IEmployeeBL : IBaseBL<Employee>
     {
+        /// <summary>
+        /// Hàm xuất danh sách nhân viên ra Excel
+        /// Createby: Nguyễn Văn Cương 15/10/2022
+        /// </summary>
+        /// <returns></returns>
+        public Byte[] GetEmployeeExcel();
 
     }
 }

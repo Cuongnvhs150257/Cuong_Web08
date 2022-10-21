@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BankAccount" xml:space="preserve">
+    <value>Tài khoản ngân hàng</value>
+    <comment>Số tài khoản ngân hàng nhân viên</comment>
+  </data>
+  <data name="BankUnit" xml:space="preserve">
+    <value>Chi nhánh ngân hàng</value>
+    <comment>Chi nhánh ngân hàng nhân viên</comment>
+  </data>
+  <data name="DateOfBirth" xml:space="preserve">
+    <value>Ngày sinh</value>
+    <comment>Ngày sinh nhân viên</comment>
+  </data>
   <data name="Default_User" xml:space="preserve">
     <value>admin</value>
     <comment>Tên người dùng mặc định</comment>
@@ -141,6 +153,26 @@
     <value>Invalid input field</value>
     <comment>Message dành cho Dev khi validate không thành công</comment>
   </data>
+  <data name="EmailValidate" xml:space="preserve">
+    <value>/^(([^&lt;&gt;()[\]\\.,;:\s@"]+(\.[^&lt;&gt;()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]/^(([^&lt;&gt;()[\]\\.,;:\s@"]+(\.[^&lt;&gt;()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/</value>
+    <comment>Regex dùng để validate email</comment>
+  </data>
+  <data name="Employee_Code" xml:space="preserve">
+    <value>Mã nhân viên</value>
+    <comment>Mã nhân viên</comment>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Tên nhân viên</value>
+    <comment>Tên nhân viên</comment>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Giới tính</value>
+    <comment>Giới tính nhân viên</comment>
+  </data>
+  <data name="IdentifyCode" xml:space="preserve">
+    <value>Số CMND</value>
+    <comment>Số chức minh nhân dân nhân viên</comment>
+  </data>
   <data name="MoreInfo_Exception" xml:space="preserve">
     <value>http://openapi.google.com/api/errorrcode</value>
     <comment>Link thông tin thêm về lỗi exception</comment>
@@ -152,6 +184,18 @@
   <data name="MoreInfo_Request" xml:space="preserve">
     <value>http://openapi.google.com/api/errorrcode</value>
     <comment>Link thông tin thêm về lỗi  request</comment>
+  </data>
+  <data name="Number_Order" xml:space="preserve">
+    <value>STT</value>
+    <comment>Số thứ tự</comment>
+  </data>
+  <data name="Postions" xml:space="preserve">
+    <value>Chức danh</value>
+    <comment>Chức danh nhân viên</comment>
+  </data>
+  <data name="Proc_CheckDulicate" xml:space="preserve">
+    <value>Proc_{0}_CheckDulicate</value>
+    <comment>Template string cho procudes check mã trùng</comment>
   </data>
   <data name="Proc_DeleteMultiple" xml:space="preserve">
     <value>Proc_{0}_DeleteMultiple</value>
@@ -184,6 +228,18 @@
   <data name="Proc_UpdateRecord" xml:space="preserve">
     <value>Proc_{0}_UpdateRecord</value>
     <comment>Template string cho procudues cập nhật</comment>
+  </data>
+  <data name="Range_Worksheet" xml:space="preserve">
+    <value>A1:J1</value>
+    <comment>Số hàng sử dụng excel trong tiêu đề</comment>
+  </data>
+  <data name="Title_Worksheet" xml:space="preserve">
+    <value>Danh sách nhân viên</value>
+    <comment>Tiêu đề của excel khi xuất ra</comment>
+  </data>
+  <data name="UnitName" xml:space="preserve">
+    <value>Tên đơn vị</value>
+    <comment>Tên đơn vị nhân viên</comment>
   </data>
   <data name="UserMsg_DeleteFailed" xml:space="preserve">
     <value>Xóa nhân viên thất bật</value>
