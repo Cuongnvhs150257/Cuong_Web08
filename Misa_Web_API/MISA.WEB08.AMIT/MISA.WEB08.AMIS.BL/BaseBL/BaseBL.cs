@@ -74,7 +74,7 @@ namespace MISA.WEB08.AMIS.BL
                     
                 }
                 var Dulicate = (DulicateAtrribute?)Attribute.GetCustomAttribute(property, typeof(DulicateAtrribute));
-                if(Dulicate != null && validateStatus == true)
+                if(Dulicate != null)
                 {
                     var duli = _baseDL.CheckEmployeeCodeExist(properyValue.ToString());
                     if (properyValue != null && duli == true)
