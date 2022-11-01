@@ -186,12 +186,12 @@ namespace MISA.WEB08.AMIS.DL
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         /// <returns>Data, TotalCount</returns>
-        public PagingData Filter(
+        public PagingData<T> Filter(
             string where,
             int? limit,
             int? offset)
         {
-            var result = new PagingData();
+            var result = new PagingData<T>();
 
             //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
             var parameters = new DynamicParameters();
@@ -209,10 +209,10 @@ namespace MISA.WEB08.AMIS.DL
 
                 //Thực hiện gọi vào DB
                 var ListOject = mysqlConnection.QueryMultiple(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-                result.Data = ListOject.Read<Employee>().ToList();
+                result.Data = ListOject.Read<T>().ToList();
                 result.TotalCount = ListOject.Read<Int32>().First();
             }
-            return new PagingData()
+            return new PagingData<T>
             {
                 Data = result.Data,
                 TotalCount = result.TotalCount,

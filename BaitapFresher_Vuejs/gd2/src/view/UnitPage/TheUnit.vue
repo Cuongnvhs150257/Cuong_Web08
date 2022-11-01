@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="product-content-top-right">
-        <div class="btn-button-openPopupSelect" @click="openPopupSelect">
+        <div class="btn-button-openPopupSelect" @click="openPopup(null)">
           <MButton  :ButtonCss="'btn-button-openPopup'" :text="'Thêm'"/>
         </div>
       </div>
@@ -29,23 +29,21 @@
       
       <TheUnitTable
         @custom-open-dbclick="openPopup"
-        :EmployeesLoad="EmployeesTable"
+        :UnitsLoad="UnitsTable"
         @data-load-delete="loadData"
-        @get-List-Employee="getListEmployee"
+        @get-List-Unit="getListUnit"
         :closeSelectedAll="closeSelectedAll"
       />
       
     </div>
     <div class="product-content-bottom">
       <ThePadding
-        :TotalCount="EmployeesTable"
+        :TotalCount="UnitsTable"
         @filter-padding="getLimitValue"
         @offset-value="getOffSetValue"
       />
     </div>
-    <TheProductSelect v-if="isShowPopupSelect" @close-popup-selete="closePopupSelect" @open-product-popup="openProductPopup" />
-
-    <TheProductPopup v-if="isShow" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" />
+    <MPopupEdit v-if="isShow" :PopupEdit_label="PopupEdit_label" :height="'height: 320px;'" :inputShow="2" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Units" :recordvalue="UnitValue" />
 
 
     <!-- <Teleport to="#page-employee">
@@ -63,9 +61,8 @@ import MInputSearch from '../../components/Base/MInputSearch/MInputSearch.vue';
 import ThePadding from '../../components/Layout/ThePadding/ThePadding.vue';
 import MToast from '../../components/Base/MToast/MToast.vue';
 import MLoading from '../../components/Base/MLoading/MLoading.vue'
+import MPopupEdit from '../../components/Base/MPopupEdit/MPopupEdit.vue';
 import TheUnitTable from './TheUnitTable.vue';
-import TheProductSelect from '../ProductPage/ProductPopup/TheProductSelect.vue';
-import TheProductPopup from '../ProductPage/ProductPopup/TheProductPopup.vue';
 import configs from '../../configs/index';
 import enums from '../../resouce/enums';
 import toast from '../../resouce/toast';
@@ -77,21 +74,9 @@ export default {
     MInputSearch,
     MToast,
     TheUnitTable,
-    TheProductSelect,
-    TheProductPopup
+    MPopupEdit
   },
   methods: {
-    openPopupSelect(){
-      this.isShowPopupSelect = true;
-    },
-    closePopupSelect(){
-      this.isShowPopupSelect = false;
-    },
-    openProductPopup(value){
-      this.isShow = true;
-      this.isShowPopupSelect = false;
-      this.ProductPopupProperty = value;
-    },
     closeProductPopup(){
       this.isShow = false;
     },
@@ -101,7 +86,7 @@ export default {
      * Nguyễn Văn Cương 01/10/2022
      */
     async getNewCode() {
-      await fetch(configs.baseURL + "getmax", {
+      await fetch(configs.baseURLUnitCalculate + "getmax", {
         method: "GET", //lấy mã nhân viên cao nhất
       })
         .then((response) => response.json())
@@ -109,7 +94,7 @@ export default {
           var s = JSON.stringify(data);
           var d = s.replace(/[^0-9]*/g, ""); //lấy mã nhân viên cao nhất, loại bỏ dữ liệu thừa
           var e = "NV-" + d; //thêm chữ nv đằng trước
-          this.Employees.EmployeeCode = e;
+          this.Units.UnitCalculateCode = e;
         })
         .catch((res) => {
           console.log(res);
@@ -125,13 +110,14 @@ export default {
       //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
       if (id) {
         this.LoadingShow = true; //hiển thị loading
-        await fetch(configs.baseURL + id, { method: "GET" })
+        await fetch(configs.baseURLUnitCalculate + id, { method: "GET" })
           .then((res) => res.json())
           .then(async (data) => {
             this.LoadingShow = false; //Đóng loading
-            this.Employees = data;
+            this.Units = data;
+            this.PopupEdit_label = "Sửa đơn vị tính";
             if (detailFormMode == 1) {
-              this.Employees.EmployeeCode = "";
+              this.Units.UnitCalculateCode = "";
               await this.getNewCode();
             }
             this.Mode = detailFormMode;
@@ -144,8 +130,9 @@ export default {
           });
         //trường hợp chỉ mở popup
       } else {
-        (this.Employees = {}), //dữ liệu trên popup rỗng
+        (this.Units = {}), //dữ liệu trên popup rỗng
           await this.getNewCode();
+          this.PopupEdit_label = "Thêm đơn vị tính";
         this.isShow = true;
       }
     },
@@ -165,8 +152,8 @@ export default {
      */
     closePopup() {
       this.isShow = false;
-      if (this.Employees.EmployeeID == null) {
-        this.Employees = {};
+      if (this.Units.UnitCalculateID == null) {
+        this.Units = {};
       }
       this.isShowToast = false;
     },
@@ -220,9 +207,9 @@ export default {
      * Hàm lấy danh sách mã nhân viên cần xóa
      * Nguyễn Văn Cương 15/10/2022
      */
-    getListEmployee(listEmpDe) {
-      this.listEmpDelete = listEmpDe;
-      console.log(this.listEmpDelete);
+    getListUnit(listUnitDe) {
+      this.listUnitDelete = listUnitDe;
+      console.log(this.listUnitDelete);
     },
     
     /**
@@ -262,7 +249,7 @@ export default {
     async deleteMultiple() {
       var listD = this.listEmpDelete;
       
-      await fetch(configs.baseURL + "batch-delete", {
+      await fetch(configs.baseURLUnitCalculate + "batch-delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -319,13 +306,14 @@ export default {
         offset = 0;
       }
       const filter = `filter?wnere=${where}&limit=${limit}&offset=${offset}`;
-      fetch(configs.baseURL + filter, {
+      fetch(configs.baseURLUnitCalculate + filter, {
         method: "GET",
       })
         .then((res) => res.json())
         .then((data) => {
-          this.EmployeesTable = data; //lưu dữ liệu
+          this.UnitsTable = data; //lưu dữ liệu
           this.LoadingShow = false; //tắt loading
+          console.log(data);
         })
         .catch((res) => {
           console.log(res);
@@ -341,7 +329,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURL + "get-employees-excel",{method: "GET"})
+        fetch(configs.baseURLUnitCalculate + "get-employees-excel",{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a
@@ -349,7 +337,7 @@ export default {
               //lấy ra URL
               a.href = URL.createObjectURL(b);
               // Set attribute của thẻ a và tên của file excel
-              a.setAttribute("download", "Danh_sach_nhan_vien.xlsx");
+              a.setAttribute("download", "Danh_sach_don_vi_tinh.xlsx");
               a.click();
               // Ẩn Loading
               this.LoadingShow = false;
@@ -397,12 +385,12 @@ export default {
       ProductPopupProperty: 1,
       isShow: false, //gọi popup thêm nhân viên
       LoadingShow: false, //gọi màn hình loadind
-      Employees: null, //lưu giá trị nhân viên
-      EmployeesTable: null, //lưu giá trị bảng nhân viên
+      Units: null, //lưu giá trị nhân viên
+      UnitsTable: null, //lưu giá trị bảng nhân viên
       LimitValue: null, //lưu giá trị số lượng trang
       OffSetValue: null, //lưu giá trị bản ghi hiện tại
       WhereValue: null, //lưu giá trị tìm kiếm
-      listEmpDelete: [], //lưu danh sách mã nhân viên cần xóa
+      listUnitDelete: [], //lưu danh sách mã nhân viên cần xóa
       Mode: 2, //lưu trạng thái mở popup nhân viên 
       isShowAskDelete: false, //gọi popup hỏi có xóa không
       closeSelectedAll: false, //đóng chọn checkbox
@@ -420,7 +408,9 @@ export default {
       errors: [],
       //gọi popup thiếu dữ liệu
       isShowNotification: false,
-      ButtonMode: 1
+      ButtonMode: 1,
+      PopupEdit_label: {},
+      UnitValue: [{value: 'UnitCalculateValue'},{value: 'Describe'}],
     };
   },
 }

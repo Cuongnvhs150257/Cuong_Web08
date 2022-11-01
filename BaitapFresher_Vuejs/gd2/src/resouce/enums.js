@@ -41,6 +41,15 @@ export default{
     //khác
     ELSE: 0,
 
+    //Đang hoạt động
+    ACTIVE: 1,
+
+    //Ngưng hoạt động
+    UNACTIVE: 2,
+
+    //Chưa xác định
+    UNKNOW: 0,
+
     //lỗi mã trống
     EmployeeCodeNull: "Mã không được để trống",
 

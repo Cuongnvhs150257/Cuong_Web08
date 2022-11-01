@@ -29,21 +29,21 @@
       
       <TheWarehouseTable
         @custom-open-dbclick="openPopup"
-        :EmployeesLoad="EmployeesTable"
+        :WarehousesLoad="WarehousesTable"
         @data-load-delete="loadData"
-        @get-List-Employee="getListEmployee"
+        @get-List-Warehouse="getListWarehouse"
         :closeSelectedAll="closeSelectedAll"
       />
       
     </div>
     <div class="product-content-bottom">
       <ThePadding
-        :TotalCount="EmployeesTable"
+        :TotalCount="WarehousesTable"
         @filter-padding="getLimitValue"
         @offset-value="getOffSetValue"
       />
     </div>
-    <MPopupEdit v-if="isShow" :PopupEdit_label="'Thêm Kho'" :inputShow="1" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" />
+    <MPopupEdit v-if="isShow" :PopupEdit_label="PopupEdit_label" :inputShow="1" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Warehouses" :recordvalue="WarehouseValue" />
  
 
     <!-- <Teleport to="#page-employee">
@@ -89,7 +89,7 @@ export default {
      * Nguyễn Văn Cương 01/10/2022
      */
     async getNewCode() {
-      await fetch(configs.baseURL + "getmax", {
+      await fetch(configs.baseURLWarehouse + "getmax", {
         method: "GET", //lấy mã nhân viên cao nhất
       })
         .then((response) => response.json())
@@ -97,7 +97,7 @@ export default {
           var s = JSON.stringify(data);
           var d = s.replace(/[^0-9]*/g, ""); //lấy mã nhân viên cao nhất, loại bỏ dữ liệu thừa
           var e = "NV-" + d; //thêm chữ nv đằng trước
-          this.Employees.EmployeeCode = e;
+          this.Warehouses.WarehouseCode = e;
         })
         .catch((res) => {
           console.log(res);
@@ -113,13 +113,14 @@ export default {
       //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
       if (id) {
         this.LoadingShow = true; //hiển thị loading
-        await fetch(configs.baseURL + id, { method: "GET" })
+        await fetch(configs.baseURLWarehouse + id, { method: "GET" })
           .then((res) => res.json())
           .then(async (data) => {
             this.LoadingShow = false; //Đóng loading
-            this.Employees = data;
+            this.PopupEdit_label = "Sửa kho";
+            this.Warehouses = data;
             if (detailFormMode == 1) {
-              this.Employees.EmployeeCode = "";
+              this.Warehouses.WarehouseCode = "";
               await this.getNewCode();
             }
             this.Mode = detailFormMode;
@@ -132,8 +133,9 @@ export default {
           });
         //trường hợp chỉ mở popup
       } else {
-        (this.Employees = {}), //dữ liệu trên popup rỗng
+        (this.Warehouses = {}), //dữ liệu trên popup rỗng
           await this.getNewCode();
+          this.PopupEdit_label = "Thêm kho";
         this.isShow = true;
       }
     },
@@ -142,8 +144,8 @@ export default {
      *  Nguyễn Văn Cương 25/09/2022
     */
     openPopupAsk(){
-        if(this.listEmpDelete.length != 0){
-          console.log(this.listEmpDelete);
+        if(this.listWhDelete.length != 0){
+          console.log(this.listWhDelete);
           this.isShowAskDelete = true;
         } 
     },
@@ -153,8 +155,8 @@ export default {
      */
     closePopup() {
       this.isShow = false;
-      if (this.Employees.EmployeeID == null) {
-        this.Employees = {};
+      if (this.Warehouses.WarehouseID == null) {
+        this.Warehouses = {};
       }
       this.isShowToast = false;
     },
@@ -208,9 +210,9 @@ export default {
      * Hàm lấy danh sách mã nhân viên cần xóa
      * Nguyễn Văn Cương 15/10/2022
      */
-    getListEmployee(listEmpDe) {
-      this.listEmpDelete = listEmpDe;
-      console.log(this.listEmpDelete);
+    getListWarehouse(listWhDe) {
+      this.listWhDelete = listWhDe;
+      console.log(this.listWhDelete);
     },
     
     /**
@@ -250,7 +252,7 @@ export default {
     async deleteMultiple() {
       var listD = this.listEmpDelete;
       
-      await fetch(configs.baseURL + "batch-delete", {
+      await fetch(configs.baseURLWarehouse + "batch-delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -307,12 +309,12 @@ export default {
         offset = 0;
       }
       const filter = `filter?wnere=${where}&limit=${limit}&offset=${offset}`;
-      fetch(configs.baseURL + filter, {
+      fetch(configs.baseURLWarehouse + filter, {
         method: "GET",
       })
         .then((res) => res.json())
         .then((data) => {
-          this.EmployeesTable = data; //lưu dữ liệu
+          this.WarehousesTable = data; //lưu dữ liệu
           this.LoadingShow = false; //tắt loading
         })
         .catch((res) => {
@@ -329,7 +331,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURL + "get-employees-excel",{method: "GET"})
+        fetch(configs.baseURLWarehouse + "get-employees-excel",{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a
@@ -337,7 +339,7 @@ export default {
               //lấy ra URL
               a.href = URL.createObjectURL(b);
               // Set attribute của thẻ a và tên của file excel
-              a.setAttribute("download", "Danh_sach_nhan_vien.xlsx");
+              a.setAttribute("download", "Danh_sach_kho.xlsx");
               a.click();
               // Ẩn Loading
               this.LoadingShow = false;
@@ -385,12 +387,12 @@ export default {
       ProductPopupProperty: 1,
       isShow: false, //gọi popup thêm nhân viên
       LoadingShow: false, //gọi màn hình loadind
-      Employees: null, //lưu giá trị nhân viên
-      EmployeesTable: null, //lưu giá trị bảng nhân viên
+      Warehouses: null, //lưu giá trị nhân viên
+      WarehousesTable: null, //lưu giá trị bảng nhân viên
       LimitValue: null, //lưu giá trị số lượng trang
       OffSetValue: null, //lưu giá trị bản ghi hiện tại
       WhereValue: null, //lưu giá trị tìm kiếm
-      listEmpDelete: [], //lưu danh sách mã nhân viên cần xóa
+      listWhDelete: [], //lưu danh sách mã nhân viên cần xóa
       Mode: 2, //lưu trạng thái mở popup nhân viên 
       isShowAskDelete: false, //gọi popup hỏi có xóa không
       closeSelectedAll: false, //đóng chọn checkbox
@@ -408,7 +410,9 @@ export default {
       errors: [],
       //gọi popup thiếu dữ liệu
       isShowNotification: false,
-      ButtonMode: 1
+      ButtonMode: 1,
+      PopupEdit_label: {},
+      WarehouseValue: [{value: 'WarehouseCode'},{value:'WarehouseName'}, {value: 'WarehouseAccount'}, {value: 'Address'}],
     };
   },
 }

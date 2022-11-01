@@ -8,33 +8,35 @@
         <th style="min-width: 120px;">MÃ</th>
         <th style="min-width: 120px;">GIẢM THUẾ THEO NQ 43</th>
         <th style="min-width: 120px;">TÍNH CHẤT</th>
-        <th style="min-width: 120px;" class="product-tab-th-select">SỐ LƯỢNG TỒN</th>
-        <th class="product-tab-th-select" style="min-width: 140px;" >GIÁ TRỊ TỒN</th>
+        <th style="min-width: 120px;">Nhóm VTHH</th>
+        <th style="min-width: 120px;" class="product-tab-th-select-amount">SỐ LƯỢNG TỒN</th>
+        <th class="product-tab-th-select-amount" style="min-width: 140px;" >GIÁ TRỊ TỒN</th>
         <th class="product-tab-th-select">CHỨC NĂNG</th>
       </tr>
     </thead>
-    <tbody v-if="EmployeesLoad">
+    <tbody v-if="ProductsLoad">
       <tr
-        v-for="emp in EmployeesLoad.data"
-        :key="emp.employeeID"
-        @dblclick="rowDBClick(emp.employeeID)"
+        v-for="pro in ProductsLoad.data"
+        :key="pro.productID"
+        @dblclick="rowDBClick(pro.productID)"
       >
-        <td class="product-box"><MCheckbox @click="handleCheckBox(emp.employeeID)"  :stateCheckAll="stateCheckAll" /></td>
-        <td>{{ emp.fullName }}</td>
-        <td>{{ emp.employeeCode }}</td>
-        <td>{{ this.fomatGender(emp.gender) }}</td>
-        <td class="product-tab-th-select">{{ this.formatDate(emp.dateOfBirth) }}</td>
-        <td>{{ emp.identifyCode }}</td>
-        <td>{{ emp.postions }}</td>
+        <td class="product-box"><MCheckbox @click="handleCheckBox(pro.productID)"  :stateCheckAll="stateCheckAll" /></td>
+        <td>{{ pro.productName }}</td>
+        <td>{{ pro.productCode }}</td>
+        <td>{{ this.fomatTaxReduction(pro.taxReduction)}}</td>
+        <td>{{ pro.nature }}</td>
+        <td>{{ pro.supplyName}}</td>
+        <td  class="product-tab-th-select-amount" >{{ pro.quantityStock }}</td>
+        <td  class="product-tab-th-select-amount" >{{ pro.existentialValue }}</td>
         <td style="min-width: 110px;">
-          <label class="product-tab-th-select-lable" @click="rowDBClick(emp.employeeID)">Sửa</label>
+          <label class="product-tab-th-select-lable" @click="rowDBClick(pro.productID)">Sửa</label>
           <div class="product-btnopendrop"></div>
         </td>
       </tr>
     </tbody>
   </table>
   <div class="product-mpopup-ask">
-    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteEmployee" :getEmployeeCode="getemployeedeteteCode"/>
+    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteProduct" :getProductCode="getproductdeteteCode"/>
   </div>
   <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
   </div>
@@ -50,9 +52,9 @@ import enums from '../../resouce/enums';
 import toast from '../../resouce/toast';
 
 export default {
-  name: "EmployeeList",
+  name: "ProductList",
   props: {
-    EmployeesLoad: Object,
+    ProductsLoad: Object,
     closeSelectedAll: Boolean
   },
   
@@ -67,45 +69,43 @@ export default {
       this.stateCheckAll = !this.stateCheckAll;
       if(this.stateCheckAll == true){
           //vòng lặp thêm mã nhân viên vào mảng
-          this.EmployeesLoad.data.forEach(emp => {
-            this.listEmpSelected.push(emp.employeeID);
+          this.ProductsLoad.data.forEach(pro => {
+            this.listProSelected.push(pro.productID);
           },
-          this.$emit("get-List-Employee", this.listEmpSelected)
+          this.$emit("get-List-Product", this.listProSelected)
           );
       }else{
-        this.listEmpSelected = [];
+        this.listProSelected = [];
       }
-      console.log(this.listEmpSelected);
     },
 
     /**
      * hàm thực hiện kích hoạt checkbox
      */
-    handleCheckBox(EmpID){
+    handleCheckBox(ProID){
           //thêm mã nhân viên đã chọn vào mảng
-          this.listEmpSelected.push(EmpID);
-          this.$emit("get-List-Employee", this.listEmpSelected)
-          console.log(this.listEmpSelected);
+          this.listProSelected.push(ProID);
+          this.$emit("get-List-Product", this.listProSelected)
+          console.log(this.listProSelected);
     },
 
     /**
      * hàm hiện thông tin trên popup khi nhấn vào Sửa
      * Nguyễn Văn Cương 25/09/2022
      */
-    rowDBClick(employeeID) {
+    rowDBClick(productID) {
       //bấm dbclick để sửa
       this.detailFormMode = 2;
-      this.$emit("custom-open-dbclick", employeeID, this.detailFormMode);
-      console.log(this.detailFormMode);
+      this.$emit("custom-open-dbclick", productID, this.detailFormMode);
     },
 
     /**
      * hàm lấy thông tin nhân viên khi xóa
      * Nguyễn Văn Cương 25/09/2022
      */
-    getEmployeeDetele(employeeID, employeeCode){
-        this.getemployeedetetevalue = employeeID;
-        this.getemployeedeteteCode = employeeCode;
+    getProductDetele(propductID, productCode){
+        this.getproductdetetevalue = propductID;
+        this.getproductdeteteCode = productCode;
         
     },
  
@@ -118,11 +118,11 @@ export default {
         console.log(this.checkDelete);
         if (this.checkDelete == 2){
             this.isShowAskDelete = true; //hiện popup hỏi người dùng
-            this.idEmployeeDelete = this.getemployeedetetevalue; //lưu id employee cần xóa
+            this.idProductDelete = this.getproductdetetevalue; //lưu id employee cần xóa
         }else if(this.checkDelete == 1){
           //bấm nhân bản
            this.detailFormMode = 1;
-           this.$emit("custom-open-dbclick", this.getemployeedetetevalue, this.detailFormMode);
+           this.$emit("custom-open-dbclick", this.getproductdetetevalue, this.detailFormMode);
         }else{
            console.log(1);
            //ngưng sử dụng
@@ -142,20 +142,20 @@ export default {
      * hàm format giới tính 
      * Nguyễn Văn Cương 01/10/2022
      */
-    fomatGender(gender){
+    fomatTaxReduction(status){
 
-      //giá trị 1 là nữ 
-       if(gender == enums.FEMALE){
-         return gender = "Nữ";
-      //giá trị 2 là nam
-       }else if(gender == enums.MALE){
-         return gender = "Nam";
-       //giá trị 0 là khác
-       }else if (gender == enums.ELSE){
-         return gender = "Khác";
+      //giá trị 1 là hoạt động
+       if(status == enums.ACTIVE){
+         return status = "Có giảm thuế";
+      //giá trị 2 là ngưng hoạt động
+       }else if(status == enums.UNACTIVE){
+         return status = "Không giảm thuế";
+       //giá trị 0 là chưa xác định
+       }else if (status == enums.UNKNOW){
+         return status = "Chưa xác định";
       //không có cho thành rỗng
        }else{
-         return gender = "";
+         return status = "";
        }
     },
 
@@ -210,17 +210,17 @@ export default {
      * Hàm xóa employee theo id 
      * Nguyễn Văn Cương 25/09/2022
      */
-    async deleteEmployee() {
+    async deleteProduct() {
           this.isShowToast = false;
           //lấy employeeid đã lưu 
-          var id = this.idEmployeeDelete; 
+          var id = this.idProductDelete; 
            //check xem người dùng có ấn hủy hay không
           if(this.popupAskCance == true){
           {
             //đóng popup hỏi người dùng
             this.ClosePopupAsk();
               await fetch(
-            configs.baseURL + id,
+            configs.baseURLProduct + id,
             { method: "DELETE" }
           )
             .then((res) => res.json())
@@ -245,15 +245,15 @@ export default {
   },
   data() {
     return {
-      employees: [], //lưu dữ liệu nhân viên
-      empSelected: {}, //lưu nhân viên đã chọn
+      products: [], //lưu dữ liệu nhân viên
+      proSelected: {}, //lưu nhân viên đã chọn
       detailFormMode: 1, //lưu trạng thái mở popup
       isShowAskDelete: false, //gọi popup hỏi có xóa không
       popupAskCance: true, //nút hủy xóa
-      idEmployeeDelete:0, //lưu id nhân viên cần xóa
+      idProductDelete:0, //lưu id nhân viên cần xóa
       checkDelete: 2,  //trạng thái xóa
-      getemployeedetetevalue: 0, //lưu id nhân viên cần xóa
-      getemployeedetetecode: '', //lưu code nhân viên cần xóa
+      getproductdetetevalue: 0, //lưu id nhân viên cần xóa
+      getproductdetetecode: '', //lưu code nhân viên cần xóa
       stateCheckAll: false, //lưu trạng thái checkbox
       listEmpSelected: [], //lưu danh sách nhân viên cần xóa
       isShowToast: false, //hiển thị thông báo
@@ -343,6 +343,11 @@ td, th {
 .product-tab-th-select {
   text-align: center !important;
   padding: 0 !important;
+  z-index: 1;
+}
+.product-tab-th-select-amout{
+  text-align: right !important;
+  padding-left: 10px !important;
   z-index: 1;
 }
 .product-content-table thead {

@@ -1,10 +1,10 @@
 <template>
-  <div class="droptbl" :class="{'dropbox-input-green': !inValueChange, 'dropbox-input-green': isShowDropbox }"  >
-    <input class="dropbox-input product" type="text" :disabled="disabled" :style="width" :maxlength="maxlength" v-model="this.RecordSle[label]" :tabindex="tab" />
+  <div class="droptbl" :class="{'dropbox-input-green': !inValueChange, 'dropbox-input-green': isShowDropbox }" >
+    <input class="dropbox-input product" type="text" :readonly="readonly" :style="width" :maxlength="maxlength" v-model="this.RecordSle[label]" :tabindex="tab" />
     <div :class="{'dropbox-input add' : iconadd}" @click="openPopupEdit"></div>
-    <button class="droptbtn" @click="btnDropClick"></button>
-    <div class="dropbl-data" v-show="isShowDropbox" ref="combobox">
-        <div class="drop-for" v-for="d in DropboxShow" :key="d[value]" :class="{select : d[value] == RecordSle[value] }" @click="selectedRecord(d)" >
+    <button class="droptbtn" @click="btnDropClick" ref="cover_combobox"></button>
+    <div class="dropbl-data" v-show="isShow" ref="combobox">
+        <div class="drop-for" v-for="d in DropboxShow" :key="d[value]" :class="{select : d[value] == RecordSle[value] , select : d[label] == RecordSle[label] }" @click="selectedRecord(d)" >
           <div class="drop-itemtbl" >{{d[label]}}</div>
         </div>
     </div>
@@ -27,9 +27,11 @@ export default {
         maxlength: Number,
         value: String,
         label: String,
-        disabled: Boolean,
+        readonly: Boolean,
         iconadd: Boolean,
         width: String,
+        Comboboxmodel: String,
+        baseURL: String
     },
     methods:{
         /**
@@ -39,14 +41,18 @@ export default {
         selectedRecord(drop){
           this.RecordName = drop;
           this.isShowDropbox = !this.isShowDropbox;
+          this.isShow = this.isShowDropbox;
           this.$emit("get-recordvalue", drop.value);
           this.inValueChange = this.inValueCombox;
           this.selectItem = false;
+          this.RecordSle.label = drop.label;
         },
         btnDropClick(){
            this.isShowDropbox = !this.isShowDropbox;
+           this.isShow = this.isShowDropbox;  
            if(this.DropboxItem){
               this.DropboxShow = this.DropboxItem
+              console.log(this.DropboxShow);
            }else{
              this.loadUnit();
            }
@@ -60,7 +66,7 @@ export default {
          * Nguyễn Văn Cương 05/10/2022
          */
         loadUnit(){
-            fetch(configs.baseURLUnit, {
+            fetch(configs[this.baseURL], {
             method: "GET",
       })
         .then((res) => res.json())
@@ -77,31 +83,25 @@ export default {
       clickEventInterrupt(event){
       const isClick = this.$refs.combobox.contains(event.target);
       if(!isClick){
-         this.isShowDropbox = false;
+         this.isShow = false;
       }
-      
     },
-    },
-
-    computed:{
-        RecordSle(){
-          
-          return this.RecordName;
-        }
     },
     data(){
       
-      var RecordName= {
+      var RecordSle= {
           //hiện thị tên đơn vị của nhân viên khi mở popup sửa nhân viên
-            lable: this.EmployeeUnit 
+            [this.label]: this.Comboboxmodel 
       };
       return{
+        isShow: false,
         isShowDropbox: false,
         selectItem: true,
         inValue: true, //nổi bật đơn vị đã chọn
         inValueChange: true,
-        RecordName,
+        RecordName: {},
         DropboxShow: [],
+        RecordSle,
 
       }
     }
@@ -148,6 +148,9 @@ export default {
   outline: none;
   padding-left: 10px;
   border-radius: 4px;
+}.dropbox-input.product:focus ~.droptbl{
+  border: 1px solid #50B83C;
+  outline: none;
 }
 .droptbtn{
     background-image: var(--icon);

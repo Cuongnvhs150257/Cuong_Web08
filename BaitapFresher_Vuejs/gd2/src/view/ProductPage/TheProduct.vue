@@ -57,23 +57,23 @@
       
       <TheProductTable
         @custom-open-dbclick="openPopup"
-        :EmployeesLoad="EmployeesTable"
+        :ProductsLoad="ProductsTable"
         @data-load-delete="loadData"
-        @get-List-Employee="getListEmployee"
+        @get-List-Product="getListProduct"
         :closeSelectedAll="closeSelectedAll"
       />
       
     </div>
     <div class="product-content-bottom">
       <ThePadding
-        :TotalCount="EmployeesTable"
+        :TotalCount="ProductsTable"
         @filter-padding="getLimitValue"
         @offset-value="getOffSetValue"
       />
     </div>
     <TheProductSelect v-if="isShowPopupSelect" @close-popup-selete="closePopupSelect" @open-product-popup="openProductPopup" />
 
-    <TheProductPopup v-if="isShow" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" />
+    <TheProductPopup v-if="isShow" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
 
 
     <!-- <Teleport to="#page-employee">
@@ -129,7 +129,7 @@ export default {
      * Nguyễn Văn Cương 01/10/2022
      */
     async getNewCode() {
-      await fetch(configs.baseURL + "getmax", {
+      await fetch(configs.baseURLProduct + "getmax", {
         method: "GET", //lấy mã nhân viên cao nhất
       })
         .then((response) => response.json())
@@ -137,7 +137,7 @@ export default {
           var s = JSON.stringify(data);
           var d = s.replace(/[^0-9]*/g, ""); //lấy mã nhân viên cao nhất, loại bỏ dữ liệu thừa
           var e = "NV-" + d; //thêm chữ nv đằng trước
-          this.Employees.EmployeeCode = e;
+          this.Products.ProductCode = e;
         })
         .catch((res) => {
           console.log(res);
@@ -153,13 +153,13 @@ export default {
       //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
       if (id) {
         this.LoadingShow = true; //hiển thị loading
-        await fetch(configs.baseURL + id, { method: "GET" })
+        await fetch(configs.baseURLProduct + id, { method: "GET" })
           .then((res) => res.json())
           .then(async (data) => {
             this.LoadingShow = false; //Đóng loading
-            this.Employees = data;
+            this.Products = data;
             if (detailFormMode == 1) {
-              this.Employees.EmployeeCode = "";
+              this.Products.ProductCode = "";
               await this.getNewCode();
             }
             this.Mode = detailFormMode;
@@ -172,7 +172,7 @@ export default {
           });
         //trường hợp chỉ mở popup
       } else {
-        (this.Employees = {}), //dữ liệu trên popup rỗng
+        (this.Products = {}), //dữ liệu trên popup rỗng
           await this.getNewCode();
         this.isShow = true;
       }
@@ -182,8 +182,8 @@ export default {
      *  Nguyễn Văn Cương 25/09/2022
     */
     openPopupAsk(){
-        if(this.listEmpDelete.length != 0){
-          console.log(this.listEmpDelete);
+        if(this.listProDelete.length != 0){
+          console.log(this.listProDelete);
           this.isShowAskDelete = true;
         } 
     },
@@ -193,8 +193,8 @@ export default {
      */
     closePopup() {
       this.isShow = false;
-      if (this.Employees.EmployeeID == null) {
-        this.Employees = {};
+      if (this.Products.ProductID == null) {
+        this.Products = {};
       }
       this.isShowToast = false;
     },
@@ -248,9 +248,8 @@ export default {
      * Hàm lấy danh sách mã nhân viên cần xóa
      * Nguyễn Văn Cương 15/10/2022
      */
-    getListEmployee(listEmpDe) {
-      this.listEmpDelete = listEmpDe;
-      console.log(this.listEmpDelete);
+    getListProduct(listProDe) {
+      this.listProDelete = listProDe;
     },
     
     /**
@@ -288,9 +287,9 @@ export default {
      * Nguyễn Văn Cương 15/10/2022
      */
     async deleteMultiple() {
-      var listD = this.listEmpDelete;
+      var listD = this.listProDelete;
       
-      await fetch(configs.baseURL + "batch-delete", {
+      await fetch(configs.baseURLProduct + "batch-delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -347,12 +346,12 @@ export default {
         offset = 0;
       }
       const filter = `filter?wnere=${where}&limit=${limit}&offset=${offset}`;
-      fetch(configs.baseURL + filter, {
+      fetch(configs.baseURLProduct + filter, {
         method: "GET",
       })
         .then((res) => res.json())
         .then((data) => {
-          this.EmployeesTable = data; //lưu dữ liệu
+          this.ProductsTable = data; //lưu dữ liệu
           this.LoadingShow = false; //tắt loading
         })
         .catch((res) => {
@@ -369,7 +368,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURL + "get-employees-excel",{method: "GET"})
+        fetch(configs.baseURLProduct + "get-product-excel",{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a
@@ -377,7 +376,7 @@ export default {
               //lấy ra URL
               a.href = URL.createObjectURL(b);
               // Set attribute của thẻ a và tên của file excel
-              a.setAttribute("download", "Danh_sach_nhan_vien.xlsx");
+              a.setAttribute("download", "Danh_sach_hang_hoa.xlsx");
               a.click();
               // Ẩn Loading
               this.LoadingShow = false;
@@ -425,12 +424,12 @@ export default {
       ProductPopupProperty: 1,
       isShow: false, //gọi popup thêm nhân viên
       LoadingShow: false, //gọi màn hình loadind
-      Employees: null, //lưu giá trị nhân viên
-      EmployeesTable: null, //lưu giá trị bảng nhân viên
+      Products: null, //lưu giá trị nhân viên
+      ProductsTable: null, //lưu giá trị bảng nhân viên
       LimitValue: null, //lưu giá trị số lượng trang
       OffSetValue: null, //lưu giá trị bản ghi hiện tại
       WhereValue: null, //lưu giá trị tìm kiếm
-      listEmpDelete: [], //lưu danh sách mã nhân viên cần xóa
+      listProDelete: [], //lưu danh sách mã nhân viên cần xóa
       Mode: 2, //lưu trạng thái mở popup nhân viên 
       isShowAskDelete: false, //gọi popup hỏi có xóa không
       closeSelectedAll: false, //đóng chọn checkbox

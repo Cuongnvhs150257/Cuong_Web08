@@ -10,25 +10,25 @@
         <th class="product-tab-th-select">CHỨC NĂNG</th>
       </tr>
     </thead>
-    <tbody v-if="EmployeesLoad">
+    <tbody v-if="WarehousesLoad">
       <tr
-        v-for="emp in EmployeesLoad.data"
-        :key="emp.employeeID"
-        @dblclick="rowDBClick(emp.employeeID)"
+        v-for="wh in WarehousesLoad.data"
+        :key="wh.warehouseID"
+        @dblclick="rowDBClick(wh.warehouseID)"
       >
-        <td>{{ emp.employeeCode }}</td>
-        <td>{{ emp.fullName }}</td>
-        <td>{{ emp.postions }}</td>
-        <td>{{ this.fomatGender(emp.gender) }}</td>
+        <td>{{ wh.warehouseCode }}</td>
+        <td>{{ wh.warehouseName }}</td>
+        <td>{{ wh.address }}</td>
+        <td>{{ this.fomatWarehouse(wh.status) }}</td>
         <td style="min-width: 110px;">
-          <label class="product-tab-th-select-lable" @click="rowDBClick(emp.employeeID)">Sửa</label>
+          <label class="product-tab-th-select-lable" @click="rowDBClick(wh.warehouseID)">Sửa</label>
           <div class="product-btnopendrop"></div>
         </td>
       </tr>
     </tbody>
   </table>
   <div class="product-mpopup-ask">
-    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteEmployee" :getEmployeeCode="getemployeedeteteCode"/>
+    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteWarehouse" :getWarehouseCode="getwarehousedeteteCode"/>
   </div>
   <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
   </div>
@@ -45,7 +45,7 @@ import toast from '../../resouce/toast';
 export default {
   name: "EmployeeList",
   props: {
-    EmployeesLoad: Object,
+    WarehousesLoad: Object,
     closeSelectedAll: Boolean
   },
   
@@ -63,32 +63,32 @@ export default {
           this.EmployeesLoad.data.forEach(emp => {
             this.listEmpSelected.push(emp.employeeID);
           },
-          this.$emit("get-List-Employee", this.listEmpSelected)
+          this.$emit("get-List-Warehouse", this.listWhSelected)
           );
       }else{
-        this.listEmpSelected = [];
+        this.listWhSelected = [];
       }
-      console.log(this.listEmpSelected);
+      console.log(this.listWhSelected);
     },
 
     /**
      * hàm thực hiện kích hoạt checkbox
      */
-    handleCheckBox(EmpID){
+    handleCheckBox(WhID){
           //thêm mã nhân viên đã chọn vào mảng
-          this.listEmpSelected.push(EmpID);
-          this.$emit("get-List-Employee", this.listEmpSelected)
-          console.log(this.listEmpSelected);
+          this.listWhSelected.push(WhID);
+          this.$emit("get-List-Warehouse", this.listWhSelected)
+          console.log(this.listWhSelected);
     },
 
     /**
      * hàm hiện thông tin trên popup khi nhấn vào Sửa
      * Nguyễn Văn Cương 25/09/2022
      */
-    rowDBClick(employeeID) {
+    rowDBClick(warehouseID) {
       //bấm dbclick để sửa
       this.detailFormMode = 2;
-      this.$emit("custom-open-dbclick", employeeID, this.detailFormMode);
+      this.$emit("custom-open-dbclick", warehouseID, this.detailFormMode);
       console.log(this.detailFormMode);
     },
 
@@ -96,9 +96,9 @@ export default {
      * hàm lấy thông tin nhân viên khi xóa
      * Nguyễn Văn Cương 25/09/2022
      */
-    getEmployeeDetele(employeeID, employeeCode){
-        this.getemployeedetetevalue = employeeID;
-        this.getemployeedeteteCode = employeeCode;
+    getWarehouseDetele(warehouseID, warehouseCode){
+        this.getwarehousedetetevalue = warehouseID;
+        this.getwarehousedeteteCode = warehouseCode;
         
     },
  
@@ -111,11 +111,11 @@ export default {
         console.log(this.checkDelete);
         if (this.checkDelete == 2){
             this.isShowAskDelete = true; //hiện popup hỏi người dùng
-            this.idEmployeeDelete = this.getemployeedetetevalue; //lưu id employee cần xóa
+            this.idWarehouseDelete = this.getwarehousedetetevalue; //lưu id employee cần xóa
         }else if(this.checkDelete == 1){
           //bấm nhân bản
            this.detailFormMode = 1;
-           this.$emit("custom-open-dbclick", this.getemployeedetetevalue, this.detailFormMode);
+           this.$emit("custom-open-dbclick", this.getwarehousedetetevalue, this.detailFormMode);
         }else{
            console.log(1);
            //ngưng sử dụng
@@ -135,20 +135,20 @@ export default {
      * hàm format giới tính 
      * Nguyễn Văn Cương 01/10/2022
      */
-    fomatGender(gender){
+    fomatWarehouse(status){
 
-      //giá trị 1 là nữ 
-       if(gender == enums.FEMALE){
-         return gender = "Nữ";
-      //giá trị 2 là nam
-       }else if(gender == enums.MALE){
-         return gender = "Nam";
-       //giá trị 0 là khác
-       }else if (gender == enums.ELSE){
-         return gender = "Khác";
+      //giá trị 1 là hoạt động
+       if(status == enums.ACTIVE){
+         return status = "Đang sử dụng";
+      //giá trị 2 là ngưng hoạt động
+       }else if(status == enums.UNACTIVE){
+         return status = "Không sử dụng";
+       //giá trị 0 là chưa xác định
+       }else if (status == enums.UNKNOW){
+         return status = "Chưa xác định";
       //không có cho thành rỗng
        }else{
-         return gender = "";
+         return status = "";
        }
     },
 
@@ -203,17 +203,17 @@ export default {
      * Hàm xóa employee theo id 
      * Nguyễn Văn Cương 25/09/2022
      */
-    async deleteEmployee() {
+    async deleteWarehouse() {
           this.isShowToast = false;
           //lấy employeeid đã lưu 
-          var id = this.idEmployeeDelete; 
+          var id = this.idWarehouseDelete; 
            //check xem người dùng có ấn hủy hay không
           if(this.popupAskCance == true){
           {
             //đóng popup hỏi người dùng
             this.ClosePopupAsk();
               await fetch(
-            configs.baseURL + id,
+            configs.baseURLWarehouse + id,
             { method: "DELETE" }
           )
             .then((res) => res.json())
@@ -238,17 +238,17 @@ export default {
   },
   data() {
     return {
-      employees: [], //lưu dữ liệu nhân viên
-      empSelected: {}, //lưu nhân viên đã chọn
+      warehouses: [], //lưu dữ liệu nhân viên
+      whSelected: {}, //lưu nhân viên đã chọn
       detailFormMode: 1, //lưu trạng thái mở popup
       isShowAskDelete: false, //gọi popup hỏi có xóa không
       popupAskCance: true, //nút hủy xóa
-      idEmployeeDelete:0, //lưu id nhân viên cần xóa
+      idWarehouseDelete:0, //lưu id nhân viên cần xóa
       checkDelete: 2,  //trạng thái xóa
-      getemployeedetetevalue: 0, //lưu id nhân viên cần xóa
-      getemployeedetetecode: '', //lưu code nhân viên cần xóa
+      getwarehousedetetevalue: 0, //lưu id nhân viên cần xóa
+      getwarehousedetetecode: '', //lưu code nhân viên cần xóa
       stateCheckAll: false, //lưu trạng thái checkbox
-      listEmpSelected: [], //lưu danh sách nhân viên cần xóa
+      listWhSelected: [], //lưu danh sách nhân viên cần xóa
       isShowToast: false, //hiển thị thông báo
       ToastStatus: true, //trang thái thông báo
       ToastMess:{}, //nội dung thông báo

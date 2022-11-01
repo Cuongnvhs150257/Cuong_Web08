@@ -20,36 +20,36 @@
             <div class="popupedit-input1" >
               <label class="item-label product">Mã</label>
               <label class="item-labelsao"> *</label>
-              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" />
+              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" v-model="Records[recordvalue[0].value]"/>
             </div>
             <div class="popupedit-input2">
               <label class="item-label product">Tên</label>
               <label class="item-labelsao"> *</label>
-              <MInput :tab="2" />
+              <MInput :tab="2" v-model="Records[recordvalue[1].value]" />
             </div>
             <div class="popupedit-input3">
               <label class="item-label product">Tài khoản kho</label>
               <label class="item-labelsao"> *</label>
-              <TheProductDropBox :tab="3" :value="'unitID'" :label="'unitName'" :isShow="isShowDropbox" :disabled="false" :maxlength="100" @get-recordvalue="getRecord" ref="combobox" />
+              <TheProductDropBox :tab="3" :value="'warehouseID'" :label="'warehouseName'" :baseURL="'baseURLWarehouse'" :Comboboxmodel="Records[recordvalue[1].value]" :isShow="isShowDropbox" :disabled="false" :maxlength="100" @get-recordvalue="getRecord" ref="combobox" />
             </div>
             <div class="popupedit-input4">
               <label class="item-label product">Địa chỉ</label>
               <label class="item-labelsao"> *</label>
-              <MInput :tab="4" class="item-input input4" />
+              <MInput :tab="4" class="item-input input4" v-model="Records[recordvalue[3].value]" />
             </div>
           </div>
 
       </div>
+      
        <div class="popupedit-content item2" v-if="inputShow == 2">
             <div class="popupedit-input5" >
               <label class="item-label product">Đơn vị tính</label>
               <label class="item-labelsao"> *</label>
-              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" />
+              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" v-model="Records[recordvalue[0].value]" />
             </div>
             <div class="popupedit-input6">
               <label class="item-label product">Mô tả</label>
-              <label class="item-labelsao"> *</label>
-              <MInput :tab="4" class="item-input input4" />
+              <MInput :tab="4" class="item-input input4" v-model="Records[recordvalue[1].value]" />
             </div>
 
       </div>
@@ -88,10 +88,18 @@ export default {
       TheProductDropBox
   },
   props: {
-    getEmployeeCode: String,
     PopupEdit_label: String,
     inputShow: Boolean,
     height: String,
+    recordsSelected: Object,
+    recordvalue: [],
+
+  },
+  created(){
+    if (this.recordsSelected) {
+      this.Records = { ...this.recordsSelected };
+      console.log(this.Records);
+    }
   },
   methods: {
 
@@ -99,6 +107,11 @@ export default {
       this.$emit("close-product-popup");
     },
   },
+  data(){
+    return{
+      Records: {},
+    }
+  }
 };
 </script>
 

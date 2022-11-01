@@ -179,7 +179,7 @@ namespace MISA.WEB08.AMIS.BL
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         /// <returns>Data, TotalCount</returns>
-        public PagingData Filter(string keyword, int? limit, int? offset)
+        public PagingData<T> Filter(string keyword, int? limit, int? offset)
         {
             return _baseDL.Filter(keyword, limit, offset);
         }

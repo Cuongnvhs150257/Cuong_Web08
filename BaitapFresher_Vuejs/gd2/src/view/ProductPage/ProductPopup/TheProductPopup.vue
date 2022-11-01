@@ -65,29 +65,29 @@
           <div class="product-popup-input1">
             <label class="item-label product">Tên</label>
             <label class="item-labelsao"> *</label>
-            <MInput :inValue="inValue_Name" :maxlength="100" :tab="1" ref="inputFocus"/>
+            <MInput :inValue="inValue_Name" :maxlength="100" :tab="1" ref="inputFocus" v-model="Products.ProductName"/>
           </div>
           <div class="product-popup-input23">
             <div class="product-popup-input2">
               <label class="item-label product">Mã</label>
               <label class="item-labelsao"> *</label>
-              <MInput :inValue="inValue_Code" :maxlength="36" :tab="2" />
+              <MInput :inValue="inValue_Code" :maxlength="36" :tab="2" v-model="Products.ProductCode" />
             </div>
             <div class="product-popup-input3">
               <label class="item-label product item1">Nhóm VTHH</label>
               <span class="product-tooltip"> Nhóm vật tư hàng hóa </span>
-              <MInput :tab="3" />
+              <MInput :tab="3" v-model="Products.SupplyName" />
             </div>
           </div>
           <div class="product-popup-input23">
             <div class="product-popup-input4">
               <label class="item-label product">Đơn vị tính chính</label>
-              <TheProductDropBox :tab="4" :iconadd="true" :width="'width: 40%;'" :value="'unitID'" :label="'unitName'" :isShow="isShowDropbox" :disabled="false" :maxlength="100" @get-recordvalue="getRecord" @open-popup-edit="openPopupEdit" ref="combobox" />
+              <TheProductDropBox :Comboboxmodel="Products.UnitCalculateValue" :baseURL="'baseURLUnitCalculate'" :tab="4" :iconadd="true" :width="'width: 40%;'" :value="'unitCalculateID'" :label="'unitCalculateValue'" :isShow="isShowDropbox" :maxlength="100" @get-recordvalue="getRecord" @open-popup-edit="openPopupEdit" ref="combobox" />
             </div>
             <div class="product-popup-input5">
               <label class="item-label product item2">Giảm thuế theo NQ43</label>
               <span class="product-tooltip">Trạng thái tra cứu giảm thuế theo Nghị quyết 43/2022/QH15 </span>
-              <TheProductDropBox :tab="5" :DropboxItem="DropboxItemTax" :maxlength="0" :disabled="true" @get-recordvalue="getRecord" :value="'value'" :label="'label'" ref="combobox"/>
+              <TheProductDropBox :Comboboxmodel="fomatTaxReduction(Products.TaxReduction)" :tab="5" :DropboxItem="DropboxItemTax" :maxlength="0" :readonly="true" @get-recordvalue="getRecord" :value="'value'" :label="'label'" ref="combobox"/>
             </div>
             <div class="product-popup-input-icon"></div>
             <div class="product-popup-input-label">Tra cứu mã giảm thuế</div>
@@ -110,28 +110,28 @@
           <div class="product-popup-input678">
             <div class="product-popup-input6">
               <label class="item-label product">Thời hạn bảo hành</label>
-              <TheProductDropBox :tab="7" :DropboxItem="DropboxItemInsurance" :disabled="true" :value="'value'" :label="'label'" :maxlength="100" @get-recordvalue="getRecord" ref="combobox" />
+              <TheProductDropBox :tab="7" :Comboboxmodel="Products.Insurance" :DropboxItem="DropboxItemInsurance" :readonly="true" :value="'value'" :label="'label'" :maxlength="100" @get-recordvalue="getRecord" ref="combobox" />
             </div>
             <div class="product-popup-input7">
               <label class="item-label product">Số lượng tồn tối thiểu</label>
-              <MInput :tab="8" />
+              <MInput :tab="8" v-model="Products.Amount" />
             </div>
             <div class="product-popup-input8">
               <label class="item-label product">Nguồn gốc</label>
-              <MInput />
+              <MInput :tab="9"  v-model="Products.Source" />
             </div>
           </div>
            <div class="product-popup-input9">
               <label class="item-label product">Mô tả</label>
-              <MInput :tab="9"  class="item-input input9" />
+              <MInput :tab="10"  v-model="Products.Describe"  class="item-input input9" />
             </div>
             <div class="product-popup-input10">
               <label class="item-label product">Diễn giải khi mua</label>
-              <MInput :tab="10" />
+              <MInput :tab="11" v-model="Products.ExplainBuy"/>
             </div>
             <div class="product-popup-input11">
               <label class="item-label product">Diễn giải khi bán</label>
-              <MInput :tab="11" />
+              <MInput :tab="12" v-model="Products.ExplainSell" />
             </div>
       </div>
       <div class="product-popup-product-content-center-mid">
@@ -171,6 +171,10 @@ import notification from "../../../resouce/notification";
 export default {
   created(){
     this.handleDropboxItemInsurance();
+    if (this.productsSelected) {
+      this.Products = { ...this.productsSelected };
+      console.log(this.Products);
+    }
   },
   mounted() {
     this.handleLoopFocus();
@@ -189,6 +193,7 @@ export default {
   },
   props: {
     property: Number,
+    productsSelected: Object,
   },
   methods: {
     /**
@@ -282,6 +287,26 @@ export default {
       this.$emit("open-popup-select");
       this.$emit("close-product-popup");
     },
+    /**
+     * hàm format giới tính 
+     * Nguyễn Văn Cương 01/10/2022
+     */
+    fomatTaxReduction(status){
+
+      //giá trị 1 là hoạt động
+       if(status == enums.ACTIVE){
+         return status = "Có giảm thuế";
+      //giá trị 2 là ngưng hoạt động
+       }else if(status == enums.UNACTIVE){
+         return status = "Không giảm thuế";
+       //giá trị 0 là chưa xác định
+       }else if (status == enums.UNKNOW){
+         return status = "Chưa xác định";
+      //không có cho thành rỗng
+       }else{
+         return status = "";
+       }
+    },
   },
   data(){
     return{
@@ -304,6 +329,7 @@ export default {
       DropboxItemInsurance: [],
       isShowDropbox: true,
       isShowEdit: false,
+      Products: {},
     }
   }
 };
