@@ -15,6 +15,8 @@ namespace MISA.WEB08.AMIS.Common.Entities
 
         public string WarehouseName { get; set; }
 
+        public string WarehouseAccount { get; set; }
+
         public string Address { get; set; }
 
         public int Status { get; set; }

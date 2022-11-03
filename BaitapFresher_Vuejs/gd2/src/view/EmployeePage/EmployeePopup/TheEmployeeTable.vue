@@ -42,7 +42,7 @@
     </tbody>
   </table>
   <div class="mpopup-ask">
-    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteEmployee" :getEmployeeCode="getemployeedeteteCode"/>
+    <MPopupNotification v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteEmployee" :getEmployeeCode="getemployeedeteteCode" :MPopupN = 2 />
   </div>
   <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
   </div>
@@ -51,8 +51,8 @@
 
 <script>
 
-import MPopupAsk from '../../../components/Base/MPopupAsk/MPopupAsk.vue';
-import MDropItem from './MDropItem.vue';
+import MPopupNotification from "../../../components/Base/MPopupNotification/MPopupNotification.vue";
+import MDropItem from '../../../components/Base/MDropItem/MDropItem.vue';
 import MCheckbox from "../../../components/Base/MCheckbox/MCheckbox.vue";
 import MToast from "../../../components/Base/MToast/MToast.vue";
 import toast from "../../../resouce/toast";
@@ -65,7 +65,12 @@ export default {
     EmployeesLoad: Object,
     closeSelectedAll: Boolean
   },
-  
+  components: {
+    MPopupNotification,
+    MDropItem,
+    MCheckbox,
+    MToast,
+  },
   methods: {
 
     /**
@@ -275,12 +280,6 @@ export default {
      
     };
   },
-  components: {
-    MPopupAsk,
-    MDropItem,
-    MCheckbox,
-    MToast,
-  }
 };
 </script>
 

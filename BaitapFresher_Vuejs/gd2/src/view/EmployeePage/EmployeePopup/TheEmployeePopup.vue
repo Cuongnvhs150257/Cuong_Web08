@@ -95,7 +95,14 @@
           <MComboxbox
             @get-unitid="getUnitID"
             :inValueCombox="inValue_Unit"
-            :EmployeeUnit="Employees.UnitName"
+            :Comboboxmodel="Employees.UnitName"
+            :baseURL="'baseURLUnit'"
+            :value="'unitID'"
+            :label="'unitName'"
+            :isShow="isShowDropbox"
+            :maxlength="100"
+            @get-recordvalue="getUnitID"
+            ref="combobox"
             :tab="3"
           />
           <span v-show="Spanempty" class="error-unit">
@@ -200,15 +207,9 @@
       </div>
       <div class="popup_item input8">
         <div class="popup_input8_border">
-          <div class="input_item_right">
-            <m-button-1
-              :toolTip="'Ctrl + ALT + C'"
-              class="input_item_right_btn"
-              @click="btnSaveonClick"
-              :tab="20"
-              ref="focusLoop"
-            >
-            </m-button-1>
+          <div class="input_item_right" @click="btnSaveonClick">
+            <MButton :tab="20" :ButtonCss="'btn-button-save-emp'" :text="'Cất và thêm'" ref="focusLoop" />
+            <span class="tool-tip-btn">Ctrl + ALT + C</span>
           <div class="btn-c">
             <button
               class="btn_input8_right"
@@ -235,11 +236,12 @@
         ></div>
 
         <div>
-          <MPopupAskEdit
+          <MPopupNotification
             v-if="isShowPopupAskEdit"
             @popup-ask-no="handleCloseAll"
             @popup-ask-cance="handleCloseAskEdit"
             @agree-save-click="agreeSaveClick"
+            :MPopupN="3"
           />
         </div>
       </div>
@@ -249,19 +251,19 @@
         :errors="errors"
         :classcssicon="PopupNotifi_icon"
         :classlabel="PopupNotifi_label"
+        :MPopupN=1
       />
     </div>
   </div>
 </template>
 <script>
 import MInputNomal from "./MInputNomal.vue";
-import MInputRadio from "./MInputRadio.vue";
-import MButton1 from "./MButton1.vue";
+import MInputRadio from "../../../components/Base/MInputRadio/MInputRadio.vue";
+import MButton from "../../../components/Base/MButton/MButton.vue";
 import MInputSpecial from "./MInputSpecial.vue";
 import MPopupNotification from "../../../components/Base/MPopupNotification/MPopupNotification.vue";
-import MComboxbox from "./MCombobox.vue";
-import MDatetime from "./MDatetime.vue";
-import MPopupAskEdit from "./MPopupAskEdit/MPopupAskEdit.vue";
+import MComboxbox from "../../../components/Base/MCombobox/MCombobox.vue";
+import MDatetime from "../../../components/Base/MDatetime/MDatetime.vue";
 import notification from "../../../resouce/notification";
 import toast from "../../../resouce/toast";
 import popupnotification from "../../../resouce/popupnotification";
@@ -764,12 +766,11 @@ export default {
   components: {
     MInputNomal,
     MInputRadio,
-    MButton1,
+    MButton,
     MInputSpecial,
     MPopupNotification,
     MComboxbox,
     MDatetime,
-    MPopupAskEdit,
   },
   props: {
     employeesSelected: Object,
@@ -1046,7 +1047,7 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   margin-top: 15px;
-  margin-right: 172px;
+  margin-right: 163px;
   position: absolute;
   right: 0;
 }
@@ -1073,6 +1074,7 @@ export default {
 .btn-c:hover .tool-tip-btn{
   visibility: visible;
   opacity: 1;
+  right: 150px;
 }
 .btn_input8_left {
   height: 36px;
@@ -1165,6 +1167,12 @@ export default {
 }
 .focus-loop {
   opacity: 0;
+}.input_item_right:hover .tool-tip-btn{
+  visibility: visible;
+  opacity: 1;
+  width: 80px;
+  top: 80px;
+  right: 50px;
 }
 </style>
 

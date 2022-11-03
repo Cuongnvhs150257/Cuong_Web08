@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="content-top-right">
-        <div @click="openPopup(null)"> 
+        <div @click="openPopup(null, 1)"> 
            <MButton  :ButtonCss="'btn-button-openPopup-Employee'" :text="'Thêm mới nhân viên'"/>
         </div>
       </div>
@@ -15,11 +15,11 @@
 
     <div class="content-table">
       <div class="content-toolbar">
-        <div class="content-toolbar">
-          <MButtonDeleteMultiple @handle-deletemu="openPopupAsk" />
+        <div class="content-toolbar" @click="openPopupAsk">
+          <MButton :ButtonCss="'deletemultple'" :iconcss="true" :text="'Thực hiện xóa hàng loạt'" />
         </div>
         <div class="content-toolbar-right">
-          <MInputSearch @InputWhere="getWhereValue"/>
+          <MInputSearch @InputWhere="getWhereValue" :placeholder="'Tìm theo mã, tên nhân viên'" :iconsearch="'icon-search'"/>
           <button type="button" class="toolbar-load" @click="loadData"></button>
           <button type="button" class="toolbar-export" @click="getExcel"></button>
         </div>
@@ -56,12 +56,13 @@
     <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
 
     <div class="mpopup-ask">
-    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteMultiple"  />
+    <MPopupNotification v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteMultiple" :MPopupN = 2 />
   </div>
     <MPopupNotification
         v-if="isShowNotification"
         @close-notification-click="closeNoti"
-        :errors="errors"
+        :label="errors"
+        :MPopupN = 1
     />
 
     <MLoading v-if="LoadingShow" />
@@ -71,20 +72,29 @@
 
 <script>
 import MButton from "../../../components/Base/MButton/MButton.vue";
-import MTable from "../EmployeeTable/MTable.vue";
+import MTable from "./TheEmployeeTable.vue";
 import ThePadding from "../../../components/Layout/ThePadding/ThePadding.vue";
 import MToast from "../../../components/Base/MToast/MToast.vue";
-import MPopup from "../EmployeePopup/MPopup.vue";
+import MPopup from "./TheEmployeePopup.vue";
 import MLoading from "../../../components/Base/MLoading/MLoading.vue";
-import MInputSearch from "./MInputSearch.vue";
-import MButtonDeleteMultiple from "./MButtonDeleteMultiple.vue";
-import MPopupAsk from '../../../components/Base/MPopupAsk/MPopupAsk.vue';
+import MInputSearch from "../../../components/Base/MInputSearch/MInputSearch.vue";
 import MPopupNotification from "../../../components/Base/MPopupNotification/MPopupNotification.vue";
 import toast from "../../../resouce/toast";
 import configs from "../../../configs/index";
 import enums from "../../../resouce/enums";
 
 export default {
+
+  components: {
+    MButton,
+    MTable,
+    ThePadding,
+    MPopup,
+    MLoading,
+    MInputSearch,
+    MToast,
+    MPopupNotification,
+  },
   methods: {
     /**
      * Hàm lấy mã nhân viên mới
@@ -368,18 +378,6 @@ export default {
       this.isShowNotification = false;
       this.validate = false;
     },
-  },
-  components: {
-    MButton,
-    MTable,
-    ThePadding,
-    MPopup,
-    MLoading,
-    MInputSearch,
-    MToast,
-    MButtonDeleteMultiple,
-    MPopupAsk,
-    MPopupNotification,
   },
 
   created() {

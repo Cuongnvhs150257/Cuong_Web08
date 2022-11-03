@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="product-content-top-right">
-        <div class="btn-button-openPopupSelect" @click="openPopupUnit">
+        <div class="btn-button-openPopupSelect" @click="openPopup(null, 1)">
           <MButton  :ButtonCss="'btn-button-openPopup'" :text="'Thêm'"/>
         </div>
       </div>
@@ -19,7 +19,7 @@
     <div class="product-content-table">
       <div class="product-content-toolbar">
         <div class="product-content-toolbar-left">
-           <MInputSearch @InputWhere="getWhereValue"/>
+           <MInputSearch @InputWhere="getWhereValue" :placeholder="'Tìm mã kho, tên kho'" :iconsearch="'icon-search b'"/>
         </div>
         <div class="product-content-toolbar-right">
           <button type="button" class="product-toolbar-load" @click="loadData"></button>
@@ -43,7 +43,7 @@
         @offset-value="getOffSetValue"
       />
     </div>
-    <MPopupEdit v-if="isShow" :PopupEdit_label="PopupEdit_label" :inputShow="1" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Warehouses" :recordvalue="WarehouseValue" />
+    <MPopupEdit v-if="isShow" :baseURL="'baseURLWarehouse'" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="1" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Warehouses" :recordvalue="WarehouseValue" />
  
 
     <!-- <Teleport to="#page-employee">
@@ -77,9 +77,6 @@ export default {
     MPopupEdit,
   },
   methods: {
-    openPopupUnit(){
-      this.isShow = true;
-    },
     closeProductPopup(){
       this.isShow = false;
     },
@@ -121,7 +118,6 @@ export default {
             this.Warehouses = data;
             if (detailFormMode == 1) {
               this.Warehouses.WarehouseCode = "";
-              await this.getNewCode();
             }
             this.Mode = detailFormMode;
             console.log(this.Mode);
@@ -134,8 +130,8 @@ export default {
         //trường hợp chỉ mở popup
       } else {
         (this.Warehouses = {}), //dữ liệu trên popup rỗng
-          await this.getNewCode();
           this.PopupEdit_label = "Thêm kho";
+          this.Mode = detailFormMode;
         this.isShow = true;
       }
     },
@@ -412,7 +408,7 @@ export default {
       isShowNotification: false,
       ButtonMode: 1,
       PopupEdit_label: {},
-      WarehouseValue: [{value: 'WarehouseCode'},{value:'WarehouseName'}, {value: 'WarehouseAccount'}, {value: 'Address'}],
+      WarehouseValue: [{value: 'WarehouseID'},{value: 'WarehouseCode'},{value:'WarehouseName'}, {value: 'WarehouseAccount'}, {value: 'Address'}],
     };
   },
 }

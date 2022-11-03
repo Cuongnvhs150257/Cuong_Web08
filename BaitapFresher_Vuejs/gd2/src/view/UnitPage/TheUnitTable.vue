@@ -20,13 +20,13 @@
         <td>{{ this.fomatUnit(u.status) }}</td>
         <td style="min-width: 110px;">
           <label class="product-tab-th-select-lable" @click="rowDBClick(u.unitCalculateCode)">Sửa</label>
-          <div class="product-btnopendrop"></div>
+          <div class="product-btnopendrop"><MDropItem @edit-value="openPopupAsk" @click="getEmployeeDetele(u.unitCalculateID,  u.unitCalculateValue)" /></div>
         </td>
       </tr>
     </tbody>
   </table>
   <div class="product-mpopup-ask">
-    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteUnit" :getUnitCode="getunitdeteteCode"/>
+    <MPopupNotification v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteUnit" :getUnitCode="getunitdeteteCode" :MPopupN="2" />
   </div>
   <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
   </div>
@@ -34,8 +34,9 @@
 </template>
 
 <script>
-import MPopupAsk from '../../components/Base/MPopupAsk/MPopupAsk.vue';
+import MPopupNotification from '../../components/Base/MPopupNotification/MPopupNotification.vue';
 import MToast from '../../components/Base/MToast/MToast.vue';
+import MDropItem from "../../components/Base/MDropItem/MDropItem.vue";
 import configs from '../../configs/index';
 import enums from '../../resouce/enums';
 import toast from '../../resouce/toast';
@@ -257,8 +258,9 @@ export default {
     };
   },
   components: {
-    MPopupAsk,
+    MPopupNotification,
     MToast,
+    MDropItem,
   }
 };
 </script>

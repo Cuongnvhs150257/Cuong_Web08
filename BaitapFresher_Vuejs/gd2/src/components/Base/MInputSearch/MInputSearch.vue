@@ -3,16 +3,22 @@
     <input
       type="text"
       class="toolbar-input-search"
-      placeholder="Tìm theo mã, tên nhân viên"
+      :placeholder="placeholder"
       :value="InputWhere"
       @input="handleInput"
+      :style="style"
     />
-    <button class="icon-search"></button>
+    <button :class="iconsearch"></button>
   </div>
 </template>
 
 <script>
 export default {
+  props:{
+    placeholder: String,
+    style: String,
+    iconsearch: String,
+  },
   methods:{
     handleInput(event) {
       this.$emit("InputWhere", event.target.value);
@@ -47,7 +53,7 @@ export default {
   font-size: 12px;
 }
 .toolbar-input-search:focus {
-  border: 2px solid #019160;
+  border: 1px solid #50B83C;
 }
 .icon-search {
   width: 28px;
@@ -62,5 +68,7 @@ export default {
   background-image: var(--icon);
   background-position: -425px -30px;
   background-repeat: no-repeat;
+}.icon-search.b{
+    right: 90px;
 }
 </style>

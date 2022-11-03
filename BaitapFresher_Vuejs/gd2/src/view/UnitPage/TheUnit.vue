@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="product-content-top-right">
-        <div class="btn-button-openPopupSelect" @click="openPopup(null)">
+        <div class="btn-button-openPopupSelect" @click="openPopup(null, 1)">
           <MButton  :ButtonCss="'btn-button-openPopup'" :text="'Thêm'"/>
         </div>
       </div>
@@ -19,7 +19,7 @@
     <div class="product-content-table">
       <div class="product-content-toolbar">
         <div class="product-content-toolbar-left">
-           <MInputSearch @InputWhere="getWhereValue"/>
+           <MInputSearch @InputWhere="getWhereValue" :placeholder="'Tìm kiếm theo đơn vị tính'" :iconsearch="'icon-search b'"/>
         </div>
         <div class="product-content-toolbar-right">
           <button type="button" class="product-toolbar-load" @click="loadData"></button>
@@ -43,7 +43,7 @@
         @offset-value="getOffSetValue"
       />
     </div>
-    <MPopupEdit v-if="isShow" :PopupEdit_label="PopupEdit_label" :height="'height: 320px;'" :inputShow="2" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Units" :recordvalue="UnitValue" />
+    <MPopupEdit v-if="isShow" :PopupEdit_label="PopupEdit_label" :detailFormMode="Mode"  @data-load="loadData" @custom-handle-click="closeProductPopup" :baseURL="'baseURLUnitCalculate'" :height="'height: 320px;'" :inputShow="2" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Units" :recordvalue="UnitValue" />
 
 
     <!-- <Teleport to="#page-employee">
@@ -118,7 +118,6 @@ export default {
             this.PopupEdit_label = "Sửa đơn vị tính";
             if (detailFormMode == 1) {
               this.Units.UnitCalculateCode = "";
-              await this.getNewCode();
             }
             this.Mode = detailFormMode;
             console.log(this.Mode);
@@ -131,8 +130,8 @@ export default {
         //trường hợp chỉ mở popup
       } else {
         (this.Units = {}), //dữ liệu trên popup rỗng
-          await this.getNewCode();
           this.PopupEdit_label = "Thêm đơn vị tính";
+          this.Mode = detailFormMode;
         this.isShow = true;
       }
     },
@@ -410,7 +409,7 @@ export default {
       isShowNotification: false,
       ButtonMode: 1,
       PopupEdit_label: {},
-      UnitValue: [{value: 'UnitCalculateValue'},{value: 'Describe'}],
+      UnitValue: [{value: 'UnitCalculateID'},{value: 'UnitCalculateValue'},{value: 'Describe'}],
     };
   },
 }

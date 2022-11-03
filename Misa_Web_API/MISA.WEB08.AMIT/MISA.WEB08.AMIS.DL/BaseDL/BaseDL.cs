@@ -165,7 +165,7 @@ namespace MISA.WEB08.AMIS.DL
             using (var mysqlConnection = new MySqlConnection(connectionString))
             {
                 //khai bao ten stored produre
-                string storeProdureName = String.Format(Resource.Proc_UpdateRecord, typeof(Employee).Name);
+                string storeProdureName = String.Format(Resource.Proc_UpdateRecord, typeof(T).Name);
 
                 //Thực hiện gọi vào DB
                 var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -246,7 +246,7 @@ namespace MISA.WEB08.AMIS.DL
             using (var mysqlConnection = new MySqlConnection(connectionString))
             {
                 //khai bao ten stored produre
-                string storeProdureName = String.Format(Resource.Proc_DeleteRecord, typeof(Employee).Name);
+                string storeProdureName = String.Format(Resource.Proc_DeleteRecord, typeof(T).Name);
 
                 //Thực hiện gọi vào DB
                 var numberOfAffectedRows = mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -329,12 +329,22 @@ namespace MISA.WEB08.AMIS.DL
         /// </summary>
         /// <param name="employeeCode"></param>
         /// <returns></returns>
-        public bool CheckEmployeeCodeExist(string employeeCode)
+        public bool CheckRecordCodeExist(string recordCode)
         {
             //Chuẩn bị tham số đầu vào
             var parameters = new DynamicParameters();
 
-            parameters.Add("v_employeeCode", employeeCode);
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
+            {
+                string propertyName = property.Name;
+                var Dulicate = (DulicateAtrribute?)Attribute.GetCustomAttribute(property, typeof(DulicateAtrribute));
+                if(Dulicate != null)
+                {
+                    parameters.Add($"v_{propertyName}", recordCode);
+                    break;
+                }
+            }
             //khai bao ten stored produre
             var storeProdureName = String.Format(Resource.Proc_CheckDulicate, typeof(T).Name);
 
@@ -344,8 +354,8 @@ namespace MISA.WEB08.AMIS.DL
             using (var mysqlConnection = new MySqlConnection(connectionString))
             {
                 //Thực hiện gọi vào DB
-                var employeeCodeDuplicate = mysqlConnection.QueryFirstOrDefault<string>(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-                if (employeeCodeDuplicate != null)
+                var recordCodeDuplicate = mysqlConnection.QueryFirstOrDefault<string>(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                if (recordCodeDuplicate != null)
                     return true;
                 else
                     return false;

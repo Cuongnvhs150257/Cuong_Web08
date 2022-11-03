@@ -6,11 +6,11 @@
         <th class="product-box"><MCheckbox @click="handleCheckBoxAll" :stateCheckAll="stateCheckAll"  /></th>
         <th style="min-width: 250px;">TÊN</th>
         <th style="min-width: 120px;">MÃ</th>
-        <th style="min-width: 120px;">GIẢM THUẾ THEO NQ 43</th>
+        <th class="pro-tab" style="min-width: 120px;">GIẢM THUẾ THEO NQ 43 <span class="product-tooltip">Trạng thái tra cứu giảm thuế theo Nghị quyết 43/2022/QH15</span> </th>
         <th style="min-width: 120px;">TÍNH CHẤT</th>
-        <th style="min-width: 120px;">Nhóm VTHH</th>
-        <th style="min-width: 120px;" class="product-tab-th-select-amount">SỐ LƯỢNG TỒN</th>
-        <th class="product-tab-th-select-amount" style="min-width: 140px;" >GIÁ TRỊ TỒN</th>
+        <th class="pro-tab-b" style="min-width: 120px;">NHÓM VTHH <span class="product-tooltip">Nhóm vật tư hàng hóa</span> </th>
+        <th style="min-width: 120px;" class="product-tab-th-amount">SỐ LƯỢNG TỒN</th>
+        <th class="product-tab-th-amount" style="min-width: 140px;" >GIÁ TRỊ TỒN</th>
         <th class="product-tab-th-select">CHỨC NĂNG</th>
       </tr>
     </thead>
@@ -26,17 +26,17 @@
         <td>{{ this.fomatTaxReduction(pro.taxReduction)}}</td>
         <td>{{ pro.nature }}</td>
         <td>{{ pro.supplyName}}</td>
-        <td  class="product-tab-th-select-amount" >{{ pro.quantityStock }}</td>
-        <td  class="product-tab-th-select-amount" >{{ pro.existentialValue }}</td>
+        <td  class="product-tab-th-amount" >{{ pro.quantityStock }}</td>
+        <td  class="product-tab-th-amount" >{{ pro.existentialValue }}</td>
         <td style="min-width: 110px;">
           <label class="product-tab-th-select-lable" @click="rowDBClick(pro.productID)">Sửa</label>
-          <div class="product-btnopendrop"></div>
+          <div class="product-btnopendrop"><MDropItem @edit-value="openPopupAsk" @click="getProductDetele(pro.productID, pro.productCode)" /></div>
         </td>
       </tr>
     </tbody>
   </table>
   <div class="product-mpopup-ask">
-    <MPopupAsk v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteProduct" :getProductCode="getproductdeteteCode"/>
+    <MPopupNotification v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteProduct" :getProductCode="getproductdeteteCode" :MPopupN="2" />
   </div>
   <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
   </div>
@@ -44,9 +44,10 @@
 </template>
 
 <script>
-import MPopupAsk from '../../components/Base/MPopupAsk/MPopupAsk.vue';
+import MPopupNotification from '../../components/Base/MPopupNotification/MPopupNotification.vue';
 import MCheckbox from "../../components/Base/MCheckbox/MCheckbox.vue";
 import MToast from '../../components/Base/MToast/MToast.vue';
+import MDropItem from "../../components/Base/MDropItem/MDropItem.vue";
 import configs from '../../configs/index';
 import enums from '../../resouce/enums';
 import toast from '../../resouce/toast';
@@ -266,9 +267,10 @@ export default {
     };
   },
   components: {
-    MPopupAsk,
+    MPopupNotification,
     MCheckbox,
     MToast,
+    MDropItem,
   }
 };
 </script>
@@ -345,9 +347,9 @@ td, th {
   padding: 0 !important;
   z-index: 1;
 }
-.product-tab-th-select-amout{
+.product-tab-th-amount{
   text-align: right !important;
-  padding-left: 10px !important;
+  padding-right: 10px !important;
   z-index: 1;
 }
 .product-content-table thead {
@@ -395,24 +397,22 @@ td, th {
   z-index: 3;
   
 }
-.product-tool-tip-table {
-        width: 140px;
-        font-size: 11px;
-        position: absolute;
-        top: 30px;
-        right: 0;
-        background-color: #505050;
-        border-radius: 2px;
-        padding: 2px 4px;
-        z-index: 3;
-        text-align: center;
-        color: #fff;
-        visibility: hidden;
-        
-    }
-    .product-cmnd:hover .product-tool-tip-table {
-        visibility: visible;
-        opacity: 1;
-    }
+.pro-tab:hover .product-tooltip{
+  visibility: visible;
+  opacity: 1;
+  width: 313px;
+  font-size: 10px;
+  right: -60px;
+  font-family: Misa Fonts Semibold;
+  height: 15px;
+}.pro-tab-b:hover .product-tooltip{
+  visibility: visible;
+  opacity: 1;
+  font-family: Misa Fonts Semibold;
+  width: 150px;
+  font-size: 10px;
+  right: -5px;
+  height: 15px;
+}
 </style>
 

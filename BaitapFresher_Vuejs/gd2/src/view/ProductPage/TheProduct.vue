@@ -24,7 +24,9 @@
     </div>
     <div class="product-overview">
         <div class="product-overview-ri">
-          <div class="product-overview-ri-icon"></div>
+          <div class="product-overview-ri-icon">
+            <span class="product-tooltip">Bấm vào để lọc</span>
+          </div>
           <div class="product-overview-ri-left">
             <div class="product-overview-ri-left-top">0</div>
             <div class="product-overview-ri-left-center">Hàng hóa</div>
@@ -32,7 +34,9 @@
           </div>
         </div>
         <div class="product-overview-le">
-           <div class="product-overview-le-icon"></div>
+           <div class="product-overview-le-icon">
+             <span class="product-tooltip">Bấm vào để lọc</span>
+           </div>
           <div class="product-overview-le-left">
             <div class="product-overview-le-left-top">11</div>
             <div class="product-overview-ri-left-center">Hàng hóa</div>
@@ -49,7 +53,7 @@
           <MButton :ButtonCss="'btn-button-filter'" :text="'Lọc'" /> 
         </div>
         <div class="product-content-toolbar-right">
-          <MInputSearch @InputWhere="getWhereValue"/>
+          <MInputSearch @InputWhere="getWhereValue" :placeholder="'Tìm theo mã, tên hàng hóa, dịch vụ'" :style="'width: 250px'" :iconsearch="'icon-search'" />
           <button type="button" class="product-toolbar-load" @click="loadData"></button>
           <button type="button" class="product-toolbar-export" @click="getExcel"></button>
         </div>
@@ -73,7 +77,7 @@
     </div>
     <TheProductSelect v-if="isShowPopupSelect" @close-popup-selete="closePopupSelect" @open-product-popup="openProductPopup" />
 
-    <TheProductPopup v-if="isShow" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
+    <TheProductPopup v-if="isShow" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
 
 
     <!-- <Teleport to="#page-employee">
@@ -119,6 +123,7 @@ export default {
       this.isShow = true;
       this.isShowPopupSelect = false;
       this.ProductPopupProperty = value;
+      this.Products = {}
     },
     closeProductPopup(){
       this.isShow = false;
@@ -612,6 +617,7 @@ export default {
   right: 150px;
   margin-top: 10px;
   border-radius: 50%;
+  border: 2px solid #ffff;
 }.product-overview-ri-icon:hover{
    border: 2px solid rgba(254,167,17,.3);
 }.product-overview-ri-icon:active{
@@ -645,6 +651,7 @@ export default {
   height: 90px;
   margin-top: 10px;
   border-radius: 50%;
+  border: 2px solid #ffff;
 }.product-overview-le-icon:hover{
   border: 2px solid rgba(255,0,0,.3);
 }.product-overview-le-left{
@@ -670,5 +677,26 @@ export default {
   width: 25px;
   height: 25px;
   margin-top: 3px;
+}.product-tooltip{
+    width: 100px;
+    height: 18px;
+    font-size: 12px;
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    background-color: #505050;
+    border-radius: 4px;
+    padding: 2px 4px;
+    z-index: 5;
+    text-align: center;
+    color: #fff;
+    visibility: hidden;
+}.product-overview-ri-icon:hover .product-tooltip{
+  visibility: visible;
+  opacity: 1;
+}.product-overview-le-icon:hover .product-tooltip{
+  visibility: visible;
+  opacity: 1;
+
 }
 </style>

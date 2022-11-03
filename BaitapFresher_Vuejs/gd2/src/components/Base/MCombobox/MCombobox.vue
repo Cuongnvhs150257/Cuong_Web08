@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import configs from "../../configs/index";
+import configs from "../../../configs/index";
 export default {
   mounted() {
     window.addEventListener('mouseup', this.clickEventInterrupt);
@@ -39,13 +39,13 @@ export default {
          * Nguyễn Văn Cương 05/10/2022
          */
         selectedRecord(drop){
-          this.RecordName = drop;
+          console.log(drop);
           this.isShowDropbox = !this.isShowDropbox;
           this.isShow = this.isShowDropbox;
           this.$emit("get-recordvalue", drop.value);
           this.inValueChange = this.inValueCombox;
           this.selectItem = false;
-          this.RecordSle.label = drop.label;
+          this.RecordSle[this.label] = drop[this.label];
         },
         btnDropClick(){
            this.isShowDropbox = !this.isShowDropbox;
@@ -99,7 +99,6 @@ export default {
         selectItem: true,
         inValue: true, //nổi bật đơn vị đã chọn
         inValueChange: true,
-        RecordName: {},
         DropboxShow: [],
         RecordSle,
 
@@ -110,7 +109,7 @@ export default {
 
 <style scoped>
 :root{
-    --icon: url("../../assets/Resource/img/Sprites.64af8f61.svg");
+    --icon: url("../../../assets/Resource/img/Sprites.64af8f61.svg");
 }.select .drop-itemtbl {
   background-color: #2ca01c !important;
   color: #fff !important;
@@ -173,6 +172,7 @@ export default {
     top: 32px;
     border-radius: 4px;
     overflow-y: scroll;
+    overflow-x: hidden;
     max-height: 184px;
 }.dropbox-input.add{
     position: absolute;
@@ -188,7 +188,7 @@ export default {
 }
 .drop-itemtbl{
   height: 32px;
-  width: 94%;
+  width: 100%;
   display: flex;
   align-items: center;
   background-color: #fff;

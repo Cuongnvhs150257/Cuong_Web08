@@ -81,7 +81,7 @@ namespace MISA.WEB08.AMIS.DL
         /// Createby: Nguyễn Văn Cương 15/10/2022
         /// </summary>
         /// <returns></returns>
-        public bool CheckEmployeeCodeExist(string EmployeeCode);
+        public bool CheckRecordCodeExist(string RecordCode);
 
 
     }

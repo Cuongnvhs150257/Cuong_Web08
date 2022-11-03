@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import {createRouter, createWebHistory} from "vue-router"
 import TheProduct from '../src/view/ProductPage/TheProduct.vue'
-import TheEmployee from '../src/view/EmployeePage/TheEmployee/TheEmployee.vue'
+import TheEmployee from './view/EmployeePage/EmployeePopup/TheEmployee.vue'
 import TheWarehouse from '../src/view/WarehousePage/TheWarehouse.vue'
 import TheUnit from '../src/view/UnitPage/TheUnit.vue'
 const routers = [
