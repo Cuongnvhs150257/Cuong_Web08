@@ -15,7 +15,7 @@
 
             <div
               class="product-input1-checkbox-icon question-icon"
-              @click="handleCloseProductPopup"
+              @click="handleOpenPopupAskEdit"
             >
               <span class="product-tooltip"> Đóng (ESC) </span>
             </div>
@@ -318,6 +318,7 @@
         :recordvalue="UnitValue"
         :height="'height: 320px;'"
         :inputShow="2"
+        @custom-handle-click ="closeProductPopup"
         @close-product-popup="closeProductPopup"
         @open-popup-select="openPopupSelect"
       />
@@ -417,7 +418,7 @@ export default {
 
       //nếu có phím tắt ESC thì đóng popup
       if (event.keyCode == enums.ESC) {
-        this.handleCloseProductPopup();
+        this.handleOpenPopupAskEdit();
       }
       //nếu có phím tắt F2 thì gọi trở giúp
       if (event.keyCode == enums.F2) {

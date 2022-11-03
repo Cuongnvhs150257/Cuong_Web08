@@ -39,10 +39,10 @@
                     <div class="sidebar-item-icon sicon8"></div>
                     <label class="sidebar-item-laber">Công cụ dụng cụ</label>
                 </router-link>
-                <div class="sidebar-item">
+                <router-link to="/Thesupply" class="sidebar-item">
                     <div class="sidebar-item-icon sicon9"></div>
                     <label class="sidebar-item-laber">Tài sản cố định</label>
-                </div>
+                </router-link>
                 <div class="sidebar-item">
                     <div class="sidebar-item-icon sicon10"></div>
                     <label class="sidebar-item-laber">Thuế</label>

@@ -71,4 +71,7 @@ export default {
 }.icon-search.b{
     right: 90px;
 }
+.icon-search.c{
+    right: 35px;
+}
 </style>

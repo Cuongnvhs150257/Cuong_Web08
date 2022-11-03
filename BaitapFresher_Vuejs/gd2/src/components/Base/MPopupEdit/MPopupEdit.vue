@@ -3,7 +3,7 @@
     <div class="popupedit" :style="height">
       <div class="popupedit-top">
           <div class="popupedit-top-left">
-              <div class="popupedit-top-left-label">{{PopupEdit_label}}</div>
+              <div class="popupedit-top-left-label" :style="width">{{PopupEdit_label}}</div>
           </div>
           <div class="popupedit-top-right">
               <div class="ask-icon">
@@ -47,6 +47,25 @@
             </div>
 
       </div>
+
+       <div class="popupedit-content item3" v-if="inputShow == 3">
+            <div class="popupedit-input7" >
+              <label class="item-label product">Mã</label>
+              <label class="item-labelsao"> *</label>
+              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" ref="inputFocus" v-model="Records[recordvalue[1].value]"/>
+            </div>
+            <div class="popupedit-input8">
+              <label class="item-label product">Tên</label>
+              <label class="item-labelsao"> *</label>
+              <MInput :tab="2" v-model="Records[recordvalue[2].value]" />
+            </div>
+            <div class="popupedit-input9">
+              <label class="item-label product">Thuộc</label>
+              <MInput :tab="3" class="item-input input5"  />
+            </div>
+
+      </div>
+
       <div class="popupedit-bottom">
          <div class="popupedit-content-bottom-left">
               <div @click="handleCloseProductPopup">
@@ -106,6 +125,7 @@ export default {
     PopupEdit_label: String,
     inputShow: Boolean,
     height: String,
+    width: String,
     recordsSelected: Object,
     recordvalue: [],
     baseURL: String,
@@ -172,7 +192,7 @@ export default {
 
       //nếu có phím tắt ESC thì đóng popup
       if (event.keyCode == enums.ESC) {
-        this.handleCloseProductPopup();
+        this.handleOpenPopupAskEdit();
       }
       //nếu có phím tắt F2 thì gọi trở giúp
       if (event.keyCode == enums.F2) {
@@ -643,6 +663,22 @@ export default {
 }.popupedit-content.item2{
     margin-top: 5px;
     height: 173px;
+}.popupedit-input7{
+  width: 150px; 
+}.popupedit-input8{
+    margin-left: 25px;
+    width: 347px;
+}.popupedit-input9{
+    position: absolute;
+    width: 520px;
+    left: 33px;
+    top: 142px;
+    height: 30px;
+}.item-input.input5{
+    height: 30px;
+}.popupedit-content.item3{
+  height: 170px;
+  width: 536px;
 }
 
 </style>
