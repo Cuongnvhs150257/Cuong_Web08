@@ -39,7 +39,7 @@
     </div>
     <div class="product-content-bottom">
       <ThePadding
-        :TotalCount="SupplysTable"
+        :TotalCount="TotalCount"
         @filter-padding="getLimitValue"
         @offset-value="getOffSetValue"
       />
@@ -59,7 +59,7 @@
 <script>
 import MButton from '../../components/Base/MButton/MButton.vue';
 import MInputSearch from '../../components/Base/MInputSearch/MInputSearch.vue';
-import ThePadding from '../../components/Layout/ThePadding/ThePadding.vue';
+import ThePadding from '../../components/Layout/ThePadding/MPadding.vue';
 import MToast from '../../components/Base/MToast/MToast.vue';
 import MLoading from '../../components/Base/MLoading/MLoading.vue'
 import TheSupplyTable from './TheSupplyTable.vue';
@@ -311,6 +311,7 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           this.SupplysTable = data; //lưu dữ liệu
+          this.TotalCount = data.totalCount;
           this.LoadingShow = false; //tắt loading
         })
         .catch((res) => {
@@ -409,6 +410,7 @@ export default {
       ButtonMode: 1,
       PopupEdit_label: {},
       SupplyValue: [{value: 'SupplyID'},{value: 'SupplyCode'},{value:'SupplyName'}, {value: 'Status'}],
+      TotalCount: 10,
     };
   },
 }

@@ -34,7 +34,7 @@
     </div>
     <div class="content-bottom">
       <ThePadding
-        :TotalCount="EmployeesTable"
+        :TotalCount="TotalCount"
         @filter-padding="getLimitValue"
         @offset-value="getOffSetValue"
       />
@@ -73,7 +73,7 @@
 <script>
 import MButton from "../../../components/Base/MButton/MButton.vue";
 import MTable from "./TheEmployeeTable.vue";
-import ThePadding from "../../../components/Layout/ThePadding/ThePadding.vue";
+import ThePadding from "../../../components/Layout/ThePadding/MPadding.vue";
 import MToast from "../../../components/Base/MToast/MToast.vue";
 import MPopup from "./TheEmployeePopup.vue";
 import MLoading from "../../../components/Base/MLoading/MLoading.vue";
@@ -325,6 +325,7 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           this.EmployeesTable = data; //lưu dữ liệu
+          this.TotalCount = data.totalCount;
           this.LoadingShow = false; //tắt loading
         })
         .catch((res) => {
@@ -417,6 +418,7 @@ export default {
       errors: [],
       //gọi popup thiếu dữ liệu
       isShowNotification: false,
+      TotalCount: 10,
     };
   },
 };
