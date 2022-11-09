@@ -96,6 +96,7 @@
         </div>
         <MPopupNotification
         v-if="isShowNotification"
+        :MPopupN="1"
         @close-notification-click="closeNoti"
         :errors="errors"
         :classcssicon="PopupNotifi_icon"
@@ -133,12 +134,14 @@ export default {
 
   },
   created(){
+    //hiển thị giá trị chuyền vào lên popup
     if (this.recordsSelected) {
       this.Records = { ...this.recordsSelected };
       console.log(this.Records);
     }
   },
   mounted() {
+    //focus vào ô input
     this.handleLoopFocus();
     window.addEventListener("keydown", this.handleEvent);
     window.addEventListener("keyup", this.handleEventInterrupt);
@@ -215,7 +218,10 @@ export default {
         }
       }
     },
-
+    /**
+    * hàm đóng popup
+    * Nguyễn Văn Cương 01/10/2022
+    */    
     handleCloseProductPopup() {
       this.$emit("close-product-popup");
     },
@@ -354,7 +360,7 @@ export default {
     },
 
     /**
-     * hàm sửa hoặc thêm nhân viên mới
+     * hàm sửa hoặc thêm mới
      * Nguyễn Văn Cương 15/09/2022
      */
     async btnSaveonClick() {
@@ -384,6 +390,7 @@ export default {
             if (res.errorCode) {
               //mở popup thông báo
               this.showNotification(this.NotifiStatus == false);
+              //nếu trùng mã thi hiển thị lỗi
               if (res.errorCode == "8") {
                 let errormess = res.moreInfo;
                 let arrayStrig = errormess.split("<");
@@ -497,16 +504,26 @@ export default {
       inputFocus: null,
       //mảng chưa keyCode
       arrKeyCode: [],
-      isShowToast: false, //hiển thị thông báo
-      ToastStatus: 1, //trang thái thông báo
-      ToastMess: {}, //nội dung thông báo
-      ToastMess_color: {}, //màu nội dung thông báo
-      Toastcss: {}, //css thông báo
-      Toastcssicon: {}, //icon thông báo
-      ToastAddClose: false, //trạng thái thêm và đóng popup
-      NotifiStatus: true, //trạng thái hiển thị notification
-      PopupNotifi_icon: {}, //lưu icon notifi
-      PopupNotifi_label: {}, //lưu css nội dung notifi
+       //hiển thị thông báo
+      isShowToast: false,
+      //trang thái thông báo
+      ToastStatus: 1, 
+       //nội dung thông báo
+      ToastMess: {},
+       //màu nội dung thông báo
+      ToastMess_color: {},
+       //css thông báo
+      Toastcss: {},
+      //icon thông báo
+      Toastcssicon: {}, 
+      //trạng thái thêm và đóng popup
+      ToastAddClose: false, 
+      //trạng thái hiển thị notification
+      NotifiStatus: true, 
+       //lưu icon notifi
+      PopupNotifi_icon: {},
+      //lưu css nội dung notifi
+      PopupNotifi_label: {}, 
     }
   }
 };

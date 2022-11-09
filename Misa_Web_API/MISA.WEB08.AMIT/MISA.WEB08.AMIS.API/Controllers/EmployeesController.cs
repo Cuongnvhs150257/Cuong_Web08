@@ -12,6 +12,10 @@ using System;
 
 namespace MISA.WEB08.AMIS.API.Controllers
 {
+    /// <summary>
+    /// Controller cho bảng Employee kế thừa BaseController
+    /// </summary>
+    /// <param name="baseBL"></param>
     public class EmployeesController : BaseController<Employee>
     {
         #region Field

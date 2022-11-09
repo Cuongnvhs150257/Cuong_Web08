@@ -10,7 +10,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
         #region Contructor
 
         /// <summary>
-        /// Controller cho bảng Product kế thừa BaseController
+        /// Controller cho bảng UnitCalculate kế thừa BaseController
         /// </summary>
         /// <param name="baseBL"></param>
         public UnitCalculateController(IBaseBL<UnitCalculate> baseBL) : base(baseBL)

@@ -10,7 +10,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
         #region Contructor
 
         /// <summary>
-        /// Controller cho bảng Product kế thừa BaseController
+        /// Controller cho bảng Supply kế thừa BaseController
         /// </summary>
         /// <param name="baseBL"></param>
         public SupplyController(IBaseBL<Supply> baseBL) : base(baseBL)

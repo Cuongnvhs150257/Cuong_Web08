@@ -66,9 +66,19 @@
 <script>
 export default {
     methods:{
+
+    /**
+     * Hàm đóng popup tính chất
+     * Nguyễn Văn Cương 15/09/2022
+     */
         handleClosePopupSelect(){
             this.$emit("close-popup-selete");
         },
+
+    /**
+     * Hàm mở popup 
+     * Nguyễn Văn Cương 15/09/2022
+     */
         handleOpenProductPopup(value){
             this.$emit("open-product-popup", value)
         }

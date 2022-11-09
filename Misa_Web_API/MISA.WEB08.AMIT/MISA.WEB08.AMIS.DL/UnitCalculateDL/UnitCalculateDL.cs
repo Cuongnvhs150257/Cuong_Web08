@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.DL.UnitCalculateDL
 {
+    /// <summary>
+    /// UnitCalculateDL kết nối với Database
+    /// Createdby: Nguyễn Văn Cương 02/10/2022
+    /// </summary>
     public class UnitCalculateDL : BaseDL<UnitCalculate>, IUnitCalculateDL
     {
     }

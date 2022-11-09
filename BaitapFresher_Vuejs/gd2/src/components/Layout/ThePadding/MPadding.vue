@@ -2,7 +2,7 @@
     <div class="padding">
                     <div class="padding-left" v-if="TotalCount">
                         <label>Tổng số: </label>
-                        <label class="padding-left-bold">{{TotalCount.totalCount}}</label>
+                        <label class="padding-left-bold">{{TotalCount}}</label>
                         <label> bản ghi</label>
                     </div>
                     <div class="padding-right">
@@ -10,11 +10,11 @@
                             <MDropBox @padding-value ="getPaddingValue"/>
                         </div>
                         <div class="padding-center">
-                            <button class="btn-first" @click="PrevValue()" >Trước</button>
-                            <div class="page-group" v-for="(item, index) in DisplayValue" :key="index" @click="offSetValue(item)">
+                            <button class="btn-first" :class="{ 'disabled' : currentPage === 1 }" @click="PrevValue()" >Trước</button>
+                            <div class="page-group" :class="{ 'button-seleced': currentPage === item }" v-for="(item, index) in DisplayValue" :key="index" @click="offSetValue(item)">
                                 {{item}}
                             </div>
-                            <button class="btn-last" @click="NextValue()">Sau</button>
+                            <button class="btn-last" :class="{ 'disabled': currentPage === Math.ceil(TotalCount/indexPadding) }" @click="NextValue()">Sau</button> 
                         </div>
                     </div>
                 </div>
@@ -56,12 +56,14 @@ export default {
                 this.currentPage = page;
                 if(page === Math.ceil(this.TotalCount/this.indexPadding)){
                     this.pageChangeCLick = this.currentPage - 1;
+                    this.endPage = true;
                 }
                 else if(page === Math.ceil(this.TotalCount/this.indexPadding) - 1){
                     this.pageChangeCLick = this.currentPage;
                 }
                 else{
                     this.pageChangeCLick = 3;
+                    this.endPage = false;
                 }
                 this.$emit("offset-value", (this.indexPadding) * (page - 1));
             }
@@ -72,6 +74,7 @@ export default {
                     this.pageChangeCLick = this.currentPage - 1;
                 }
                 this.currentPage -= 1;
+                this.endPage = false;
             this.$emit("offset-value", (this.indexPadding) * (this.currentPage - 1));
             }
         },
@@ -90,36 +93,28 @@ export default {
     computed:{
         DisplayValue(){
            let arr = [];
-           for (let i = 1; i < Math.ceil(this.TotalCount/this.indexPadding); i++) {
-               if(this.currentpage === Math.ceil(this.TotalCount/this.indexPadding) - 1 || this.currentpage === Math.ceil(this.TotalCount/this.indexPadding)){
-                   if(this.currentpage === Math.ceil(this.TotalCount/this.indexPadding)){
-                        arr.push(i);
-                   }else if(i === 3){
-                        if(Math.ceil(this.TotalCount/this.indexPadding) === 4){
-                            arr.push(i);
-                        }else{
-                            arr.push("...");
-                        }
-                    }else if(i < 4){
-                        arr.push(i);
-                    }else if(i === 4){
-                        arr.push(this.pageChangeCLick);
-                    } 
-               }
-               else{
+           for (let i = 1; i < Math.ceil(this.TotalCount/this.indexPadding) + 1; i++) {
                     if(i === Math.ceil(this.TotalCount/this.indexPadding)){
                         arr.push(i);
                     }
                     else if(i === 3){
-                        arr.push(this.pageChangeCLick);
+                        if(this.endPage == true){
+                            arr.push("...");
+                        }else{
+                            arr.push(this.pageChangeCLick);
+                        }
                     }
                     else if(i < 4){
                         arr.push(i);
                     }
                     else if(i === 4){
-                        arr.push("...");
+                        if(this.endPage == true){
+                            arr.push(this.pageChangeCLick);
+                        }else{
+                            arr.push("...");
+                        }
+                        
                     }
-                }
             }     
             //this.$emit("offset-value", this.currentpage);
             console.log(arr);
@@ -131,8 +126,9 @@ export default {
     
     data(){
         return{
-            currentpage: 1,
+            currentPage: 1,
             pageChangeCLick : 3,
+            endPage: false,
 
             indexPadding: 10, //số lượng bản ghi
             indexOffSetOn: 2, //trang hiện tại
@@ -145,11 +141,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .padding{
     width: 100%;
     border-left: 2px solid #fff;
-    height: 48px;
+    height: 55px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,6 +164,7 @@ export default {
     margin-right: 10px;
     display: flex;
     height: 25px;
+    top: 10px;
 }.padding-right select{
     width: 200px;
     height: 30px;
@@ -182,35 +179,15 @@ export default {
 }.padding-left-bold{
     font-weight: bold;
 }
-.page-group button{
-    border: 1px solid #000;
-    height: 25px;
-    background-color: #fff;
-}
-.page-group button:hover{
-    background-color: #fff;
-}
-.page-group .paddingnumber.button-seleced {
-    font-weight: bold;
+.page-group.button-seleced {
     border: 1px solid #bbbb;
-
-}
-.page-group-last .paddingnumber.button-seleced {
-    font-weight: bold;
-    border: 1px solid #bbbb;
-
-}
-.page-group .paddingnumber, .page-group-last .paddingnumber{
-    margin-top: 5px;
-    margin-left: 3px;
-    width: 20px;
+    color: #000;
+    font-weight: 700;
+    width: 19px;
+    text-align: center;
     height: 20px;
-    margin-right: 5px;
-    padding-top: 2px;
-    cursor: pointer;
-    border: none;
-    outline: none;
     background-color: #fff;
+
 }
 
 .btn-first, .btn-last{
@@ -221,7 +198,7 @@ export default {
     cursor: pointer;
     margin-right: 10px;
 }
-.btn-first:hover, .btn-last:hover{
+.btn-first.disabled, .btn-last.disabled{    
     color: #666666;
 }.drop-box{
     width: 200px;

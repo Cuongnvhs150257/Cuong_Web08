@@ -20,6 +20,10 @@ export default {
     iconsearch: String,
   },
   methods:{
+        /**
+         * hàm cập nhật giá trị tìm kiếm
+         * Nguyễn Văn Cương 15/09/2022
+         */
     handleInput(event) {
       this.$emit("InputWhere", event.target.value);
     }

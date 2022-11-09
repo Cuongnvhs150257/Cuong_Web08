@@ -1,23 +1,44 @@
 <template>
-  <div class="droptbl">
-    <button class="droptbl" @click="btnDropClick"></button>
-    <div class="drop-datatbl" v-if="OpenDropbox === true">
-      <div class="drop-itemtbl"  @click="SelectedEdit(1)">Nhân bản</div>
-      <div class="drop-itemtbl"  @click="SelectedEdit(2)">Xóa</div>
-      <div class="drop-itemtbl" @click="SelectedEdit(3)">Ngưng sử dụng</div>
+
+  <div class="mdrop">
+    <button class="mdropbtn" @click="btnDropClick"></button>
+    <Teleport to="#opendrop" :disable="OpenDropboxD">
+    <div class="mdrop-datatbl" v-show="OpenDropboxD === true" :style="Drstyle" ref="dropbox">
+      <div class="mdrop-itemtbl"  @click="SelectedEdit(1)">Nhân bản</div>
+      <div class="mdrop-itemtbl"  @click="SelectedEdit(2)">Xóa</div>
+      <div class="mdrop-itemtbl" @click="SelectedEdit(3)">Ngưng sử dụng</div>
     </div>
+    </Teleport>
   </div>
+
 </template>
 
 <script>
+import Teleport from 'vue2-teleport';
 export default {
+  mounted() {
+    window.addEventListener('mousedown', this.clickEventInterrupt);
+  },
+  unmounted() {
+    window.removeEventListener('mouseup', this.clickEventInterrupt);
+  },
+  props:{
+    Drstyle: String
+  },
+  components:{
+    Teleport,
+  },
   methods:{
         /** 
          * hàm mở dropbox
          * Nguyễn Văn Cương 01/10/2022
         */
         btnDropClick() {
-            this.OpenDropbox = !this.OpenDropbox;
+          if(this.OpenDropboxD == false){
+            //gửi giá trị left, top để teleport hiển thị dropbox
+              this.$emit("getpostion", this.PosX, this.PosY);
+          }
+          this.OpenDropboxD = !this.OpenDropboxD;
         },
 
         /**
@@ -26,24 +47,45 @@ export default {
          */
         SelectedEdit(value){
           this.$emit("edit-value", value);
-          this.OpenDropbox = false;
-        }
-    
+          this.OpenDropboxD = false;
+        },
+
+        /**
+         * hàm click outsite
+         * Nguyễn Văn Cương 01/10/2022
+         */
+        clickEventInterrupt(event){
+          //lưu vị trí con chuột left, top
+          this.PosY = event.y;
+          this.PosX = event.x
+          if(this.OpenDropboxD == true){
+            //kiểm tra xem con chuột có click vào dropitem
+            const isClick = this.$refs.dropbox.contains(event.target);
+            if(!isClick){
+              this.OpenDropboxD = false;
+            }
+          }
+        },
   },
   data(){
         return{
-            OpenDropbox: false,
+          //trạng thái đống mở dropbox
+            OpenDropboxD: false,
+            //lưu vị trí
+            PosY: {},
+            //lưu vị trí
+            PosX: {},
         }
     }
 };
 </script>
 
 
-<style>
+<style scoped>
 :root{
     --icon: url("../../../assets/Resource/img/Sprites.64af8f61.svg");
 }
-.droptbl {
+.mdrop {
   height: 30px;
   width: 100%;
   box-sizing: border-box;
@@ -54,7 +96,7 @@ export default {
   
 }
 
-.droptbl .droptbl{
+.mdropbtn{
   position: absolute;
   border: none;
   right: 1px;
@@ -67,14 +109,14 @@ export default {
   background: #fff;
   margin: 0;
 }
-.droptbl .droptbl{
+.mdropbtn{
     background-image: var(--icon);
     background-position: -888px -354px;
     background-repeat: no-repeat;
-}.droptbl .drop:hover{
+}.mdropbtn:hover{
     background-color: #dddd;
 }
-.drop-datatbl {
+.mdrop-datatbl {
   position: absolute;
   top: 32px;
   width: 110px;
@@ -83,7 +125,7 @@ export default {
   border: 1px solid #bbbb;
   z-index: 3;
 }
-.drop-itemtbl {
+.mdrop-itemtbl {
   height: 32px;
   width: 100px;
   display: flex;
@@ -96,10 +138,10 @@ export default {
   z-index: 100;
 }
 
-.drop-itemtbl:hover {
+.mdrop-itemtbl:hover {
   color: #50b83c;
   background-color: #EBEDF0;
-}.drop-data-hide{
+}.mdrop-data-hide{
     display: none;
 }
 </style>

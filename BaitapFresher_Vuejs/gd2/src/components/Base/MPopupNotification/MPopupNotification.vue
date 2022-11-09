@@ -22,8 +22,8 @@
         <div class="popupask-icon icon-ask"></div>
         <div class="popupask-icon-label-ask">
           <label class="label-ask"
-            >Bạn có thực sự muốn xóa Nhân viên
-            {{ getEmployeeCode }} không?</label
+            >Bạn có thực sự muốn xóa {{record}} 
+             {{ getRecordCode }} không?</label
           >
         </div>
       </div>
@@ -68,7 +68,8 @@ export default {
       errors: String,
       classcssicon: String,
       classlabel: String,
-      getEmployeeCode: String,
+      getRecordCode: String,
+      record: String,
       MPopupN: Number
   },
   methods: {

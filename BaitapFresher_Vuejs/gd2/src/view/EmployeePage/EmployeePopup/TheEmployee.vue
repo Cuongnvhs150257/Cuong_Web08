@@ -26,10 +26,15 @@
       </div>
       <MTable
         @custom-open-dbclick="openPopup"
-        :EmployeesLoad="EmployeesTable"
+        :RecordsLoad="EmployeesTable"
         @data-load-delete="loadData"
-        @get-List-Employee="getListEmployee"
+        @get-List-CheckAll="getListEmployee"
         :closeSelectedAll="closeSelectedAll"
+        :thListTable="thList"
+        :tdListTable="tdList"
+        :PopupNotilable="'Nhân viên'"
+        :baseURL="'baseURL'"
+        :TableCheckBox="true"
       />
     </div>
     <div class="content-bottom">
@@ -72,7 +77,7 @@
 
 <script>
 import MButton from "../../../components/Base/MButton/MButton.vue";
-import MTable from "./TheEmployeeTable.vue";
+import MTable from "../../../components/Base/MTable/MTable.vue";
 import ThePadding from "../../../components/Layout/ThePadding/MPadding.vue";
 import MToast from "../../../components/Base/MToast/MToast.vue";
 import MPopup from "./TheEmployeePopup.vue";
@@ -242,7 +247,9 @@ export default {
           this.ToastMess_color = toast.ToastMess_color_faild;
           this.ToastMess = toast.ToastMessDeleteMuti_faild;
         }
+        this.closeToast();
     },
+    
     /**
     Hàm hiện thị thông báo cho popup nhân viên
     Nguyễn Văn Cương 15/10/2022
@@ -253,8 +260,20 @@ export default {
         this.Toastcss = Toastcss;
         this.ToastMess_color = ToastMess_color;
         this.ToastMess = ToastMess;
+        this.closeToast();
     },
 
+    closeToast(){
+      if(this.timeout){
+        clearTimeout(this.timeout)
+        this.timeout = null;
+      }
+      else{
+        this.timeout = setTimeout(() => {
+        this.isShowToast = false;
+        }, 4000);
+      }
+    },
     /**
      * Hàm thực hiện xóa nhiều nhân viên
      * Nguyễn Văn Cương 15/10/2022
@@ -393,23 +412,40 @@ export default {
 
   data() {
     return {
-      isShow: false, //gọi popup thêm nhân viên
-      LoadingShow: false, //gọi màn hình loadind
-      Employees: null, //lưu giá trị nhân viên
-      EmployeesTable: null, //lưu giá trị bảng nhân viên
-      LimitValue: null, //lưu giá trị số lượng trang
-      OffSetValue: null, //lưu giá trị bản ghi hiện tại
-      WhereValue: null, //lưu giá trị tìm kiếm
-      listEmpDelete: [], //lưu danh sách mã nhân viên cần xóa
-      Mode: 2, //lưu trạng thái mở popup nhân viên 
-      isShowAskDelete: false, //gọi popup hỏi có xóa không
-      closeSelectedAll: false, //đóng chọn checkbox
-      isShowToast: false, //hiển thị thông báo
-      ToastStatus: true, //trang thái thông báo
-      ToastMess:{}, //nội dung thông báo
-      ToastMess_color: {}, //màu nội dung thông báo
-      Toastcss:{}, //css thông báo
-      Toastcssicon: {}, //icon thông báo
+       //gọi popup thêm nhân viên
+      isShow: false,
+      //gọi màn hình loadind
+      LoadingShow: false, 
+      //lưu giá trị nhân viên
+      Employees: null, 
+      //lưu giá trị bảng nhân viên
+      EmployeesTable: null, 
+      //lưu giá trị số lượng trang
+      LimitValue: null, 
+      //lưu giá trị bản ghi hiện tại
+      OffSetValue: null, 
+      //lưu giá trị tìm kiếm
+      WhereValue: null, 
+      //lưu danh sách mã nhân viên cần xóa
+      listEmpDelete: [], 
+      //lưu trạng thái mở popup nhân viên 
+      Mode: 2, 
+      //gọi popup hỏi có xóa không
+      isShowAskDelete: false, 
+      //đóng chọn checkbox
+      closeSelectedAll: false, 
+      //hiển thị thông báo
+      isShowToast: false, 
+      //trang thái thông báo
+      ToastStatus: true, 
+      //nội dung thông báo
+      ToastMess:{}, 
+       //màu nội dung thông báo
+      ToastMess_color: {},
+      //css thông báo
+      Toastcss:{}, 
+       //icon thông báo
+      Toastcssicon: {},
       //mảng chưa keyCode
       arrKeyCode: [],
       //lưu thời gian delay khi tìm kiếm
@@ -418,7 +454,36 @@ export default {
       errors: [],
       //gọi popup thiếu dữ liệu
       isShowNotification: false,
+      //số trang mặc định
       TotalCount: 10,
+      //lưu giá trị của tdhead trong table
+      thList: [
+        {style: "min-width: 130px;", label: "MÃ NHÂN VIÊN"},
+        {style: "min-width: 170px;", label: "TÊN NHÂN VIÊN"},
+        {style: "min-width: 100px;", label: "GIỚI TÍNH"},
+        {style: "min-width: 120px;", label: "NGÀY SINH", class: "tab-th-select"},
+        {style: "min-width: 140px;", label: "SỐ CMND", class: "cmnd", span: "Số chứng minh nhân dân"},
+        {style: "min-width: 170px;", label: "CHỨC DANH"},
+        {style: "min-width: 170px;", label: "TÊN ĐƠN VỊ"},
+        {style: "min-width: 130px;", label: "SỐ TÀI KHOẢN"},
+        {style: "min-width: 170px;", label: "TÊN NGÂN HÀNG"},
+        {style: "min-width: 200px;", label: "CHI NHÁNH NGÂN HÀNG"},
+      ],
+      
+      //lưu property trong table
+      tdList: 
+      [{property: "employeeCode"},
+      {property: "fullName"},
+      {property: "gender", fun: 2}, 
+      {property: "dateOfBirth", fun: 3},
+      {property: "identifyCode"},
+      {property: "postions"},
+      {property: "unitName"},
+      {property: "bankAccount"},
+      {property: "bankName"},
+      {property: "bankUnit"},
+      {property: "employeeID", style: "display: none"}
+      ],
     };
   },
 };
@@ -511,5 +576,11 @@ export default {
   border-radius: 4px;
   background-color: #ffff;
   cursor: pointer;
+}.content-table{
+  height: calc(100% - 146px);
+  width: calc(100% - 30px);
+  background-color: #fff;
+  padding: 10px 16px;
+  border-radius: 4px 4px 0px 0px;
 }
 </style>

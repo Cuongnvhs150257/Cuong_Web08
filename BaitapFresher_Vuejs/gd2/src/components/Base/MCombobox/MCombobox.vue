@@ -1,14 +1,44 @@
 <template>
-  <div class="droptbl" :class="{'dropbox-input-green': !inValueChange, 'dropbox-input-green': isShowDropbox }" >
+  <div class="droptbl" v-if="ComboClass === 1" :class="{'dropbox-input-green': !inValueChange, 'dropbox-input-green': isShowDropbox }" >
     <input class="dropbox-input product" type="text" :readonly="readonly" :style="width" :maxlength="maxlength" v-model="this.RecordSle[label]" :tabindex="tab" />
     <div :class="{'dropbox-input add' : iconadd}" @click="openPopupEdit"></div>
-    <button class="droptbtn" @click="btnDropClick" ref="cover_combobox"></button>
-    <div class="dropbl-data" v-show="isShow" ref="combobox">
+    <button class="droptbtn" @click="btnDropClick" ref="cover_combobox"><div class="droptbtn-icon" :style="style"></div></button>
+    <div class="dropbl-data" v-show="isShowD" ref="combobox">
         <div class="drop-for" v-for="d in DropboxShow" :key="d[value]" :class="{select : d[value] == RecordSle[value] , select : d[label] == RecordSle[label] }" @click="selectedRecord(d)" >
           <div class="drop-itemtbl" >{{d[label]}}</div>
         </div>
     </div>
     
+  </div>
+  <div class="combomuti" v-if="ComboClass === 2" :class="{'dropbox-input-green': !inValueChange, 'dropbox-input-green': isShowDropbox }">
+    <div class="combomuti-input-main">
+      <div class="combomuti-input-main-data" v-for="item in ComboMutiItem" :key="item">
+        <div class="combomuti-main-item">
+          <div class="item-label">{{item}}</div>
+          <div class="item-cancel" @click="CancelComboMutiItem(item)" ></div>
+        </div>
+      </div>
+      <input class="combomuti-input" type="text" :readonly="readonly" :style="width" :maxlength="maxlength" v-model="this.RecordSle[label]" :tabindex="tab" />
+    </div>
+    
+    <div :class="{'dropbox-input add' : iconadd}" @click="openPopupEdit"></div>
+    <button class="droptbtn" @click="btnDropClick" ref="cover_combobox"><div class="droptbtn-icon" :style="style"></div></button>
+    <div class="combomuti-data" v-show="isShowD" :style="width_combomuti" ref="combobox" >
+        <div class="combomuti-head">
+          <div class="combomuti-head-left">{{CombolabelLeft}}</div>
+          <div class="combomuti-head-right">{{CombolabelRight}}</div>
+        </div>
+        <div class="combomuti-cover">
+            <div class="combomuti-for" v-for="d in DropboxShow" :key="d[value]" :class="{select : d[value] == RecordSle[value] , select : d[label] == RecordSle[label] }" @click="selectedRecordMuti(d)" >
+              <div class="combomuti-itemtbl" >
+                <div class="combomuti-item-left">{{d[code]}}</div>
+                <div class="combomuti-item-center">{{d[label]}}</div>
+                <div :class="{'combomuti-item-right' : d[label] === ComboMutiItem[indexComboMutiItem]}"></div>
+          </div>
+        </div>
+        
+        </div>
+    </div>
   </div>
 </template>
 
@@ -16,7 +46,7 @@
 import configs from "../../../configs/index";
 export default {
   mounted() {
-    window.addEventListener('mouseup', this.clickEventInterrupt);
+    window.addEventListener('mousedown', this.clickEventInterrupt);
   },
   unmounted() {
     window.removeEventListener('mouseup', this.clickEventInterrupt);
@@ -27,11 +57,21 @@ export default {
         maxlength: Number,
         value: String,
         label: String,
+        code: String,
         readonly: Boolean,
         iconadd: Boolean,
         width: String,
         Comboboxmodel: String,
-        baseURL: String
+        baseURL: String,
+        ComboClass: {
+          type: Number,
+          default: 1,
+          
+        },
+        CombolabelLeft: String,
+        CombolabelRight: String,
+        width_combomuti: String,
+        InputClass: Boolean,
     },
     methods:{
         /**
@@ -41,22 +81,73 @@ export default {
         selectedRecord(drop){
           console.log(drop);
           this.isShowDropbox = !this.isShowDropbox;
-          this.isShow = this.isShowDropbox;
-          this.$emit("get-recordvalue", drop.value);
-          this.inValueChange = this.inValueCombox;
+          this.isShowD = this.isShowDropbox;
+          this.$emit("get-recordvalue", drop.value, this.value);
+          this.inValueChange = false;
           this.selectItem = false;
           this.RecordSle[this.label] = drop[this.label];
+          this.Rotate();
         },
-        btnDropClick(){
-           this.isShowDropbox = !this.isShowDropbox;
-           this.isShow = this.isShowDropbox;  
+
+        /**
+        hàm mở combobox
+        Nguyễn Văn Cương 05/10/2022
+         */
+        btnDropClick(){ 
+          //trường hợp combobox dữ liệu có sẵn
            if(this.DropboxItem){
               this.DropboxShow = this.DropboxItem
-              console.log(this.DropboxShow);
            }else{
+             //trường hợp combobox cần load dữ liệu
              this.loadUnit();
            }
+           this.isShowDropbox = !this.isShowDropbox;
+           this.isShowD = this.isShowDropbox; 
+           //xoay icon nút 
+           this.Rotate();
         },
+
+        /**
+        hàm chọn nhiều phần tử
+        Nguyễn Văn Cương 05/10/2022
+         */
+        selectedRecordMuti(muti){
+          this.inValueChange = false;
+          if(this.InputClass == false){
+            //kiểm tra xem mảng chứa đã có chưa
+            if(!this.ComboMutiItem.includes(muti[this.label])){
+              this.ComboMutiItem.push(muti[this.label]);
+            }
+            //lưu index của giá trị
+            this.indexComboMutiItem = this.ComboMutiItem.indexOf(muti[this.label]);
+            console.log(this.ComboMutiItem);
+            this.$emit("get-recordvalue", this.ComboMutiItem);
+          }else{
+            //chưa có thì chọn tiếp
+            this.selectedRecord(muti);
+          }
+          //xoay icon nút
+          this.Rotate();
+          
+        },
+
+        /**
+        hàm xóa phần tử trong combobox nhiều
+        Nguyễn Văn Cương 05/10/2022
+         */
+        CancelComboMutiItem(value){
+          //tìm index của phần từ trong mảng
+          const index = this.ComboMutiItem.indexOf(value);
+          if (index > -1) {
+            //loại bỏ phần tử khỏi mảng
+            this.ComboMutiItem.splice(index, 1); 
+          }  
+        },
+
+        /**
+        hàm mở popup thêm mới
+        Nguyễn Văn Cương 05/10/2022
+         */
         openPopupEdit(){
           this.$emit("open-popup-edit");
         },
@@ -79,28 +170,60 @@ export default {
         });
         },
 
-
+      /**
+        hàm xoay icon nút
+        Nguyễn Văn Cương 05/10/2022
+         */  
+      Rotate(){
+        if(this.isShowD == true){
+          this.style = "transition: linear 0.2s; transform: rotate(180deg);"
+        }else{
+          this.style = "transition: linear 0.2s; transform: rotate(0deg);"
+        }
+      },
+      
+      /**
+        hàm click outside
+        Nguyễn Văn Cương 05/10/2022
+         */
       clickEventInterrupt(event){
-      const isClick = this.$refs.combobox.contains(event.target);
-      if(!isClick){
-         this.isShow = false;
+      if(this.isShowD == true){
+        //kiểm tra click có chứa combobox không
+        const isClick = this.$refs.combobox.contains(event.target);
+        if(!isClick){
+          //nếu không đóng combobox
+          this.isShowD = false;
+          //xoay icon nút
+          this.style = "transition: linear 0.2s; transform: rotate(0deg);"
+        }
       }
     },
     },
     data(){
       
       var RecordSle= {
-          //hiện thị tên đơn vị của nhân viên khi mở popup sửa nhân viên
+          //hiện thị giá trị của bảng trên input
             [this.label]: this.Comboboxmodel 
       };
       return{
-        isShow: false,
+        //trạng thái đóng mở combobox
+        isShowD: false,
+        //trạng thái đóng mở combobox
         isShowDropbox: false,
+        //lưu giá trị
         selectItem: true,
-        inValue: true, //nổi bật đơn vị đã chọn
-        inValueChange: true,
+        //nổi bật đơn vị đã chọn
+        inValueChange: true, 
+        //mảng chứa giá trị combobox
         DropboxShow: [],
+        //hiển thị giá trị đã chọn lên input
         RecordSle,
+        //lưu giá trị combobox nhiều
+        ComboMutiItem: [],
+        //lưu vị trí value trong mảng
+        indexComboMutiItem: Number,
+        //lưu thuộc tính style nút icon
+        style: {},
 
       }
     }
@@ -111,6 +234,10 @@ export default {
 :root{
     --icon: url("../../../assets/Resource/img/Sprites.64af8f61.svg");
 }.select .drop-itemtbl {
+  background-color: #2ca01c !important;
+  color: #fff !important;
+}
+.select .combomuti-itemtbl {
   background-color: #2ca01c !important;
   color: #fff !important;
 }
@@ -147,14 +274,17 @@ export default {
   outline: none;
   padding-left: 10px;
   border-radius: 4px;
+  cursor: pointer;
 }.dropbox-input.product:focus ~.droptbl{
   border: 1px solid #50B83C;
   outline: none;
 }
-.droptbtn{
+.droptbtn-icon{
     background-image: var(--icon);
     background-position: -552px -353px;
     background-repeat: no-repeat;
+    width: 30px;
+    height: 28px;
 }.droptbtn:hover{
     border: none;
     outline: none;
@@ -227,5 +357,110 @@ export default {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #7c869c;
+}.combomuti-data{
+  position: absolute;
+    width: 140%;
+    z-index: 6;
+    border: 1px solid #bbbb;
+    top: 32px;
+    border-radius: 4px;
+    height: 200px;
+}.combomuti-cover{
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 160px;
+}.combomuti-for{
+    width: 100%;
+}.combomuti-itemtbl{
+  height: 32px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  font-size: 13px;
+  font-weight: lighter;
+  color: #000;
+  z-index: 100;
+  padding-left:8px ;
+}
+.combomuti-itemtbl:hover {
+  color: #50b83c;
+  background-color: #EBEDF0;
+}.combomuti-head{
+  display: flex;
+  height: 30px;
+  font-family: Misa Fonts Bold;
+  font-size: 13px;
+  padding-top: 10px;
+  background-color: #f4f5f8;
+  position: relative;
+}.combomuti-head-right{
+  position: absolute;
+  left: 50%;
+ 
+}.combomuti-head-left{
+  margin-left: 10px;
+}.combomuti-itemtbl{
+  display: flex;
+  position: relative;
+}.combomuti-item-center{
+  position: absolute;
+  left: 50%;
+}.combomuti-item-left{
+  margin-left: 8px;
+}.combomuti-item-right{
+  position: absolute;
+  right: 0;
+  background-image: var(--icon);
+  background-position: -899px -316px;
+  background-repeat: no-repeat;
+  width: 15px;
+  height: 15px;
+  margin-right: 15px;
+}.combomuti-input-main{
+  width: 91.5%;
+  display: flex;
+  flex-wrap: wrap;
+  border-right: 1px solid #bbbb;
+}.combomuti-main-item{
+  border: 1px solid #ccc;
+  align-items: center;
+  border-radius: 3px;
+  background-color: #f0f0f0;
+  padding: 2px 3px 2px 5px;
+  margin-top: 3px;
+  margin-left: 4px;
+  min-width: 50px;
+  overflow: hidden;
+  display: flex;
+}.item-label{
+  font-family: Misa Fonts Regular;
+  font-size: 11px;
+}.combomuti{
+  min-height: 31px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+  background-color: #fff;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #bbbbbb;
+  align-items: center;
+}.combomuti-input{
+  min-width: 35%;
+  min-height: 27px;
+  float: left;
+  border: none;
+  outline: none;
+  padding-left: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}.item-cancel{
+  background-image: var(--icon);
+  background-position: -78px -312px;
+  background-repeat: no-repeat;
+  width: 15px;
+  height: 15px;
 }
 </style>

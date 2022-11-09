@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div class="product-overview">
+    <div class="product-overview" v-show="isShowOverview">
         <div class="product-overview-ri">
           <div class="product-overview-ri-icon">
             <span class="product-tooltip">Bấm vào để lọc</span>
@@ -45,7 +45,7 @@
           <div class="product-overview-reload"></div>
         </div>
       </div>
-    <div class="product-content-table">
+    <div class="content-table" :style="TableStyle">
       <div class="product-content-toolbar">
         <div class="product-content-toolbar-left">
           <div class="product-content-toolbar-left-icon"></div>
@@ -56,28 +56,36 @@
           <MInputSearch @InputWhere="getWhereValue" :placeholder="'Tìm theo mã, tên hàng hóa, dịch vụ'" :style="'width: 250px'" :iconsearch="'icon-search'" />
           <button type="button" class="product-toolbar-load" @click="loadData"></button>
           <button type="button" class="product-toolbar-export" @click="getExcel"></button>
+          <button type="button" :class="ShowOverviewCss" @click="showOverview"></button>
         </div>
       </div>
       
-      <TheProductTable
+      
+      <MTable 
         @custom-open-dbclick="openPopup"
-        :ProductsLoad="ProductsTable"
+        :RecordsLoad="ProductsTable"
         @data-load-delete="loadData"
-        @get-List-Product="getListProduct"
+        @get-List-CheckAll="getListProduct"
         :closeSelectedAll="closeSelectedAll"
+        :thListTable="thList"
+        :tdListTable="tdList"
+        :tfoot="true"
+        :PopupNotilable="'Vật tư hàng hóa'"
+        :baseURL="'baseURLProduct'"
+        :TableCheckBox="true"
       />
       
     </div>
     <div class="product-content-bottom">
       <ThePadding
-        :TotalCount="ProductsTable"
+        :TotalCount="TotalCount"
         @filter-padding="getLimitValue"
         @offset-value="getOffSetValue"
       />
     </div>
     <TheProductSelect v-if="isShowPopupSelect" @close-popup-selete="closePopupSelect" @open-product-popup="openProductPopup" />
 
-    <TheProductPopup v-if="isShow" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
+    <TheProductPopup v-if="isShow" @show-toast="showToastPopup" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
 
 
     <!-- <Teleport to="#page-employee">
@@ -92,10 +100,11 @@
 <script>
 import MButton from '../../components/Base/MButton/MButton.vue';
 import MInputSearch from '../../components/Base/MInputSearch/MInputSearch.vue';
-import ThePadding from '../../components/Layout/ThePadding/ThePadding.vue';
+import ThePadding from '../../components/Layout/ThePadding/MPadding.vue';
 import MToast from '../../components/Base/MToast/MToast.vue';
 import MLoading from '../../components/Base/MLoading/MLoading.vue'
-import TheProductTable from './TheProductTable.vue';
+//import TheProductTable from './TheProductTable.vue';
+import MTable from '../../components/Base/MTable/MTable.vue'
 import TheProductSelect from '../ProductPage/ProductPopup/TheProductSelect.vue';
 import TheProductPopup from '../ProductPage/ProductPopup/TheProductPopup.vue';
 import configs from '../../configs/index';
@@ -108,23 +117,58 @@ export default {
     MLoading,
     MInputSearch,
     MToast,
-    TheProductTable,
+    //TheProductTable,
+    MTable,
     TheProductSelect,
     TheProductPopup
   },
   methods: {
+    /**
+     * Hàm mở popup tính chất
+     * Nguyễn Văn Cương 01/10/2022
+     */
     openPopupSelect(){
       this.isShowPopupSelect = true;
     },
+
+    /**
+     * Hàm mở overview
+     * Nguyễn Văn Cương 01/10/2022
+     */
+    showOverview(){
+      this.isShowOverview = !this.isShowOverview;
+      if(this.isShowOverview == true){
+         this.ShowOverviewCss = "product-toolbar-hideoverview";
+         this.TableStyle = "height: calc(100% - 270px);"
+      }else{
+        this.ShowOverviewCss = "product-toolbar-hideoverview b";
+        this.TableStyle = "height: calc(100% - 160px); margin-top: 20px;" 
+      }
+    },
+
+    /**
+     * Hàm đóng popup tính chất
+     * Nguyễn Văn Cương 01/10/2022
+     */
     closePopupSelect(){
       this.isShowPopupSelect = false;
     },
+
+    /**
+     * Hàm mở popup hàng hóa
+     * Nguyễn Văn Cương 01/10/2022
+     */
     openProductPopup(value){
       this.isShow = true;
       this.isShowPopupSelect = false;
       this.ProductPopupProperty = value;
       this.Products = {}
     },
+
+    /**
+     * Hàm đóng popup hàng hóa
+     * Nguyễn Văn Cương 01/10/2022
+     */
     closeProductPopup(){
       this.isShow = false;
     },
@@ -274,6 +318,7 @@ export default {
           this.ToastMess_color = toast.ToastMess_color_faild;
           this.ToastMess = toast.ToastMessDeleteMuti_faild;
         }
+        this.closeToast();
     },
     /**
     Hàm hiện thị thông báo cho popup nhân viên
@@ -285,6 +330,19 @@ export default {
         this.Toastcss = Toastcss;
         this.ToastMess_color = ToastMess_color;
         this.ToastMess = ToastMess;
+        this.closeToast();
+    },
+
+    closeToast(){
+      if(this.timeout){
+        clearTimeout(this.timeout)
+        this.timeout = null;
+      }
+      else{
+        this.timeout = setTimeout(() => {
+        this.isShowToast = false;
+        }, 4000);
+      }
     },
 
     /**
@@ -357,6 +415,7 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           this.ProductsTable = data; //lưu dữ liệu
+          this.TotalCount = data.totalCount;
           this.LoadingShow = false; //tắt loading
         })
         .catch((res) => {
@@ -425,25 +484,44 @@ export default {
 
    data() {
     return {
-      isShowPopupSelect: false, //gọi popup lựa chọn tính chất
+       //gọi popup lựa chọn tính chất
+      isShowPopupSelect: false,
+      //lưu tính chất
       ProductPopupProperty: 1,
-      isShow: false, //gọi popup thêm nhân viên
-      LoadingShow: false, //gọi màn hình loadind
-      Products: null, //lưu giá trị nhân viên
-      ProductsTable: null, //lưu giá trị bảng nhân viên
-      LimitValue: null, //lưu giá trị số lượng trang
-      OffSetValue: null, //lưu giá trị bản ghi hiện tại
-      WhereValue: null, //lưu giá trị tìm kiếm
-      listProDelete: [], //lưu danh sách mã nhân viên cần xóa
-      Mode: 2, //lưu trạng thái mở popup nhân viên 
-      isShowAskDelete: false, //gọi popup hỏi có xóa không
-      closeSelectedAll: false, //đóng chọn checkbox
-      isShowToast: false, //hiển thị thông báo
-      ToastStatus: true, //trang thái thông báo
-      ToastMess:{}, //nội dung thông báo
-      ToastMess_color: {}, //màu nội dung thông báo
-      Toastcss:{}, //css thông báo
-      Toastcssicon: {}, //icon thông báo
+      //gọi popup thêm nhân viên
+      isShow: false, 
+       //gọi màn hình loadind
+      LoadingShow: false,
+       //lưu giá trị nhân viên
+      Products: null,
+      //lưu giá trị bảng nhân viên
+      ProductsTable: null, 
+      //lưu giá trị số lượng trang
+      LimitValue: null, 
+      //lưu giá trị bản ghi hiện tại
+      OffSetValue: null, 
+      //lưu giá trị tìm kiếm
+      WhereValue: null, 
+      //lưu danh sách mã nhân viên cần xóa
+      listProDelete: [], 
+      //lưu trạng thái mở popup nhân viên 
+      Mode: 2, 
+      //gọi popup hỏi có xóa không
+      isShowAskDelete: false, 
+      //đóng chọn checkbox
+      closeSelectedAll: false, 
+      //hiển thị thông báo
+      isShowToast: false, 
+       //trang thái thông báo
+      ToastStatus: true,
+      //nội dung thông báo
+      ToastMess:{}, 
+       //màu nội dung thông báo
+      ToastMess_color: {},
+      //css thông báo
+      Toastcss:{}, 
+      //icon thông báo
+      Toastcssicon: {}, 
       //mảng chưa keyCode
       arrKeyCode: [],
       //lưu thời gian delay khi tìm kiếm
@@ -452,7 +530,41 @@ export default {
       errors: [],
       //gọi popup thiếu dữ liệu
       isShowNotification: false,
-      ButtonMode: 1
+      //trạng thái nút
+      ButtonMode: 1,
+      //lưu tổng trang mặc định
+      TotalCount: 10,
+      //hiển thị overview
+      isShowOverview: true,
+      //lưu css overview
+      ShowOverviewCss: "product-toolbar-hideoverview",
+      //lưu style của table
+      TableStyle: {},
+      //lưu giá trị tdhead của table
+      thList: [
+        {style: "min-width: 150px;", label: "TÊN"},
+        {style: "min-width: 100px;", label: "MÃ"},
+        {style: "min-width: 100px;", label: "GIẢM THUẾ THEO NQ 43",class: "tab", span: "Trạng thái tra cứu giảm thuế theo Nghị quyết 43/2022/QH15" },
+        {style: "min-width: 100px;", label: "TÍNH CHẤT", },
+        {style: "min-width: 100px;", label: "NHÓM VTHH", class: "tab-b", span: "Nhóm vật tư hàng hóa"},
+        {style: "min-width: 100px;", label: "ĐƠN VỊ TÍNH"},
+        {style: "min-width: 100px;", label: "SỐ LƯỢNG TỒN", class: "tab-th-amount" },
+        {style: "min-width: 100px;", label: "GIÁ TRỊ TỒN", class: "tab-th-amount" },
+        {style: "min-width: 100px;", label: "THỜI GIAN BẢO HÀNH"},
+      ],
+      //lưu giá trị property td
+      tdList: 
+      [{property: "productName"},
+      {property: "productCode"},
+      {property: "taxReduction", fun: 4}, 
+      {property: "nature"},
+      {property: "supplyName"},
+      {property: "unitCalculateValue"},
+      {property: "quantityStock", class: "product-tab-th-amount"},
+      {property: "existentialValue", class: "product-tab-th-amount"},
+      {property: "insurance"},
+      {property: "productID", style: "display: none"}
+      ],
     };
   },
 }
@@ -697,6 +809,24 @@ export default {
 }.product-overview-le-icon:hover .product-tooltip{
   visibility: visible;
   opacity: 1;
-
+}.product-toolbar-hideoverview{
+  position: absolute;
+  background-image: var(--icon);
+  background-position: -124px -356px;
+  background-repeat: no-repeat;
+  right: -28px;
+  top: -25px;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #e2e9f2;
+  background-color: #f2f5f8;
+}.product-toolbar-hideoverview.b{
+  background-position: -172px -356px;
+}.content-table{
+  height: calc(100% - 280px);
+  width: calc(100% - 30px);
+  background-color: #fff;
+  padding: 10px 16px;
+  border-radius: 4px 4px 0px 0px;
 }
 </style>

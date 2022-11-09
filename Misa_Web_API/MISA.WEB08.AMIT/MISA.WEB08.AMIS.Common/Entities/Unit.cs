@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.Common
 {
+    /// <summary>
+    /// Đơn vị ứng với bảng đơn vị
+    /// </summary>
     public class Unit : BaseEntities
     {
         /// <summary>

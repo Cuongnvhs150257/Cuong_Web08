@@ -828,16 +828,26 @@ export default {
       inputFocus: null,
       //mảng chưa keyCode
       arrKeyCode: [],
-      isShowToast: false, //hiển thị thông báo
-      ToastStatus: 1, //trang thái thông báo
-      ToastMess: {}, //nội dung thông báo
-      ToastMess_color: {}, //màu nội dung thông báo
-      Toastcss: {}, //css thông báo
-      Toastcssicon: {}, //icon thông báo
-      ToastAddClose: false, //trạng thái thêm và đóng popup
-      NotifiStatus: true, //trạng thái hiển thị notification
-      PopupNotifi_icon: {}, //lưu icon notifi
-      PopupNotifi_label: {}, //lưu css nội dung notifi
+      //hiển thị thông báo
+      isShowToast: false, 
+      //trang thái thông báo
+      ToastStatus: 1, 
+      //nội dung thông báo
+      ToastMess: {}, 
+       //màu nội dung thông báo
+      ToastMess_color: {},
+       //css thông báo
+      Toastcss: {},
+      //icon thông báo
+      Toastcssicon: {}, 
+       //trạng thái thêm và đóng popup
+      ToastAddClose: false,
+      //trạng thái hiển thị notification
+      NotifiStatus: true, 
+      //lưu icon notifi
+      PopupNotifi_icon: {}, 
+      //lưu css nội dung notifi
+      PopupNotifi_label: {}, 
     };
   },
 };

@@ -1,19 +1,23 @@
 <template>
   <div class="drop">
     <div class="drop-label"><label>{{PaddingValue}} bảng ghi trên 1 trang</label></div>
-    <button class="drop-btn" @click="btnDropClick"></button>
-    <div class="drop-data" v-if="OpenDropbox === true">
-      <div class="drop-item"  @click="SelectedPadding(10)">10 bảng ghi trên 1 trang</div>
-      <div class="drop-item"  @click="SelectedPadding(20)">20 bảng ghi trên 1 trang</div>
-      <div class="drop-item" @click="SelectedPadding(30)">30 bảng ghi trên 1 trang</div>
-      <div class="drop-item" @click="SelectedPadding(50)">50 bảng ghi trên 1 trang</div>
-      <div class="drop-item" @click="SelectedPadding(100)">100 bảng ghi trên 1 trang</div>
+    <button class="dropbtn" @click="btnDropClick"><div class="droptbtn-icon" :style="style"></div></button>
+    <div class="drop-data" v-if="OpenDropbox === true" ref="dropbox" >
+      <div class="drop-for" v-for="index in DropBoxPadding" :key="index" :class="{select : PaddingValue === index.value}">
+        <div class="drop-item"  @click="SelectedPadding(index.value)">{{index.value}} bảng ghi trên 1 trang</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  mounted() {
+    window.addEventListener('mousedown', this.clickEventInterrupt);
+  },
+  unmounted() {
+    window.removeEventListener('mouseup', this.clickEventInterrupt);
+  },
   methods:{
         /**
          * hàm đóng mở dropbox
@@ -21,6 +25,7 @@ export default {
          */
         btnDropClick() {
             this.OpenDropbox = !this.OpenDropbox;
+            this.Rotate();
         },
 
         /**
@@ -31,13 +36,41 @@ export default {
           this.$emit("padding-value", value);
           this.OpenDropbox = false;
           this.PaddingValue = value;
+          this.ChoiseValue = value;
+          this.Rotate();
+        },
+        Rotate(){
+        if(this.OpenDropbox == true){
+          this.style = "transition: linear 0.2s; transform: rotate(180deg);"
+        }else{
+          this.style = "transition: linear 0.2s; transform: rotate(0deg);"
         }
+        },
+         clickEventInterrupt(event){
+          if(this.OpenDropbox == true){
+            const isClick = this.$refs.dropbox.contains(event.target);
+          if(!isClick){
+            this.OpenDropbox = false;
+            this.style = "transition: linear 0.2s; transform: rotate(0deg);"
+          }
+        }
+        
+  },
     
   },
   data(){
         return{
             OpenDropbox: false, //gọi dropbox
             PaddingValue: 10, //giá trị mặc định của số lượng bản ghi
+            ChoiseValue: 1,
+            DropBoxPadding: [
+              {value: 10},
+              {value: 20},
+              {value: 30},
+              {value: 50},
+              {value: 100},
+            ],
+            style: {},
         }
     }
 };
@@ -47,6 +80,10 @@ export default {
 <style>
 :root{
     --icon: url("../../../assets/Resource/img/Sprites.64af8f61.svg");
+}
+.select .drop-item {
+  background-color: #2ca01c !important;
+  color: #fff !important;
 }
 .drop {
   height: 30px;
@@ -96,17 +133,18 @@ export default {
   border-bottom: none;
   background-color: #fff;
   max-height: 200px;
+  z-index: 5;
 
 }
 .drop-item {
   height: 32px;
-  width: 175px;
+  width: 96%;
   display: flex;
   align-items: center;
-  margin-left: 8px;
   padding-left: 8px;
   background-color: #fff;
   font-size: 13px;
+  z-index: 5;
 }
 
 .drop-item:hover {
@@ -115,5 +153,22 @@ export default {
   border-radius: 4px;
 }.drop-data-hide{
     display: none;
+}.droptbtn{
+  position: absolute;
+  border: none;
+  right: 1px;
+  width: 30px;
+  height: 28px;
+  flex-shrink: 0;
+  flex-basis: 40px;
+  cursor: pointer;
+  background: #fff;
+  z-index: 3;
+}.droptbtn-icon{
+    background-image: var(--icon);
+    background-position: -552px -353px;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 28px;
 }
 </style>

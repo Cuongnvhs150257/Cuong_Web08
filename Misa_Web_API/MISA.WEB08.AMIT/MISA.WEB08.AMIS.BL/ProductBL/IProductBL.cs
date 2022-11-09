@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB08.AMIS.BL.ProductBL
 {
+    /// <summary>
+    /// interface kết nối với Dl
+    /// Createdby: Nguyễn Văn Cương 01/10/2022
+    /// </summary>
     public interface IProductBL: IBaseBL<Product>
     {
     }

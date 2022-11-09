@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div class="product-content-table">
+    <div class="content-table">
       <div class="product-content-toolbar">
         <div class="product-content-toolbar-left">
            <MInputSearch @InputWhere="getWhereValue" :placeholder="'Tìm theo nhóm vật tư, hàng hóa, dịch vụ'" :style="'width: 250px'" :iconsearch="'icon-search c'"/>
@@ -28,12 +28,16 @@
         </div>
       </div>
       
-      <TheSupplyTable
+      <MTable
         @custom-open-dbclick="openPopup"
-        :SupplysLoad="SupplysTable"
         @data-load-delete="loadData"
-        @get-List-Supply="getListSupply"
+        @get-List-CheckAll="getListSupply"
         :closeSelectedAll="closeSelectedAll"
+        :thListTable="thList"
+        :tdListTable="tdList"
+        :PopupNotilable="'Nhóm vật tư hàng hóa'"
+        :baseURL="'baseURLSupply'"
+        :RecordsMuti="TableMuti"
       />
       
     </div>
@@ -48,6 +52,7 @@
  
 
     <!-- <Teleport to="#page-employee">
+      
     </Teleport> -->
 
     <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
@@ -61,8 +66,8 @@ import MButton from '../../components/Base/MButton/MButton.vue';
 import MInputSearch from '../../components/Base/MInputSearch/MInputSearch.vue';
 import ThePadding from '../../components/Layout/ThePadding/MPadding.vue';
 import MToast from '../../components/Base/MToast/MToast.vue';
-import MLoading from '../../components/Base/MLoading/MLoading.vue'
-import TheSupplyTable from './TheSupplyTable.vue';
+import MLoading from '../../components/Base/MLoading/MLoading.vue';
+import MTable from "../../components/Base/MTable/MTable.vue";
 import MPopupEdit from '../../components/Base/MPopupEdit/MPopupEdit.vue';
 import configs from '../../configs/index';
 import enums from '../../resouce/enums';
@@ -74,10 +79,15 @@ export default {
     MLoading,
     MInputSearch,
     MToast,
-    TheSupplyTable,
+    MTable,
     MPopupEdit,
   },
   methods: {
+    
+    /**
+     * Hàm đóng popup
+     * Nguyễn Văn Cương 01/11/2022
+     */
     closeProductPopup(){
       this.isShow = false;
     },
@@ -108,6 +118,7 @@ export default {
      * Nguyễn Văn Cương 25/09/2022
      */
     async openPopup(id, detailFormMode) {
+      console.log(this.tdTree)
       //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
       if (id) {
         this.LoadingShow = true; //hiển thị loading
@@ -228,6 +239,7 @@ export default {
           this.ToastMess_color = toast.ToastMess_color_faild;
           this.ToastMess = toast.ToastMessDeleteMuti_faild;
         }
+        this.closeToast();
     },
     /**
     Hàm hiện thị thông báo cho popup nhân viên
@@ -239,6 +251,23 @@ export default {
         this.Toastcss = Toastcss;
         this.ToastMess_color = ToastMess_color;
         this.ToastMess = ToastMess;
+        this.closeToast();
+    },
+
+    /**
+     * Hàm tự động đoán toast
+     * Nguyễn Văn Cương 01/10/2022
+     */
+    closeToast(){
+      if(this.timeout){
+        clearTimeout(this.timeout)
+        this.timeout = null;
+      }
+      else{
+        this.timeout = setTimeout(() => {
+        this.isShowToast = false;
+        }, 4000);
+      }
     },
 
     /**
@@ -278,6 +307,7 @@ export default {
           console.log(res);
         });
     },
+
     /**
      * hàm load dữ liệu
      * Nguyễn Văn Cương 15/09/2022
@@ -311,12 +341,43 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           this.SupplysTable = data; //lưu dữ liệu
+          this.getMutiTable();
           this.TotalCount = data.totalCount;
           this.LoadingShow = false; //tắt loading
         })
         .catch((res) => {
           console.log(res);
         });
+    },
+
+    /**
+     * hàm tạo mảng đệ quy
+     * Nguyễn Văn Cương 10/11/2022
+     */
+    getMutiTable(){
+      //trạng thái phần từ
+      let sta = true;
+      for (let i = 0; i < this.SupplysTable.data.length; i++) {
+        let a = this.SupplysTable.data[i].supplyID;
+        for (let j = 1; j < this.SupplysTable.data.length; j++) {
+          let b = this.SupplysTable.data[j].parentID;
+          if(a == b){
+            //nếu parentID của phần từ b trùng với supplyID của phần từ a => tạo mảng đệ quy
+            //đẩy vào mảng tablemuti
+            this.TableMuti.push({arr: this.SupplysTable.data[i], style: "font-weight: 700; font-family: Misa Fonts Semibold;", class: false}, {arr: this.SupplysTable.data[j], style: "display: none", class: true});
+            sta = false;
+            break;
+          }else{
+            sta = true;
+          }
+        }
+        //đẩy phần từ a vào mảng tablemuti khi parentID không trùng
+        if(sta == true){
+          this.TableMuti.push({arr: this.SupplysTable.data[i], class: false})
+        }
+      }
+      console.log(this.TableMuti);
+      
     },
    
     /**
@@ -411,6 +472,18 @@ export default {
       PopupEdit_label: {},
       SupplyValue: [{value: 'SupplyID'},{value: 'SupplyCode'},{value:'SupplyName'}, {value: 'Status'}],
       TotalCount: 10,
+      thList: [
+        {style: "min-width: 200px;", label: "MÃ NHÓM VẬT TƯ, HÀNG HÓA, DỊCH VỤ"},
+        {style: "min-width: 500px;", label: "TÊN NHÓM VẬT TƯ, HÀNG HÓA, DỊCH VỤ"},
+        {style: "min-width: 120px;", label: "TRẠNG THÁI"},
+      ],
+      tdList: 
+      [{property: "supplyCode", muti: 1},
+      {property: "supplyName"},
+      {property: "status", fun: 1},
+      {property: "parentID", style: "display: none"}, 
+      {property: "supplyID", style: "display: none"}],
+      TableMuti: [],
     };
   },
 }
@@ -638,5 +711,12 @@ export default {
 }.product-toolbar-extend{
   color: #009AD5;
   margin-top: 5px;
+}.content-table{
+  height: calc(100% - 280px);
+  width: calc(100% - 30px);
+  margin-top: 10px;
+  background-color: #fff;
+  padding: 10px 16px;
+  border-radius: 4px 4px 0px 0px;
 }
 </style>

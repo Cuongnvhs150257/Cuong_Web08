@@ -47,8 +47,12 @@ export default {
   },
   emits: ["click-radio"],
   setup(props, context) {
+        /**
+         * hàm cập nhật giá trị giới tính
+         * Nguyễn Văn Cương 09/09/2022
+         */
     const handleClick = () => {
-      context.emit("click-radio", props.value); //cập nhật giá trị giới tính
+      context.emit("click-radio", props.value); 
     };
     return {
       handleClick,

@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div class="product-content-table">
+    <div class="content-table">
       <div class="product-content-toolbar">
         <div class="product-content-toolbar-left">
            <MInputSearch @InputWhere="getWhereValue" :placeholder="'Tìm kiếm theo đơn vị tính'" :iconsearch="'icon-search b'"/>
@@ -27,24 +27,29 @@
         </div>
       </div>
       
-      <TheUnitTable
+      <MTable
         @custom-open-dbclick="openPopup"
-        :UnitsLoad="UnitsTable"
+        :RecordsLoad="UnitsTable"
         @data-load-delete="loadData"
-        @get-List-Unit="getListUnit"
+        @get-List-Record="getListUnit"
         :closeSelectedAll="closeSelectedAll"
+        :thListTable="thList"
+        :tdListTable="tdList"
+        :PopupNotilable="'Đơn vị tính'"
+        :baseURL="'baseURLUnitCalculate'"
       />
       
     </div>
     <div class="product-content-bottom">
       <ThePadding
-        :TotalCount="UnitsTable"
+        :TotalCount="TotalCount"
         @filter-padding="getLimitValue"
         @offset-value="getOffSetValue"
       />
     </div>
     <MPopupEdit v-if="isShow" :PopupEdit_label="PopupEdit_label" :detailFormMode="Mode"  @data-load="loadData" @custom-handle-click="closeProductPopup" :baseURL="'baseURLUnitCalculate'" :height="'height: 320px;'" :inputShow="2" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Units" :recordvalue="UnitValue" />
 
+    
 
     <!-- <Teleport to="#page-employee">
     </Teleport> -->
@@ -58,11 +63,11 @@
 <script>
 import MButton from '../../components/Base/MButton/MButton.vue';
 import MInputSearch from '../../components/Base/MInputSearch/MInputSearch.vue';
-import ThePadding from '../../components/Layout/ThePadding/ThePadding.vue';
+import ThePadding from '../../components/Layout/ThePadding/MPadding.vue';
 import MToast from '../../components/Base/MToast/MToast.vue';
 import MLoading from '../../components/Base/MLoading/MLoading.vue'
 import MPopupEdit from '../../components/Base/MPopupEdit/MPopupEdit.vue';
-import TheUnitTable from './TheUnitTable.vue';
+import MTable from '../../components/Base/MTable/MTable.vue';
 import configs from '../../configs/index';
 import enums from '../../resouce/enums';
 import toast from '../../resouce/toast';
@@ -73,10 +78,14 @@ export default {
     MLoading,
     MInputSearch,
     MToast,
-    TheUnitTable,
+    MTable,
     MPopupEdit
   },
   methods: {
+    /**
+    Hàm đóng popup 
+    Nguyễn Văn Cương 01/11/2022
+     */
     closeProductPopup(){
       this.isShow = false;
     },
@@ -228,6 +237,7 @@ export default {
           this.ToastMess_color = toast.ToastMess_color_faild;
           this.ToastMess = toast.ToastMessDeleteMuti_faild;
         }
+        this.closeToast();
     },
     /**
     Hàm hiện thị thông báo cho popup nhân viên
@@ -239,6 +249,23 @@ export default {
         this.Toastcss = Toastcss;
         this.ToastMess_color = ToastMess_color;
         this.ToastMess = ToastMess;
+        this.closeToast();
+    },
+
+    /**
+    Hàm tự động đóng toast
+    Nguyễn Văn Cương 01/11/2022
+     */
+    closeToast(){
+      if(this.timeout){
+        clearTimeout(this.timeout)
+        this.timeout = null;
+      }
+      else{
+        this.timeout = setTimeout(() => {
+        this.isShowToast = false;
+        }, 4000);
+      }
     },
 
     /**
@@ -311,7 +338,9 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           this.UnitsTable = data; //lưu dữ liệu
+          this.TotalCount = data.totalCount;
           this.LoadingShow = false; //tắt loading
+          
           console.log(data);
         })
         .catch((res) => {
@@ -410,6 +439,17 @@ export default {
       ButtonMode: 1,
       PopupEdit_label: {},
       UnitValue: [{value: 'UnitCalculateID'},{value: 'UnitCalculateValue'},{value: 'Describe'}],
+      TotalCount: 10,
+      thList: [
+        {style: "min-width: 120px;", label: "ĐƠN VỊ TÍNH"},
+        {style: "min-width: 250px;", label: "MÔ TẢ"},
+        {style: "min-width: 120px;", label: "TRẠNG THÁI"},
+      ],
+      tdList: 
+      [{property: "unitCalculateValue"},
+      {property: "describe"},
+      {property: "status", fun: 1},
+      {property: "unitCalculateID", style: "display: none"}],
     };
   },
 }
@@ -634,5 +674,12 @@ export default {
   margin-top: 3px;
 }.product-content-table{
   margin-top: 25px;
+}.content-table{
+  height: calc(100% - 280px);
+  width: calc(100% - 30px);
+  margin-top: 10px;
+  background-color: #fff;
+  padding: 10px 16px;
+  border-radius: 4px 4px 0px 0px;
 }
 </style>
