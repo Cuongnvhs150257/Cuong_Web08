@@ -26,7 +26,7 @@ namespace MISA.WEB08.AMIS.BL
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        public ServiceRespone InsertRecords(T record);
+        public ServiceRespone InsertRecord(T record);
 
         /// <summary>
         /// Hàm kết nối DL để lấy nhân viên theo ID
@@ -69,7 +69,7 @@ namespace MISA.WEB08.AMIS.BL
         /// <param name="employeeid"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public int DeleteMultipleRecord(List<Guid> ListEmployeeID);
+        public int DeleteMultipleRecord(List<Guid> ListRecordID);
 
         /// <summary>
         /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
@@ -77,6 +77,14 @@ namespace MISA.WEB08.AMIS.BL
         /// </summary>
         /// <returns></returns>
         public object GetMaxRecord();
+
+        /// <summary>
+        /// Hàm kiểm tra phát sinh trong khi xóa
+        /// Nguyễn Văn Cương 15/11/2022
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        public object CheckDelete(Guid record);
 
 
         #endregion

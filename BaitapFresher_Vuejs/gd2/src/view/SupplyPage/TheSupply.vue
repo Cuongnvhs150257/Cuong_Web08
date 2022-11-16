@@ -31,10 +31,11 @@
       <MTable
         @custom-open-dbclick="openPopup"
         @data-load-delete="loadData"
-        @get-List-CheckAll="getListSupply"
+        @get-List-Checkbox="getListSupply"
         :closeSelectedAll="closeSelectedAll"
         :thListTable="thList"
         :tdListTable="tdList"
+        :CheckDeleteIns="true"
         :PopupNotilable="'Nhóm vật tư hàng hóa'"
         :baseURL="'baseURLSupply'"
         :RecordsMuti="TableMuti"
@@ -379,6 +380,22 @@ export default {
       console.log(this.TableMuti);
       
     },
+    getMutiTableTwo(){
+      let parentarr = this.SupplysTable.data;
+      let childarr = [];
+      for (let i = 0; i < parentarr.length; i++) {
+          for (let j = 0; j < childarr.length; j++) {
+            if(parentarr[i].supplyID == childarr[j].parentID){
+              parentarr.push({ arr: childarr[i]});
+          }
+            
+          }
+
+      }
+      console.log(parentarr)
+        
+
+    },
    
     /**
     Hàm tạo file excel danh sách nhân viên
@@ -441,25 +458,44 @@ export default {
 
    data() {
     return {
-      isShowPopupSelect: false, //gọi popup lựa chọn tính chất
+       //gọi popup lựa chọn tính chất
+      isShowPopupSelect: false,
+      //trạng thái tính chất
       ProductPopupProperty: 1,
-      isShow: false, //gọi popup thêm nhân viên
-      LoadingShow: false, //gọi màn hình loadind
-      Supplys: null, //lưu giá trị nhân viên
-      SupplysTable: null, //lưu giá trị bảng nhân viên
-      LimitValue: null, //lưu giá trị số lượng trang
-      OffSetValue: null, //lưu giá trị bản ghi hiện tại
-      WhereValue: null, //lưu giá trị tìm kiếm
-      listSuDelete: [], //lưu danh sách mã nhân viên cần xóa
-      Mode: 2, //lưu trạng thái mở popup nhân viên 
-      isShowAskDelete: false, //gọi popup hỏi có xóa không
-      closeSelectedAll: false, //đóng chọn checkbox
-      isShowToast: false, //hiển thị thông báo
-      ToastStatus: true, //trang thái thông báo
-      ToastMess:{}, //nội dung thông báo
-      ToastMess_color: {}, //màu nội dung thông báo
-      Toastcss:{}, //css thông báo
-      Toastcssicon: {}, //icon thông báo
+       //gọi popup 
+      isShow: false,
+      //gọi màn hình loadind
+      LoadingShow: false, 
+      //lưu giá trị nhân viên
+      Supplys: null, 
+      //lưu giá trị bảng nhân viên
+      SupplysTable: null, 
+      //lưu giá trị số lượng trang
+      LimitValue: null, 
+      //lưu giá trị bản ghi hiện tại
+      OffSetValue: null, 
+       //lưu giá trị tìm kiếm
+      WhereValue: null,
+       //lưu danh sách mã nhân viên cần xóa
+      listSuDelete: [],
+      //lưu trạng thái mở popup nhân viên 
+      Mode: 2, 
+      //gọi popup hỏi có xóa không
+      isShowAskDelete: false, 
+      //đóng chọn checkbox
+      closeSelectedAll: false,
+       //hiển thị thông báo 
+      isShowToast: false,
+      //trang thái thông báo
+      ToastStatus: true, 
+       //nội dung thông báo
+      ToastMess:{},
+      //màu nội dung thông báo
+      ToastMess_color: {}, 
+      //css thông báo
+      Toastcss:{}, 
+      //icon thông báo
+      Toastcssicon: {}, 
       //mảng chưa keyCode
       arrKeyCode: [],
       //lưu thời gian delay khi tìm kiếm
@@ -468,21 +504,28 @@ export default {
       errors: [],
       //gọi popup thiếu dữ liệu
       isShowNotification: false,
+      //trạng thái nút
       ButtonMode: 1,
+      //tiêu đề của popup
       PopupEdit_label: {},
+      //lưu property
       SupplyValue: [{value: 'SupplyID'},{value: 'SupplyCode'},{value:'SupplyName'}, {value: 'Status'}],
+      //giá trị tổng số trang mặc định
       TotalCount: 10,
+      //lưu giá trị của thead trong table
       thList: [
         {style: "min-width: 200px;", label: "MÃ NHÓM VẬT TƯ, HÀNG HÓA, DỊCH VỤ"},
         {style: "min-width: 500px;", label: "TÊN NHÓM VẬT TƯ, HÀNG HÓA, DỊCH VỤ"},
         {style: "min-width: 120px;", label: "TRẠNG THÁI"},
       ],
+      //lưu property table
       tdList: 
       [{property: "supplyCode", muti: 1},
       {property: "supplyName"},
       {property: "status", fun: 1},
       {property: "parentID", style: "display: none"}, 
       {property: "supplyID", style: "display: none"}],
+      //lưu giá trị table đệ quy
       TableMuti: [],
     };
   },

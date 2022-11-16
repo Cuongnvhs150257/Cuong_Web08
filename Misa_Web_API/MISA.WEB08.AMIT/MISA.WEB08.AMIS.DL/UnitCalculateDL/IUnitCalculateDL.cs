@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MISA.WEB08.AMIS.DL.UnitCalculateDL
+namespace MISA.WEB08.AMIS.DL
 {
     /// <summary>
     /// interface lấy dữ liệu bảng đơn vị tính
@@ -13,5 +13,11 @@ namespace MISA.WEB08.AMIS.DL.UnitCalculateDL
     /// </summary>
     public interface IUnitCalculateDL: IBaseDL<UnitCalculate>
     {
+        /// <summary>
+        /// Hàm xuất danh sách đơn vị tính ra Excel
+        /// Createby: Nguyễn Văn Cương 15/11/2022
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<UnitCalculate> GetUnitCalculateExcel();
     }
 }

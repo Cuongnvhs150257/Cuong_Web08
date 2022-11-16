@@ -51,13 +51,18 @@ export default {
   unmounted() {
     window.removeEventListener('mouseup', this.clickEventInterrupt);
   },
+  updated(){
+    this.ResetCombobox();
+  },
     props:{
         DropboxItem: [],
         tab: Number,
         maxlength: Number,
         value: String,
         label: String,
+        labelSupply: String,
         code: String,
+        valuePost: String,
         readonly: Boolean,
         iconadd: Boolean,
         width: String,
@@ -72,17 +77,28 @@ export default {
         CombolabelRight: String,
         width_combomuti: String,
         InputClass: Boolean,
+        Reset: Boolean,
     },
     methods:{
         /**
+          Hàm reset combobox
+          Nguyễn Văn Cương 11/11/2022
+         */
+         ResetCombobox(){
+            if(this.Reset == true){
+              this.RecordSle[this.label] = [];
+            }
+         },
+
+        /**
          * hàm chọn đơn vị
-         * Nguyễn Văn Cương 05/10/2022
+         * Nguyễn Văn Cương 05/11/2022
          */
         selectedRecord(drop){
           console.log(drop);
           this.isShowDropbox = !this.isShowDropbox;
           this.isShowD = this.isShowDropbox;
-          this.$emit("get-recordvalue", drop.value, this.value);
+          this.$emit("get-recordvalue", drop[this.value], this.valuePost);
           this.inValueChange = false;
           this.selectItem = false;
           this.RecordSle[this.label] = drop[this.label];
@@ -115,13 +131,13 @@ export default {
           this.inValueChange = false;
           if(this.InputClass == false){
             //kiểm tra xem mảng chứa đã có chưa
-            if(!this.ComboMutiItem.includes(muti[this.label])){
-              this.ComboMutiItem.push(muti[this.label]);
+            if(!this.ComboMutiItem.includes(muti[this.code])){
+              this.ComboMutiItem.push(muti[this.code]);
             }
             //lưu index của giá trị
-            this.indexComboMutiItem = this.ComboMutiItem.indexOf(muti[this.label]);
+            this.indexComboMutiItem = this.ComboMutiItem.indexOf(muti[this.code]);
             console.log(this.ComboMutiItem);
-            this.$emit("get-recordvalue", this.ComboMutiItem);
+            this.$emit("get-recordvalue", muti[this.value], this.valuePost);
           }else{
             //chưa có thì chọn tiếp
             this.selectedRecord(muti);
@@ -224,6 +240,8 @@ export default {
         indexComboMutiItem: Number,
         //lưu thuộc tính style nút icon
         style: {},
+        //lưu trạng thái xóa combobox
+        sta: true,
 
       }
     }

@@ -65,6 +65,12 @@
 
 <script>
 export default {
+  props:{
+    ProductID:{
+      type: Number,
+      default: null,
+    },
+  },
     methods:{
 
     /**
@@ -80,7 +86,12 @@ export default {
      * Nguyễn Văn Cương 15/09/2022
      */
         handleOpenProductPopup(value){
-            this.$emit("open-product-popup", value)
+            if(this.ProductID){
+              this.$emit("open-product-popup", this.ProductID, 2, value);
+            }else{
+              this.$emit("open-product-popup", null, 1, value);
+            }
+           
         }
     },
 };

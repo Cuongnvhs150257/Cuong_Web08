@@ -1,6 +1,6 @@
 <template>
 
-  <div class="mdrop">
+  <div class="mdrop" v-show="MDropSta == 1">
     <button class="mdropbtn" @click="btnDropClick"></button>
     <Teleport to="#opendrop" :disable="OpenDropboxD">
     <div class="mdrop-datatbl" v-show="OpenDropboxD === true" :style="Drstyle" ref="dropbox">
@@ -9,6 +9,17 @@
       <div class="mdrop-itemtbl" @click="SelectedEdit(3)">Ngưng sử dụng</div>
     </div>
     </Teleport>
+  </div>
+  
+  <div class="filterdrop" v-if="MDropSta == 2">
+      <div class="filterdrop-item i1">(Trống)</div>
+      <div class="filterdrop-item i2">(Không trống)</div>
+      <div class="filterdrop-item i3">Bằng</div>
+      <div class="filterdrop-item i4">Khác</div>
+      <div class="filterdrop-item i5">Chứa</div>
+      <div class="filterdrop-item i6">Không chứa</div>
+      <div class="filterdrop-item i7">Bắt đầu với</div>
+      <div class="filterdrop-item i8">Kết thúc với</div>
   </div>
 
 </template>
@@ -23,7 +34,8 @@ export default {
     window.removeEventListener('mouseup', this.clickEventInterrupt);
   },
   props:{
-    Drstyle: String
+    Drstyle: String,
+    MDropSta: Number,
   },
   components:{
     Teleport,
@@ -143,5 +155,25 @@ export default {
   background-color: #EBEDF0;
 }.mdrop-data-hide{
     display: none;
+}.filterdrop{
+  width: 100px;
+  height: 230px;
+  border: 1px solid #bbb;
+  background-color: #fff;
+  position: absolute;
+  top: -110px;
+  right: 0;
+}.filterdrop-item{
+  width: 93%;
+  height: 25px;
+  padding-left: 6px;
+  padding-top: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}.filterdrop-item:hover{
+  background-color: #E8E9EC;
+  color: #50b83c;
+}.filterdrop-item.i8{
+  height: 23px;
 }
 </style>

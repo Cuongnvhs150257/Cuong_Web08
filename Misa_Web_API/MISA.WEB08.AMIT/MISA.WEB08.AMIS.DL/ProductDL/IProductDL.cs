@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MISA.WEB08.AMIS.DL.ProductDL
+namespace MISA.WEB08.AMIS.DL
 {
     /// <summary>
     /// interface lấy dữ liệu bảng hàng hóa
@@ -13,6 +13,11 @@ namespace MISA.WEB08.AMIS.DL.ProductDL
     /// </summary>
     public interface IProductDL: IBaseDL<Product>
     {
-  
+        /// <summary>
+        /// Hàm xuất danh sách nhân viên ra Excel
+        /// Createby: Nguyễn Văn Cương 15/10/2022
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Product> GetProductExcel();
     }
 }

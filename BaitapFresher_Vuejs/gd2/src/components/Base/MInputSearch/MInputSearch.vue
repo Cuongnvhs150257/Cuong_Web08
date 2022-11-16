@@ -73,9 +73,9 @@ export default {
   background-position: -425px -30px;
   background-repeat: no-repeat;
 }.icon-search.b{
-    right: 90px;
+    right: 10px;
 }
 .icon-search.c{
-    right: 35px;
+    right: 3px;
 }
 </style>

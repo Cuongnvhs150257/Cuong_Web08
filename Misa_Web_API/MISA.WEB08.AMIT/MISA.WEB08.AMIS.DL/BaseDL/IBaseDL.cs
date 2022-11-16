@@ -67,7 +67,7 @@ namespace MISA.WEB08.AMIS.DL
         /// <param name="recordid"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public int DeleteMultipleRecord(List<Guid> ListEmployeeID);
+        public int DeleteMultipleRecord(List<Guid> ListRecordID);
 
         /// <summary>
         /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
@@ -83,6 +83,12 @@ namespace MISA.WEB08.AMIS.DL
         /// <returns></returns>
         public bool CheckRecordCodeExist(string RecordCode);
 
+        /// <summary>
+        /// Hàm kết nối DB để check phát sinh trong khi xóa
+        /// Createby: Nguyễn Văn Cương 15/11/2022
+        /// </summary>
+        /// <returns></returns>
+        public object CheckDelete(Guid record);
 
     }
 

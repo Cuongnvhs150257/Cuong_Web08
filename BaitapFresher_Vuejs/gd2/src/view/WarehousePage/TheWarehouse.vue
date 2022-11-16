@@ -31,10 +31,11 @@
         @custom-open-dbclick="openPopup"
         :RecordsLoad="WarehousesTable"
         @data-load-delete="loadData"
-        @get-List-CheckAll="getListWarehouse"
+        @get-List-Checkbox="getListWarehouse"
         :closeSelectedAll="closeSelectedAll"
         :thListTable="thList"
         :tdListTable="tdList"
+        :CheckDeleteIns="true"
         :PopupNotilable="'Kho'"
         :baseURL="'baseURLWarehouse'"
       />
@@ -408,25 +409,44 @@ export default {
 
    data() {
     return {
-      isShowPopupSelect: false, //gọi popup lựa chọn tính chất
+      //gọi popup lựa chọn tính chất
+      isShowPopupSelect: false, 
+      //giá trị tính chất mặc định
       ProductPopupProperty: 1,
-      isShow: false, //gọi popup thêm nhân viên
-      LoadingShow: false, //gọi màn hình loadind
-      Warehouses: null, //lưu giá trị nhân viên
-      WarehousesTable: null, //lưu giá trị bảng nhân viên
-      LimitValue: null, //lưu giá trị số lượng trang
-      OffSetValue: null, //lưu giá trị bản ghi hiện tại
-      WhereValue: null, //lưu giá trị tìm kiếm
-      listWhDelete: [], //lưu danh sách mã nhân viên cần xóa
-      Mode: 2, //lưu trạng thái mở popup nhân viên 
-      isShowAskDelete: false, //gọi popup hỏi có xóa không
-      closeSelectedAll: false, //đóng chọn checkbox
-      isShowToast: false, //hiển thị thông báo
-      ToastStatus: true, //trang thái thông báo
-      ToastMess:{}, //nội dung thông báo
-      ToastMess_color: {}, //màu nội dung thông báo
-      Toastcss:{}, //css thông báo
-      Toastcssicon: {}, //icon thông báo
+      //gọi popup thêm nhân viên
+      isShow: false, 
+      //gọi màn hình loadind
+      LoadingShow: false, 
+      //lưu giá trị kho
+      Warehouses: null, 
+      //lưu giá trị bảng kho
+      WarehousesTable: null, 
+      //lưu giá trị số lượng trang
+      LimitValue: null, 
+      //lưu giá trị bản ghi hiện tại
+      OffSetValue: null, 
+      //lưu giá trị tìm kiếm
+      WhereValue: null, 
+      //lưu danh sách mã nhân viên cần xóa
+      listWhDelete: [], 
+      //lưu trạng thái mở popup 
+      Mode: 2, 
+      //gọi popup hỏi có xóa không
+      isShowAskDelete: false, 
+       //đóng chọn checkbox
+      closeSelectedAll: false,
+      //hiển thị thông báo
+      isShowToast: false, 
+      //trang thái thông báo
+      ToastStatus: true, 
+      //nội dung thông báo
+      ToastMess:{}, 
+      //màu nội dung thông báo
+      ToastMess_color: {}, 
+       //css thông báo
+      Toastcss:{},
+       //icon thông báo
+      Toastcssicon: {},
       //mảng chưa keyCode
       arrKeyCode: [],
       //lưu thời gian delay khi tìm kiếm
@@ -435,21 +455,29 @@ export default {
       errors: [],
       //gọi popup thiếu dữ liệu
       isShowNotification: false,
+      //trạng thái nút
       ButtonMode: 1,
+      //tiêu đề popup
       PopupEdit_label: {},
+      //lưu property
       WarehouseValue: [{value: 'WarehouseID'},{value: 'WarehouseCode'},{value:'WarehouseName'}, {value: 'WarehouseAccount'}, {value: 'Address'}],
+      //tổng số trang mặc định
       TotalCount: 10, 
+      //lưu giá trị thead
       thList: [
-        {style: "min-width: 250px;", label: "MÃ KHO"},
+        {style: "min-width: 80px;", label: "MÃ KHO"},
         {style: "min-width: 120px;", label: "TÊN KHO"},
-        {style: "min-width: 120px;", label: "ĐỊA CHỈ"},
-        {style: "min-width: 120px;", label: "TRẠNG THÁI", }
+        {style: "min-width: 250px;", label: "ĐỊA CHỈ"},
+        {style: "min-width: 100px;", label: "TRẠNG THÁI", },
+        {style: "min-width: 150px;", label: "CHI NHÁNH"},
       ],
+      //lưu property cho td
       tdList: 
       [{property: "warehouseCode"},
       {property: "warehouseName"},
       {property: "address"}, 
       {property: "status", fun: 1},
+      {property: "branch"}, 
       {property: "warehouseID", style: "display: none"}
       ],
     };

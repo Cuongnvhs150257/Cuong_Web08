@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
+using MISA.WEB08.AMIS.Common.Resource;
 using MISA.WEB08.AMIS.DL;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,6 @@ namespace MISA.WEB08.AMIS.BL
 
         #region Method
 
-        #region GetAll Records
 
         /// <summary>
         /// Hàm kết nối DL để lấy danh sách đối tượng
@@ -102,9 +102,6 @@ namespace MISA.WEB08.AMIS.BL
 
             };
         }
-        #endregion
-
-        #region InsertRecords
 
         /// <summary>
         /// Hàm kết nối DB để thêm mới đối tượng
@@ -112,7 +109,7 @@ namespace MISA.WEB08.AMIS.BL
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        public ServiceRespone InsertRecords(T record)
+        public ServiceRespone InsertRecord(T record)
         {
             var validateStatus = true;
             var validateResult = ValidateRequestData(validateStatus, record);
@@ -152,10 +149,6 @@ namespace MISA.WEB08.AMIS.BL
             }
         }
 
-        #endregion
-
-        #region GetRecordByID
-
         /// <summary>
         /// Hàm kết nối DL để lấy nhân viên theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -166,10 +159,6 @@ namespace MISA.WEB08.AMIS.BL
         {
             return _baseDL.GetRecordByID(record);
         }
-
-        #endregion
-
-        #region Filter
 
         /// <summary>
         /// Hàm kết nối DL để phân trang, tìm kiếm
@@ -184,9 +173,6 @@ namespace MISA.WEB08.AMIS.BL
             return _baseDL.Filter(keyword, limit, offset);
         }
 
-        #endregion
-
-        #region DeleteRecord
 
         /// <summary>
         /// Hàm kết nối DB để xóa đối tượng theo ID
@@ -199,10 +185,6 @@ namespace MISA.WEB08.AMIS.BL
         {
             return _baseDL.DeleteRecord(recordid);
         }
-
-        #endregion
-
-        #region UpdateRecord
 
         /// Hàm kết nối DB để sửa đối tượng theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -251,24 +233,16 @@ namespace MISA.WEB08.AMIS.BL
 
         }
 
-        #endregion
-
-        #region DeleteMultipleRecord
-
         /// <summary>
         /// Hàm kết nối DB để xóa nhiều đối tượng
         /// </summary>
         /// <param name="employeeid"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public int DeleteMultipleRecord(List<Guid> ListEmployeeID)
+        public int DeleteMultipleRecord(List<Guid> ListRecordID)
         {
-            return _baseDL.DeleteMultipleRecord(ListEmployeeID);
+            return _baseDL.DeleteMultipleRecord(ListRecordID);
         }
-
-        #endregion
-
-        #region GetMaxRecord
 
         /// <summary>
         /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
@@ -280,7 +254,16 @@ namespace MISA.WEB08.AMIS.BL
             return _baseDL.GetMaxRecord();
         }
 
-        #endregion
+        /// <summary>
+        /// Hàm kiểm tra phát sinh trong khi xóa
+        /// Nguyễn Văn Cương 15/11/2022
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        public object CheckDelete(Guid record)
+        {
+            return _baseDL.CheckDelete(record);
+        }
 
         #endregion
     }

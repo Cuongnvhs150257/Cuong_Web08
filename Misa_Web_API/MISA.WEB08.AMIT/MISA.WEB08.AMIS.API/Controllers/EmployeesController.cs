@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MISA.WEB08.AMIS.BL;
 using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
+using MISA.WEB08.AMIS.Common.Resource;
 using MySqlConnector;
 using System;
 

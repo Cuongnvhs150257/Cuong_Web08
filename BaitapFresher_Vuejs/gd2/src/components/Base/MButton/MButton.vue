@@ -1,6 +1,6 @@
 <template>
   <button type="button" :class="ButtonCss" :tabindex="tab">
-    {{text}}
+    {{text}} <div v-if="iconcss" :class="iconcss" ></div>
   </button>
   <span v-if="toolTip" class="tool-tip">
             {{ toolTip }}
@@ -14,7 +14,7 @@ export default {
       text: String, 
       ButtonCss: String,
       tab: Number,
-      iconcss: Boolean,
+      iconcss: String,
   },
   methods: {
     
@@ -22,7 +22,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+:root {
+  --icon: url("../../../assets/Resource/img/Sprites.64af8f61.svg");
+}
 .btn-button-openPopup-Employee{
   height: 38px;
   padding: 0 24px;
@@ -40,6 +43,10 @@ export default {
 }.btn-button-openPopup-Employee:hover{
   background-color: #35BF22;
 
+}.btn-button-openPopup-Employee.c{
+  height: 36px;
+  padding: 0 12px;
+  min-width: 100px;
 }
 
 .btn-button-openPopup {
@@ -87,8 +94,8 @@ export default {
 }.btn-button-utilities:hover{
   background-color: #D2D3D6;
 }.btn-button-actionMutile{
-  height: 40px;
-  padding: 0 24px;
+  height: 36px;
+  padding: 0 15px;
   border: 2px solid #000;
   text-align: center;
   color: #000;
@@ -97,27 +104,40 @@ export default {
   min-width: 100px;
   position: absolute;
   left: 30px;
-  font-weight: 700;
+  font-family: Misa Fonts Semibold;
+  font-size: 13px;
   top: 0;
   background-color: #ffff;
+  display: flex;
+  align-items: center;
 }.btn-button-actionMutile:hover{
   background-color: #D2D3D6;
 }.btn-button-filter{
-  height: 40px;
-  padding: 0 24px;
+  height: 36px;
+  padding: 0 15px;
   border: 2px solid #000;
   text-align: center;
   color: #000;
   border-radius: 20px;
   cursor: pointer;
-  min-width: 100px;
+  min-width: 60px;
   position: absolute;
   left: 220px;
-  font-weight: 700;
+  font-family: Misa Fonts Semibold;
+  font-size: 13px;
   top: 0;
   background-color: #ffff;
+  display: flex;
+  align-items: center;
 }.btn-button-filter:hover{
   background-color: #D2D3D6;  
+}.icon-filter{
+  background-image: var(--icon);
+  background-position: -558px -359px;
+  background-repeat: no-repeat;
+  width: 15px;
+  height: 15px;
+  
 }.btn-button-cancel{
   height: 36px;
   padding: 0 19px;
@@ -135,6 +155,9 @@ export default {
   margin-top: 10px;
 }.btn-button-cancel:hover{
   background-color: #D2D3D6;  
+}.btn-button-cancel.d{
+  top: 150px;
+  font-weight: 600;
 }.btn-button-save{
     height: 36px;
     padding: 0px 21px;
@@ -152,6 +175,11 @@ export default {
 }.btn-button-save:hover{
   background-color: #35BF22;
 
+}.btn-button-save.b{
+  min-width: 50px;
+}.btn-button-save.c{
+  min-width: 50px;
+  margin-top: 0;
 }.btn-button-save-emp{
   height: 36px;
     padding: 0px 21px;

@@ -138,7 +138,7 @@
     <comment>Messeage dành cho Dev khi xóa thất bại</comment>
   </data>
   <data name="DevMsg_Exception" xml:space="preserve">
-    <value>Carsh the exception</value>
+    <value>Catched an exception</value>
     <comment>Messeage dành cho Dev khi API lỗi exception</comment>
   </data>
   <data name="DevMsg_InsertFailed" xml:space="preserve">
@@ -193,6 +193,10 @@
     <value>Chức danh</value>
     <comment>Chức danh nhân viên</comment>
   </data>
+  <data name="Proc_CheckDelete" xml:space="preserve">
+    <value>Proc_{0}_CheckDelete</value>
+    <comment>Kiểm tra xem có phát sinh không trong quá trình xóa</comment>
+  </data>
   <data name="Proc_CheckDulicate" xml:space="preserve">
     <value>Proc_{0}_CheckDulicate</value>
     <comment>Template string cho procudes check mã trùng</comment>
@@ -229,12 +233,36 @@
     <value>Proc_{0}_UpdateRecord</value>
     <comment>Template string cho procudues cập nhật</comment>
   </data>
-  <data name="Range_Worksheet" xml:space="preserve">
+  <data name="Range_Worksheet_Employee" xml:space="preserve">
     <value>A1:J1</value>
     <comment>Số hàng sử dụng excel trong tiêu đề</comment>
   </data>
-  <data name="Title_Worksheet" xml:space="preserve">
+  <data name="Range_Worksheet_Product" xml:space="preserve">
+    <value>A1:M1</value>
+    <comment>Số hàng sử dụng excel trong tiêu đề</comment>
+  </data>
+  <data name="Range_Worksheet_Supply" xml:space="preserve">
+    <value>A1:D1</value>
+    <comment>Số hàng sử dụng excel trong tiêu đề</comment>
+  </data>
+  <data name="Range_Worksheet_Warehouse" xml:space="preserve">
+    <value>A1:F1</value>
+    <comment>Số hàng sử dụng excel trong tiêu đề</comment>
+  </data>
+  <data name="Title_Worksheet_Employee" xml:space="preserve">
     <value>Danh sách nhân viên</value>
+    <comment>Tiêu đề của excel khi xuất ra</comment>
+  </data>
+  <data name="Title_Worksheet_Product" xml:space="preserve">
+    <value>Danh sách hàng hóa, dịch vụ</value>
+    <comment>Tiêu đề của excel khi xuất ra</comment>
+  </data>
+  <data name="Title_Worksheet_Supply" xml:space="preserve">
+    <value>Danh sách nhóm vật tư hàng hóa, dịch vụ</value>
+    <comment>Tiêu đề của excel khi xuất ra</comment>
+  </data>
+  <data name="Title_Worksheet_Warehouse" xml:space="preserve">
+    <value>Danh sách kho</value>
     <comment>Tiêu đề của excel khi xuất ra</comment>
   </data>
   <data name="UnitName" xml:space="preserve">

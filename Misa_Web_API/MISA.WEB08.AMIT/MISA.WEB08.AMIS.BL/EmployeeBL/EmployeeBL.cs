@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
+using MISA.WEB08.AMIS.Common.Resource;
 using MISA.WEB08.AMIS.DL;
 using System;
 using System.Collections.Generic;
@@ -64,8 +65,8 @@ namespace MISA.WEB08.AMIS.BL
                 var ws = wb.Worksheets.Add(typeof(Employee).Name);
 
                 // Tạo tiêu đề của sheet
-                var range = ws.Range(Resource.Range_Worksheet);
-                range.Merge().Value = Resource.Title_Worksheet;
+                var range = ws.Range(Resource.Range_Worksheet_Employee);
+                range.Merge().Value = Resource.Title_Worksheet_Employee;
                 range.Style.Font.Bold = true;
                 range.Style.Font.FontSize = 16;
                 range.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);

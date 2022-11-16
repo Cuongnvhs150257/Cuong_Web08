@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MISA.WEB08.AMIS.DL.SupplyDL
+namespace MISA.WEB08.AMIS.DL
 {
     /// <summary>
     /// interface lấy dữ liệu bảng nhóm vật tư hàng hóa
@@ -13,6 +13,11 @@ namespace MISA.WEB08.AMIS.DL.SupplyDL
     /// </summary>
     public interface ISupplyDL: IBaseDL<Supply>
     {
-
+        /// <summary>
+        /// Hàm xuất danh sách ra Excel
+        /// Createby: Nguyễn Văn Cương 15/10/2022
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Supply> GetSupplyExcel();
     }
 }

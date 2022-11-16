@@ -17,15 +17,17 @@
       </div>
       <div class="popupedit-content" v-if="inputShow == 1">
           <div class="popupedit-input12">
-            <div class="popupedit-input1" >
+            <div class="popupedit-input1" ref="inputCode">
               <label class="item-label product">Mã</label>
               <label class="item-labelsao"> *</label>
               <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" ref="inputFocus" v-model="Records[recordvalue[1].value]"/>
+              <div class="alertInputEd" v-if="isShowAlertCode" >Mã không được để trống</div>
             </div>
-            <div class="popupedit-input2">
+            <div class="popupedit-input2" ref="inputName">
               <label class="item-label product">Tên</label>
               <label class="item-labelsao"> *</label>
               <MInput :tab="2" v-model="Records[recordvalue[2].value]" />
+              <div class="alertInputEd b"  v-if="isShowAlertName"  >Tên không được để trống</div>
             </div>
             <div class="popupedit-input4">
               <label class="item-label product">Địa chỉ</label>
@@ -36,10 +38,11 @@
       </div>
       
        <div class="popupedit-content item2" v-if="inputShow == 2">
-            <div class="popupedit-input5" >
+            <div class="popupedit-input5" ref="inputCode">
               <label class="item-label product">Đơn vị tính</label>
               <label class="item-labelsao"> *</label>
               <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" ref="inputFocus" v-model="Records[recordvalue[1].value]" />
+              <div class="alertInputEd"  v-if="isShowAlertCode"  >Đơn vị tính được để trống</div>
             </div>
             <div class="popupedit-input6">
               <label class="item-label product">Mô tả</label>
@@ -49,15 +52,17 @@
       </div>
 
        <div class="popupedit-content item3" v-if="inputShow == 3">
-            <div class="popupedit-input7" >
+            <div class="popupedit-input7" ref="inputCode">
               <label class="item-label product">Mã</label>
               <label class="item-labelsao"> *</label>
               <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" ref="inputFocus" v-model="Records[recordvalue[1].value]"/>
+              <div class="alertInputEd"  v-if="isShowAlertCode"  >Mã được để trống</div>
             </div>
-            <div class="popupedit-input8">
+            <div class="popupedit-input8" ref="inputName">
               <label class="item-label product">Tên</label>
               <label class="item-labelsao"> *</label>
               <MInput :tab="2" v-model="Records[recordvalue[2].value]" />
+              <div class="alertInputEd c"  v-if="isShowAlertName"  >Tên không được để trống</div>
             </div>
             <div class="popupedit-input9">
               <label class="item-label product">Thuộc</label>
@@ -145,13 +150,42 @@ export default {
     this.handleLoopFocus();
     window.addEventListener("keydown", this.handleEvent);
     window.addEventListener("keyup", this.handleEventInterrupt);
+    window.addEventListener('mouseover', this.clickEventInterrupt);
   },
   unmounted() {
     window.removeEventListener("keydown", this.handleEvent);
     window.removeEventListener("keyup", this.handleEventInterrupt);
+    window.removeEventListener('mouseout', this.clickEventInterrupt);
   },
   methods: {
-
+    /**
+     * hàm hiển thị alert
+     * Nguyễn Văn Cương 10/11/2022
+     */
+    clickEventInterrupt(event){
+      if(this.inValue_Name == false && this.isShowAlertName == false){
+        //kiểm tra click có chứa input name không
+        const isHover = this.$refs.inputName.contains(event.target);
+        if(isHover){
+          //nếu có mở alert
+          this.isShowAlertName = true;
+        }
+      }
+      else if(this.inValue_Name == false && this.isShowAlertName == true){
+           this.isShowAlertName = false;
+      }
+      if( this.inValue_Code == false && this.isShowAlertCode == false){
+        //kiểm tra click có chứa input code không
+        const isHover = this.$refs.inputCode.contains(event.target);
+        if(isHover){
+          //nếu có mở alert
+          this.isShowAlertCode = true;
+        }
+      }
+      else if(this.inValue_Code == false && this.isShowAlertCode == true){
+           this.isShowAlertCode = false;
+      }
+    },
     /**
     * hàm tabindex vòng lặp
      Nguyễn Văn Cương 10/10/2022
@@ -346,9 +380,9 @@ export default {
           this.Spanempty = true;
         }
         if (!this.Records[this.recordvalue[2].value]) {
-          this.errors = notification.UnitNull;
+          this.errors = notification.EmployeeNameNull;
           //đỏ input đơn vị
-          this.inValue_Unit = false;
+          this.inValue_Name = false;
           //hiển thị toolTip
           this.Spanempty = true;
         }
@@ -382,7 +416,7 @@ export default {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(this.Records),
+          body: JSON.stringify(this.Records)
         })
           .then((res) => res.json())
           .then((res) => {
@@ -400,6 +434,8 @@ export default {
                   this.Records[this.recordvalue[1].value] +
                   arrayStrig[1];
                 console.log(this.errors);
+              }else{
+                this.errors = res.userMsg;
               }
             } else {
               //load lại dữ liệu
@@ -524,6 +560,10 @@ export default {
       PopupNotifi_icon: {},
       //lưu css nội dung notifi
       PopupNotifi_label: {}, 
+      //lưu trạng thái alert
+      isShowAlertName: false,
+      //lưu trạng thái alert
+      isShowAlertCode: false
     }
   }
 };
@@ -648,12 +688,16 @@ export default {
     height: 60px;
 }.popupedit-input1{
   width: 130px; 
+  position: relative;
+  z-index: 2;
 }.item-label.product{
     font-size: 12px;
     font-family: Misa Fonts Bold;
 }.popupedit-input2{
     margin-left: 25px;
     width: 269px;
+    position: relative;
+    z-index: 2;
 }.popupedit-input3{
     position: absolute;
     width: 142px;
@@ -671,6 +715,8 @@ export default {
 }.popupedit-input5{
     width: 130px;
     height: 60px;
+    position: relative;
+    z-index: 2;
 }.popupedit-input6{
     position: absolute;
     width: 420px;
@@ -682,9 +728,13 @@ export default {
     height: 173px;
 }.popupedit-input7{
   width: 150px; 
+  position: relative;
+  z-index: 2;
 }.popupedit-input8{
     margin-left: 25px;
     width: 347px;
+    position: relative;
+    z-index: 2;
 }.popupedit-input9{
     position: absolute;
     width: 520px;
@@ -696,6 +746,33 @@ export default {
 }.popupedit-content.item3{
   height: 170px;
   width: 536px;
+}.alertInputEd{
+  width: 150px;
+  height: 18px;
+  font-size: 12px;
+  position: absolute;
+  top: 60px;
+  right: -18px;
+  background-color: #FF7777;
+  border-radius: 4px;
+  padding: 2px 4px;
+  z-index: 10;
+  text-align: center;
+  color: #fff;
+}.alertInputEd.b{
+  right: 40px;
+}.alertInputEd.c{
+  right: 100px;
+}.alertInputEd::after {
+  content: " ";
+  position: absolute;
+  top: -15px;
+  right: 76px;
+  border-width: 9px 9px;
+  border-style: solid;
+  border-radius: 4px;
+  border-color: transparent transparent #FF7777 transparent;
+  cursor: pointer;
 }
 
 </style>

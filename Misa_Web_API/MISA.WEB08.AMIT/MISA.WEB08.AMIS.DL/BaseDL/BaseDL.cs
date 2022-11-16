@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
+using MISA.WEB08.AMIS.Common.Resource;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,6 @@ namespace MISA.WEB08.AMIS.DL
 {
     public class BaseDL<T> : IBaseDL<T>
     {
-        #region GetAllRecords
-
         // <summary>
         /// Hàm kết nối DB để lấy toàn bộ nhân viên
         /// Createdby: Nguyễn Văn Cương 28/09/2022
@@ -34,10 +33,6 @@ namespace MISA.WEB08.AMIS.DL
                 return employees;
             };
         }
-
-        #endregion
-
-        #region InsertRecords
 
         /// <summary>
         /// Hàm kết nối DB để thêm mới đối tượng
@@ -92,10 +87,6 @@ namespace MISA.WEB08.AMIS.DL
 
         }
 
-        #endregion
-
-        #region GetRecordByID
-
         /// <summary>
         /// Hàm kết nối DB để lấy nhân viên theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -127,9 +118,6 @@ namespace MISA.WEB08.AMIS.DL
                 return OJ;
             }
         }
-        #endregion
-
-        #region UpdateRecord
 
         /// <summary>
         /// Hàm kết nối DB để sửa đối tượng theo ID
@@ -174,10 +162,6 @@ namespace MISA.WEB08.AMIS.DL
             }    
         }
 
-        #endregion
-
-        #region Filter
-
         /// <summary>
         /// Hàm kết nối DB để phân trang, tìm kiếm
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -219,10 +203,6 @@ namespace MISA.WEB08.AMIS.DL
             };
         }
 
-        #endregion
-
-        #region DeleteRecord
-
         /// <summary>
         /// Hàm kết nối DB để xóa đối tượng theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -255,54 +235,63 @@ namespace MISA.WEB08.AMIS.DL
     
         }
 
-        #endregion
-
-        #region DeleteMultipleRecord
-
         /// <summary>
         /// Hàm kết nối DB để xóa nhiều đối tượng
         /// </summary>
         /// <param name="employeeid"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public int DeleteMultipleRecord(List<Guid> ListEmployeeID)
+        public int DeleteMultipleRecord(List<Guid> ListRecordID)
         {
-            //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
-            var parameters = new DynamicParameters();
-            var ListID = "";
-
-            if(ListEmployeeID == null || ListEmployeeID.Count == 0)
+            try
             {
-                return 0;
-            }
-            
-            ListID = $"('{String.Join("','", ListEmployeeID)}')";
-            parameters.Add($"v_ListEmployeeID", ListID);
+                //CHuẩn bị tham số đầu vào cho câu lệnh MySQL
+                var parameters = new DynamicParameters();
+                var ListID = "";
 
-
-            //Khởi tạo kết nối với MySQl
-            string connectionString = DataContext.MySqlConnectionString;
-            using (var mysqlConnection = new MySqlConnection(connectionString))
-            {
-                mysqlConnection.Open();
-                using(var transcation = mysqlConnection.BeginTransaction())
+                if (ListRecordID == null || ListRecordID.Count == 0)
                 {
-                    //khai bao ten stored produre
-                    string storeProdureName = String.Format(Resource.Proc_DeleteMultiple, typeof(Employee).Name);
-
-                    //Thực hiện gọi vào DB
-                    var result = mysqlConnection.Execute(storeProdureName, parameters, transcation, commandType: System.Data.CommandType.StoredProcedure);
-                    transcation.Commit();
-                    mysqlConnection.Close();
-                    return result;
+                    return 0;
                 }
+
+                ListID = $"('{String.Join("','", ListRecordID)}')";
+                parameters.Add($"v_ListRecordID", ListID);
+
+
+                //Khởi tạo kết nối với MySQl
+                string connectionString = DataContext.MySqlConnectionString;
+                using (var mysqlConnection = new MySqlConnection(connectionString))
+                {
+                    mysqlConnection.Open();
+                    using (var transaction = mysqlConnection.BeginTransaction())
+                    {
+                        try
+                        {
+                            //khai bao ten stored produre
+                            string storeProdureName = String.Format(Resource.Proc_DeleteMultiple, typeof(T).Name);
+
+                            //Thực hiện gọi vào DB
+                            var result = mysqlConnection.Execute(storeProdureName, parameters, transaction, commandType: System.Data.CommandType.StoredProcedure);
+                            transaction.Commit();
+                            mysqlConnection.Close();
+                            return result;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            transaction.Rollback();
+                            return 0;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 0;
             }
 
         }
-
-        #endregion
-
-        #region GetMaxRecord
 
         /// <summary>
         /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
@@ -363,6 +352,38 @@ namespace MISA.WEB08.AMIS.DL
             
         }
 
-        #endregion
+        /// <summary>
+        /// Hàm kiểm tra phát sinh trong khi xóa
+        /// Nguyễn Văn Cương 15/11/2022
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        public object CheckDelete(Guid record)
+        {
+            //Chuẩn bị tham số đầu vào
+            var parameters = new DynamicParameters();
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
+            {
+                string propertyName = property.Name;
+                parameters.Add($"v_{propertyName}", record);
+                break;
+            }
+
+            //khởi tạo kết nối Database
+            string connectionString = DataContext.MySqlConnectionString;
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                //khai bao ten stored produre
+                string storeProdureName = String.Format(Resource.Proc_CheckDelete, typeof(T).Name);
+
+                //Thực hiện gọi vào DB
+                var OJ = mysqlConnection.QueryFirstOrDefault(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+                return OJ;
+            }
+        }
+
+
     }
 }

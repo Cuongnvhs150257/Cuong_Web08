@@ -1,5 +1,5 @@
 <template>
-        <input type="text" class="item-input" :class="{ 'item-input-red': !inValue, 'item-input-green': !inValueChange }"   :value="modelValue" @input="handleInput" :tabindex="tab" :maxlength="maxlength">
+        <input :type="typeInput" class="item-input" :class="{ 'item-input-red': !inValue, 'item-input-green': !inValueChange }" :placeholder="placeholder"  :value="modelValue" @input="handleInput" :tabindex="tab" :maxlength="maxlength">
 </template>
 <style>
 
@@ -34,6 +34,7 @@ export default {
         tab: Number,
         refs: String,
         maxlength: Number,
+        typeInput: String,
     },
     methods:{
          /**

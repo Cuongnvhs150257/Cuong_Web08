@@ -17,7 +17,7 @@
         </div>
         <MButton :ButtonCss="'btn-button-utilities'" :text="'Tiện ích'"/>
         <MButton :ButtonCss="'btn-button-product'" :text="'Nhóm hàng hóa, dịch vụ'"/>
-        <div class="btn-button-openPopupSelect" @click="openPopupSelect">
+        <div class="btn-button-openPopupSelect" @click="openPopupSelect(null)">
           <MButton  :ButtonCss="'btn-button-openPopup'" :text="'Thêm'"/>
         </div>
       </div>
@@ -49,8 +49,16 @@
       <div class="product-content-toolbar">
         <div class="product-content-toolbar-left">
           <div class="product-content-toolbar-left-icon"></div>
-          <MButton :ButtonCss="'btn-button-actionMutile'" :text="'Thực hiện hàng loạt'" /> 
-          <MButton :ButtonCss="'btn-button-filter'" :text="'Lọc'" /> 
+          <div class="product-content-toolbar-left-btn"  @click="openPopupAsk">
+            <MButton :ButtonCss="'btn-button-actionMutile'" :text="'Thực hiện hàng loạt'" :iconcss="'icon-filter'" /></div>
+          <div class="product-content-toolbar-left-btn" @click="showFilter(1)" ><MButton :ButtonCss="'btn-button-filter'" :iconcss="'icon-filter'" :text="'Lọc'"/></div>
+          <div class="toolbar-filter-label">
+            <label class="label-filter" >test</label>
+            <div class="label-icon"></div>
+          </div>
+          <div class="toolbar-filter-label">
+            <label class="label-filter delete" >Xóa điều kiện lọc</label>
+          </div>
         </div>
         <div class="product-content-toolbar-right">
           <MInputSearch @InputWhere="getWhereValue" :placeholder="'Tìm theo mã, tên hàng hóa, dịch vụ'" :style="'width: 250px'" :iconsearch="'icon-search'" />
@@ -65,7 +73,7 @@
         @custom-open-dbclick="openPopup"
         :RecordsLoad="ProductsTable"
         @data-load-delete="loadData"
-        @get-List-CheckAll="getListProduct"
+        @get-List-Checkbox="getListProduct"
         :closeSelectedAll="closeSelectedAll"
         :thListTable="thList"
         :tdListTable="tdList"
@@ -73,6 +81,7 @@
         :PopupNotilable="'Vật tư hàng hóa'"
         :baseURL="'baseURLProduct'"
         :TableCheckBox="true"
+        @Show-Filter="showFilter"
       />
       
     </div>
@@ -83,14 +92,13 @@
         @offset-value="getOffSetValue"
       />
     </div>
-    <TheProductSelect v-if="isShowPopupSelect" @close-popup-selete="closePopupSelect" @open-product-popup="openProductPopup" />
+    <TheProductSelect v-if="isShowPopupSelect" @close-popup-selete="closePopupSelect" @open-product-popup="openPopup" :ProductID="SaveProductID" />
 
-    <TheProductPopup v-if="isShow" @show-toast="showToastPopup" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
-
-
-    <!-- <Teleport to="#page-employee">
-    </Teleport> -->
-
+    <TheProductPopup v-if="isShow" @show-toast="showToastPopup" @data-load="loadData" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
+    <div ref="filter">
+    <MFilter  v-if="isShowFilter" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
+    </div>
+    <MPopupNotification v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteMultiple" :MPopupN = 2 />
     <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
 
     <MLoading v-if="LoadingShow" />
@@ -103,10 +111,11 @@ import MInputSearch from '../../components/Base/MInputSearch/MInputSearch.vue';
 import ThePadding from '../../components/Layout/ThePadding/MPadding.vue';
 import MToast from '../../components/Base/MToast/MToast.vue';
 import MLoading from '../../components/Base/MLoading/MLoading.vue'
-//import TheProductTable from './TheProductTable.vue';
 import MTable from '../../components/Base/MTable/MTable.vue'
+import MPopupNotification from '../../components/Base/MPopupNotification/MPopupNotification.vue';
 import TheProductSelect from '../ProductPage/ProductPopup/TheProductSelect.vue';
 import TheProductPopup from '../ProductPage/ProductPopup/TheProductPopup.vue';
+import MFilter from '../../components/Base/MFilter/MFilter.vue';
 import configs from '../../configs/index';
 import enums from '../../resouce/enums';
 import toast from '../../resouce/toast';
@@ -117,23 +126,43 @@ export default {
     MLoading,
     MInputSearch,
     MToast,
-    //TheProductTable,
+    MFilter,
     MTable,
     TheProductSelect,
-    TheProductPopup
+    TheProductPopup,
+    MPopupNotification
   },
+  
   methods: {
+
+   /**
+    * hàm click outsite
+    * Nguyễn Văn Cương 01/10/2022
+   */
+   clickEventInterrupt(event){
+    //lưu vị trí con chuột left, top
+    if(this.isShowFilter == true){
+    //kiểm tra xem con chuột có click vào dropitem
+    const isClick = this.$refs.filter.contains(event.target);
+     if(!isClick){
+      this.isShowFilter = false;
+      }
+    }
+  },  
     /**
      * Hàm mở popup tính chất
      * Nguyễn Văn Cương 01/10/2022
      */
-    openPopupSelect(){
+    openPopupSelect(ProductID){
       this.isShowPopupSelect = true;
+      if(ProductID){
+        this.SaveProductID = ProductID;
+      }
     },
 
     /**
      * Hàm mở overview
-     * Nguyễn Văn Cương 01/10/2022
+     * Nguyễn Văn Cương 01/11/2022
      */
     showOverview(){
       this.isShowOverview = !this.isShowOverview;
@@ -144,6 +173,21 @@ export default {
         this.ShowOverviewCss = "product-toolbar-hideoverview b";
         this.TableStyle = "height: calc(100% - 160px); margin-top: 20px;" 
       }
+    },
+
+    /**
+     * Hàm mở popup filter
+     * Nguyễn Văn Cương 11/11/2022
+     */
+    showFilter(value, posY, posX){
+        this.FilterMode = value;
+        posX = posX - 200;
+        posY = posY + 20;
+        this.isShowFilter = !this.isShowFilter;
+        this.StyleFilter = "left: " + posX + "px;" + "top: " + posY + "px;";
+    },
+    closeFilter(){
+      this.isShowFilter = false;
     },
 
     /**
@@ -185,12 +229,24 @@ export default {
         .then((data) => {
           var s = JSON.stringify(data);
           var d = s.replace(/[^0-9]*/g, ""); //lấy mã nhân viên cao nhất, loại bỏ dữ liệu thừa
-          var e = "NV-" + d; //thêm chữ nv đằng trước
-          this.Products.ProductCode = e;
+          this.Products.ProductCode = d;
         })
         .catch((res) => {
           console.log(res);
         });
+    },
+    getSupplyCode(property){
+        if(property == 1){
+          this.Products.SupplyCode = "HH";
+        }else if(property == 2){
+          this.Products.SupplyCode = "DV";
+        }else if(property == 3){
+          this.Products.SupplyCode = "NVL";
+        }else if(property == 4){
+          this.Products.SupplyCode = "TP";
+        }else{
+          this.Products.SupplyCode = "CDDC";
+        }
     },
 
     /**
@@ -198,7 +254,7 @@ export default {
      * và lấy dữ liệu nhân viên theo id dể hiện trên popup
      * Nguyễn Văn Cương 25/09/2022
      */
-    async openPopup(id, detailFormMode) {
+    async openPopup(id, detailFormMode, value) {
       //trường hợp lấy dữ liệu nhân viên theo id dể hiện trên popup
       if (id) {
         this.LoadingShow = true; //hiển thị loading
@@ -210,11 +266,19 @@ export default {
             if (detailFormMode == 1) {
               this.Products.ProductCode = "";
               await this.getNewCode();
+              await this.getSupplyCode(value);
             }
             this.Mode = detailFormMode;
             console.log(this.Mode);
             this.isShow = true; //Hiển thị popup
+            this.isShowPopupSelect = false;
             this.isShowToast = false;
+            if(value){
+              this.ProductPopupProperty = value;
+            }else{
+              this.ProductPopupProperty = this.Products.Nature;
+            }
+            
           })
           .catch((res) => {
             console.log(res);
@@ -223,6 +287,10 @@ export default {
       } else {
         (this.Products = {}), //dữ liệu trên popup rỗng
           await this.getNewCode();
+          await this.getSupplyCode(value);
+        this.Mode = detailFormMode;
+        this.isShowPopupSelect = false;
+        this.ProductPopupProperty = value;
         this.isShow = true;
       }
     },
@@ -395,6 +463,7 @@ export default {
         limit = 10;
       }
       var offset = this.OffSetValue; //lưu trang hiển thị
+      
       if (offset == null) {
         //nếu không có, mặc định là 0
         offset = 0;
@@ -432,7 +501,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURLProduct + "get-product-excel",{method: "GET"})
+        fetch(configs.baseURLProduct + "get-products-excel",{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a
@@ -440,7 +509,7 @@ export default {
               //lấy ra URL
               a.href = URL.createObjectURL(b);
               // Set attribute của thẻ a và tên của file excel
-              a.setAttribute("download", "Danh_sach_hang_hoa.xlsx");
+              a.setAttribute("download", "Danh_sach_hang_hoa_dich_vu.xlsx");
               a.click();
               // Ẩn Loading
               this.LoadingShow = false;
@@ -476,10 +545,12 @@ export default {
   },
   mounted(){
       window.addEventListener('keyup', this.handleEventInterrupt);
+      window.addEventListener('mousedown', this.clickEventInterrupt);
       
   },
   unmounted(){
       window.removeEventListener('keyup', this.handleEventInterrupt);
+      window.removeEventListener('mouseup', this.clickEventInterrupt);
   },
 
    data() {
@@ -540,6 +611,10 @@ export default {
       ShowOverviewCss: "product-toolbar-hideoverview",
       //lưu style của table
       TableStyle: {},
+      //trạng thái mở filter
+      isShowFilter: false,
+      StyleFilter: {},
+      SaveProductID: null,
       //lưu giá trị tdhead của table
       thList: [
         {style: "min-width: 150px;", label: "TÊN"},
@@ -548,7 +623,7 @@ export default {
         {style: "min-width: 100px;", label: "TÍNH CHẤT", },
         {style: "min-width: 100px;", label: "NHÓM VTHH", class: "tab-b", span: "Nhóm vật tư hàng hóa"},
         {style: "min-width: 100px;", label: "ĐƠN VỊ TÍNH"},
-        {style: "min-width: 100px;", label: "SỐ LƯỢNG TỒN", class: "tab-th-amount" },
+        {style: "min-width: 115px;", label: "SỐ LƯỢNG TỒN", class: "tab-th-amount" },
         {style: "min-width: 100px;", label: "GIÁ TRỊ TỒN", class: "tab-th-amount" },
         {style: "min-width: 100px;", label: "THỜI GIAN BẢO HÀNH"},
       ],
@@ -557,7 +632,7 @@ export default {
       [{property: "productName"},
       {property: "productCode"},
       {property: "taxReduction", fun: 4}, 
-      {property: "nature"},
+      {property: "nature", fun: 5},
       {property: "supplyName"},
       {property: "unitCalculateValue"},
       {property: "quantityStock", class: "product-tab-th-amount"},
@@ -624,7 +699,8 @@ export default {
   height: 20px;
   margin-top: 15px;
 }.product-content-toolbar-left{
-  width: 300px;
+  width: 50%;
+  display: flex;
 }
 .product-content-toolbar-right {
   position: absolute;
@@ -828,5 +904,23 @@ export default {
   background-color: #fff;
   padding: 10px 16px;
   border-radius: 4px 4px 0px 0px;
+}.product-content-toolbar-left-btn{
+  width: 145px;
+  height: 100%;
+}.toolbar-filter-label{
+  min-width: 60px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+}.label-filter{
+  color: #009AD5;
+}.label-icon{
+  background-image: var(--icon);
+  background-position: -77px -311px;
+  background-repeat: no-repeat;
+  width: 15px;
+  height: 15px;
+}.label-filter.delete:hover{
+  text-decoration: underline;
 }
 </style>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MISA.WEB08.AMIS.BL;
 using MISA.WEB08.AMIS.Common;
 using MISA.WEB08.AMIS.Common.Entities;
+using MISA.WEB08.AMIS.Common.Resource;
 using MISA.WEB08.AMIS.DL;
 
 namespace MISA.WEB08.AMIS.API.Controllers
@@ -27,8 +28,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
         #endregion
 
         #region Method
-
-        #region API GetAllRecords
 
         /// <summary>
         /// Lấy danh sách đối tượng
@@ -59,10 +58,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
             }
         }
 
-        #endregion
-
-        #region API POST Record
-
         // <summary>
         /// API thêm mới đối tượng
         /// </summary>
@@ -70,12 +65,12 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// <returns>số lượng bản ghi ảnh hưởng</returns>
         /// createdby: Nguyễn Văn Cương 16/08/2022
         [HttpPost("")]
-        public IActionResult InsertEmployee([FromBody] T record)
+        public IActionResult InsertRecord([FromBody] T record)
         {
             try
             {
                 //Xử lý giá trị trả về
-                var result = _baseBL.InsertRecords(record);
+               var result = _baseBL.InsertRecord(record);
 
                 if (result.Success)
                 {
@@ -99,10 +94,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
             }
 
         }
-
-        #endregion
-
-        #region GET Record By ID
 
         /// <summary>
         /// API lấy thông tin một đối tượng bằng id
@@ -134,9 +125,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         }
 
-        #endregion
-
-        #region API PUT Record
 
         // <summary>
         /// API sửa thông tin một nhân viên bằng id
@@ -175,10 +163,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
             }
         }
 
-        #endregion
-
-        #region API Filter 
-
         /// <summary>
         /// API tìm kiếm phân trang
         /// Createdby: Nguyễn Văn Cương 16/08/2022
@@ -188,7 +172,7 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// <param name="offset"></param>
         /// <returns></returns>
         [HttpGet("filter")]
-        public IActionResult FilterEmployees(
+        public IActionResult FilterRecord(
             [FromQuery] string? wnere,
             [FromQuery] int? limit,
             [FromQuery] int? offset)
@@ -210,11 +194,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
                     HttpContext.TraceIdentifier));
             }
         }
-
-
-        #endregion
-
-        #region API Detele Record by ID
 
         // <summary>
         /// API xóa một nhân viên bằng id
@@ -256,11 +235,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
             }
         }
 
-        #endregion
-
-
-        #region API Delete All Record
-
         // <summary>
         /// API xóa nhiều nhân viên bằng id
         /// </summary>
@@ -269,11 +243,11 @@ namespace MISA.WEB08.AMIS.API.Controllers
         /// createdby: Nguyễn Văn Cương 16/08/2022
 
         [HttpPost("batch-delete")]
-        public IActionResult DeleteMultipleRecord([FromBody] List<Guid> ListEmployeeID)
+        public IActionResult DeleteMultipleRecord([FromBody] List<Guid> ListRecordID)
         {
             try
             {
-                var result = _baseBL.DeleteMultipleRecord(ListEmployeeID);
+                var result = _baseBL.DeleteMultipleRecord(ListRecordID);
                 return StatusCode(StatusCodes.Status200OK, result);
             }
             catch (Exception ex)
@@ -288,10 +262,6 @@ namespace MISA.WEB08.AMIS.API.Controllers
                     HttpContext.TraceIdentifier));
             }
         }
-
-        #endregion
-
-        #region API Get Max Record
 
         /// <summary>
         /// Lấy danh sách đối tượng
@@ -322,8 +292,37 @@ namespace MISA.WEB08.AMIS.API.Controllers
             }
         }
 
-        #endregion
-        
+        /// <summary>
+        /// Hàm kiểm tra phát sinh trong khi xóa
+        /// Nguyễn Văn Cương 15/11/2022
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("checkdelete")]
+        public IActionResult CheckDelete(Guid checkdelete)
+        {
+
+            try
+            {
+                var result = _baseBL.CheckDelete(checkdelete);
+
+                return StatusCode(StatusCodes.Status200OK, result);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AMITErrorCode.Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
+                    HttpContext.TraceIdentifier));
+            }
+
+        }
+
         #endregion
     }
 }

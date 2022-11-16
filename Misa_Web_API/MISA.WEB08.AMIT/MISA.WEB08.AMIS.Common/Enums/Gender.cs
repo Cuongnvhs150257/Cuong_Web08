@@ -16,7 +16,6 @@
         /// </summary>
         Female = 1, 
 
-
         /// <summary>
         /// Khác
         /// </summary>

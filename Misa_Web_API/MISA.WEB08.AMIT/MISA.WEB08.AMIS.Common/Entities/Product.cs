@@ -74,7 +74,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// Tính chất hàng hóa
         /// </summary>
-        public string? Nature { get; set; }
+        public int? Nature { get; set; }
 
         /// <summary>
         /// Mô tả

@@ -54,10 +54,12 @@ export default {
             }
             else{
                 this.currentPage = page;
+                // 
                 if(page === Math.ceil(this.TotalCount/this.indexPadding)){
                     this.pageChangeCLick = this.currentPage - 1;
                     this.endPage = true;
                 }
+                // 
                 else if(page === Math.ceil(this.TotalCount/this.indexPadding) - 1){
                     this.pageChangeCLick = this.currentPage;
                 }
@@ -76,16 +78,19 @@ export default {
                 this.currentPage -= 1;
                 this.endPage = false;
             this.$emit("offset-value", (this.indexPadding) * (this.currentPage - 1));
+            
             }
         },
 
         NextValue(){
+            console.log(1)
             if(this.currentPage < Math.ceil(this.TotalCount/this.indexPadding)){
                 if(this.currentPage >= 3 && this.currentPage < Math.ceil(this.TotalCount/this.indexPadding) - 1){
                     this.pageChangeCLick = this.currentPage + 1;
                 }
                 this.currentPage += 1;
                 this.$emit("offset-value", (this.indexPadding) * (this.currentPage - 1));
+
             }
         },
         

@@ -27,6 +27,14 @@ builder.Services.AddScoped<IUnitBL, UnitBL>();
 builder.Services.AddScoped<IUnitDL, UnitDL>();
 builder.Services.AddScoped<IEmployeeBL, EmployeeBL>();
 builder.Services.AddScoped<IEmployeeDL, EmployeeDL>();
+builder.Services.AddScoped<IProductBL, ProductBL>();
+builder.Services.AddScoped<IProductDL, ProductDL>();
+builder.Services.AddScoped<ISupplyBL, SupplyBL>();
+builder.Services.AddScoped<ISupplyDL, SupplyDL>();
+builder.Services.AddScoped<IUnitCalculateBL, UnitCalculateBL>();
+builder.Services.AddScoped<IUnitCalculateDL, UnitCalculateDL>();
+builder.Services.AddScoped<IWarehouseBL, WarehouseBL>();
+builder.Services.AddScoped<IWarehouseDL, WarehouseDL>();
 
 DataContext.MySqlConnectionString = builder.Configuration.GetConnectionString("MySqlConnectionString");
 

@@ -28,7 +28,7 @@
         @custom-open-dbclick="openPopup"
         :RecordsLoad="EmployeesTable"
         @data-load-delete="loadData"
-        @get-List-CheckAll="getListEmployee"
+        @get-List-Checkbox="getListEmployee"
         :closeSelectedAll="closeSelectedAll"
         :thListTable="thList"
         :tdListTable="tdList"

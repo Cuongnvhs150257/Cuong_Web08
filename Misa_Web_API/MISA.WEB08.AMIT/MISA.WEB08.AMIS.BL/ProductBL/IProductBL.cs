@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MISA.WEB08.AMIS.BL.ProductBL
+namespace MISA.WEB08.AMIS.BL
 {
     /// <summary>
     /// interface kết nối với Dl
@@ -13,5 +13,11 @@ namespace MISA.WEB08.AMIS.BL.ProductBL
     /// </summary>
     public interface IProductBL: IBaseBL<Product>
     {
+        /// <summary>
+        /// Hàm xuất danh sách hàng hóa ra Excel
+        /// Createby: Nguyễn Văn Cương 16/11/2022
+        /// </summary>
+        /// <returns></returns>
+        public Byte[] GetProductExcel();
     }
 }

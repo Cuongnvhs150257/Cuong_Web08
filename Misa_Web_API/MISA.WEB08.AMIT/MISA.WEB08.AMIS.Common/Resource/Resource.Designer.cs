@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MISA.WEB08.AMIS.Common {
+namespace MISA.WEB08.AMIS.Common.Resource {
     using System;
     
     
@@ -106,7 +106,7 @@ namespace MISA.WEB08.AMIS.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Carsh the exception.
+        ///   Looks up a localized string similar to Catched an exception.
         /// </summary>
         public static string DevMsg_Exception {
             get {
@@ -232,6 +232,15 @@ namespace MISA.WEB08.AMIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Proc_{0}_CheckDelete.
+        /// </summary>
+        public static string Proc_CheckDelete {
+            get {
+                return ResourceManager.GetString("Proc_CheckDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Proc_{0}_CheckDulicate.
         /// </summary>
         public static string Proc_CheckDulicate {
@@ -315,18 +324,72 @@ namespace MISA.WEB08.AMIS.Common {
         /// <summary>
         ///   Looks up a localized string similar to A1:J1.
         /// </summary>
-        public static string Range_Worksheet {
+        public static string Range_Worksheet_Employee {
             get {
-                return ResourceManager.GetString("Range_Worksheet", resourceCulture);
+                return ResourceManager.GetString("Range_Worksheet_Employee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A1:M1.
+        /// </summary>
+        public static string Range_Worksheet_Product {
+            get {
+                return ResourceManager.GetString("Range_Worksheet_Product", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A1:D1.
+        /// </summary>
+        public static string Range_Worksheet_Supply {
+            get {
+                return ResourceManager.GetString("Range_Worksheet_Supply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A1:F1.
+        /// </summary>
+        public static string Range_Worksheet_Warehouse {
+            get {
+                return ResourceManager.GetString("Range_Worksheet_Warehouse", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Danh sách nhân viên.
         /// </summary>
-        public static string Title_Worksheet {
+        public static string Title_Worksheet_Employee {
             get {
-                return ResourceManager.GetString("Title_Worksheet", resourceCulture);
+                return ResourceManager.GetString("Title_Worksheet_Employee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Danh sách hàng hóa, dịch vụ.
+        /// </summary>
+        public static string Title_Worksheet_Product {
+            get {
+                return ResourceManager.GetString("Title_Worksheet_Product", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Danh sách nhóm vật tư hàng hóa, dịch vụ.
+        /// </summary>
+        public static string Title_Worksheet_Supply {
+            get {
+                return ResourceManager.GetString("Title_Worksheet_Supply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Danh sách kho.
+        /// </summary>
+        public static string Title_Worksheet_Warehouse {
+            get {
+                return ResourceManager.GetString("Title_Worksheet_Warehouse", resourceCulture);
             }
         }
         

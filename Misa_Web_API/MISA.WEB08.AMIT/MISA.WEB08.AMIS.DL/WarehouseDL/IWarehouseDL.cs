@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MISA.WEB08.AMIS.DL.WarehouseDL
+namespace MISA.WEB08.AMIS.DL
 {
     /// <summary>
     /// interface kết nối với Database
@@ -13,5 +13,11 @@ namespace MISA.WEB08.AMIS.DL.WarehouseDL
     /// </summary>
     public interface IWarehouseDL: IBaseDL<Warehouse>
     {
+        /// <summary>
+        /// Hàm xuất danh sách kho ra Excel
+        /// Createby: Nguyễn Văn Cương 15/11/2022
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Warehouse> GetWarehouseExcel();
     }
 }

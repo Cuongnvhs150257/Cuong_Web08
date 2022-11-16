@@ -4,7 +4,7 @@
     <thead>
       <tr>
         <th v-if="TableCheckBox" class="box"><MCheckbox @click="handleCheckBoxAll" :stateCheckAll="stateCheckAll"  /></th>
-        <th v-for="index in thListTable" :key="index.label" :class="index.class" :style="index.style">{{index.label}} <span class="tooltip" v-if="index.span">{{index.span}}</span></th>
+        <th v-for="index in thListTable" :key="index.label" :class="index.class" :style="index.style">{{index.label}} <div @click="openFilter" class="filter-header-icon"></div> <span class="tooltip" v-if="index.span">{{index.span}}</span></th>
         <th class="tab-th-select">CHỨC NĂNG</th>
       </tr>
     </thead>
@@ -19,12 +19,13 @@
           : index.fun === 2 ? this.formatGenderRecord(re[index.property])
           : index.fun === 3 ? this.formatDateRecord(re[index.property])
           : index.fun === 4 ? this.formatTaxRecord(re[index.property])
+          : index.fun === 5 ? this.formatNatureRecord(re[index.property])
           : re[index.property] }}
           </td>
         <td style="min-width: 110px;">
           
           <label class="tab-th-select-lable" @click="rowDBClick(re[tdListTable[tdListTable.length - 1].property])">Sửa</label>
-          <div class="btnopendrop"><MDropItem @edit-value="openPopupAsk" :Drstyle="StyleDropbox" @getpostion="getPostion" @click="getProductDetele(re[tdListTable[tdListTable.length - 1].property], re[tdListTable[1].property])" /></div>
+          <div class="btnopendrop" @click="getRecordDetele(re[tdListTable[tdListTable.length - 1].property], re[tdListTable[1].property])" ><MDropItem @edit-value="openPopupAsk" :MDropSta="1"  :Drstyle="StyleDropbox" @getpostion="getPostion" /></div>
         </td>
       </tr>
     </tbody>
@@ -39,13 +40,14 @@
                   : index.fun === 2 ? this.formatGenderRecord(re.arr[index.property])
                   : index.fun === 3 ? this.formatDateRecord(re.arr[index.property])
                   : index.fun === 4 ? this.formatTaxRecord(re.arr[index.property])
+                  : index.fun === 5 ? this.formatNatureRecord(re.arr[index.property])
                   : re.arr[index.property]}}
                 </div>
             </div>
           </td>
           <td style="min-width: 110px;">
-            <label class="tab-th-select-lable" @click="rowDBClick(re[tdListTable[tdListTable.length - 1].property])">Sửa</label>
-            <div class="btnopendrop"><MDropItem @edit-value="openPopupAsk" :Drstyle="StyleDropbox" @getpostion="getPostion" @click="getProductDetele(re[tdListTable[tdListTable.length - 1].property], re[tdListTable[1].property])" /></div>
+            <label class="tab-th-select-lable" @click="rowDBClick(re.arr[tdListTable[tdListTable.length - 1].property])">Sửa</label>
+            <div class="btnopendrop" @click="getRecordDetele(re.arr[tdListTable[tdListTable.length - 1].property], re.arr[tdListTable[1].property])"><MDropItem @edit-value="openPopupAsk" :MDropSta="1" :Drstyle="StyleDropbox" @getpostion="getPostion" /></div>
         </td>
         </tr>
     </tbody>
@@ -64,7 +66,9 @@
     </tfoot>
   </table>
   <div class="mpopup-ask">
-    <MPopupNotification v-if="isShowAskDelete" :record="PopupNotilable" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteRecord" :getRecordCode="getrecorddeteteCode" :MPopupN="2" />
+    <MPopupNotification v-if="isShowAskDelete" :record="PopupNotilable" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteRecord" @close-notification-click="ClosePopupAsk"
+    :getRecordCode="getrecorddeteteCode" :MPopupN="PopupNotificationMode" />
+    
   </div>
   <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
   </div>
@@ -92,12 +96,19 @@ export default {
     baseURL: String,
     TableCheckBox: Boolean,
     RecordsMuti: Object,
+    CheckDeleteIns: Boolean,
   },
   components: {
     MPopupNotification,
     MCheckbox,
     MToast,
     MDropItem,
+  },
+  mounted() {
+    window.addEventListener('mousedown', this.clickEventInterrupt);
+  },
+  unmounted() {
+    window.removeEventListener('mouseup', this.clickEventInterrupt);
   },
   
   methods: {
@@ -121,7 +132,21 @@ export default {
         this.Changeicon = false;
       }
       
-    }, 
+    },
+
+    /**
+         * hàm click outsite
+         * Nguyễn Văn Cương 01/10/2022
+         */
+        clickEventInterrupt(event){
+          //lưu vị trí con chuột left, top
+          this.PosY = event.y;
+          this.PosX = event.x
+        },
+
+    openFilter(){
+      this.$emit("Show-Filter", 2, this.PosY, this.PosX);
+    },
 
     /**
     Hàm lấy vị trí để hiển thị dropbox
@@ -145,7 +170,7 @@ export default {
       if(this.stateCheckAll == true){
           //vòng lặp thêm mã nhân viên vào mảng
           this.RecordsLoad.data.forEach(re => {
-            this.listReSelected.push(re[this.tdListTable[7].property]);
+            this.listReSelected.push(re[this.tdListTable[this.tdListTable.length - 1].property]);
           },
           this.$emit("get-List-Checkbox", this.listReSelected)
           );
@@ -159,7 +184,7 @@ export default {
      */
     handleCheckBox(ReID){
           //thêm mã nhân viên đã chọn vào mảng
-          this.listProSelected.push(ReID);
+          this.listReSelected.push(ReID);
           this.$emit("get-List-Checkbox", this.listReSelected)
           console.log(this.listReSelected);
     },
@@ -178,7 +203,7 @@ export default {
      * hàm lấy thông tin nhân viên khi xóa
      * Nguyễn Văn Cương 25/09/2022
      */
-    getProductDetele(recordID, recordCode){
+    getRecordDetele(recordID, recordCode){
         this.getrecorddetetevalue = recordID;
         this.getrecorddeteteCode = "<" + recordCode + ">";
         
@@ -190,9 +215,9 @@ export default {
     */
     openPopupAsk(selectedit){
         this.checkDelete = selectedit; //lưu lựa chọn sửa 
-        console.log(this.checkDelete);
         if (this.checkDelete == 2){
             this.isShowAskDelete = true; //hiện popup hỏi người dùng
+            this.PopupNotificationMode = 2;
             this.idRecordDelete = this.getrecorddetetevalue; //lưu id employee cần xóa
         }else if(this.checkDelete == 1){
           //bấm nhân bản
@@ -304,6 +329,22 @@ export default {
        }
     },
 
+    formatNatureRecord(value){
+       //giá trị 1 là nữ 
+       if(value == enums.ACTIVE){
+         return value = "Hàng hóa";
+      //giá trị 2 là nam
+       }else if(value == enums.UNACTIVE){
+         return value = "Dịch vụ";
+       //giá trị 0 là khác
+       }else if (value == enums.UNKNOW){
+         return value = "Nguyên vật liệu";
+      //không có cho thành rỗng
+       }else{
+         return value = "";
+       }
+    },
+
   /**
     Hàm hiện thị thông báo
     Nguyễn Văn Cương 15/10/2022
@@ -334,6 +375,16 @@ export default {
           var id = this.idRecordDelete; 
             //đóng popup hỏi người dùng
             this.ClosePopupAsk();
+          var Incurred = true;
+            if(this.CheckDeleteIns){
+              await this.CheckDelete(id);
+              if(this.IncurredID != null){
+                Incurred = false;
+                this.isShowAskDelete = true;
+                this.PopupNotificationMode = 4;
+              }
+            }
+            if(Incurred){
               await fetch(
             configs[this.baseURL] + id,
             { method: "DELETE" })
@@ -353,12 +404,35 @@ export default {
             .catch((res) => {
               this.ShowToast(this.ToastStatus = false);
               console.log(res);
-            });
+            });  
+            }
       } catch (error) {
         console.log(error);
       }
     },
-   
+
+    /**
+    Hàm check phát sinh khi xóa
+    Nguyễn Văn Cương 15/11/2022
+     */
+    async CheckDelete(recordid){
+      try {
+        this.IncurredID = null;
+        await fetch(configs[this.baseURL] + "checkdelete?checkdelete=" + recordid, {method: "GET"})
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.errorCode) {
+            //mở popup thông báo
+            this.ShowToast(this.ToastStatus = false);
+          }
+          else{
+            this.IncurredID = JSON.stringify(data);
+          }
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    },
     
   },
   created() {
@@ -406,6 +480,10 @@ export default {
       Changeicon: false,
       //thay đổi trạng thái mở td con
       openChildMuti: false,
+      //lưu phát sinh
+      IncurredID: null,
+      //kiểu mở popup thông báo
+      PopupNotificationMode: 2,
 
     };
   },
@@ -466,7 +544,7 @@ td, th {
   padding-left: 8px;
   text-align: left;
   cursor: pointer;
-}.content-table tbody tr:hover{
+}.content-table tbody tr:hover {
   background-color: rgba(80,184,60,0.1);
 }.content-table tr:active{
   background-color: #E5F3FF;
@@ -482,7 +560,6 @@ td, th {
 }
 .tab-th-amount{
   text-align: right !important;
-  padding-right: 10px !important;
   z-index: 1;
 }
 .content-table thead {
@@ -526,10 +603,9 @@ td, th {
    font-weight: 600;
 }.btnopendrop{
   position: relative;
-  width: 5px;
-  height: 5px;
+  width: 30px;
+  height: 30px;
   margin-top: 12px;
-  margin-left: 30px;
 
 }.content-table table thead tr th{
   font-family: Misa Fonts Bold;
@@ -603,6 +679,17 @@ td, th {
   padding-left: 28px;
 }.mutitable-label.c{
   padding-left: 0;
+}.filter-header-icon{
+  background-image: var(--icon);
+  background-position: -1688px -565px;
+  background-repeat: no-repeat;
+  width: 15px;
+  height: 15px;
+  float: right;
+  margin-right: 5px;
+  visibility: hidden;
+}.content-table table thead tr th:hover .filter-header-icon{
+  visibility: visible;
 }
 </style>
 

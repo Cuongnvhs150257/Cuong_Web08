@@ -57,6 +57,25 @@
         </div>
       </div>
     </div>
+    <div class="popupincurred" v-if="MPopupN == 4">
+      <div class="popupincurred-top">
+        <div class="popupask-icon-icon-incurred"></div>
+        <div class="popupask-icon-label-incurred">
+          <label class="label-incurred"
+            >Xóa không thành công</label
+          >
+          <label class="label-incurred-edit"
+            >Nhóm vật tư hàng hóa Nguyên vật liệu đã có phát sinh. Bạn phải xóa các phát sinh liên quan trước khi xóa nhóm vật tư hàng hóa.</label
+          >
+        </div>
+      </div>
+      <div class="popupincurred-bottom">
+          <div class="popupincurred-bottom-right-btn" @click="agreesave">
+            <MButton :ButtonCss="'btn-button-openPopup-Employee c'" :text="'Xem phát sinh'" />
+          </div>
+          <button class="popupincurred-bottom-right" @click="closeNotification">Đóng</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -348,6 +367,68 @@ export default {
   position: absolute;
   right: 30px;
   top: 65%;
+}.popupincurred{
+  width: 430px;
+  height: 230px;
+  position: relative;
+  top: 30%;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 4px;
+}.popupincurred-top{
+  width: 85%;
+  height: 150px;
+  margin-left: 32px;
+  display: flex;
+  position: relative;
+  border-bottom: 2px solid #bbbb;
+}.popupask-icon-icon-incurred{
+  background-image: var(--icon);
+  background-position: -722px -453px;
+  background-repeat: no-repeat;
+  width: 50px;
+  height: 50px;
+  margin-top: 40px;
+  padding-left: 25px;
+
+}.popupask-icon-label-incurred{
+  width: 320px;
+  height: 100px;
+  margin-top: 40px;
+  margin-left: 20px; 
+  line-height: 20px;
+  display: grid;
+}.label-incurred{
+  color: #000;
+  font-size: 13px;
+  font-family: Misa Fonts Bold;
+}.label-incurred-edit{
+  color: #000;
+  font-size: 13px;
+}.popupincurred-bottom{
+  display: flex;
+  width: 100%;
+  height: 75px;
+}.popupincurred-bottom-right{
+  height: 38px;
+  width: 80px;
+  border: 1px solid #bbbb;
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  background-color: #ffff;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 50px;
+  position: absolute;
+  right: 33px;
+}.popupincurred-bottom-right-btn{
+  width: 143px;
+  height: 30px;
+  position: absolute;
+  right: 125px;
+  top: 74%;
 }
 </style>
 
