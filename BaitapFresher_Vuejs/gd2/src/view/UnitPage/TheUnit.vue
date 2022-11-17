@@ -358,7 +358,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURLUnitCalculate + "get-employees-excel",{method: "GET"})
+        fetch(configs.baseURLUnitCalculate + "get-unitcalculates-excel",{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a

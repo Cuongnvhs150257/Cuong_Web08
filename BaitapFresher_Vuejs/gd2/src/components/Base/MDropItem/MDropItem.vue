@@ -12,14 +12,10 @@
   </div>
   
   <div class="filterdrop" v-if="MDropSta == 2">
-      <div class="filterdrop-item i1">(Trống)</div>
-      <div class="filterdrop-item i2">(Không trống)</div>
-      <div class="filterdrop-item i3">Bằng</div>
-      <div class="filterdrop-item i4">Khác</div>
-      <div class="filterdrop-item i5">Chứa</div>
-      <div class="filterdrop-item i6">Không chứa</div>
-      <div class="filterdrop-item i7">Bắt đầu với</div>
-      <div class="filterdrop-item i8">Kết thúc với</div>
+    <div class="filterdrop-data"  v-for="item in FilterList" :key="item" ref="filterdrop">
+      <div class="filterdrop-item" @click="getFilter(item.comparisonType)"  >{{item.label}}</div>
+    </div>
+    
   </div>
 
 </template>
@@ -36,6 +32,7 @@ export default {
   props:{
     Drstyle: String,
     MDropSta: Number,
+    FilterList: [],
   },
   components:{
     Teleport,
@@ -73,11 +70,23 @@ export default {
           if(this.OpenDropboxD == true){
             //kiểm tra xem con chuột có click vào dropitem
             const isClick = this.$refs.dropbox.contains(event.target);
+            const isClick2 = this.$refs.filterdrop.contains(event.target);
             if(!isClick){
               this.OpenDropboxD = false;
             }
+            if(!isClick2){
+              this.$emit("close-filterdrop");
+            }
           }
         },
+        /**
+        Hàm lấy soft để lọc
+        Nguyễn Văn Cương 17/11/2022
+         */
+        getFilter(value){
+          this.$emit("get-Filter", value);
+          this.$emit("close-filterdrop");
+        }
   },
   data(){
         return{

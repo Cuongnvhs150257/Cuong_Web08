@@ -62,7 +62,7 @@
         </div>
         <div class="product-content-toolbar-right">
           <MInputSearch @InputWhere="getWhereValue" :placeholder="'Tìm theo mã, tên hàng hóa, dịch vụ'" :style="'width: 250px'" :iconsearch="'icon-search'" />
-          <button type="button" class="product-toolbar-load" @click="loadData"></button>
+          <button type="button" class="product-toolbar-load" @click="StartLoad"></button>
           <button type="button" class="product-toolbar-export" @click="getExcel"></button>
           <button type="button" :class="ShowOverviewCss" @click="showOverview"></button>
         </div>
@@ -96,7 +96,7 @@
 
     <TheProductPopup v-if="isShow" @show-toast="showToastPopup" @data-load="loadData" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
     <div ref="filter">
-    <MFilter  v-if="isShowFilter" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
+    <MFilter  v-if="isShowFilter" @start-Filter="loadData" @get-Keyword-Header="getKeywordHeader" @get-Filter-Header="getFilterHeader" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
     </div>
     <MPopupNotification v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteMultiple" :MPopupN = 2 />
     <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
@@ -134,6 +134,20 @@ export default {
   },
   
   methods: {
+    /**
+    Hàm lấy soft để lọc
+    Nguyễn Văn Cương 17/11/2022
+    */    
+    getFilterHeader(value){
+      this.Sort = value;
+    },
+        /**
+    Hàm lấy giá trị tìm kiếm để lọc
+    Nguyễn Văn Cương 17/11/2022
+    */ 
+    getKeywordHeader(value){
+      this.Keyword = value;
+    },
 
    /**
     * hàm click outsite
@@ -179,8 +193,9 @@ export default {
      * Hàm mở popup filter
      * Nguyễn Văn Cương 11/11/2022
      */
-    showFilter(value, posY, posX){
-        this.FilterMode = value;
+    showFilter(mode, type, posY, posX){
+        this.FilterMode = mode;
+        this.TypeSort = type;
         posX = posX - 200;
         posY = posY + 20;
         this.isShowFilter = !this.isShowFilter;
@@ -451,6 +466,19 @@ export default {
         });
     },
     /**
+    Hàm chuẩn bị load lại dữ liệu
+    Nguyễn Văn Cương 17/11/2022
+     */
+    StartLoad(){
+      this.LimitValue = null;
+      this.OffSetValue = null;
+      this.WhereValue = null;
+      this.Sort = 0;
+      this.TypeSort = "";
+      this.Keyword = null;
+      this.loadData();
+    },
+    /**
      * hàm load dữ liệu
      * Nguyễn Văn Cương 15/09/2022
      */
@@ -477,7 +505,10 @@ export default {
       else{
         offset = 0;
       }
-      const filter = `filter?wnere=${where}&limit=${limit}&offset=${offset}`;
+      var soft = this.Sort;
+      var typesort = this.TypeSort;
+      var keyword = this.Keyword;
+      const filter = `filter?wnere=${where}&limit=${limit}&offset=${offset}&soft=${soft}&typesoft=${typesort}&keyword=${keyword}`;
       fetch(configs.baseURLProduct + filter, {
         method: "GET",
       })
@@ -613,19 +644,27 @@ export default {
       TableStyle: {},
       //trạng thái mở filter
       isShowFilter: false,
+      //lưu css filter
       StyleFilter: {},
+      //lưu lại id của product
       SaveProductID: null,
+      //lưu giá trị lọc
+      Sort: 0,
+      //lưu tên trường cần soft
+      TypeSort: "",
+      //lưu giá trị tìm kiếm nhập vào theo cột
+      Keyword: null,
       //lưu giá trị tdhead của table
       thList: [
-        {style: "min-width: 150px;", label: "TÊN"},
-        {style: "min-width: 100px;", label: "MÃ"},
-        {style: "min-width: 100px;", label: "GIẢM THUẾ THEO NQ 43",class: "tab", span: "Trạng thái tra cứu giảm thuế theo Nghị quyết 43/2022/QH15" },
-        {style: "min-width: 100px;", label: "TÍNH CHẤT", },
-        {style: "min-width: 100px;", label: "NHÓM VTHH", class: "tab-b", span: "Nhóm vật tư hàng hóa"},
-        {style: "min-width: 100px;", label: "ĐƠN VỊ TÍNH"},
-        {style: "min-width: 115px;", label: "SỐ LƯỢNG TỒN", class: "tab-th-amount" },
-        {style: "min-width: 100px;", label: "GIÁ TRỊ TỒN", class: "tab-th-amount" },
-        {style: "min-width: 100px;", label: "THỜI GIAN BẢO HÀNH"},
+        {style: "min-width: 150px;", label: "TÊN", property: "ProductName"},
+        {style: "min-width: 100px;", label: "MÃ", property: "ProductCode"},
+        {style: "min-width: 100px;", label: "GIẢM THUẾ THEO NQ 43",class: "tab", span: "Trạng thái tra cứu giảm thuế theo Nghị quyết 43/2022/QH15", property: "TaxReduction" },
+        {style: "min-width: 100px;", label: "TÍNH CHẤT", property: "Nature"},
+        {style: "min-width: 100px;", label: "NHÓM VTHH", class: "tab-b", span: "Nhóm vật tư hàng hóa", property: "SupplyName"},
+        {style: "min-width: 100px;", label: "ĐƠN VỊ TÍNH", property: "UnitCalculateValue"},
+        {style: "min-width: 115px;", label: "SỐ LƯỢNG TỒN", class: "tab-th-amount", property: "QuantityStock" },
+        {style: "min-width: 100px;", label: "GIÁ TRỊ TỒN", class: "tab-th-amount",property: "ExistentialValue" },
+        {style: "min-width: 100px;", label: "THỜI GIAN BẢO HÀNH", property: "Insurance"},
       ],
       //lưu giá trị property td
       tdList: 

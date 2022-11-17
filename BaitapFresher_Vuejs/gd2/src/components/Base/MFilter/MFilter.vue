@@ -101,7 +101,7 @@
                 </div>
             </div>
             <div class="filterb-mid-input">
-                <MInput class="dd" :placeholder="'Nhập giá trị lọc'" />
+                <MInputSearch  @InputWhere="getKeywordValue" :style="'width: 315px'" class="dd" :placeholder="'Nhập giá trị lọc'" />
             </div>
         </div>
         <div class="filterb-bottom">
@@ -111,19 +111,19 @@
             </div>
           </div>
           <div class="filterb-content-bottom-right">
-            <div class="btn-product-popup-save" @click="btnSaveonClick" > <MButton  :tab="9" :ButtonCss="'btn-button-save c'" :text="'Lọc'" />
+            <div class="btn-product-popup-save" @click="btnFilterClick" > <MButton  :tab="9" :ButtonCss="'btn-button-save c'" :text="'Lọc'" />
             <span class="product-tooltip">Ctrl + Alt + C</span></div>  
           </div>
       </div>
       <div class="drop">
-        <MDropItem v-if="isShowDropFilter" :MDropSta="2" @click="getFilter()" />
+        <MDropItem v-if="isShowDropFilter" :FilterList="FilterList" :MDropSta="2" @close-filterdrop="CloseFilterDrop" @get-Filter="getFilter" />
       </div>
     </div>
 </template>
 
 <script>
 import MButton from "../../../components/Base/MButton/MButton.vue";
-import MInput from "../MInput/MInputSpecial.vue";
+import MInputSearch from "../MInputSearch/MInputSearch.vue";
 import MCombobox from "../../Base/MCombobox/MCombobox.vue";
 import MDropItem from "../MDropItem/MDropItem.vue";
 export default {
@@ -134,7 +134,7 @@ export default {
     components:{
         MButton,
         MCombobox,
-        MInput,
+        MInputSearch,
         MDropItem,
     },
 
@@ -147,7 +147,27 @@ export default {
       },
       OpenDropFilter(){
         this.isShowDropFilter = !this.isShowDropFilter;
-      }
+      },
+      CloseFilterDrop(){
+        this.isShowDropFilter = false;
+      },
+       /**
+        Hàm lấy soft để lọc
+        Nguyễn Văn Cương 17/11/2022
+      */
+      getFilter(value){
+        this.$emit("get-Filter-Header", value);
+      },
+      /**
+      Hàm lấy giá trị tìm kiếm lọc
+      Nguyễn Văn Cương 17/11/2022 
+       */
+      getKeywordValue(value){
+        this.$emit("get-Keyword-Header", value);
+      },
+      btnFilterClick(){
+        this.$emit("start-Filter");
+      },
     },
 
     data(){
@@ -216,6 +236,41 @@ export default {
           label: "Ngừng sử dụng",
         }
       ],
+      FilterList: [
+        {
+          label: "(Trống)",
+          comparisonType: 1
+        },
+        {
+          label: "(Không trống)",
+          comparisonType: 2
+        },
+        {
+          label: "Bằng",
+          comparisonType: 3
+        },
+        {
+          label: "Khác",
+          comparisonType: 4
+        },
+        {
+          label: "Chứa",
+          comparisonType: 5
+        },
+        {
+          label: "Không chứa",
+          comparisonType: 6
+        },
+        {
+          label: "Bắt đầu với",
+          comparisonType: 7
+        }
+        ,{
+          label: "Kết thúc với",
+          comparisonType: 8
+        }
+
+      ]
       }
     }
 }

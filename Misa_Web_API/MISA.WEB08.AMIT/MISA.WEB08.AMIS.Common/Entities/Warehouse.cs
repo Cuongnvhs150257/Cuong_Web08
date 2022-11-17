@@ -20,11 +20,13 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// Mã kho
         /// </summary>
+        [SearchCodeAttribute]
         public string WarehouseCode { get; set; }
 
         /// <summary>
         /// Tên kho
         /// </summary>
+        [SearchNameAttribute]
         public string WarehouseName { get; set; }
 
         /// <summary>

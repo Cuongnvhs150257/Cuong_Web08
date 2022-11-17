@@ -19,13 +19,13 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// mã nhân viên
         /// </summary>
-        [IsNotNullOrEmptyAtrribute("Mã nhân viên không được để trống")] [DulicateAtrribute("Mã nhân viên <> đã tồn tại trong hệ thống, vui lòng kiểm tra lại")]
+        [IsNotNullOrEmptyAtrribute("Mã nhân viên không được để trống")] [DulicateAtrribute("Mã nhân viên <> đã tồn tại trong hệ thống, vui lòng kiểm tra lại")][SearchNameAttribute]
         public string EmployeeCode { get; set; }
 
         /// <summary>
         /// tên nhân viên
         /// </summary>
-        [IsNotNullOrEmptyAtrribute("Tên nhân viên không được để trống")]
+        [IsNotNullOrEmptyAtrribute("Tên nhân viên không được để trống")][SearchCodeAttribute]
         public string FullName { get; set; }
 
         /// <summary>

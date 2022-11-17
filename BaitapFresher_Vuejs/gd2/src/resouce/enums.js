@@ -50,4 +50,20 @@ export default{
     //Chưa xác định
     UNKNOW: 0,
 
+    //Hàng hóa
+    Product: 1,
+
+    //Dịch vụ
+    Service: 2,
+
+    //Nguyên vật liệu
+    Material: 3,
+
+    //Thành phẩm
+    FiProduct: 4,
+
+    //công cụ dụng cụ
+    Tools: 5,
+
+
 }

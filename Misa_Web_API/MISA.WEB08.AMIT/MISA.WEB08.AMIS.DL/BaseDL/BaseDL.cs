@@ -169,11 +169,13 @@ namespace MISA.WEB08.AMIS.DL
         /// <param name="where"></param>
         /// <param name="limit"></param>
         /// <param name="offset"></param>
+        /// <param name="soft"></param>
         /// <returns>Data, TotalCount</returns>
         public PagingData<T> Filter(
-            string where,
             int? limit,
-            int? offset)
+            int? offset,
+            string? query,
+            string? queryCount)
         {
             var result = new PagingData<T>();
 
@@ -182,7 +184,8 @@ namespace MISA.WEB08.AMIS.DL
 
             parameters.Add("v_limit", limit);
             parameters.Add("v_offset", offset);
-            parameters.Add("v_where", where);
+            parameters.Add("v_query", query);
+            parameters.Add("v_query2", queryCount);
 
             //Khởi tạo kết nối với MySQl
             string connectionString = DataContext.MySqlConnectionString;

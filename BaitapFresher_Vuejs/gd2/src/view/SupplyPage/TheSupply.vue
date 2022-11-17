@@ -276,7 +276,7 @@ export default {
      * Nguyễn Văn Cương 15/10/2022
      */
     async deleteMultiple() {
-      var listD = this.listEmpDelete;
+      var listD = this.listSuDelete;
       
       await fetch(configs.baseURLSupply + "batch-delete", {
         method: "POST",
@@ -406,7 +406,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURLSupply + "get-employees-excel",{method: "GET"})
+        fetch(configs.baseURLSupply + "get-supplys-excel",{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a
@@ -414,7 +414,7 @@ export default {
               //lấy ra URL
               a.href = URL.createObjectURL(b);
               // Set attribute của thẻ a và tên của file excel
-              a.setAttribute("download", "Danh_sach_kho.xlsx");
+              a.setAttribute("download", "Danh_sach_nhom_vat_tu_hang_hoa.xlsx");
               a.click();
               // Ẩn Loading
               this.LoadingShow = false;

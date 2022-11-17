@@ -16,12 +16,13 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// Mã nhóm vật tư hàng hóa
         /// </summary>
-        [IsNotNullOrEmptyAtrribute("Mã nhóm vật tư, hàng hóa không được để trống")]
+        [IsNotNullOrEmptyAtrribute("Mã nhóm vật tư, hàng hóa không được để trống")][SearchCodeAttribute]
         public string SupplyCode { get; set; }
 
         /// <summary>
         /// Tên nhóm vật tư hàng hóa
         /// </summary>
+        [SearchNameAttribute]
         public string? SupplyName { get; set; }
 
         /// <summary>

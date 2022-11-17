@@ -106,8 +106,25 @@
 
     }
 
-   
+    /// <summary>
+    /// Atrribute dùng để tìm kiếm tên
+    /// Createdby: Nguyễn Văn Cương 17/11/2022
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class SearchNameAttribute : Attribute
+    {
 
+    }
+
+    /// <summary>
+    /// Atrribute dùng để tìm kiếm mã
+    /// Createdby: Nguyễn Văn Cương 17/11/2022
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class SearchCodeAttribute : Attribute
+    {
+
+    }
 
 
 }

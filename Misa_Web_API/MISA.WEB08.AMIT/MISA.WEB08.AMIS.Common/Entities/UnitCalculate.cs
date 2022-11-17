@@ -17,7 +17,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// Giá trị đơn vị tính
         /// </summary>
-        [IsNotNullOrEmptyAtrribute("Giá trị đơn vị tính không được để trống")]
+        [IsNotNullOrEmptyAtrribute("Giá trị đơn vị tính không được để trống")][SearchNameAttribute]
         public string UnitCalculateValue { get; set; }
 
         /// <summary>

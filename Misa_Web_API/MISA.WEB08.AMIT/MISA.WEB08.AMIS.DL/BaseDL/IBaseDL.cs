@@ -49,7 +49,7 @@ namespace MISA.WEB08.AMIS.DL
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         /// <returns>Data, TotalCount</returns>
-        public PagingData<T> Filter(string where, int? limit, int? offset);
+        public PagingData<T> Filter(int? limit, int? offset, string? query, string? queryCount);
 
         /// <summary>
         /// Hàm kết nối DB để xóa nhân viên theo ID

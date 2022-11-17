@@ -17,13 +17,13 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// mã hàng hóa
         /// </summary>
-        [IsNotNullOrEmptyAtrribute("Mã hàng hóa không được để trống")][DulicateAtrribute("Mã hàng hóa <> đã tồn tại trong hệ thống, vui lòng kiểm tra lại")]
+        [IsNotNullOrEmptyAtrribute("Mã hàng hóa không được để trống")][DulicateAtrribute("Mã hàng hóa <> đã tồn tại trong hệ thống, vui lòng kiểm tra lại")][SearchCodeAttribute]
         public string ProductCode { get; set; }
 
         /// <summary>
         /// tên hàng hóa
         /// </summary>
-        [IsNotNullOrEmptyAtrribute("Tên hàng hóa không được để trống")]
+        [IsNotNullOrEmptyAtrribute("Tên hàng hóa không được để trống")][SearchNameAttribute]
         public string ProductName { get; set; }
 
         /// <summary>

@@ -175,11 +175,14 @@ namespace MISA.WEB08.AMIS.API.Controllers
         public IActionResult FilterRecord(
             [FromQuery] string? wnere,
             [FromQuery] int? limit,
-            [FromQuery] int? offset)
+            [FromQuery] int? offset,
+            [FromQuery] int? soft,
+            [FromQuery] string? typesoft,
+            [FromQuery] string? keyword)
         {
             try
             {
-                var ListOJ = _baseBL.Filter(wnere, limit, offset);
+                var ListOJ = _baseBL.Filter(wnere, limit, offset, soft, typesoft, keyword);
 
                 return StatusCode(StatusCodes.Status200OK, ListOJ);
             }

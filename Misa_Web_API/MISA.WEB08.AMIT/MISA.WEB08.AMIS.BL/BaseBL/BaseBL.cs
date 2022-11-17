@@ -168,9 +168,123 @@ namespace MISA.WEB08.AMIS.BL
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         /// <returns>Data, TotalCount</returns>
-        public PagingData<T> Filter(string keyword, int? limit, int? offset)
+        public PagingData<T> Filter(string? where, int? limit, int? offset, int? soft, string? typesoft, string? keyword)
         {
-            return _baseDL.Filter(keyword, limit, offset);
+            string query = "";
+            string queryCount = "";
+            if (where != null && typesoft == null)
+            {
+                var properties = typeof(T).GetProperties();
+                string queryFirst = "";
+                string queryAfter = "";
+                foreach (var property in properties)
+                {
+                    var SearchNameAttribute = (SearchNameAttribute?)Attribute.GetCustomAttribute(property, typeof(SearchNameAttribute));
+                    if (SearchNameAttribute != null)
+                    {
+                        string propertyName = property.Name;
+                        queryFirst = propertyName + " LIKE '%" + where + "%'";
+                    }
+                    var SearchCodeAttribute = (SearchCodeAttribute?)Attribute.GetCustomAttribute(property, typeof(SearchCodeAttribute));
+                    if (SearchCodeAttribute != null)
+                    {
+                        string propertyName = property.Name;
+                        queryAfter = "OR " + propertyName + " LIKE '%" + where + "%'";
+                    }
+                    
+                }
+                query = queryFirst + queryAfter;
+
+            }
+            if (where != null && soft != null)
+            {
+                var properties = typeof(T).GetProperties();
+                foreach (var property in properties)
+                {
+                    if (property.Name == typesoft)
+                    {
+                        string propertyName = property.Name;
+                        switch (soft)
+                        {
+                            case 1:
+                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " IS NULL";
+                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " IS NULL";
+                                break;
+                            case 2:
+                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " IS NOT NULL";
+                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " IS NOT NULL";
+                                break;
+                            case 3:
+                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " = " + "'" + keyword + "' ";
+                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " = " + "'" + keyword + "' ";
+                                break;
+                            case 4:
+                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " != " + "'" + keyword + "'";
+                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " != " + "'" + keyword + "'";
+                                break;
+                            case 5:
+                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " LIKE '%" + keyword + "%'";
+                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " LIKE '%" + keyword + "%'";
+                                break;
+                            case 6:
+                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " LIKE '!%" + keyword + "%'";
+                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " LIKE '!%" + keyword + "%'";
+                                break;
+                            case 7:
+                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " LIKE " + "'" + keyword + "_%'";
+                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " LIKE " + "'" + keyword + "_%'";
+                                break;
+                            case 8:
+                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " LIKE '%_" + keyword + "'";
+                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " LIKE '%_" + keyword + "'";
+                                break;
+                        }
+                    }
+
+                }
+
+            }
+            if (where == null && typesoft != null)
+            {
+                var properties = typeof(T).GetProperties();
+                foreach (var property in properties)
+                {
+                    if (property.Name == typesoft)
+                    {
+                        string propertyName = property.Name;
+                        switch (soft)
+                        {
+                            case 1:
+                                query = propertyName + " IS NULL";
+                                break;
+                            case 2:
+                                query = propertyName + " IS NOT NULL";
+                                break;
+                            case 3:
+                                query = propertyName + " = " + "'" + keyword + "'";
+                                break;
+                            case 4:
+                                query = propertyName + " != " + "'" + keyword + "'";
+                                break;
+                            case 5:
+                                query = propertyName + " LIKE '%" + keyword + "%'";
+                                break;
+                            case 6:
+                                query = propertyName + " LIKE '!%" + keyword + "%'";
+                                break;
+                            case 7:
+                                query = propertyName + " LIKE " + "'" + keyword + "_%'";
+                                break;
+                            case 8:
+                                query = propertyName + " LIKE '%_" + keyword + "'";
+                                break;
+                        }
+                    }
+
+                }
+            }
+
+            return _baseDL.Filter(limit, offset, query, queryCount);
         }
 
 

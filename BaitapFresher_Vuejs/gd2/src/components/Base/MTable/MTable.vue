@@ -4,7 +4,7 @@
     <thead>
       <tr>
         <th v-if="TableCheckBox" class="box"><MCheckbox @click="handleCheckBoxAll" :stateCheckAll="stateCheckAll"  /></th>
-        <th v-for="index in thListTable" :key="index.label" :class="index.class" :style="index.style">{{index.label}} <div @click="openFilter" class="filter-header-icon"></div> <span class="tooltip" v-if="index.span">{{index.span}}</span></th>
+        <th v-for="index in thListTable" :key="index.label" :class="index.class" :style="index.style">{{index.label}} <div @click="openFilter(index.property)" class="filter-header-icon"></div> <span class="tooltip" v-if="index.span">{{index.span}}</span></th>
         <th class="tab-th-select">CHỨC NĂNG</th>
       </tr>
     </thead>
@@ -144,8 +144,8 @@ export default {
           this.PosX = event.x
         },
 
-    openFilter(){
-      this.$emit("Show-Filter", 2, this.PosY, this.PosX);
+    openFilter(value){
+      this.$emit("Show-Filter", 2, value, this.PosY, this.PosX);
     },
 
     /**
@@ -331,14 +331,20 @@ export default {
 
     formatNatureRecord(value){
        //giá trị 1 là nữ 
-       if(value == enums.ACTIVE){
+       if(value == enums.Product){
          return value = "Hàng hóa";
       //giá trị 2 là nam
-       }else if(value == enums.UNACTIVE){
+       }else if(value == enums.Service){
          return value = "Dịch vụ";
        //giá trị 0 là khác
-       }else if (value == enums.UNKNOW){
+       }else if (value == enums.Material){
          return value = "Nguyên vật liệu";
+      //không có cho thành rỗng
+       }else if (value == enums.FiProduct){
+         return value = "Thành phẩm";
+      //không có cho thành rỗng
+       }else if (value == enums.Tools){
+         return value = "Công cụ dụng cụ";
       //không có cho thành rỗng
        }else{
          return value = "";
