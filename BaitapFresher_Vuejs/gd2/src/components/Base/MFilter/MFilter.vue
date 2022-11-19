@@ -46,6 +46,7 @@
                 <MCombobox
                   :Comboboxmodel="DropboxItemStatusWarehouse[0].label"
                   :tab="5"
+                  :width="'width: 40%;'"
                   :DropboxItem="DropboxItemStatusWarehouse"
                   :maxlength="0"
                   :readonly="true"
@@ -81,7 +82,7 @@
             </div>
           </div>
           <div class="filter-content-bottom-right">
-            <div class="btn-product-popup-save2" @click="btnSaveonClick" > <MButton  :tab="6" :ButtonCss="'btn-button-save b'" :text="'Lọc'" />
+            <div class="btn-product-popup-save2" @click="btnFilterClick" > <MButton  :tab="6" :ButtonCss="'btn-button-save b'" :text="'Lọc'" />
             <span class="product-tooltip">Ctrl + Alt + C</span></div>  
           </div>
       </div>
@@ -95,13 +96,39 @@
             <div class="filterb-mid-top">
                 <div class="filterb-mid-label">Lọc tên</div>
                 <div class="filterb-mid-dropbox">
-                  <label class="filterb-mid-dropbox-label">Chứa</label>
+                  <label class="filterb-mid-dropbox-label">{{FilterLable}}</label>
                   <div class="filterb-mid-icon" @click="OpenDropFilter">
                   </div>
                 </div>
             </div>
             <div class="filterb-mid-input">
-                <MInputSearch  @InputWhere="getKeywordValue" :style="'width: 315px'" class="dd" :placeholder="'Nhập giá trị lọc'" />
+                <MInputSearch v-if="typeInput == 1" @InputWhere="getKeywordValue" :disable="DisableInput" :style="'width: 315px'" class="dd" :placeholder="'Nhập giá trị lọc'" />
+                <MCombobox
+                   v-if="typeInput == 2"
+                  :Comboboxmodel="DropboxItemNature[0].label"
+                  :tab="5"
+                  :DropboxItem="DropboxItemNature"
+                  :maxlength="0"
+                  :readonly="true"
+                  @get-recordvalue="getRecord"
+                  :value="'Nature'"
+                  :label="'label'"
+                  :valuePost="'Nature'"
+                  ref="combobox"
+                />
+                <MCombobox
+                  v-if="typeInput == 3"
+                  :Comboboxmodel="DropboxItemTax[0].label"
+                  :tab="5"
+                  :DropboxItem="DropboxItemTax"
+                  :maxlength="0"
+                  :readonly="true"
+                  @get-recordvalue="getRecord"
+                  :value="'TaxReduction'"
+                  :label="'label'"
+                  :valuePost="'TaxReduction'"
+                  ref="combobox"
+                />
             </div>
         </div>
         <div class="filterb-bottom">
@@ -130,6 +157,7 @@ export default {
   props:{
     FilterMode: Number,
     FilterStyle: String,
+    typeInput: Number,
   },
     components:{
         MButton,
@@ -155,8 +183,20 @@ export default {
         Hàm lấy soft để lọc
         Nguyễn Văn Cương 17/11/2022
       */
-      getFilter(value){
-        this.$emit("get-Filter-Header", value);
+      getFilter(comparisonType, label){
+        console.log(1);
+        this.$emit("get-Filter-Header", comparisonType);
+        this.FilterLable = label;
+        if(comparisonType == 1 || comparisonType == 2){
+          this.DisableInput = true;
+        }else{
+          this.DisableInput = false;
+        }
+      },
+      getRecord(keyword, namevalue, filterlabel){
+          this.$emit("get-Keyword-Header", keyword);
+          this.$emit("get-Filter-Header", 3);
+          this.$emit("get-Typesoft", namevalue, filterlabel);
       },
       /**
       Hàm lấy giá trị tìm kiếm lọc
@@ -174,6 +214,9 @@ export default {
       return{
         SupplyNull: false,
         isShowDropFilter: false,
+        FilterLable: "Chứa",
+        //lưu style input
+        DisableInput: false,
 
       //lưu giá trị của combobox tính chất
       DropboxItemNature: [
@@ -270,7 +313,22 @@ export default {
           comparisonType: 8
         }
 
-      ]
+      ],
+      //lưu giá trị của combobox trạng thái
+      DropboxItemTax: [
+        {
+          TaxReduction: 0,
+          label: "Chưa xác định",
+        },
+        {
+          TaxReduction: 2,
+          label: "Không giảm thuế",
+        },
+        {
+          TaxReduction: 1,
+          label: "Có giảm thuế",
+        },
+      ],
       }
     }
 }
@@ -396,13 +454,13 @@ export default {
   text-align: left;
   padding-top: 30px;
 }.filterb-mid-dropbox{
-  width: 20%;
+  width: 36%;
   text-align: end;
   height: 100%;
   padding-top: 30px;
   display: flex;
 }.filterb-mid-input{
-  width: 96%;
+  width: 100%;
 }.filterb-bottom{
   width: 100px;
   height: 50px;
@@ -410,7 +468,7 @@ export default {
   color: #0075c0;
   font-family: Misa Fonts Semibold;
   font-size: 13px;
-  width: 50px;
+  width: 100px;
 }.filterb-mid-icon{
   background-image: var(--icon);
   background-position: -1769px -522px;

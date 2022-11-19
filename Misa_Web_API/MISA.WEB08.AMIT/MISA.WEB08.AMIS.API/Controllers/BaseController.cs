@@ -177,8 +177,8 @@ namespace MISA.WEB08.AMIS.API.Controllers
             [FromQuery] int? limit,
             [FromQuery] int? offset,
             [FromQuery] int? soft,
-            [FromQuery] string? typesoft,
-            [FromQuery] string? keyword)
+            [FromQuery] string[]? typesoft,
+            [FromQuery] string[]? keyword)
         {
             try
             {

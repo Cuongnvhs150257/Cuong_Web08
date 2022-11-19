@@ -52,12 +52,12 @@
           <div class="product-content-toolbar-left-btn"  @click="openPopupAsk">
             <MButton :ButtonCss="'btn-button-actionMutile'" :text="'Thực hiện hàng loạt'" :iconcss="'icon-filter'" /></div>
           <div class="product-content-toolbar-left-btn" @click="showFilter(1)" ><MButton :ButtonCss="'btn-button-filter'" :iconcss="'icon-filter'" :text="'Lọc'"/></div>
-          <div class="toolbar-filter-label">
-            <label class="label-filter" >test</label>
-            <div class="label-icon"></div>
+          <div class="toolbar-filter-label" v-for="(item, index) in BindingFilterValue" :key="item">
+            <label class="label-filter" >{{item}}</label>
+            <div class="label-icon" @click="CancelFilterlabel(item, index)"></div>
           </div>
           <div class="toolbar-filter-label">
-            <label class="label-filter delete" >Xóa điều kiện lọc</label>
+            <label class="label-filter delete" @click="StartLoad" v-if="BindingFilterValue.length > 0" >Xóa điều kiện lọc</label>
           </div>
         </div>
         <div class="product-content-toolbar-right">
@@ -96,7 +96,7 @@
 
     <TheProductPopup v-if="isShow" @show-toast="showToastPopup" @data-load="loadData" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
     <div ref="filter">
-    <MFilter  v-if="isShowFilter" @start-Filter="loadData" @get-Keyword-Header="getKeywordHeader" @get-Filter-Header="getFilterHeader" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
+    <MFilter :typeInput="InputType" v-if="isShowFilter" @get-Typesoft="getTypesoft" @start-Filter="loadData" @get-Keyword-Header="getKeywordHeader" @get-Filter-Header="getFilterHeader" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
     </div>
     <MPopupNotification v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteMultiple" :MPopupN = 2 />
     <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
@@ -146,7 +146,17 @@ export default {
     Nguyễn Văn Cương 17/11/2022
     */ 
     getKeywordHeader(value){
-      this.Keyword = value;
+      if(this.timeout){
+        clearTimeout(this.timeout)
+        this.timeout = null;
+      }
+      else{
+        this.timeout = setTimeout(() => {
+        }, 500);
+      }
+      if(!this.Keyword.includes(value)){
+        this.Keyword.push(value);
+      }
     },
 
    /**
@@ -193,16 +203,56 @@ export default {
      * Hàm mở popup filter
      * Nguyễn Văn Cương 11/11/2022
      */
-    showFilter(mode, type, posY, posX){
+    showFilter(mode, inputfil, type, filterlabel, posY, posX){
         this.FilterMode = mode;
-        this.TypeSort = type;
+        this.InputType = inputfil;
+        if(!this.TypeSort.includes(type) && type != null){
+          this.TypeSort.push(type);
+        }
+        this.FilterLabel = filterlabel;
         posX = posX - 200;
         posY = posY + 20;
         this.isShowFilter = !this.isShowFilter;
         this.StyleFilter = "left: " + posX + "px;" + "top: " + posY + "px;";
     },
+    getTypesoft(type, filterlabel){
+      if(!this.TypeSort.includes(type)){
+        this.TypeSort.push(type);
+      }
+      this.FilterLabel = filterlabel;
+    },
     closeFilter(){
       this.isShowFilter = false;
+      this.StartLoad();
+    },
+
+    BindingFilter(){
+      if(!this.BindingFilterValue.includes(this.FilterLabel) && this.FilterLabel != null){
+        this.BindingFilterValue.push(this.FilterLabel + ":");
+      }
+    },
+    /**
+    hàm xóa phần tử trong combobox nhiều
+    Nguyễn Văn Cương 05/10/2022
+    */
+    CancelFilterlabel(value, indexFilterValue){
+      //tìm index của phần từ trong mảng
+      const index = this.BindingFilterValue.indexOf(value);
+      if (index > -1) {
+        //loại bỏ phần tử khỏi mảng
+        this.BindingFilterValue.splice(index, 1); 
+      }
+      for (let i = 0; i < this.TypeSort.length; i++) {
+        if(indexFilterValue == i){
+          const typesoft = this.TypeSort.indexOf(this.TypeSort[i]);
+          if (typesoft > -1) {
+            //loại bỏ phần tử khỏi mảng
+            this.TypeSort.splice(typesoft, 1); 
+            this.FilterLabel = null;
+            this.loadData();
+          }
+        }
+      }
     },
 
     /**
@@ -474,8 +524,10 @@ export default {
       this.OffSetValue = null;
       this.WhereValue = null;
       this.Sort = 0;
-      this.TypeSort = "";
-      this.Keyword = null;
+      this.TypeSort = [];
+      this.Keyword = [];
+      this.FilterLabel = null;
+      this.BindingFilterValue = [];
       this.loadData();
     },
     /**
@@ -506,9 +558,15 @@ export default {
         offset = 0;
       }
       var soft = this.Sort;
-      var typesort = this.TypeSort;
-      var keyword = this.Keyword;
-      const filter = `filter?wnere=${where}&limit=${limit}&offset=${offset}&soft=${soft}&typesoft=${typesort}&keyword=${keyword}`;
+      var typesort = [];
+      for (let i = 0; i < this.TypeSort.length; i++) {
+         typesort += "&typesoft=" + this.TypeSort[i];
+      }
+      var keyword = [];
+      for (let i = 0; i < this.Keyword.length; i++) {
+        keyword += "&keyword=" + this.Keyword[i];
+      }
+      const filter = `filter?wnere=${where}&limit=${limit}&offset=${offset}&soft=${soft}${typesort}${keyword}`;
       fetch(configs.baseURLProduct + filter, {
         method: "GET",
       })
@@ -516,6 +574,7 @@ export default {
         .then((data) => {
           this.ProductsTable = data; //lưu dữ liệu
           this.TotalCount = data.totalCount;
+          this.BindingFilter();
           this.LoadingShow = false; //tắt loading
         })
         .catch((res) => {
@@ -651,20 +710,26 @@ export default {
       //lưu giá trị lọc
       Sort: 0,
       //lưu tên trường cần soft
-      TypeSort: "",
+      TypeSort: [],
       //lưu giá trị tìm kiếm nhập vào theo cột
-      Keyword: null,
+      Keyword: [],
+      //lưu giá trị input của filter
+      InputType: null,
+      //lưu giá trị biding hiển thị
+      BindingFilterValue: [],
+      //lưu tên head muốn filter
+      FilterLabel: null,
       //lưu giá trị tdhead của table
       thList: [
-        {style: "min-width: 150px;", label: "TÊN", property: "ProductName"},
-        {style: "min-width: 100px;", label: "MÃ", property: "ProductCode"},
-        {style: "min-width: 100px;", label: "GIẢM THUẾ THEO NQ 43",class: "tab", span: "Trạng thái tra cứu giảm thuế theo Nghị quyết 43/2022/QH15", property: "TaxReduction" },
-        {style: "min-width: 100px;", label: "TÍNH CHẤT", property: "Nature"},
-        {style: "min-width: 100px;", label: "NHÓM VTHH", class: "tab-b", span: "Nhóm vật tư hàng hóa", property: "SupplyName"},
-        {style: "min-width: 100px;", label: "ĐƠN VỊ TÍNH", property: "UnitCalculateValue"},
-        {style: "min-width: 115px;", label: "SỐ LƯỢNG TỒN", class: "tab-th-amount", property: "QuantityStock" },
-        {style: "min-width: 100px;", label: "GIÁ TRỊ TỒN", class: "tab-th-amount",property: "ExistentialValue" },
-        {style: "min-width: 100px;", label: "THỜI GIAN BẢO HÀNH", property: "Insurance"},
+        {style: "min-width: 150px;", label: "TÊN", filterlabel: "Tên", property: "ProductName", inputfilter: 1},
+        {style: "min-width: 100px;", label: "MÃ", filterlabel: "Mã", property: "ProductCode", inputfilter: 1},
+        {style: "min-width: 100px;", label: "GIẢM THUẾ THEO NQ 43", filterlabel: "Giảm thuế theo NQ 43", class: "tab", span: "Trạng thái tra cứu giảm thuế theo Nghị quyết 43/2022/QH15", property: "TaxReduction", inputfilter: 3 },
+        {style: "min-width: 100px;", label: "TÍNH CHẤT",filterlabel: "Tính chất", property: "Nature", inputfilter: 2},
+        {style: "min-width: 100px;", label: "NHÓM VTHH", filterlabel: "Nhóm VTHH", class: "tab-b", span: "Nhóm vật tư hàng hóa", property: "SupplyName", inputfilter: 1},
+        {style: "min-width: 100px;", label: "ĐƠN VỊ TÍNH", filterlabel: "Đơn vị tính", property: "UnitCalculateValue", inputfilter: 1},
+        {style: "min-width: 115px;", label: "SỐ LƯỢNG TỒN", filterlabel: "Số lượng tồn", class: "tab-th-amount", property: "QuantityStock" , inputfilter: 1},
+        {style: "min-width: 100px;", label: "GIÁ TRỊ TỒN", filterlabel: "Giá trị tồn", class: "tab-th-amount",property: "ExistentialValue", inputfilter: 1},
+        {style: "min-width: 100px;", label: "THỜI GIAN BẢO HÀNH", filterlabel: "Thời gian bảo hành", property: "Insurance", inputfilter: 1},
       ],
       //lưu giá trị property td
       tdList: 
@@ -738,7 +803,7 @@ export default {
   height: 20px;
   margin-top: 15px;
 }.product-content-toolbar-left{
-  width: 50%;
+  width: 100%;
   display: flex;
 }
 .product-content-toolbar-right {
@@ -947,7 +1012,8 @@ export default {
   width: 145px;
   height: 100%;
 }.toolbar-filter-label{
-  min-width: 60px;
+  min-width: 40px;
+  margin-right: 5px;
   height: 32px;
   display: flex;
   align-items: center;

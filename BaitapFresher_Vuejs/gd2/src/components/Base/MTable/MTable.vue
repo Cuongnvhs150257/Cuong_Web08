@@ -4,7 +4,7 @@
     <thead>
       <tr>
         <th v-if="TableCheckBox" class="box"><MCheckbox @click="handleCheckBoxAll" :stateCheckAll="stateCheckAll"  /></th>
-        <th v-for="index in thListTable" :key="index.label" :class="index.class" :style="index.style">{{index.label}} <div @click="openFilter(index.property)" class="filter-header-icon"></div> <span class="tooltip" v-if="index.span">{{index.span}}</span></th>
+        <th v-for="index in thListTable" :key="index.label" :class="index.class" :style="index.style">{{index.label}} <div @click="openFilter(index.inputfilter, index.property, index.filterlabel)" class="filter-header-icon"></div> <span class="tooltip" v-if="index.span">{{index.span}}</span></th>
         <th class="tab-th-select">CHỨC NĂNG</th>
       </tr>
     </thead>
@@ -144,8 +144,8 @@ export default {
           this.PosX = event.x
         },
 
-    openFilter(value){
-      this.$emit("Show-Filter", 2, value, this.PosY, this.PosX);
+    openFilter(inputfil,value, filterlabel){
+      this.$emit("Show-Filter", 2,inputfil, value, filterlabel, this.PosY, this.PosX);
     },
 
     /**

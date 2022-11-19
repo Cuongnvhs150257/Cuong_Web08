@@ -98,7 +98,7 @@ export default {
           console.log(drop);
           this.isShowDropbox = !this.isShowDropbox;
           this.isShowD = this.isShowDropbox;
-          this.$emit("get-recordvalue", drop[this.value], this.valuePost);
+          this.$emit("get-recordvalue", drop[this.value], this.valuePost, drop[this.label]);
           this.inValueChange = false;
           this.selectItem = false;
           this.RecordSle[this.label] = drop[this.label];

@@ -6,6 +6,7 @@
       :placeholder="placeholder"
       :value="InputWhere"
       @input="handleInput"
+      :disabled="disable"
       :style="style"
     />
     <button :class="iconsearch"></button>
@@ -18,6 +19,7 @@ export default {
     placeholder: String,
     style: String,
     iconsearch: String,
+    disable: Boolean,
   },
   methods:{
         /**

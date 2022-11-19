@@ -13,7 +13,7 @@
   
   <div class="filterdrop" v-if="MDropSta == 2">
     <div class="filterdrop-data"  v-for="item in FilterList" :key="item" ref="filterdrop">
-      <div class="filterdrop-item" @click="getFilter(item.comparisonType)"  >{{item.label}}</div>
+      <div class="filterdrop-item" @click="getFilter(item.comparisonType, item.label)"  >{{item.label}}</div>
     </div>
     
   </div>
@@ -83,9 +83,10 @@ export default {
         Hàm lấy soft để lọc
         Nguyễn Văn Cương 17/11/2022
          */
-        getFilter(value){
-          this.$emit("get-Filter", value);
+        getFilter(comparisonType, label){
+          this.$emit("get-Filter", comparisonType, label);
           this.$emit("close-filterdrop");
+          
         }
   },
   data(){

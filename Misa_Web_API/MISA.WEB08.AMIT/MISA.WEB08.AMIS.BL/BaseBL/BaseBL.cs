@@ -168,15 +168,16 @@ namespace MISA.WEB08.AMIS.BL
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         /// <returns>Data, TotalCount</returns>
-        public PagingData<T> Filter(string? where, int? limit, int? offset, int? soft, string? typesoft, string? keyword)
+        public PagingData<T> Filter(string? where, int? limit, int? offset, int? soft, string[]? typesoft, string[]? keyword)
         {
             string query = "";
+            string queryFirst = "";
+            string queryAfter = "";
+            string queryStartCount = "";
             string queryCount = "";
             if (where != null && typesoft == null)
             {
                 var properties = typeof(T).GetProperties();
-                string queryFirst = "";
-                string queryAfter = "";
                 foreach (var property in properties)
                 {
                     var SearchNameAttribute = (SearchNameAttribute?)Attribute.GetCustomAttribute(property, typeof(SearchNameAttribute));
@@ -198,89 +199,106 @@ namespace MISA.WEB08.AMIS.BL
             }
             if (where != null && soft != null)
             {
-                var properties = typeof(T).GetProperties();
-                foreach (var property in properties)
+                string typename = "";
+                string typequery = "";
+                string key = "";
+                queryFirst = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING ";
+                queryStartCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ";
+                for (int i = 0; i < typesoft.Length; i++)
                 {
-                    if (property.Name == typesoft)
+                    if (i == 0)
                     {
-                        string propertyName = property.Name;
-                        switch (soft)
-                        {
-                            case 1:
-                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " IS NULL";
-                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " IS NULL";
-                                break;
-                            case 2:
-                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " IS NOT NULL";
-                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " IS NOT NULL";
-                                break;
-                            case 3:
-                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " = " + "'" + keyword + "' ";
-                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " = " + "'" + keyword + "' ";
-                                break;
-                            case 4:
-                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " != " + "'" + keyword + "'";
-                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " != " + "'" + keyword + "'";
-                                break;
-                            case 5:
-                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " LIKE '%" + keyword + "%'";
-                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " LIKE '%" + keyword + "%'";
-                                break;
-                            case 6:
-                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " LIKE '!%" + keyword + "%'";
-                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " LIKE '!%" + keyword + "%'";
-                                break;
-                            case 7:
-                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " LIKE " + "'" + keyword + "_%'";
-                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " LIKE " + "'" + keyword + "_%'";
-                                break;
-                            case 8:
-                                query = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING " + propertyName + " LIKE '%_" + keyword + "'";
-                                queryCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY " + propertyName + " LIKE '%_" + keyword + "'";
-                                break;
-                        }
+                        typequery = typesoft[i];
                     }
-
+                    else
+                    {
+                        typequery = "AND " + typesoft[i];
+                    }
+                    for (int j = i; j < keyword.Length; j++)
+                    {
+                        key = keyword[j];
+                        break;
+                    }
+                    switch (soft)
+                    {
+                        case 1:
+                            queryAfter += typequery + " IS NULL";
+                            break;
+                        case 2:
+                            queryAfter += typequery + " IS NOT NULL";
+                            break;
+                        case 3:
+                            queryAfter += typequery + " = " + "'" + key + "' ";
+                            break;
+                        case 4:
+                            queryAfter += typequery + " != " + "'" + key + "'";
+                            break;
+                        case 5:
+                            queryAfter += typequery + " LIKE '%" + key + "%'";
+                            break;
+                        case 6:
+                            queryAfter += typequery + " LIKE '!%" + key + "%'";
+                            break;
+                        case 7:
+                            queryAfter += typequery + " LIKE " + "'" + key + "_%'";
+                            break;
+                        case 8:
+                            queryAfter += typequery + " LIKE '%_" + key + "'";
+                            break;
+                    }
+                    query = queryFirst + queryAfter;
+                    queryCount = queryStartCount + queryAfter;
                 }
 
             }
             if (where == null && typesoft != null)
             {
-                var properties = typeof(T).GetProperties();
-                foreach (var property in properties)
-                {
-                    if (property.Name == typesoft)
-                    {
-                        string propertyName = property.Name;
-                        switch (soft)
-                        {
-                            case 1:
-                                query = propertyName + " IS NULL";
-                                break;
-                            case 2:
-                                query = propertyName + " IS NOT NULL";
-                                break;
-                            case 3:
-                                query = propertyName + " = " + "'" + keyword + "'";
-                                break;
-                            case 4:
-                                query = propertyName + " != " + "'" + keyword + "'";
-                                break;
-                            case 5:
-                                query = propertyName + " LIKE '%" + keyword + "%'";
-                                break;
-                            case 6:
-                                query = propertyName + " LIKE '!%" + keyword + "%'";
-                                break;
-                            case 7:
-                                query = propertyName + " LIKE " + "'" + keyword + "_%'";
-                                break;
-                            case 8:
-                                query = propertyName + " LIKE '%_" + keyword + "'";
-                                break;
-                        }
-                    }
+                string typename = "";
+                string typequery = "";
+                string key = "";
 
+                for (int i = 0; i < typesoft.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        typequery = typesoft[i];
+                    }
+                    else
+                    {
+                        typequery = "AND " + typesoft[i];
+                    }
+                    for (int j = i; j < keyword.Length; j++)
+                    {
+                        key = keyword[j];
+                        break;
+                    }
+                    switch (soft)
+                    {
+                        case 1:
+                            query += typequery + " IS NULL ";
+                            break;
+                        case 2:
+                            query += typequery + " IS NOT NULL ";
+                            break;
+                        case 3:
+                            query += typequery + " = " + "'" + key + "' ";
+                            break;
+                        case 4:
+                            query += typequery + " != " + "'" + key + "' ";
+                            break;
+                        case 5:
+                            query += typequery + " LIKE '%" + key + "%' ";
+                            break;
+                        case 6:
+                            query += typequery + " LIKE '!%" + key + "%' ";
+                            break;
+                        case 7:
+                            query += typequery + " LIKE " + "'" + key + "_%' ";
+                            break;
+                        case 8:
+                            query += typequery + " LIKE '%_" + key + "' ";
+                            break;
+                    }
                 }
             }
 
