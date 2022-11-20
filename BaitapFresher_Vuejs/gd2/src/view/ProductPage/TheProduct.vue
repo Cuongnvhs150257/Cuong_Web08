@@ -146,17 +146,11 @@ export default {
     Nguyễn Văn Cương 17/11/2022
     */ 
     getKeywordHeader(value){
-      if(this.timeout){
-        clearTimeout(this.timeout)
-        this.timeout = null;
-      }
-      else{
-        this.timeout = setTimeout(() => {
-        }, 500);
-      }
-      if(!this.Keyword.includes(value)){
+      if(!this.Keyword.includes(value) && value != null){
         this.Keyword.push(value);
+        this.FilterKey = value;
       }
+      console.log(this.Keyword); 
     },
 
    /**
@@ -228,7 +222,7 @@ export default {
 
     BindingFilter(){
       if(!this.BindingFilterValue.includes(this.FilterLabel) && this.FilterLabel != null){
-        this.BindingFilterValue.push(this.FilterLabel + ":");
+        this.BindingFilterValue.push(this.FilterLabel + ": " + this.FilterKey);
       }
     },
     /**
@@ -242,6 +236,16 @@ export default {
         //loại bỏ phần tử khỏi mảng
         this.BindingFilterValue.splice(index, 1); 
       }
+      for (let i = 0; i < this.Keyword.length; i++) {
+        if(indexFilterValue == i){
+          const key = this.Keyword.indexOf(this.Keyword[i]);
+          if (key > -1) {
+            //loại bỏ phần tử khỏi mảng
+            this.Keyword.splice(key, 1); 
+            this.FilterKey = null;
+          }
+        }
+      }
       for (let i = 0; i < this.TypeSort.length; i++) {
         if(indexFilterValue == i){
           const typesoft = this.TypeSort.indexOf(this.TypeSort[i]);
@@ -253,6 +257,7 @@ export default {
           }
         }
       }
+      
     },
 
     /**
@@ -300,6 +305,25 @@ export default {
           console.log(res);
         });
     },
+
+    /**
+     * Hàm lấy mã  mới
+     * Nguyễn Văn Cương 20/11/2022
+     */
+    async getCodeTable() {
+      await fetch(configs.baseURLProduct + "getnewcode", {
+        method: "GET", //lấy mã nhân viên cao nhất
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          var s = JSON.stringify(data.NewCode);
+          this.Products.ProductCode = s.replace(/[^a-zA-Z0-9]*/g, "");
+          
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
     getSupplyCode(property){
         if(property == 1){
           this.Products.SupplyCode = "HH";
@@ -330,7 +354,7 @@ export default {
             this.Products = data;
             if (detailFormMode == 1) {
               this.Products.ProductCode = "";
-              await this.getNewCode();
+              await this.getCodeTable();
               await this.getSupplyCode(value);
             }
             this.Mode = detailFormMode;
@@ -351,7 +375,7 @@ export default {
         //trường hợp chỉ mở popup
       } else {
         (this.Products = {}), //dữ liệu trên popup rỗng
-          await this.getNewCode();
+          await this.getCodeTable();
           await this.getSupplyCode(value);
         this.Mode = detailFormMode;
         this.isShowPopupSelect = false;
@@ -561,6 +585,7 @@ export default {
       var typesort = [];
       for (let i = 0; i < this.TypeSort.length; i++) {
          typesort += "&typesoft=" + this.TypeSort[i];
+         offset = 0;
       }
       var keyword = [];
       for (let i = 0; i < this.Keyword.length; i++) {
@@ -719,6 +744,7 @@ export default {
       BindingFilterValue: [],
       //lưu tên head muốn filter
       FilterLabel: null,
+      FilterKey: null,
       //lưu giá trị tdhead của table
       thList: [
         {style: "min-width: 150px;", label: "TÊN", filterlabel: "Tên", property: "ProductName", inputfilter: 1},

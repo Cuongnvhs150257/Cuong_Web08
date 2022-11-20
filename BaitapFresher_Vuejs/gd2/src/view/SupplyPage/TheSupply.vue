@@ -39,6 +39,7 @@
         :PopupNotilable="'Nhóm vật tư hàng hóa'"
         :baseURL="'baseURLSupply'"
         :RecordsMuti="TableMuti"
+        :RecordsLoad="SupplysTable"
       />
       
     </div>
@@ -342,7 +343,6 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           this.SupplysTable = data; //lưu dữ liệu
-          this.getMutiTable();
           this.TotalCount = data.totalCount;
           this.LoadingShow = false; //tắt loading
         })

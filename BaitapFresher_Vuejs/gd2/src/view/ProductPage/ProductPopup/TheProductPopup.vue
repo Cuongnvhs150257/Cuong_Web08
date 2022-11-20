@@ -105,6 +105,8 @@
                   :width="'width: 40%;'"
                   :value="'supplyID'"
                   :valuePost="'SupplyID'"
+                  :valueFilter="'supplyName'"
+                  :Filter="false"
                   :label="'supplyName'"
                   :code="'supplyCode'"
                   :isShow="isShowDropbox"
@@ -560,8 +562,8 @@ export default {
      */
     getRecord(value, namevalue) {
       this.Products[namevalue] = value;
-      console.log(this.Products[namevalue]);
     },
+    
 
     /**
      * Hàm render ra giá trị trong combobox (thời gian bảo hành)
@@ -711,6 +713,25 @@ export default {
     },
 
     /**
+     * Hàm lấy mã  mới
+     * Nguyễn Văn Cương 20/11/2022
+     */
+    async getCodeTable() {
+      await fetch(configs.baseURLProduct + "getnewcode", {
+        method: "GET", //lấy mã nhân viên cao nhất
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          var s = JSON.stringify(data.NewCode);
+          this.Products.ProductCode = s.replace(/[^a-zA-Z0-9]*/g, "");
+          
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+
+    /**
      * hàm kiểm tra có rỗng mã, tên, đơn vị không
      * Nguyễn Văn Cương 2/10/2022
      */
@@ -833,6 +854,7 @@ export default {
                 //xóa form popup sau khi thêm thành công
               } else {
                 this.Products = {};
+                this.getCodeTable();
                 //hiển thị thông báo (thêm thành công)
                 this.ShowToast((this.ToastStatus = 1));
               }

@@ -117,6 +117,7 @@ namespace MISA.WEB08.AMIS.BL
             if (validateResult != null && validateResult.Success)
             {
                 var newRecordID = _baseDL.InsertRecords(record);
+                SaveCode(record);
 
                 if (newRecordID != Guid.Empty)
                 {
@@ -147,6 +148,71 @@ namespace MISA.WEB08.AMIS.BL
                     Data = validateResult.Data
                 };
             }
+        }
+
+        /// <summary>
+        /// Hàm cập nhật mã tự sinh
+        /// CreatedBy: Nguyễn Văn Cương 20/11/2022
+        /// </summary>
+        /// <param name="record">Bản ghi</param>
+        public void SaveCode(T record)
+        {
+            string prefix = "";
+            string number = "";
+            string last = "";
+
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
+            {
+                var SearchCodeAttribute = (SearchCodeAttribute?)Attribute.GetCustomAttribute(property, typeof(SearchCodeAttribute));
+                if (SearchCodeAttribute != null)
+                {
+                    string properyValue = property.GetValue(record).ToString();
+                    for (int i = 0; i < properyValue.Length; i++)
+                    {
+                        char[] keyNumber = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
+                        char temp = properyValue[i];
+                        if ((keyNumber.Contains(temp)) && last == "")
+                        {
+                            if (number == "" && temp == '0')
+                            {
+                                prefix += temp;
+                            }
+                            else
+                            {
+                                number += temp;
+                            }
+                        }
+                        else
+                        {
+                            if (number != "")
+                            {
+                                last += temp;
+                            }
+                            else
+                            {
+                                prefix += temp;
+                            }
+                        }
+                    }
+                    if (number == "")
+                    {
+                        number = "0";
+                    }
+                    _baseDL.SaveCode(prefix, number, last);
+                }
+            }
+ 
+        }
+
+        /// <summary>
+        /// Hàm lấy mã tự sinh
+        /// Createby: Nguyễn Văn Cương 20/11/2022
+        /// </summary>
+        /// <returns></returns>
+        public object GetNewCode()
+        {
+            return _baseDL.GetNewCode();
         }
 
         /// <summary>
@@ -221,6 +287,9 @@ namespace MISA.WEB08.AMIS.BL
                     }
                     switch (soft)
                     {
+                        case 0:
+                            queryAfter += typequery;
+                            break;
                         case 1:
                             queryAfter += typequery + " IS NULL";
                             break;
@@ -251,7 +320,7 @@ namespace MISA.WEB08.AMIS.BL
                 }
 
             }
-            if (where == null && typesoft != null)
+           if (where == null && typesoft != null)
             {
                 string typename = "";
                 string typequery = "";
@@ -274,6 +343,9 @@ namespace MISA.WEB08.AMIS.BL
                     }
                     switch (soft)
                     {
+                        case 0:
+                            query += typequery;
+                            break;
                         case 1:
                             query += typequery + " IS NULL ";
                             break;

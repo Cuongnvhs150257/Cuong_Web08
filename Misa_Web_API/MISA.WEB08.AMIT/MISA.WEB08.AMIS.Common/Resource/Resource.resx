@@ -217,6 +217,10 @@
     <value>Proc_{0}_GetMaxRecord</value>
     <comment>Template string cho procudes lấy mã nhân viên cao nhất</comment>
   </data>
+  <data name="Proc_GetNewCode" xml:space="preserve">
+    <value>Proc_codenew_GetMaxRecord</value>
+    <comment>Template string cho procudues lấy mã tự sinh</comment>
+  </data>
   <data name="Proc_InsertRecord" xml:space="preserve">
     <value>Proc_{0}_InsertRecord</value>
     <comment>Template string cho procudues thêm mới</comment>
@@ -228,6 +232,10 @@
   <data name="Proc_SelectRecord" xml:space="preserve">
     <value>Proc_{0}_SelectRecord</value>
     <comment>Template string cho procudues lấy một</comment>
+  </data>
+  <data name="Proc_UpdateCode" xml:space="preserve">
+    <value>Proc_codenew_UpdateRecord</value>
+    <comment>Template string cho procudues cập nhật mã tự sinh</comment>
   </data>
   <data name="Proc_UpdateRecord" xml:space="preserve">
     <value>Proc_{0}_UpdateRecord</value>

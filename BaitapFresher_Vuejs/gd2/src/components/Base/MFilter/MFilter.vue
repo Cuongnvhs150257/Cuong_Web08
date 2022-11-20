@@ -26,13 +26,15 @@
                   :CombolabelLeft="'Mã nhóm'"
                   :CombolabelRight="'Tên nhóm'"
                   :tab="3"
-                  :InputClass="true"
+                  :InputClass="false"
                   :readonly="false"
                   :width="'width: 40%;'"
                   :value="'supplyID'"
                   :valuePost="'SupplyID'"
                   :label="'supplyName'"
                   :code="'supplyCode'"
+                  :valueFilter="'s.SupplyName'"
+                  :Filer="true"
                   :isShow="isShowDropbox"
                   :maxlength="100"
                   @get-recordvalue="getRecord"
@@ -53,7 +55,7 @@
                   @get-recordvalue="getRecord"
                   :value="'StatusWarehouse'"
                   :label="'label'"
-                  :valuePost="'StatusWarehouse'"
+                  :valuePost="'w.Status'"
                   ref="combobox"
                 />
             </div>
@@ -68,7 +70,7 @@
                   @get-recordvalue="getRecord"
                   :value="'Status'"
                   :label="'label'"
-                  :valuePost="'Status'"
+                  :valuePost="'uc.Status'"
                   ref="combobox"
                 />
             </div>
@@ -194,8 +196,12 @@ export default {
         }
       },
       getRecord(keyword, namevalue, filterlabel){
+        if(keyword == 0){
+          this.$emit("get-Filter-Header", keyword);
+        }else{
+          this.$emit("get-Filter-Header", 5);
           this.$emit("get-Keyword-Header", keyword);
-          this.$emit("get-Filter-Header", 3);
+        }
           this.$emit("get-Typesoft", namevalue, filterlabel);
       },
       /**
@@ -203,7 +209,15 @@ export default {
       Nguyễn Văn Cương 17/11/2022 
        */
       getKeywordValue(value){
-        this.$emit("get-Keyword-Header", value);
+      if(this.timeout){
+        clearTimeout(this.timeout)
+        this.timeout = null;
+      }
+      else{
+        this.timeout = setTimeout(() => {
+          this.$emit("get-Keyword-Header", value);
+        }, 500);
+      }
       },
       btnFilterClick(){
         this.$emit("start-Filter");

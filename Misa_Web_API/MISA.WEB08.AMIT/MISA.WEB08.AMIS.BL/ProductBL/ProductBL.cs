@@ -37,17 +37,17 @@ namespace MISA.WEB08.AMIS.BL
         }
 
         #endregion
-            /// <summary>
-            /// Hàm xuất danh sách hàng hóa ra Excel
-            /// Createby: Nguyễn Văn Cương 16/11/2022
-            /// </summary>
-            /// <returns></returns>
-            public Byte[] GetProductExcel()
-            {
-                var products = _productDL.GetProductExcel();
+        /// <summary>
+        /// Hàm xuất danh sách hàng hóa ra Excel
+        /// Createby: Nguyễn Văn Cương 16/11/2022
+        /// </summary>
+        /// <returns></returns>
+        public Byte[] GetProductExcel()
+        {
+           var products = _productDL.GetProductExcel();
 
-                // Khai báo Workbook
-                using (var wb = new XLWorkbook())
+            // Khai báo Workbook
+           using (var wb = new XLWorkbook())
                 {
                     // Khai báo số dòng bắt đầu in dữ liệu
                     int currentRow = 3;
@@ -144,6 +144,7 @@ namespace MISA.WEB08.AMIS.BL
                     }
                 }
 
-            }
+        }
+
     }
 }

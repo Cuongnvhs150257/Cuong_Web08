@@ -387,6 +387,57 @@ namespace MISA.WEB08.AMIS.DL
             }
         }
 
+        /// <summary>
+        /// Hàm cập nhật mã tự sinh
+        /// Createby: Nguyễn Văn Cương 20/11/2022
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="number"></param>
+        /// <param name="last"></param>
+        public void SaveCode(string prefix, string number, string last)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("v_TableName", typeof(T).Name);
+            parameters.Add("v_Prefix", prefix);
+            parameters.Add("v_Number", number);
+            parameters.Add("v_Last", last);
+            parameters.Add("v_LengthNumber", number.Length);
+            string connectionString = DataContext.MySqlConnectionString;
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                //khai bao ten stored produre
+                string storeProdureName = Resource.Proc_UpdateCode;
+
+                //Thực hiện gọi vào DB
+                mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+
+            }
+        }
+
+        /// <summary>
+        /// Hàm kết nối DB để lấy mã tự sinh
+        /// Createby: Nguyễn Văn Cương 20/11/2022
+        /// </summary>
+        /// <returns></returns>
+        public object GetNewCode()
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("v_TableName", typeof(T).Name);
+
+            //Khởi tạo kết nối với MySQl
+            string connectionString = DataContext.MySqlConnectionString;
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                //khai bao ten stored produre
+                string storeProdureName = Resource.Proc_GetNewCode;
+
+                //Thực hiện gọi vào DB
+                var newCode = mysqlConnection.QueryFirstOrDefault(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                return newCode;
+            };
+        }
+
 
     }
 }

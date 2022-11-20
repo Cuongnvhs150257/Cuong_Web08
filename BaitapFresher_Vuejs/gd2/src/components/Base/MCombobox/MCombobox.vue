@@ -29,7 +29,7 @@
           <div class="combomuti-head-right">{{CombolabelRight}}</div>
         </div>
         <div class="combomuti-cover">
-            <div class="combomuti-for" v-for="d in DropboxShow" :key="d[value]" :class="{select : d[value] == RecordSle[value] , select : d[label] == RecordSle[label] }" @click="selectedRecordMuti(d)" >
+            <div class="combomuti-for" v-for="d in DropboxShow" :key="d[value]" :class="{select : d[value] == RecordSle[value] , select : d[label] == RecordSle[label] }" @click="selectedMuti(d)" >
               <div class="combomuti-itemtbl" >
                 <div class="combomuti-item-left">{{d[code]}}</div>
                 <div class="combomuti-item-center">{{d[label]}}</div>
@@ -63,6 +63,7 @@ export default {
         labelSupply: String,
         code: String,
         valuePost: String,
+        valueFilter: String,
         readonly: Boolean,
         iconadd: Boolean,
         width: String,
@@ -78,6 +79,7 @@ export default {
         width_combomuti: String,
         InputClass: Boolean,
         Reset: Boolean,
+        Filter: Boolean,
     },
     methods:{
         /**
@@ -127,7 +129,7 @@ export default {
         hàm chọn nhiều phần tử
         Nguyễn Văn Cương 05/10/2022
          */
-        selectedRecordMuti(muti){
+        selectedMuti(muti){
           this.inValueChange = false;
           if(this.InputClass == false){
             //kiểm tra xem mảng chứa đã có chưa
@@ -137,7 +139,12 @@ export default {
             //lưu index của giá trị
             this.indexComboMutiItem = this.ComboMutiItem.indexOf(muti[this.code]);
             console.log(this.ComboMutiItem);
-            this.$emit("get-recordvalue", muti[this.value], this.valuePost);
+            if(this.Filter == true){
+              this.$emit("get-recordvalue", muti[this.label], this.valueFilter, muti[this.label]);
+            }else{
+              this.$emit("get-recordvalue", muti[this.value], this.valuePost);
+            }
+            
           }else{
             //chưa có thì chọn tiếp
             this.selectedRecord(muti);

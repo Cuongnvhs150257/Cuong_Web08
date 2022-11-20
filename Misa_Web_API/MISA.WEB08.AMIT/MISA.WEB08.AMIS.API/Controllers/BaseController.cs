@@ -326,6 +326,34 @@ namespace MISA.WEB08.AMIS.API.Controllers
 
         }
 
+        /// Lấy danh sách đối tượng
+        /// </summary>
+        /// <returns>Danh sách toàn bộ đối tượng</returns>
+        /// Createdby: Nguyễn Văn Cương
+        /// Createddate: 16/09/2022
+        [HttpGet]
+        [Route("getnewcode")]
+        public IActionResult GetNewCode()
+        {
+            //Try catch exception
+            try
+            {
+                var records = _baseBL.GetNewCode();
+
+                return StatusCode(StatusCodes.Status200OK, records);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AMITErrorCode.Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
+                    HttpContext.TraceIdentifier));
+            }
+        }
+
         #endregion
     }
 }

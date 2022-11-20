@@ -286,6 +286,15 @@ namespace MISA.WEB08.AMIS.Common.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Proc_codenew_GetMaxRecord.
+        /// </summary>
+        public static string Proc_GetNewCode {
+            get {
+                return ResourceManager.GetString("Proc_GetNewCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Proc_{0}_InsertRecord.
         /// </summary>
         public static string Proc_InsertRecord {
@@ -309,6 +318,15 @@ namespace MISA.WEB08.AMIS.Common.Resource {
         public static string Proc_SelectRecord {
             get {
                 return ResourceManager.GetString("Proc_SelectRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proc_codenew_UpdateRecord.
+        /// </summary>
+        public static string Proc_UpdateCode {
+            get {
+                return ResourceManager.GetString("Proc_UpdateCode", resourceCulture);
             }
         }
         
