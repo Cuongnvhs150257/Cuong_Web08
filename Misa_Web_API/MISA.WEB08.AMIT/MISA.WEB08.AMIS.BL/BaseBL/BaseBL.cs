@@ -241,7 +241,9 @@ namespace MISA.WEB08.AMIS.BL
             string queryAfter = "";
             string queryStartCount = "";
             string queryCount = "";
-            if (where != null && typesoft == null)
+
+            ///trường hợp search thông thường
+            if (where != null && typesoft.Length == 0)
             {
                 var properties = typeof(T).GetProperties();
                 foreach (var property in properties)
@@ -263,6 +265,7 @@ namespace MISA.WEB08.AMIS.BL
                 query = queryFirst + queryAfter;
 
             }
+            ///trường hợp cả search cả lọc
             if (where != null && soft != null)
             {
                 string typename = "";
@@ -271,11 +274,13 @@ namespace MISA.WEB08.AMIS.BL
                 queryFirst = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING ";
                 queryStartCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ";
                 for (int i = 0; i < typesoft.Length; i++)
-                {
+                {   
+                    ///Lọc bảng đầu tiên
                     if (i == 0)
                     {
-                        typequery = typesoft[i];
+                        typequery = typesoft[i]; 
                     }
+                    //Lọc bảng tiếp theo
                     else
                     {
                         typequery = "AND " + typesoft[i];
@@ -287,30 +292,39 @@ namespace MISA.WEB08.AMIS.BL
                     }
                     switch (soft)
                     {
+                        ///Lấy tất cả
                         case 0:
                             queryAfter += typequery;
                             break;
+                        /// lấy trống
                         case 1:
                             queryAfter += typequery + " IS NULL";
                             break;
+                        ///lấy không trống
                         case 2:
                             queryAfter += typequery + " IS NOT NULL";
                             break;
+                        ///lấy bằng
                         case 3:
                             queryAfter += typequery + " = " + "'" + key + "' ";
                             break;
+                        ///lấy khác
                         case 4:
                             queryAfter += typequery + " != " + "'" + key + "'";
                             break;
+                        ///lấy chứa
                         case 5:
                             queryAfter += typequery + " LIKE '%" + key + "%'";
                             break;
+                        ///lấy không chứa
                         case 6:
                             queryAfter += typequery + " LIKE '!%" + key + "%'";
                             break;
+                        ///lấy bắt đầu với
                         case 7:
                             queryAfter += typequery + " LIKE " + "'" + key + "_%'";
                             break;
+                        ///lấy kết thúc với
                         case 8:
                             queryAfter += typequery + " LIKE '%_" + key + "'";
                             break;
@@ -320,6 +334,7 @@ namespace MISA.WEB08.AMIS.BL
                 }
 
             }
+            ///trường hợp chỉ lọc
            if (where == null && typesoft != null)
             {
                 string typename = "";
@@ -328,10 +343,12 @@ namespace MISA.WEB08.AMIS.BL
 
                 for (int i = 0; i < typesoft.Length; i++)
                 {
+                    ///Lọc bảng đầu tiên
                     if (i == 0)
                     {
                         typequery = typesoft[i];
                     }
+                    ///Lọc bảng tiếp theo
                     else
                     {
                         typequery = "AND " + typesoft[i];
@@ -343,30 +360,39 @@ namespace MISA.WEB08.AMIS.BL
                     }
                     switch (soft)
                     {
+                        ///lấy tất cả
                         case 0:
                             query += typequery;
                             break;
+                        ///lấy trống
                         case 1:
                             query += typequery + " IS NULL ";
                             break;
+                        ///lấy không trống
                         case 2:
                             query += typequery + " IS NOT NULL ";
                             break;
+                        ///lấy bằng
                         case 3:
                             query += typequery + " = " + "'" + key + "' ";
                             break;
+                        ///lấy khác
                         case 4:
                             query += typequery + " != " + "'" + key + "' ";
                             break;
+                        ///lấy chứa
                         case 5:
                             query += typequery + " LIKE '%" + key + "%' ";
                             break;
+                        ///lấy không chứa
                         case 6:
                             query += typequery + " LIKE '!%" + key + "%' ";
                             break;
+                        ///lấy bắt đầu với
                         case 7:
                             query += typequery + " LIKE " + "'" + key + "_%' ";
                             break;
+                        ///lấy kết thúc với
                         case 8:
                             query += typequery + " LIKE '%_" + key + "' ";
                             break;

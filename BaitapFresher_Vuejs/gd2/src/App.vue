@@ -67,7 +67,7 @@ export default {
 
 }
 .sidebar{
-    width: 200px;
+    width: 180px;
     height: 100vh;
     background-color: #393A3D;
     
@@ -75,8 +75,8 @@ export default {
 }
 .content{
     order: 3;
-    width: calc(100% - 248px);
-    height: calc(100vh - 80px);
+    width: calc(100% - 230px);
+    height: calc(100vh - 88px);
     float: right;
     background-color: rgb(236, 238, 241);
     padding: 0 24px;

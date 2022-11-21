@@ -94,7 +94,7 @@
     </div>
     <TheProductSelect v-if="isShowPopupSelect" @close-popup-selete="closePopupSelect" @open-product-popup="openPopup" :ProductID="SaveProductID" />
 
-    <TheProductPopup v-if="isShow" @show-toast="showToastPopup" @data-load="loadData" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
+    <TheProductPopup v-if="isShow" @show-toast="showToastPopup" :BridingCode="SaveSupplyCode" :BridingID="SaveSupplyID" @data-load="loadData" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
     <div ref="filter">
     <MFilter :typeInput="InputType" v-if="isShowFilter" @get-Typesoft="getTypesoft" @start-Filter="loadData" @get-Keyword-Header="getKeywordHeader" @get-Filter-Header="getFilterHeader" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
     </div>
@@ -209,11 +209,12 @@ export default {
         this.isShowFilter = !this.isShowFilter;
         this.StyleFilter = "left: " + posX + "px;" + "top: " + posY + "px;";
     },
-    getTypesoft(type, filterlabel){
+    getTypesoft(type, filterlabel, inputfilter){
       if(!this.TypeSort.includes(type)){
         this.TypeSort.push(type);
       }
       this.FilterLabel = filterlabel;
+      this.InputType = inputfilter;
     },
     closeFilter(){
       this.isShowFilter = false;
@@ -222,9 +223,108 @@ export default {
 
     BindingFilter(){
       if(!this.BindingFilterValue.includes(this.FilterLabel) && this.FilterLabel != null){
-        this.BindingFilterValue.push(this.FilterLabel + ": " + this.FilterKey);
+        if(this.InputType == 1){
+          this.BindingFilterValue.push(this.FilterLabel + ": " + this.FilterKey);
+        }else if(this.InputType == 2){
+          this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatNatureRecord(this.FilterKey));
+        }else if(this.InputType == 3){
+          this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatTaxRecord(this.FilterKey));
+        }else{
+          this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatFilterStatusRecord(this.FilterKey));
+        }
+        
       }
     },
+
+    /**
+     * hàm format trạng thái
+     * Nguyễn Văn Cương 01/10/2022
+     */
+    formatStatusRecord(status){
+
+      //giá trị 1 là hoạt động
+       if(status == enums.ACTIVE){
+         return status = "Đang sử dụng";
+      //giá trị 2 là ngưng hoạt động
+       }else if(status == enums.UNACTIVE){
+         return status = "Ngưng sử dụng";
+       //giá trị 0 là chưa xác định
+       }else if (status == enums.UNKNOW){
+         return status = "Chưa xác định";
+      //không có cho thành rỗng
+       }else{
+         return status = "";
+       }
+    },
+
+        /**
+     * hàm format trạng thái
+     * Nguyễn Văn Cương 01/10/2022
+     */
+    formatFilterStatusRecord(status){
+
+      //giá trị 1 là hoạt động
+       if(status == enums.ACTIVE){
+         return status = "Còn tồn";
+      //giá trị 2 là ngưng hoạt động
+       }else if(status == enums.UNACTIVE){
+         return status = "Sắp hết hàng";
+       //giá trị 0 là chưa xác định
+       }else if (status == enums.UNKNOW){
+         return status = "Hết hàng";
+      //không có cho thành rỗng
+       }else{
+         return status = "";
+       }
+    },
+
+    /**
+     * hàm format thuế
+     * Nguyễn Văn Cương 01/10/2022
+     */
+    formatTaxRecord(status){
+
+      //giá trị 1 là hoạt động
+       if(status == enums.ACTIVE){
+         return status = "Có giảm thuế";
+      //giá trị 2 là ngưng hoạt động
+       }else if(status == enums.UNACTIVE){
+         return status = "Không giảm thuế";
+       //giá trị 0 là chưa xác định
+       }else if (status == enums.UNKNOW){
+         return status = "Chưa xác định";
+      //không có cho thành rỗng
+       }else{
+         return status = "";
+       }
+    },
+
+    /**
+    hàm format tính chất
+    Nguyễn Văn Cương 1/11/2022
+     */
+    formatNatureRecord(value){
+       //giá trị 1 là nữ 
+       if(value == enums.Product){
+         return value = "Hàng hóa";
+      //giá trị 2 là nam
+       }else if(value == enums.Service){
+         return value = "Dịch vụ";
+       //giá trị 0 là khác
+       }else if (value == enums.Material){
+         return value = "Nguyên vật liệu";
+      //không có cho thành rỗng
+       }else if (value == enums.FiProduct){
+         return value = "Thành phẩm";
+      //không có cho thành rỗng
+       }else if (value == enums.Tools){
+         return value = "Công cụ dụng cụ";
+      //không có cho thành rỗng
+       }else{
+         return value = "";
+       }
+    },
+
     /**
     hàm xóa phần tử trong combobox nhiều
     Nguyễn Văn Cương 05/10/2022
@@ -326,15 +426,20 @@ export default {
     },
     getSupplyCode(property){
         if(property == 1){
-          this.Products.SupplyCode = "HH";
+          this.SaveSupplyCode = "HH";
+          this.SaveSupplyID = "7a64f0a9-508d-278e-0d4c-16e575b61049";
         }else if(property == 2){
-          this.Products.SupplyCode = "DV";
+          this.SaveSupplyCode = "DV";
+          this.SaveSupplyID = "424e92bd-2384-4a08-80ca-c511c1a6260d";
         }else if(property == 3){
-          this.Products.SupplyCode = "NVL";
+          this.SaveSupplyCode = "NVL";
+          this.SaveSupplyID = "e710150d-20c8-46a9-bba5-b40f62e41180";
         }else if(property == 4){
-          this.Products.SupplyCode = "TP";
+          this.SaveSupplyCode = "TP";
+          this.SaveSupplyID = "7a64f0a9-508d-278e-0d4c-16e575b61049";
         }else{
-          this.Products.SupplyCode = "CDDC";
+          this.SaveSupplyCode = "CDDC";
+          this.SaveSupplyID = "100e1add-24b8-4d56-bb94-78396c967e2e";
         }
     },
 
@@ -358,6 +463,7 @@ export default {
               await this.getSupplyCode(value);
             }
             this.Mode = detailFormMode;
+            this.SaveSupplyCode = this.Products.SupplyCode;
             console.log(this.Mode);
             this.isShow = true; //Hiển thị popup
             this.isShowPopupSelect = false;
@@ -388,7 +494,7 @@ export default {
      *  Nguyễn Văn Cương 25/09/2022
     */
     openPopupAsk(){
-        if(this.listProDelete.length != 0){
+        if(this.listProDelete.length > 1){
           console.log(this.listProDelete);
           this.isShowAskDelete = true;
         } 
@@ -527,6 +633,7 @@ export default {
             }else{
               //load lại data
               this.ClosePopupAsk();
+              this.OffSetValue = 0;
               this.loadData();
               this.closeSelectedAll = true;
               this.ShowToast(this.ToastStatus = true);
@@ -745,6 +852,8 @@ export default {
       //lưu tên head muốn filter
       FilterLabel: null,
       FilterKey: null,
+      SaveSupplyCode: "",
+      SaveSupplyID: null,
       //lưu giá trị tdhead của table
       thList: [
         {style: "min-width: 150px;", label: "TÊN", filterlabel: "Tên", property: "ProductName", inputfilter: 1},
@@ -765,8 +874,8 @@ export default {
       {property: "nature", fun: 5},
       {property: "supplyName"},
       {property: "unitCalculateValue"},
-      {property: "quantityStock", class: "product-tab-th-amount"},
-      {property: "existentialValue", class: "product-tab-th-amount"},
+      {property: "quantityStock", fun: 6, class: "product-tab-th-amount"},
+      {property: "existentialValue", fun: 6, class: "product-tab-th-amount"},
       {property: "insurance"},
       {property: "productID", style: "display: none"}
       ],

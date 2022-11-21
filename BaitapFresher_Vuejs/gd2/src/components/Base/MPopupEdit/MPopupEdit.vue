@@ -416,7 +416,8 @@ export default {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(this.Records)
+          body: JSON.stringify({...this.Records, 
+          Status: this.Records.Status === "" ? null : this.Records.Status ? this.Records.Status : 0})
         })
           .then((res) => res.json())
           .then((res) => {

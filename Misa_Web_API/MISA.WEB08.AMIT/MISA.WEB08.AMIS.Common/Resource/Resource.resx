@@ -233,6 +233,10 @@
     <value>Proc_{0}_SelectRecord</value>
     <comment>Template string cho procudues lấy một</comment>
   </data>
+  <data name="Proc_SumRecord" xml:space="preserve">
+    <value>Proc_product_SumRecord</value>
+    <comment>Template string cho procudues tính tổng</comment>
+  </data>
   <data name="Proc_UpdateCode" xml:space="preserve">
     <value>Proc_codenew_UpdateRecord</value>
     <comment>Template string cho procudues cập nhật mã tự sinh</comment>

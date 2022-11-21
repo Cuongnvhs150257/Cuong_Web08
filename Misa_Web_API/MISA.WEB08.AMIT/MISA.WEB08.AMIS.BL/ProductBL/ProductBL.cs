@@ -146,5 +146,15 @@ namespace MISA.WEB08.AMIS.BL
 
         }
 
+        /// <summary>
+        /// Hàm lấy tổng
+        /// Nguyễn Văn Cương 21/11/2022
+        /// </summary>
+        /// <returns></returns>
+        public object GetSum()
+        {
+            return _productDL.GetSum();
+        }
+
     }
 }

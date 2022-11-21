@@ -17,6 +17,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// Mã nhóm vật tư hàng hóa
         /// </summary>
         [IsNotNullOrEmptyAtrribute("Mã nhóm vật tư, hàng hóa không được để trống")][SearchCodeAttribute]
+        [DulicateAtrribute("Mã nhóm vật tư <> đã tồn tại trong hệ thống, vui lòng kiểm tra lại")]
         public string SupplyCode { get; set; }
 
         /// <summary>

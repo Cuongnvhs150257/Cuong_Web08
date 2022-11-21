@@ -38,5 +38,27 @@ namespace MISA.WEB08.AMIS.DL
                 return products;
             }
         }
+
+        /// <summary>
+        /// Hàm lấy tổng
+        /// Nguyễn Văn Cương 21/11/2022
+        /// </summary>
+        /// <returns></returns>
+        public object GetSum()
+        {
+            var parameters = new DynamicParameters();
+
+            //Khởi tạo kết nối với MySQl
+            string connectionString = DataContext.MySqlConnectionString;
+            using (var mysqlConnection = new MySqlConnection(connectionString))
+            {
+                //khai bao ten stored produre
+                string storeProdureName = Resource.Proc_SumRecord;
+
+                //Thực hiện gọi vào DB
+                var sum = mysqlConnection.QueryFirstOrDefault(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
+                return sum;
+            };
+        }
     }
 }

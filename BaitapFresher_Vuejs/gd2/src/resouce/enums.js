@@ -53,14 +53,14 @@ export default{
     //Hàng hóa
     Product: 1,
 
+    //Thành phẩm
+    FiProduct: 2,
+    
     //Dịch vụ
-    Service: 2,
+    Service: 3,
 
     //Nguyên vật liệu
-    Material: 3,
-
-    //Thành phẩm
-    FiProduct: 4,
+    Material: 4,
 
     //công cụ dụng cụ
     Tools: 5,

@@ -94,21 +94,22 @@
                 <label class="item-label product item1">Nhóm VTHH</label>
                 <span class="product-tooltip"> Nhóm vật tư hàng hóa </span>
                 <MCombobox
-                  :Comboboxmodel="Products.SupplyCode"
                   :baseURL="'baseURLSupply'"
                   :ComboClass="2"
                   :CombolabelLeft="'Mã nhóm vật tư, hàng hóa, dịch vụ'"
                   :CombolabelRight="'Tên nhóm vật tư, hàng hóa, dịch vụ'"
                   :tab="3"
+                  :Filter="false"
                   :readonly="false"
                   :iconadd="true"
                   :width="'width: 40%;'"
                   :value="'supplyID'"
                   :valuePost="'SupplyID'"
                   :valueFilter="'supplyName'"
-                  :Filter="false"
                   :label="'supplyName'"
                   :code="'supplyCode'"
+                  :BridingSupplyCode="BridingCode"
+                  :BridingSupplyID="BridingID"
                   :isShow="isShowDropbox"
                   :maxlength="100"
                   @get-recordvalue="getRecord"
@@ -130,6 +131,7 @@
                   :valuePost="'UnitCalculateID'"
                   :label="'unitCalculateValue'"
                   :isShow="isShowDropbox"
+                  :Filter="false"
                   :maxlength="100"
                   @get-recordvalue="getRecord"
                   @open-popup-edit="openPopupEdit"
@@ -149,6 +151,7 @@
                   :DropboxItem="DropboxItemTax"
                   :maxlength="0"
                   :readonly="true"
+                  :Filter="false"
                   @get-recordvalue="getRecord"
                   :value="'TaxReduction'"
                   :label="'label'"
@@ -184,6 +187,7 @@
                 :Comboboxmodel="Products.Insurance"
                 :DropboxItem="DropboxItemInsurance"
                 :readonly="true"
+                :Filter="false"
                 :value="'Insurance'"
                 :label="'label'"
                 :valuePost="'Insurance'"
@@ -234,11 +238,12 @@
                   :tab="15"
                   :ComboClass="2"
                   :InputClass="true"
+                  :Filter="false"
                   :CombolabelLeft="'Mã kho'"
                   :CombolabelRight="'Tên kho'"
                   :readonly="false"
                   :iconadd="true"
-                  :width_combomuti="'width: 200%;'"
+                  :width_combomuti="'width: 240%;'"
                   :width="'width: 40%;'"
                   :value="'warehouseID'"
                   :valuePost="'WarehouseID'"
@@ -425,6 +430,8 @@ export default {
     property: Number,
     productsSelected: Object,
     detailFormMode: Number,
+    BridingCode: String, 
+    BridingID: String,
   },
   methods: {
     /**
@@ -1042,7 +1049,7 @@ export default {
   left: 0;
   top: 0;
   bottom: 0;
-  background-color: rgba(12, 12, 12, 0.6);
+  background-color: rgba(12, 12, 12, 0.4);
   border-radius: 4px;
 }
 .product-Popup-form {
@@ -1123,9 +1130,11 @@ export default {
 }
 .link-product-popup-mid {
   color: #009ad5;
-  margin-left: 15px;
-  margin-top: 17px;
+  margin-left: 10px;
+  margin-top: 19px;
   height: 15px;
+  font-size: 13px;
+  cursor: pointer;
 }
 .link-product-popup-mid:hover {
   margin-top: 13px;
@@ -1147,7 +1156,7 @@ export default {
 }.product-popup-input23 {
   display: flex;
   margin-top: 5px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 .product-popup-input2 {
   width: 110px;
@@ -1252,7 +1261,7 @@ export default {
   
 }
 .product-popup-input9 {
-  margin-top: 10px;
+  margin-top: 5px;
   height: 85px;
   width: 98%;
 }
@@ -1409,6 +1418,7 @@ export default {
 }
 .product-popup-open-icon-label {
   font-size: 16px;
+  cursor: pointer;
 }
 .product-popup-open-icon-label:hover {
   color: #50b83c;
@@ -1435,6 +1445,7 @@ export default {
   margin-right: 30px;
 }.product-popup-input1{
   position: relative;
+  width: 97.5%;
 }.alertInput{
   width: 150px;
   height: 18px;

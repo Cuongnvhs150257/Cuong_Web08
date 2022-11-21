@@ -62,6 +62,34 @@ namespace MISA.WEB08.AMIS.API.Controllers
             }
         }
 
+        /// Lấy tổng
+        /// </summary>
+        /// <returns>Tổng</returns>
+        /// Createdby: Nguyễn Văn Cương
+        /// Createddate: 21/11/2022
+        [HttpGet]
+        [Route("getsum")]
+        public IActionResult GetSum()
+        {
+            //Try catch exception
+            try
+            {
+                var records = _productBL.GetSum();
+
+                return StatusCode(StatusCodes.Status200OK, records);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AMITErrorCode.Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.UserMsg_Exception,
+                    Resource.MoreInfo_Exception,
+                    HttpContext.TraceIdentifier));
+            }
+        }
+
         #endregion
     }
 }

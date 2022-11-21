@@ -19,5 +19,12 @@ namespace MISA.WEB08.AMIS.DL
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Product> GetProductExcel();
+
+        /// <summary>
+        /// Hàm lấy tổng
+        /// Nguyễn Văn Cương 21/11/2022
+        /// </summary>
+        /// <returns></returns>
+        public object GetSum();
     }
 }

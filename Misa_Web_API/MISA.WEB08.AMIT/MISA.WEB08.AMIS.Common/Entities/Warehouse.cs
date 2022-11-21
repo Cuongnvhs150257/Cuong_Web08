@@ -21,6 +21,7 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// Mã kho
         /// </summary>
         [SearchCodeAttribute]
+        [DulicateAtrribute("Mã kho <> đã tồn tại trong hệ thống, vui lòng kiểm tra lại")]
         public string WarehouseCode { get; set; }
 
         /// <summary>

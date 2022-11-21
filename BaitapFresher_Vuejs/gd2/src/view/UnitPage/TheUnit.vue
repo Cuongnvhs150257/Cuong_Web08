@@ -473,6 +473,7 @@ export default {
       //lưu property td
       tdList: 
       [{property: "unitCalculateValue"},
+      {property: "unitCalculateValue", style: "display: none"},
       {property: "describe"},
       {property: "status", fun: 1},
       {property: "unitCalculateID", style: "display: none"}],

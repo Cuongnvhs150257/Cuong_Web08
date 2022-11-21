@@ -45,7 +45,11 @@
 <script>
 import configs from "../../../configs/index";
 export default {
+  created(){
+
+  },
   mounted() {
+    this.BrindingMuti();
     window.addEventListener('mousedown', this.clickEventInterrupt);
   },
   unmounted() {
@@ -79,7 +83,12 @@ export default {
         width_combomuti: String,
         InputClass: Boolean,
         Reset: Boolean,
+        ResetSupply: Boolean,
         Filter: Boolean,
+        inputfilter: Number,
+        Tabname: String,
+        BridingSupplyCode: String,
+        BridingSupplyID: String,
     },
     methods:{
         /**
@@ -88,7 +97,14 @@ export default {
          */
          ResetCombobox(){
             if(this.Reset == true){
-              this.RecordSle[this.label] = [];
+              this.RecordSle[this.label] = "Tất cả";
+
+              this.RecordSle[this.value] = 0;
+              this.$emit("ChangeReset");
+            }
+            if(this.ResetSupply == true){
+              this.ComboMutiItem = [];
+              this.$emit("ChangeReset");
             }
          },
 
@@ -100,7 +116,11 @@ export default {
           console.log(drop);
           this.isShowDropbox = !this.isShowDropbox;
           this.isShowD = this.isShowDropbox;
-          this.$emit("get-recordvalue", drop[this.value], this.valuePost, drop[this.label]);
+          if(this.Filter == true){
+            this.$emit("get-recordvalue", drop[this.label], this.valueFilter, this.Tabname, this.inputfilter);
+          }else{
+            this.$emit("get-recordvalue", drop[this.value], this.valuePost, this.Tabname, this.inputfilter);
+          }
           this.inValueChange = false;
           this.selectItem = false;
           this.RecordSle[this.label] = drop[this.label];
@@ -139,11 +159,7 @@ export default {
             //lưu index của giá trị
             this.indexComboMutiItem = this.ComboMutiItem.indexOf(muti[this.code]);
             console.log(this.ComboMutiItem);
-            if(this.Filter == true){
-              this.$emit("get-recordvalue", muti[this.label], this.valueFilter, muti[this.label]);
-            }else{
-              this.$emit("get-recordvalue", muti[this.value], this.valuePost);
-            }
+            this.$emit("get-recordvalue", muti[this.value], this.valuePost);
             
           }else{
             //chưa có thì chọn tiếp
@@ -152,6 +168,17 @@ export default {
           //xoay icon nút
           this.Rotate();
           
+        },
+
+        BrindingMuti(){
+          if(this.BridingSupplyCode){
+            if(!this.ComboMutiItem.includes(this.BridingSupplyCode)){
+              this.ComboMutiItem.push(this.BridingSupplyCode);
+            }
+          }
+          if(this.BridingSupplyID){
+            this.$emit("get-recordvalue", this.BridingSupplyID, this.valuePost);
+          }
         },
 
         /**
@@ -321,7 +348,7 @@ export default {
     width: 100%;
 }.dropbl-data{
     position: absolute;
-    width: 100%;
+    width: 99%;
     z-index: 6;
     border: 1px solid #bbbb;
     top: 32px;
@@ -352,6 +379,7 @@ export default {
   color: #000;
   z-index: 100;
   padding-left:8px ;
+  cursor: pointer;
 }
 .drop-itemtbl:hover {
   color: #50b83c;
@@ -458,6 +486,7 @@ export default {
   min-width: 50px;
   overflow: hidden;
   display: flex;
+  cursor: pointer;
 }.item-label{
   font-family: Misa Fonts Regular;
   font-size: 11px;

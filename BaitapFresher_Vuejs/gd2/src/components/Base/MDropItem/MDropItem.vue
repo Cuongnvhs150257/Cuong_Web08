@@ -70,10 +70,10 @@ export default {
           if(this.OpenDropboxD == true){
             //kiểm tra xem con chuột có click vào dropitem
             const isClick = this.$refs.dropbox.contains(event.target);
-            const isClick2 = this.$refs.filterdrop.contains(event.target);
             if(!isClick){
               this.OpenDropboxD = false;
             }
+            const isClick2 = this.$refs.filterdrop.contains(event.target);
             if(!isClick2){
               this.$emit("close-filterdrop");
             }
@@ -122,7 +122,7 @@ export default {
   position: absolute;
   border: none;
   right: 1px;
-  width: 30px;
+  width: 29px;
   height: 28px;
   flex-shrink: 0;
   flex-basis: 40px;
@@ -158,6 +158,7 @@ export default {
   font-weight: lighter;
   color: #000;
   z-index: 100;
+  cursor: pointer;
 }
 
 .mdrop-itemtbl:hover {
@@ -173,6 +174,7 @@ export default {
   position: absolute;
   top: -110px;
   right: 0;
+  z-index: 10;
 }.filterdrop-item{
   width: 93%;
   height: 25px;

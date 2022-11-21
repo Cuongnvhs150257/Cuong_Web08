@@ -322,6 +322,15 @@ namespace MISA.WEB08.AMIS.Common.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Proc_product_SumRecord.
+        /// </summary>
+        public static string Proc_SumRecord {
+            get {
+                return ResourceManager.GetString("Proc_SumRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Proc_codenew_UpdateRecord.
         /// </summary>
         public static string Proc_UpdateCode {

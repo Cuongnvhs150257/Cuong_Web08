@@ -90,7 +90,7 @@
   --logo: url('../../../assets/Resource/img/Logo_Module_TiengViet_White.66947422.svg'); 
 }
     .sidebar-top{
-    width: 200px;
+    width: 180px;
     height: 48px;
     display: flex;
     align-items: center;
@@ -122,12 +122,12 @@
     height: calc(100vh - 52px); 
 }
 .sidebar-item{
-    width: 176px;
+    width: 169px;
     height: 44px;
     display: flex;
     cursor: pointer;
     justify-content: center;
-    padding-left: 12px;
+    padding-left: 10px;
     margin-top: 4px;
     border-radius: 4px;
     text-decoration: none;

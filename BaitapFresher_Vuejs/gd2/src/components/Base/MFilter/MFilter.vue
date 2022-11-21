@@ -5,28 +5,33 @@
             <div class="filter-input1">
               <label class="item-label">Tính chất</label>
                 <MCombobox
+                  :Reset="RecordNull"
                   :Comboboxmodel="DropboxItemNature[0].label"
                   :tab="5"
                   :DropboxItem="DropboxItemNature"
                   :maxlength="0"
                   :readonly="true"
+                  :Filter="false"
+                  :inputfilter="2"
                   @get-recordvalue="getRecord"
+                  @ChangeReset="Chage"
                   :value="'Nature'"
                   :label="'label'"
                   :valuePost="'Nature'"
+                  :Tabname="'Tính chất'"
                   ref="combobox"
                 />
             </div>
             <div class="filter-input2">
               <label class="item-label">Nhóm</label>
                 <MCombobox 
-                  :Reset="SupplyNull"
+                  :ResetSupply="SupplyNull"
                   :baseURL="'baseURLSupply'"
                   :ComboClass="2"
                   :CombolabelLeft="'Mã nhóm'"
                   :CombolabelRight="'Tên nhóm'"
                   :tab="3"
-                  :InputClass="false"
+                  :InputClass="true"
                   :readonly="false"
                   :width="'width: 40%;'"
                   :value="'supplyID'"
@@ -34,7 +39,9 @@
                   :label="'supplyName'"
                   :code="'supplyCode'"
                   :valueFilter="'s.SupplyName'"
-                  :Filer="true"
+                  :inputfilter="1"
+                  :Tabname="'Nhóm'"
+                  :Filter="true"
                   :isShow="isShowDropbox"
                   :maxlength="100"
                   @get-recordvalue="getRecord"
@@ -46,12 +53,16 @@
             <div class="filter-input1">
               <label class="item-label">Tình trạng tồn kho</label>
                 <MCombobox
+                  :Reset="RecordNull"
                   :Comboboxmodel="DropboxItemStatusWarehouse[0].label"
                   :tab="5"
                   :width="'width: 40%;'"
                   :DropboxItem="DropboxItemStatusWarehouse"
                   :maxlength="0"
                   :readonly="true"
+                  :inputfilter="4"
+                  :Filter="false"
+                  :Tabname="'Tình trạng tồn kho'"
                   @get-recordvalue="getRecord"
                   :value="'StatusWarehouse'"
                   :label="'label'"
@@ -62,11 +73,15 @@
             <div class="filter-input2">
               <label class="item-label">Trạng thái</label>
               <MCombobox
+                  :Reset="RecordNull"
                   :Comboboxmodel="DropboxItemStatus[0].label"
                   :tab="5"
                   :DropboxItem="DropboxItemStatus"
                   :maxlength="0"
                   :readonly="true"
+                  :Filter="false"
+                  :inputfilter="3"
+                  :Tabname="'Trạng thái'"
                   @get-recordvalue="getRecord"
                   :value="'Status'"
                   :label="'label'"
@@ -111,9 +126,11 @@
                   :tab="5"
                   :DropboxItem="DropboxItemNature"
                   :maxlength="0"
+                  :inputfilter="2"
                   :readonly="true"
                   @get-recordvalue="getRecord"
                   :value="'Nature'"
+                  :Tabname="'Tính chất'"
                   :label="'label'"
                   :valuePost="'Nature'"
                   ref="combobox"
@@ -124,8 +141,10 @@
                   :tab="5"
                   :DropboxItem="DropboxItemTax"
                   :maxlength="0"
+                  :inputfilter="3"
                   :readonly="true"
                   @get-recordvalue="getRecord"
+                  :Tabname="'Giảm thuế theo NQ 43'"
                   :value="'TaxReduction'"
                   :label="'label'"
                   :valuePost="'TaxReduction'"
@@ -170,7 +189,12 @@ export default {
 
     methods:{
       handleResetCombobox(){
-          this.SupplyNull = !this.SupplyNull;
+        this.RecordNull = true;
+        this.SupplyNull = true;
+      },
+      Chage(){
+        this.SupplyNull = false;
+        this.RecordNull = false;
       },
       closeFilter(){
           this.$emit("Close-Filter");
@@ -195,14 +219,14 @@ export default {
           this.DisableInput = false;
         }
       },
-      getRecord(keyword, namevalue, filterlabel){
+      getRecord(keyword, namevalue, filterlabel, inputfilter){
         if(keyword == 0){
           this.$emit("get-Filter-Header", keyword);
         }else{
           this.$emit("get-Filter-Header", 5);
           this.$emit("get-Keyword-Header", keyword);
         }
-          this.$emit("get-Typesoft", namevalue, filterlabel);
+          this.$emit("get-Typesoft", namevalue, filterlabel, inputfilter);
       },
       /**
       Hàm lấy giá trị tìm kiếm lọc
@@ -231,6 +255,7 @@ export default {
         FilterLable: "Chứa",
         //lưu style input
         DisableInput: false,
+        RecordNull: false,
 
       //lưu giá trị của combobox tính chất
       DropboxItemNature: [
@@ -239,23 +264,23 @@ export default {
           label: "Tất cả",
         },
         {
-          Nature: 2,
+          Nature: 1,
           label: "Hàng hóa",
         },
         {
-          Nature: 3,
+          Nature: 2,
           label: "Thành phẩm",
         },
         {
-          Nature: 4,
+          Nature: 3,
           label: "Dịch vụ",
         },
         {
-          Nature: 5,
+          Nature: 4,
           label: "Nguyên vật liệu",
         },
         {
-          Nature: 6,
+          Nature: 5,
           label: "Công cụ, dụng cụ",
         },
       ],

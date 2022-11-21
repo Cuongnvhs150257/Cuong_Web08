@@ -20,6 +20,7 @@
           : index.fun === 3 ? this.formatDateRecord(re[index.property])
           : index.fun === 4 ? this.formatTaxRecord(re[index.property])
           : index.fun === 5 ? this.formatNatureRecord(re[index.property])
+          : index.fun === 6 ? this.SumFormat(re[index.property])
           : re[index.property] }}
           </td>
         <td style="min-width: 110px;">
@@ -41,6 +42,7 @@
                   : index.fun === 3 ? this.formatDateRecord(re.arr[index.property])
                   : index.fun === 4 ? this.formatTaxRecord(re.arr[index.property])
                   : index.fun === 5 ? this.formatNatureRecord(re.arr[index.property])
+                  : index.fun === 6 ? this.SumFormat(re.arr[index.property])
                   : re.arr[index.property]}}
                 </div>
             </div>
@@ -59,8 +61,8 @@
         <td></td>
         <td></td>
         <td></td>
-        <td>0,00</td>
-        <td>0,0</td>
+        <td>{{SumFormat(SumQuantity)}}</td>
+        <td>{{SumFormat(SumExistent)}}</td>
         <td></td>
         <td></td>
     </tfoot>
@@ -105,6 +107,7 @@ export default {
     MDropItem,
   },
   mounted() {
+    this.getSum();
     window.addEventListener('mousedown', this.clickEventInterrupt);
   },
   unmounted() {
@@ -112,6 +115,46 @@ export default {
   },
   
   methods: {
+
+    /***
+    Hàm lấy tổng 
+    Nguyễn Văn Cương 21/11/2022
+     */
+     getSum(){
+      fetch(configs.baseURLProduct + "getsum", {
+        method: "GET", //lấy mã nhân viên cao nhất
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          var s = JSON.stringify(data.SumQuantity);
+          var d = JSON.stringify(data.SumExistent);
+          this.SumQuantity = s.replace(/[^a-zA-Z0-9]*/g, "");
+          this.SumExistent = d.replace(/[^a-zA-Z0-9]*/g, "");
+          
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+     },
+    
+    /**
+     * Hàm format tổng
+     * Nguyễn Văn Cương 21/11/2022
+     */
+     SumFormat(price) {
+       if(price){
+        const pieces = parseFloat(price).toFixed(2).split('')
+        let ii = pieces.length - 3
+        while ((ii-=3) > 0) {
+          pieces.splice(ii, 0, ',')
+        }
+        return pieces.join('');
+       }else{
+         return "";
+       }
+
+    },
+
     /**
     Hàm mở td con của table đệ quy
     Nguyễn Văn Cương 10/11/2022
@@ -144,6 +187,10 @@ export default {
           this.PosX = event.x
         },
 
+    /**
+    Hàm gọi popup Filter
+    Nguyễn Văn Cương 10/11/2022
+     */
     openFilter(inputfil,value, filterlabel){
       this.$emit("Show-Filter", 2,inputfil, value, filterlabel, this.PosY, this.PosX);
     },
@@ -329,6 +376,10 @@ export default {
        }
     },
 
+    /**
+    hàm format tính chất
+    Nguyễn Văn Cương 1/11/2022
+     */
     formatNatureRecord(value){
        //giá trị 1 là nữ 
        if(value == enums.Product){
@@ -490,6 +541,11 @@ export default {
       IncurredID: null,
       //kiểu mở popup thông báo
       PopupNotificationMode: 2,
+      //Tổng số lượng tồn
+      SumQuantity: null,
+      //Tổng giá trị tồn
+      SumExistent: null,
+
 
     };
   },
@@ -532,10 +588,12 @@ export default {
 }
 .content-table table {
   width: 100%;
-  border-collapse: collapse;
   border-spacing: unset;
   font-size: 13px;
 
+}.product-tab-th-amount{
+  text-align: right !important;
+  padding-right: 8px !important;
 }
 
 td, th {
@@ -549,8 +607,7 @@ td, th {
 .content-table tr th {
   padding-left: 8px;
   text-align: left;
-  cursor: pointer;
-}.content-table tbody tr:hover {
+}.content-table tbody tr:hover{
   background-color: rgba(80,184,60,0.1);
 }.content-table tr:active{
   background-color: #E5F3FF;
@@ -607,6 +664,7 @@ td, th {
    margin-top: 16px;
    margin-left: 30px;
    font-weight: 600;
+   cursor: pointer;
 }.btnopendrop{
   position: relative;
   width: 30px;
@@ -694,6 +752,7 @@ td, th {
   float: right;
   margin-right: 5px;
   visibility: hidden;
+  cursor: pointer;
 }.content-table table thead tr th:hover .filter-header-icon{
   visibility: visible;
 }

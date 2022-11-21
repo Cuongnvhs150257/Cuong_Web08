@@ -110,7 +110,7 @@ export default {
   left: 0;
   top: 0;
   bottom: 0;
-  background-color: rgba(12, 12, 12, 0.6);
+  background-color: rgba(12, 12, 12, 0.4);
 }
 .product-Popup-form {
   width: 800px;
