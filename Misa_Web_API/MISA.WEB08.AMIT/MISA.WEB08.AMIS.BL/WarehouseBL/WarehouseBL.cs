@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using MISA.WEB08.AMIS.Common.Entities;
+using MISA.WEB08.AMIS.Common.Enums;
 using MISA.WEB08.AMIS.Common.Resource;
 using MISA.WEB08.AMIS.DL;
 using System;
@@ -92,7 +93,7 @@ namespace MISA.WEB08.AMIS.BL
                     ws.Cell(currentRow, 2).Value = warehouse.WarehouseCode;
                     ws.Cell(currentRow, 3).Value = warehouse.WarehouseName;
                     ws.Cell(currentRow, 4).Value = warehouse.Address;
-                    ws.Cell(currentRow, 5).Value = warehouse.Status;
+                    ws.Cell(currentRow, 5).Value = warehouse.Status == (int)Status.ACTIVE ? "Đang sử dụng" : warehouse.Status == (int)Status.UNACTIVE ? "Ngưng sử dụng" : warehouse.Status == (int)Status.UNKNOW ? "Chưa xác định" : ""; ;
                     ws.Cell(currentRow, 6).Value = warehouse.Branch;
 
                     // Căn giữa các trường

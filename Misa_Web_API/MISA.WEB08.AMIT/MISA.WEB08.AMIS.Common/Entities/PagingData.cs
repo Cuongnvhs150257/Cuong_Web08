@@ -7,10 +7,16 @@
     /// 
     public class PagingData<T>
     {
-        //Danh sách nhân viên trả về
+        //Danh sách đối tượng trả về
         public List<T> Data { get; set; }
 
-        //Tổng số nhân viên trả về
+        //Tổng số đối tượng trả về
         public int TotalCount { get; set; }
+
+        //Tổng số Số lượng tồn
+        public Decimal? SumQuantity { get; set; }
+
+        //Tổng số Giá trị tồn
+        public Decimal? SumExistent { get; set; }
     }
 }

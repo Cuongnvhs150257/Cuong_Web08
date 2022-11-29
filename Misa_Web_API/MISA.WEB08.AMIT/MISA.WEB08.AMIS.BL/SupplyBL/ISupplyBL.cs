@@ -19,5 +19,6 @@ namespace MISA.WEB08.AMIS.BL
         /// </summary>
         /// <returns></returns>
         public Byte[] GetSupplyExcel();
+
     }
 }

@@ -48,7 +48,7 @@
         @offset-value="getOffSetValue"
       />
     </div>
-    <MPopupEdit v-if="isShow" :baseURL="'baseURLWarehouse'" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="1" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Warehouses" :recordvalue="WarehouseValue" />
+    <MPopupEdit v-if="isShow" :baseURL="'baseURLWarehouse'" @show-toast="showToastPopup" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="1" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Warehouses" :recordvalue="WarehouseValue" />
  
 
     <!-- <Teleport to="#page-employee">
@@ -68,6 +68,7 @@ import MToast from '../../components/Base/MToast/MToast.vue';
 import MLoading from '../../components/Base/MLoading/MLoading.vue'
 import MTable from '../../components/Base/MTable/MTable.vue';
 import MPopupEdit from '../../components/Base/MPopupEdit/MPopupEdit.vue';
+import warehousejs from '../../resouce/warehouse';
 import configs from '../../configs/index';
 import enums from '../../resouce/enums';
 import toast from '../../resouce/toast';
@@ -96,7 +97,7 @@ export default {
      * Nguyễn Văn Cương 01/10/2022
      */
     async getNewCode() {
-      await fetch(configs.baseURLWarehouse + "getmax", {
+      await fetch(configs.baseURLWarehouse + warehousejs.getmax, {
         method: "GET", //lấy mã nhân viên cao nhất
       })
         .then((response) => response.json())
@@ -124,7 +125,7 @@ export default {
           .then((res) => res.json())
           .then(async (data) => {
             this.LoadingShow = false; //Đóng loading
-            this.PopupEdit_label = "Sửa kho";
+            this.PopupEdit_label = warehousejs.PopupEdit_label_edit;
             this.Warehouses = data;
             if (detailFormMode == 1) {
               this.Warehouses.WarehouseCode = "";
@@ -140,7 +141,7 @@ export default {
         //trường hợp chỉ mở popup
       } else {
         (this.Warehouses = {}), //dữ liệu trên popup rỗng
-          this.PopupEdit_label = "Thêm kho";
+          this.PopupEdit_label = warehousejs.PopupEdit_label_add;
           this.Mode = detailFormMode;
         this.isShow = true;
       }
@@ -187,7 +188,7 @@ export default {
 
     /**
      * lấy trang hiển thị
-     *
+     * Nguyễn Văn Cương 25/09/2022
      */
     
     getOffSetValue(offset) {
@@ -277,7 +278,7 @@ export default {
     async deleteMultiple() {
       var listD = this.listEmpDelete;
       
-      await fetch(configs.baseURLWarehouse + "batch-delete", {
+      await fetch(configs.baseURLWarehouse + warehousejs.batchdelete, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -339,7 +340,7 @@ export default {
       })
         .then((res) => res.json())
         .then((data) => {
-          this.WarehousesTable = data; //lưu dữ liệu
+          this.WarehousesTable = data.data; //lưu dữ liệu
           this.TotalCount = data.totalCount;
           this.LoadingShow = false; //tắt loading
         })
@@ -357,7 +358,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURLWarehouse + "get-warehouses-excel",{method: "GET"})
+        fetch(configs.baseURLWarehouse + warehousejs.getwarehousesexcel,{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a
@@ -400,10 +401,12 @@ export default {
     this.loadData();
   },
   mounted(){
+      //gọi hàm clickoutside
       window.addEventListener('keyup', this.handleEventInterrupt);
       
   },
   unmounted(){
+      //xóa hàm clickoutside
       window.removeEventListener('keyup', this.handleEventInterrupt);
   },
 

@@ -24,10 +24,20 @@
 import MDropBox from "./MDropBox.vue";
 export default {
     props:{
+        //tổng số bản ghi
         TotalCount: Number,
+        //trạng thái có xóa nhiều không
+        DeleteMuti: Boolean
     },
     components: {
         MDropBox
+    },
+    updated(){
+        if(this.DeleteMuti){
+            this.currentPage = 2;
+            this.pageChangeCLick = 3;
+            this.PrevValue();
+        }
     },
     methods:{
         /**
@@ -70,6 +80,11 @@ export default {
                 this.$emit("offset-value", (this.indexPadding) * (page - 1));
             }
          },
+
+         /**
+          * Hàm nút giá trị quay lại
+          * Nguyễn Văn Cương 06/10/2022
+          */
          PrevValue(){
             if(this.currentPage > 1){
                 if(this.currentPage > 3 && this.currentPage < Math.ceil(this.TotalCount/this.indexPadding)){
@@ -82,6 +97,10 @@ export default {
             }
         },
 
+        /**
+         * Hàm nút tiếp theo
+         * Nguyễn Văn Cương 06/10/2022
+         */
         NextValue(){
             console.log(1)
             if(this.currentPage < Math.ceil(this.TotalCount/this.indexPadding)){
@@ -95,6 +114,10 @@ export default {
         },
         
     }, 
+    /**
+     * Hàm tính toán hiển thị
+     * Nguyễn Văn Cương 06/10/2022
+     */
     computed:{
         DisplayValue(){
            let arr = [];
@@ -131,16 +154,24 @@ export default {
     
     data(){
         return{
+            //giá trị trang ban đầu
             currentPage: 1,
+            //giá trị khi trang thay đổi
             pageChangeCLick : 3,
+            //trạng thái trang cuối
             endPage: false,
-
-            indexPadding: 10, //số lượng bản ghi
-            indexOffSetOn: 2, //trang hiện tại
-            indexOffSetNext: 2, //trang tiếp theo sẽ mở
-            seleced: true, //hiện thị trang đang chọn
-            seleced2: false, //hiện thị trang đang chọn
-            seleced3: false, //hiện thị trang đang chọn
+             //số lượng bản ghi
+            indexPadding: 10,
+             //trang hiện tại
+            indexOffSetOn: 2,
+             //trang tiếp theo sẽ mở
+            indexOffSetNext: 2,
+            //hiện thị trang đang chọn
+            seleced: true, 
+            //hiện thị trang đang chọn
+            seleced2: false, 
+             //hiện thị trang đang chọn
+            seleced3: false,
         }
     }
 }

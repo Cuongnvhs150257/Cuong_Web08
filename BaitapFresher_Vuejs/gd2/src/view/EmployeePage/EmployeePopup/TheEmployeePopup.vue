@@ -260,6 +260,7 @@ import MPopupNotification from "../../../components/Base/MPopupNotification/MPop
 import MComboxbox from "../../../components/Base/MCombobox/MCombobox.vue";
 import MDatetime from "../../../components/Base/MDatetime/MDatetime.vue";
 import notification from "../../../resouce/notification";
+import employeejs from '../../../resouce/employee';
 import toast from "../../../resouce/toast";
 import popupnotification from "../../../resouce/popupnotification";
 import regex from "../../../resouce/regex";
@@ -752,7 +753,7 @@ export default {
      * Nguyễn Văn Cương 1/10/2022
      */
     async getNewCode() {
-      await fetch(configs.baseURL + "getmax", {
+      await fetch(configs.baseURL + employeejs.getmax, {
         method: "GET",
       })
         .then((response) => response.json())

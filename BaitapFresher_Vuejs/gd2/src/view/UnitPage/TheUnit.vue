@@ -48,7 +48,7 @@
         @offset-value="getOffSetValue"
       />
     </div>
-    <MPopupEdit v-if="isShow" :PopupEdit_label="PopupEdit_label" :detailFormMode="Mode"  @data-load="loadData" @custom-handle-click="closeProductPopup" :baseURL="'baseURLUnitCalculate'" :height="'height: 320px;'" :inputShow="2" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Units" :recordvalue="UnitValue" />
+    <MPopupEdit v-if="isShow" @show-toast="showToastPopup" :PopupEdit_label="PopupEdit_label" :detailFormMode="Mode" :ValidateUnit="true"  @data-load="loadData" @custom-handle-click="closeProductPopup" :baseURL="'baseURLUnitCalculate'" :height="'height: 320px;'" :inputShow="2" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Units" :recordvalue="UnitValue" />
 
     
 
@@ -69,6 +69,7 @@ import MToast from '../../components/Base/MToast/MToast.vue';
 import MLoading from '../../components/Base/MLoading/MLoading.vue'
 import MPopupEdit from '../../components/Base/MPopupEdit/MPopupEdit.vue';
 import MTable from '../../components/Base/MTable/MTable.vue';
+import unitcalculatejs from '../../resouce/unitcalculate';
 import configs from '../../configs/index';
 import enums from '../../resouce/enums';
 import toast from '../../resouce/toast';
@@ -96,7 +97,7 @@ export default {
      * Nguyễn Văn Cương 01/10/2022
      */
     async getNewCode() {
-      await fetch(configs.baseURLUnitCalculate + "getmax", {
+      await fetch(configs.baseURLUnitCalculate + unitcalculatejs.getmax, {
         method: "GET", //lấy mã nhân viên cao nhất
       })
         .then((response) => response.json())
@@ -125,7 +126,7 @@ export default {
           .then(async (data) => {
             this.LoadingShow = false; //Đóng loading
             this.Units = data;
-            this.PopupEdit_label = "Sửa đơn vị tính";
+            this.PopupEdit_label = unitcalculatejs.PopupEdit_label_edit;
             if (detailFormMode == 1) {
               this.Units.UnitCalculateCode = "";
             }
@@ -140,7 +141,7 @@ export default {
         //trường hợp chỉ mở popup
       } else {
         (this.Units = {}), //dữ liệu trên popup rỗng
-          this.PopupEdit_label = "Thêm đơn vị tính";
+          this.PopupEdit_label = unitcalculatejs.PopupEdit_label_add;
           this.Mode = detailFormMode;
         this.isShow = true;
       }
@@ -276,7 +277,7 @@ export default {
     async deleteMultiple() {
       var listD = this.listEmpDelete;
       
-      await fetch(configs.baseURLUnitCalculate + "batch-delete", {
+      await fetch(configs.baseURLUnitCalculate + unitcalculatejs.batchdelete, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -338,7 +339,7 @@ export default {
       })
         .then((res) => res.json())
         .then((data) => {
-          this.UnitsTable = data; //lưu dữ liệu
+          this.UnitsTable = data.data; //lưu dữ liệu
           this.TotalCount = data.totalCount;
           this.LoadingShow = false; //tắt loading
           
@@ -358,7 +359,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURLUnitCalculate + "get-unitcalculates-excel",{method: "GET"})
+        fetch(configs.baseURLUnitCalculate + unitcalculatejs.getunitcalculateexcel,{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a
@@ -401,10 +402,12 @@ export default {
     this.loadData();
   },
   mounted(){
+      //gọi hàm clickoutside
       window.addEventListener('keyup', this.handleEventInterrupt);
       
   },
   unmounted(){
+    //xóa hàm clickoutside
       window.removeEventListener('keyup', this.handleEventInterrupt);
   },
 

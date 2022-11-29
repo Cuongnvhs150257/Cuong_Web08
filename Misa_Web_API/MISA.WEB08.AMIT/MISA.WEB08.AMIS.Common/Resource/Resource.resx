@@ -221,6 +221,10 @@
     <value>Proc_codenew_GetMaxRecord</value>
     <comment>Template string cho procudues lấy mã tự sinh</comment>
   </data>
+  <data name="Proc_GetSupplyCodes" xml:space="preserve">
+    <value>Proc_supply_GetSupplyCodes</value>
+    <comment>Template string cho procudues lấy mã nhóm vật tư hàng hóa</comment>
+  </data>
   <data name="Proc_InsertRecord" xml:space="preserve">
     <value>Proc_{0}_InsertRecord</value>
     <comment>Template string cho procudues thêm mới</comment>

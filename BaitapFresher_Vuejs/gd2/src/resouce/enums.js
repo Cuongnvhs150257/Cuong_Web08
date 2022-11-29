@@ -50,17 +50,20 @@ export default{
     //Chưa xác định
     UNKNOW: 0,
 
+    //hết hàng
+    Out_of_stock: 3,
+
     //Hàng hóa
     Product: 1,
-
-    //Thành phẩm
-    FiProduct: 2,
     
     //Dịch vụ
-    Service: 3,
+    Service: 2,
 
     //Nguyên vật liệu
-    Material: 4,
+    Material: 3,
+
+    //Thành phẩm
+    FiProduct: 4,
 
     //công cụ dụng cụ
     Tools: 5,

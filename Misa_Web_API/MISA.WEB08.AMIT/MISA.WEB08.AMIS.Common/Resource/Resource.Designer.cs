@@ -295,6 +295,15 @@ namespace MISA.WEB08.AMIS.Common.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Proc_supply_GetSupplyCodes.
+        /// </summary>
+        public static string Proc_GetSupplyCodes {
+            get {
+                return ResourceManager.GetString("Proc_GetSupplyCodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Proc_{0}_InsertRecord.
         /// </summary>
         public static string Proc_InsertRecord {

@@ -127,4 +127,24 @@
     }
 
 
+    /// <summary>
+    /// Atrribute dùng để lấy danh sách
+    /// Createdby: Nguyễn Văn Cương 17/11/2022
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class ListIDAttribute : Attribute
+    {
+
+    }
+
+    /// <summary>
+    /// Atrribute dùng để lấy ProductID
+    /// Createdby: Nguyễn Văn Cương 17/11/2022
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class ProductAttribute : Attribute
+    {
+
+    }
+
 }

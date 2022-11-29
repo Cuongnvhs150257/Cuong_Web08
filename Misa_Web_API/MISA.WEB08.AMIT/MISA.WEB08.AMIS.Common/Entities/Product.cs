@@ -29,12 +29,18 @@ namespace MISA.WEB08.AMIS.Common.Entities
         /// <summary>
         /// ID nhóm vật tư hàng hóa
         /// </summary>
-        public Guid? SupplyID { get; set; }
+        [ListIDAttribute]
+        public List<Guid>? SupplyID { get; set; }
 
         /// <summary>
         /// Mã nhóm vật tư hàng hóa
         /// </summary>
         public string? SupplyCode { get; set; }
+        
+        /// <summary>
+        /// ID bảng trung gian
+        /// </summary>
+        public List<Guid>? GroupID { get; set; }
 
         /// <summary>
         /// Tên nhóm vật tư hàng hóa

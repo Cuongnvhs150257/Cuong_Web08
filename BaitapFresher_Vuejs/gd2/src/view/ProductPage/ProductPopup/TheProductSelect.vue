@@ -87,6 +87,7 @@ export default {
      */
         handleOpenProductPopup(value){
             if(this.ProductID){
+              //khi mở có id
               this.$emit("open-product-popup", this.ProductID, 2, value);
             }else{
               this.$emit("open-product-popup", null, 1, value);

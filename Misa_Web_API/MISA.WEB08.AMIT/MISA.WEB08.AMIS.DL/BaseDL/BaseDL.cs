@@ -17,7 +17,7 @@ namespace MISA.WEB08.AMIS.DL
         /// Hàm kết nối DB để lấy toàn bộ nhân viên
         /// Createdby: Nguyễn Văn Cương 28/09/2022
         /// </summary>
-        /// <returns></returns>
+        /// <returns>all record</returns>
         public IEnumerable<T> GetAllRecords()
         {
 
@@ -29,8 +29,8 @@ namespace MISA.WEB08.AMIS.DL
             using (var mysqlConnection = new MySqlConnection(connectionString))
             {
                 //Thực hiện gọi vào DB
-                var employees = mysqlConnection.Query<T>(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
-                return employees;
+                var records = mysqlConnection.Query<T>(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
+                return records;
             };
         }
 
@@ -39,7 +39,7 @@ namespace MISA.WEB08.AMIS.DL
         /// Createby: Nguyễn Văn Cương 26/09/2022
         /// </summary>
         /// <param name="record"></param>
-        /// <returns></returns>
+        /// <returns>new recordid</returns>
         public Guid InsertRecords(T record)
         {
 
@@ -86,6 +86,7 @@ namespace MISA.WEB08.AMIS.DL
             }
 
         }
+
 
         /// <summary>
         /// Hàm kết nối DB để lấy nhân viên theo ID
@@ -175,7 +176,7 @@ namespace MISA.WEB08.AMIS.DL
             int? limit,
             int? offset,
             string? query,
-            string? queryCount)
+            Boolean? status)
         {
             var result = new PagingData<T>();
 
@@ -185,7 +186,6 @@ namespace MISA.WEB08.AMIS.DL
             parameters.Add("v_limit", limit);
             parameters.Add("v_offset", offset);
             parameters.Add("v_query", query);
-            parameters.Add("v_query2", queryCount);
 
             //Khởi tạo kết nối với MySQl
             string connectionString = DataContext.MySqlConnectionString;
@@ -198,11 +198,18 @@ namespace MISA.WEB08.AMIS.DL
                 var ListOject = mysqlConnection.QueryMultiple(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
                 result.Data = ListOject.Read<T>().ToList();
                 result.TotalCount = ListOject.Read<Int32>().First();
+                if(status == true)
+                {
+                    result.SumQuantity = ListOject.Read<Decimal>().First();
+                    result.SumExistent = ListOject.Read<Decimal>().First();
+                }
             }
             return new PagingData<T>
             {
                 Data = result.Data,
                 TotalCount = result.TotalCount,
+                SumQuantity = result.SumQuantity,
+                SumExistent = result.SumExistent,
             };
         }
 
@@ -300,7 +307,7 @@ namespace MISA.WEB08.AMIS.DL
         /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
         /// Createby: Nguyễn Văn Cương 26/09/2022
         /// </summary>
-        /// <returns></returns>
+        /// <returns>max code</returns>
         public object GetMaxRecord()
         {
             //khai bao ten stored produre
@@ -311,8 +318,8 @@ namespace MISA.WEB08.AMIS.DL
             using (var mysqlConnection = new MySqlConnection(connectionString))
             {
                 //Thực hiện gọi vào DB
-                var employeeCode = mysqlConnection.QueryFirstOrDefault(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
-                return employeeCode;
+                var recordCode = mysqlConnection.QueryFirstOrDefault(storeProdureName, commandType: System.Data.CommandType.StoredProcedure);
+                return recordCode;
             };
         }
 
@@ -320,7 +327,7 @@ namespace MISA.WEB08.AMIS.DL
         /// Hàm check mã trùng
         /// </summary>
         /// <param name="employeeCode"></param>
-        /// <returns></returns>
+        /// <returns>true, false</returns>
         public bool CheckRecordCodeExist(string recordCode)
         {
             //Chuẩn bị tham số đầu vào
@@ -360,7 +367,7 @@ namespace MISA.WEB08.AMIS.DL
         /// Nguyễn Văn Cương 15/11/2022
         /// </summary>
         /// <param name="record"></param>
-        /// <returns></returns>
+        /// <returns>true, false</returns>
         public object CheckDelete(Guid record)
         {
             //Chuẩn bị tham số đầu vào
@@ -386,58 +393,5 @@ namespace MISA.WEB08.AMIS.DL
                 return OJ;
             }
         }
-
-        /// <summary>
-        /// Hàm cập nhật mã tự sinh
-        /// Createby: Nguyễn Văn Cương 20/11/2022
-        /// </summary>
-        /// <param name="prefix"></param>
-        /// <param name="number"></param>
-        /// <param name="last"></param>
-        public void SaveCode(string prefix, string number, string last)
-        {
-            var parameters = new DynamicParameters();
-            parameters.Add("v_TableName", typeof(T).Name);
-            parameters.Add("v_Prefix", prefix);
-            parameters.Add("v_Number", number);
-            parameters.Add("v_Last", last);
-            parameters.Add("v_LengthNumber", number.Length);
-            string connectionString = DataContext.MySqlConnectionString;
-            using (var mysqlConnection = new MySqlConnection(connectionString))
-            {
-                //khai bao ten stored produre
-                string storeProdureName = Resource.Proc_UpdateCode;
-
-                //Thực hiện gọi vào DB
-                mysqlConnection.Execute(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-
-
-            }
-        }
-
-        /// <summary>
-        /// Hàm kết nối DB để lấy mã tự sinh
-        /// Createby: Nguyễn Văn Cương 20/11/2022
-        /// </summary>
-        /// <returns></returns>
-        public object GetNewCode()
-        {
-            var parameters = new DynamicParameters();
-            parameters.Add("v_TableName", typeof(T).Name);
-
-            //Khởi tạo kết nối với MySQl
-            string connectionString = DataContext.MySqlConnectionString;
-            using (var mysqlConnection = new MySqlConnection(connectionString))
-            {
-                //khai bao ten stored produre
-                string storeProdureName = Resource.Proc_GetNewCode;
-
-                //Thực hiện gọi vào DB
-                var newCode = mysqlConnection.QueryFirstOrDefault(storeProdureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-                return newCode;
-            };
-        }
-
-
     }
 }

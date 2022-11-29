@@ -47,7 +47,7 @@ namespace MISA.WEB08.AMIS.BL
         /// Hàm xuất danh sách nhân viên ra Excel
         /// Createby: Nguyễn Văn Cương 15/10/2022
         /// </summary>
-        /// <returns></returns>
+        /// <returns>download excel</returns>
         public Byte[] GetEmployeeExcel()
         {
             var employees = _employeeDL.GetEmployeeExcel();

@@ -89,6 +89,7 @@ export default {
         Tabname: String,
         BridingSupplyCode: String,
         BridingSupplyID: String,
+        Defaul: Boolean,
     },
     methods:{
         /**
@@ -96,15 +97,30 @@ export default {
           Nguyễn Văn Cương 11/11/2022
          */
          ResetCombobox(){
+           //reset các combobox thường
             if(this.Reset == true){
-              this.RecordSle[this.label] = "Tất cả";
-
-              this.RecordSle[this.value] = 0;
-              this.$emit("ChangeReset");
+              if(this.Filter){
+                this.RecordSle[this.label] = "Tất cả";
+                this.RecordSle[this.value] = 0;
+                this.$emit("ChangeReset");
+              }else{
+                this.RecordSle[this.label] = "";
+                this.RecordSle[this.value] = null;
+                this.$emit("ChangeReset");
+              }
+              
             }
+            //reset combobox nhóm vật tư
             if(this.ResetSupply == true){
-              this.ComboMutiItem = [];
-              this.$emit("ChangeReset");
+              if(this.Filter){
+                this.ComboMutiItem = [];
+                this.$emit("ChangeReset");
+              }
+              else{
+                this.BrindingMuti();
+                this.$emit("ChangeReset");
+              }
+              
             }
          },
 
@@ -159,7 +175,11 @@ export default {
             //lưu index của giá trị
             this.indexComboMutiItem = this.ComboMutiItem.indexOf(muti[this.code]);
             console.log(this.ComboMutiItem);
-            this.$emit("get-recordvalue", muti[this.value], this.valuePost);
+            this.SaveID = muti[this.value];
+            if(!this.MutiID.includes(this.SaveID)){
+              this.MutiID.push(this.SaveID);
+            }
+            this.$emit("get-recordvalue",this.MutiID, this.valuePost);
             
           }else{
             //chưa có thì chọn tiếp
@@ -170,15 +190,24 @@ export default {
           
         },
 
+        /**
+        Hàm hiển thị code nhóm vật tư hàng hóa khi mở popup
+        Nguyễn Văn Cương 21/11/2022
+         */
         BrindingMuti(){
           if(this.BridingSupplyCode){
             if(!this.ComboMutiItem.includes(this.BridingSupplyCode)){
-              this.ComboMutiItem.push(this.BridingSupplyCode);
+              this.ComboMutiItem = this.BridingSupplyCode;
+            }
+            if(this.BridingSupplyID && this.SaveID == null){
+              this.$emit("get-recordvalue", this.BridingSupplyID, this.valuePost);
             }
           }
-          if(this.BridingSupplyID){
-            this.$emit("get-recordvalue", this.BridingSupplyID, this.valuePost);
+          if(this.Defaul && !this.Comboboxmodel){
+            this.RecordSle[this.label] = "Chưa xác định";
+            this.$emit("get-recordvalue", 0, this.valuePost, this.Tabname, this.inputfilter); 
           }
+
         },
 
         /**
@@ -276,7 +305,10 @@ export default {
         style: {},
         //lưu trạng thái xóa combobox
         sta: true,
-
+        //lưu lại id khi chọn
+        SaveID: null,
+        //mảng nhiều phần tử khi chọn
+        MutiID: [],
       }
     }
 }
@@ -483,7 +515,7 @@ export default {
   padding: 2px 3px 2px 5px;
   margin-top: 3px;
   margin-left: 4px;
-  min-width: 50px;
+  min-width: 33px;
   overflow: hidden;
   display: flex;
   cursor: pointer;

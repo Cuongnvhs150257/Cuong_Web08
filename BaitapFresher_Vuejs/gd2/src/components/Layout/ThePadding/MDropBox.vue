@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import paddingjs from '../../../resouce/padding';
 export default {
   mounted() {
     window.addEventListener('mousedown', this.clickEventInterrupt);
@@ -41,9 +42,9 @@ export default {
         },
         Rotate(){
         if(this.OpenDropbox == true){
-          this.style = "transition: linear 0.2s; transform: rotate(180deg);"
+          this.style = paddingjs.stylebtnCombo_1;
         }else{
-          this.style = "transition: linear 0.2s; transform: rotate(0deg);"
+          this.style = paddingjs.stylebtnCombo_2;
         }
         },
          clickEventInterrupt(event){
@@ -51,7 +52,7 @@ export default {
             const isClick = this.$refs.dropbox.contains(event.target);
           if(!isClick){
             this.OpenDropbox = false;
-            this.style = "transition: linear 0.2s; transform: rotate(0deg);"
+            this.style = paddingjs.stylebtnCombo_2;
           }
         }
         

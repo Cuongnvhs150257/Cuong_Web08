@@ -21,10 +21,38 @@ namespace MISA.WEB08.AMIS.DL
         public IEnumerable<Product> GetProductExcel();
 
         /// <summary>
-        /// Hàm lấy tổng
-        /// Nguyễn Văn Cương 21/11/2022
+        /// Hàm thêm danh sách hàng hóa
+        /// Nguyễn Văn Cương 25/11/2022
+        /// </summary>
+        /// <param name="record"></param>
+        /// <param name="RecordIDMuti"></param>
+        /// <returns></returns>
+        public Guid InsertMutiRecords(Product record, List<object>? RecordIDMuti);
+
+        /// <summary>
+        /// Hàm cập nhật danh sách hàng hóa
+        /// Nguyễn Văn Cương 25/11/2022
+        /// </summary>
+        /// <param name="record"></param>
+        /// <param name="RecordIDUpdateMuti"></param>
+        /// <returns></returns>
+        public int UpdateMutiRecords(Product record, Guid productid, List<object>? RecordIDUpdateMuti, List<object>? GroupIDMuti);
+
+        /// <summary>
+        /// Hàm cập nhật mã tự sinh
+        /// Createby: Nguyễn Văn Cương 20/11/2022
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="number"></param>
+        /// <param name="last"></param>
+        public void SaveCode(string prefix, string number, string last);
+
+
+        /// <summary>
+        /// Hàm kết nối DB để lấy mã tự sinh
+        /// Createby: Nguyễn Văn Cương 20/11/2022
         /// </summary>
         /// <returns></returns>
-        public object GetSum();
+        public object GetNewCode();
     }
 }

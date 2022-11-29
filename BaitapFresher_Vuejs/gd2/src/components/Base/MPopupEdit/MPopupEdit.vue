@@ -128,14 +128,24 @@ export default {
       MPopupNotification,
   },
   props: {
+    //tiêu đề popup
     PopupEdit_label: String,
+    //trạng thái input
     inputShow: Boolean,
+    //chiều cao popup
     height: String,
+    //chiều dài popup
     width: String,
+    //record đang chọn
     recordsSelected: Object,
+    //mảng 
     recordvalue: [],
+    //url
     baseURL: String,
+    //trạng thái mở popup
     detailFormMode: Number,
+    //loại validate
+    ValidateUnit: Boolean,
 
   },
   created(){
@@ -365,28 +375,34 @@ export default {
     validateEmpty() {
       var validate = true; //dữ liệu cần thiết không trống
       //kiểm tra trường cần thiết có trống không
-      if (
-        !this.Records[this.recordvalue[1].value] ||
-        !this.Records[this.recordvalue[2].value]) 
-        {
-        //mở popup thông báo
-        this.showNotification(this.NotifiStatus == true);
+      if (!this.Records[this.recordvalue[1].value] ||!this.Records[this.recordvalue[2].value]){
         //mã nhân viên trống
         if (!this.Records[this.recordvalue[1].value]) {
+          //mở popup thông báo
+          this.showNotification(this.NotifiStatus == true);
+
           this.errors = notification.EmployeeCodeNull;
           //đỏ input mã
           this.inValue_Code = false;
           //hiển thị toolTip
           this.Spanempty = true;
+          //dữ liệu cần thiết trống
+          validate = false; 
         }
-        if (!this.Records[this.recordvalue[2].value]) {
+        if (!this.Records[this.recordvalue[2].value] && this.ValidateUnit == false) {
+
+          //mở popup thông báo
+          this.showNotification(this.NotifiStatus == true);
+
           this.errors = notification.EmployeeNameNull;
           //đỏ input đơn vị
           this.inValue_Name = false;
           //hiển thị toolTip
           this.Spanempty = true;
+          //dữ liệu cần thiết trống
+          validate = false; 
         }
-        validate = false; //dữ liệu cần thiết trống
+        
       } else {
         this.Spanempty = false;
       }

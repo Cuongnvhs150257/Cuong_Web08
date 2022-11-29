@@ -28,7 +28,7 @@
             <span class="product-tooltip">Bấm vào để lọc</span>
           </div>
           <div class="product-overview-ri-left">
-            <div class="product-overview-ri-left-top">0</div>
+            <div class="product-overview-ri-left-top">{{FilterStatus_out_stock}}</div>
             <div class="product-overview-ri-left-center">Hàng hóa</div>
             <div class="product-overview-ri-left-bottom">SẮP HẾT HÀNG</div>
           </div>
@@ -38,7 +38,7 @@
              <span class="product-tooltip">Bấm vào để lọc</span>
            </div>
           <div class="product-overview-le-left">
-            <div class="product-overview-le-left-top">11</div>
+            <div class="product-overview-le-left-top">{{FilterStatus_not_exist}}</div>
             <div class="product-overview-ri-left-center">Hàng hóa</div>
             <div class="product-overview-ri-left-bottom">HẾT HÀNG</div>
           </div>
@@ -49,7 +49,7 @@
       <div class="product-content-toolbar">
         <div class="product-content-toolbar-left">
           <div class="product-content-toolbar-left-icon"></div>
-          <div class="product-content-toolbar-left-btn"  @click="openPopupAsk">
+          <div class="product-content-toolbar-left-btn"  @click="openDropDelete">
             <MButton :ButtonCss="'btn-button-actionMutile'" :text="'Thực hiện hàng loạt'" :iconcss="'icon-filter'" /></div>
           <div class="product-content-toolbar-left-btn" @click="showFilter(1)" ><MButton :ButtonCss="'btn-button-filter'" :iconcss="'icon-filter'" :text="'Lọc'"/></div>
           <div class="toolbar-filter-label" v-for="(item, index) in BindingFilterValue" :key="item">
@@ -67,14 +67,20 @@
           <button type="button" :class="ShowOverviewCss" @click="showOverview"></button>
         </div>
       </div>
-      
+      <div class="deletedrop" v-if="isShowDropItemDelete" ref="dropdelete">
+        <div class="deletedrop-item">Sửa hàng loạt</div>
+        <div class="deletedrop-item" @click="openPopupAsk">Xóa</div>
+        <div class="deletedrop-item">Gộp</div>
+      </div>
       
       <MTable 
         @custom-open-dbclick="openPopup"
-        :RecordsLoad="ProductsTable"
+        :RecordsLoad="TableValues"
         @data-load-delete="loadData"
         @get-List-Checkbox="getListProduct"
         :closeSelectedAll="closeSelectedAll"
+        :SumQuantity="SumQuantity"
+        :SumExistent="SumExistent"
         :thListTable="thList"
         :tdListTable="tdList"
         :tfoot="true"
@@ -90,13 +96,14 @@
         :TotalCount="TotalCount"
         @filter-padding="getLimitValue"
         @offset-value="getOffSetValue"
+        :DeleteMuti="DeleteMutiPadding"
       />
     </div>
     <TheProductSelect v-if="isShowPopupSelect" @close-popup-selete="closePopupSelect" @open-product-popup="openPopup" :ProductID="SaveProductID" />
 
     <TheProductPopup v-if="isShow" @show-toast="showToastPopup" :BridingCode="SaveSupplyCode" :BridingID="SaveSupplyID" @data-load="loadData" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
     <div ref="filter">
-    <MFilter :typeInput="InputType" v-if="isShowFilter" @get-Typesoft="getTypesoft" @start-Filter="loadData" @get-Keyword-Header="getKeywordHeader" @get-Filter-Header="getFilterHeader" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
+    <MFilter :typeInput="InputType" :Label="FilterLabel" v-if="isShowFilter" @get-Typesoft="getTypesoft" @start-Filter="loadData" @get-Keyword-Header="getKeywordHeader" @get-Filter-Header="getFilterHeader" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
     </div>
     <MPopupNotification v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteMultiple" :MPopupN = 2 />
     <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
@@ -116,6 +123,8 @@ import MPopupNotification from '../../components/Base/MPopupNotification/MPopupN
 import TheProductSelect from '../ProductPage/ProductPopup/TheProductSelect.vue';
 import TheProductPopup from '../ProductPage/ProductPopup/TheProductPopup.vue';
 import MFilter from '../../components/Base/MFilter/MFilter.vue';
+import productjs from '../../resouce/product';
+import formatjs from '../../resouce/format';
 import configs from '../../configs/index';
 import enums from '../../resouce/enums';
 import toast from '../../resouce/toast';
@@ -130,7 +139,7 @@ export default {
     MTable,
     TheProductSelect,
     TheProductPopup,
-    MPopupNotification
+    MPopupNotification,
   },
   
   methods: {
@@ -158,12 +167,25 @@ export default {
     * Nguyễn Văn Cương 01/10/2022
    */
    clickEventInterrupt(event){
-    //lưu vị trí con chuột left, top
+
     if(this.isShowFilter == true){
     //kiểm tra xem con chuột có click vào dropitem
     const isClick = this.$refs.filter.contains(event.target);
      if(!isClick){
       this.isShowFilter = false;
+        if(this.FilterMode == 2 && this.FilterKey == null){
+          const typesoft = this.TypeSort.indexOf(this.SaveTypeFilter);
+          if (typesoft > -1) {
+             //loại bỏ phần tử khỏi mảng
+            this.TypeSort.splice(typesoft, 1); 
+            }
+        }
+      }
+    }
+    if(this.isShowDropItemDelete){
+      const isClick = this.$refs.dropdelete.contains(event.target);
+      if(!isClick){
+        this.isShowDropItemDelete = false;
       }
     }
   },  
@@ -185,11 +207,11 @@ export default {
     showOverview(){
       this.isShowOverview = !this.isShowOverview;
       if(this.isShowOverview == true){
-         this.ShowOverviewCss = "product-toolbar-hideoverview";
-         this.TableStyle = "height: calc(100% - 270px);"
+         this.ShowOverviewCss = productjs.ShowOverviewCss_1;
+         this.TableStyle = productjs.TableStyle_1;
       }else{
-        this.ShowOverviewCss = "product-toolbar-hideoverview b";
-        this.TableStyle = "height: calc(100% - 160px); margin-top: 20px;" 
+        this.ShowOverviewCss = productjs.ShowOverviewCss_2;
+        this.TableStyle = productjs.TableStyle_2; 
       }
     },
 
@@ -198,37 +220,70 @@ export default {
      * Nguyễn Văn Cương 11/11/2022
      */
     showFilter(mode, inputfil, type, filterlabel, posY, posX){
+
         this.FilterMode = mode;
+        //lưu lại loại input của filter
         this.InputType = inputfil;
+        //thêm vào mảng
         if(!this.TypeSort.includes(type) && type != null){
           this.TypeSort.push(type);
         }
+        this.SaveTypeFilter = type;
+        //lưu lại tên trường đang filter
         this.FilterLabel = filterlabel;
+        //lấy vị trí hiển thị filter
         posX = posX - 200;
         posY = posY + 20;
         this.isShowFilter = !this.isShowFilter;
+        //lưu vị trí hiển thị filter
         this.StyleFilter = "left: " + posX + "px;" + "top: " + posY + "px;";
     },
+
+    /**
+     * Hàm lấy tên trường muốn filter
+     * Nguyễn Văn Cương 16/11/2022
+     */
     getTypesoft(type, filterlabel, inputfilter){
       if(!this.TypeSort.includes(type)){
         this.TypeSort.push(type);
       }
+      //lưu lại tên trường đang filter
       this.FilterLabel = filterlabel;
+      //lưu lại loại input của filter
       this.InputType = inputfilter;
     },
+
+    /**
+     * Hàm đóng filter
+     * Nguyễn Văn Cương 18/11/2022
+     */
     closeFilter(){
       this.isShowFilter = false;
       this.StartLoad();
     },
 
+    /***
+     * Hàm hiển thị những filter đang hoạt động 
+     * Nguyễn Văn Cương 18/11/2022
+     */
     BindingFilter(){
-      if(!this.BindingFilterValue.includes(this.FilterLabel) && this.FilterLabel != null){
+      if(this.WhereValue){
+        this.FilterLabel = null;
+      }
+      if(!this.BindingFilterValue.includes(this.FilterLabel) && this.FilterLabel != null && this.FilterKey != null){
+        //trường hợp hiển thị thông thường
         if(this.InputType == 1){
           this.BindingFilterValue.push(this.FilterLabel + ": " + this.FilterKey);
+        //phải format tính chất
         }else if(this.InputType == 2){
           this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatNatureRecord(this.FilterKey));
+        //phải format thuế
         }else if(this.InputType == 3){
           this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatTaxRecord(this.FilterKey));
+        //phải format trạng thái
+        }else if(this.InputType == 4){
+          this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatStatusRecord(this.FilterKey));
+        //phải format trạng thái
         }else{
           this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatFilterStatusRecord(this.FilterKey));
         }
@@ -244,20 +299,20 @@ export default {
 
       //giá trị 1 là hoạt động
        if(status == enums.ACTIVE){
-         return status = "Đang sử dụng";
+         return status = formatjs.Status_Active;
       //giá trị 2 là ngưng hoạt động
        }else if(status == enums.UNACTIVE){
-         return status = "Ngưng sử dụng";
+         return status = formatjs.Status_UnActive;
        //giá trị 0 là chưa xác định
        }else if (status == enums.UNKNOW){
-         return status = "Chưa xác định";
+         return status = formatjs.Status_Unknow;
       //không có cho thành rỗng
        }else{
          return status = "";
        }
     },
 
-        /**
+    /**
      * hàm format trạng thái
      * Nguyễn Văn Cương 01/10/2022
      */
@@ -265,13 +320,16 @@ export default {
 
       //giá trị 1 là hoạt động
        if(status == enums.ACTIVE){
-         return status = "Còn tồn";
+         return status = formatjs.FilterStatus_exist;
       //giá trị 2 là ngưng hoạt động
        }else if(status == enums.UNACTIVE){
-         return status = "Sắp hết hàng";
+         return status = formatjs.FilterStatus_out_stock;
        //giá trị 0 là chưa xác định
+       }else if (status == enums.Out_of_stock){
+         return status = formatjs.FilterStatus_not_exist;
+      //không có cho thành rỗng
        }else if (status == enums.UNKNOW){
-         return status = "Hết hàng";
+         return status = formatjs.Status_Unknow;
       //không có cho thành rỗng
        }else{
          return status = "";
@@ -280,19 +338,19 @@ export default {
 
     /**
      * hàm format thuế
-     * Nguyễn Văn Cương 01/10/2022
+     * Nguyễn Văn Cương 01/11/2022
      */
     formatTaxRecord(status){
 
       //giá trị 1 là hoạt động
        if(status == enums.ACTIVE){
-         return status = "Có giảm thuế";
+         return status = formatjs.Tax_Active;
       //giá trị 2 là ngưng hoạt động
        }else if(status == enums.UNACTIVE){
-         return status = "Không giảm thuế";
+         return status = formatjs.Tax_UnActive;
        //giá trị 0 là chưa xác định
        }else if (status == enums.UNKNOW){
-         return status = "Chưa xác định";
+         return status = formatjs.Tax_UnKnow;
       //không có cho thành rỗng
        }else{
          return status = "";
@@ -306,19 +364,19 @@ export default {
     formatNatureRecord(value){
        //giá trị 1 là nữ 
        if(value == enums.Product){
-         return value = "Hàng hóa";
+         return value = formatjs.Nature_HH;
       //giá trị 2 là nam
        }else if(value == enums.Service){
-         return value = "Dịch vụ";
+         return value = formatjs.Nature_DV;
        //giá trị 0 là khác
        }else if (value == enums.Material){
-         return value = "Nguyên vật liệu";
+         return value = formatjs.Nature_NVL;
       //không có cho thành rỗng
        }else if (value == enums.FiProduct){
-         return value = "Thành phẩm";
+         return value = formatjs.Nature_TP;
       //không có cho thành rỗng
        }else if (value == enums.Tools){
-         return value = "Công cụ dụng cụ";
+         return value = formatjs.Nature_CCDC;
       //không có cho thành rỗng
        }else{
          return value = "";
@@ -336,6 +394,7 @@ export default {
         //loại bỏ phần tử khỏi mảng
         this.BindingFilterValue.splice(index, 1); 
       }
+      //tìm phần từ trang mảng keyword theo value
       for (let i = 0; i < this.Keyword.length; i++) {
         if(indexFilterValue == i){
           const key = this.Keyword.indexOf(this.Keyword[i]);
@@ -346,6 +405,7 @@ export default {
           }
         }
       }
+      //tìm phần từ trang mảng TypeSort theo value
       for (let i = 0; i < this.TypeSort.length; i++) {
         if(indexFilterValue == i){
           const typesoft = this.TypeSort.indexOf(this.TypeSort[i]);
@@ -388,30 +448,11 @@ export default {
     },
 
     /**
-     * Hàm lấy mã nhân viên mới
-     * Nguyễn Văn Cương 01/10/2022
-     */
-    async getNewCode() {
-      await fetch(configs.baseURLProduct + "getmax", {
-        method: "GET", //lấy mã nhân viên cao nhất
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          var s = JSON.stringify(data);
-          var d = s.replace(/[^0-9]*/g, ""); //lấy mã nhân viên cao nhất, loại bỏ dữ liệu thừa
-          this.Products.ProductCode = d;
-        })
-        .catch((res) => {
-          console.log(res);
-        });
-    },
-
-    /**
      * Hàm lấy mã  mới
      * Nguyễn Văn Cương 20/11/2022
      */
     async getCodeTable() {
-      await fetch(configs.baseURLProduct + "getnewcode", {
+      await fetch(configs.baseURLProduct + productjs.getnewcode, {
         method: "GET", //lấy mã nhân viên cao nhất
       })
         .then((response) => response.json())
@@ -425,21 +466,23 @@ export default {
         });
     },
     getSupplyCode(property){
+        this.SaveSupplyCode = [];
+        this.SaveSupplyID = [];
         if(property == 1){
-          this.SaveSupplyCode = "HH";
-          this.SaveSupplyID = "7a64f0a9-508d-278e-0d4c-16e575b61049";
+          this.SaveSupplyCode.push(productjs.SupplyCode_HH);
+          this.SaveSupplyID.push(productjs.SupplyID_HH);
         }else if(property == 2){
-          this.SaveSupplyCode = "DV";
-          this.SaveSupplyID = "424e92bd-2384-4a08-80ca-c511c1a6260d";
+          this.SaveSupplyCode = productjs.SupplyCode_DV;
+          this.SaveSupplyID.push(productjs.SupplyID_DV);
         }else if(property == 3){
-          this.SaveSupplyCode = "NVL";
-          this.SaveSupplyID = "e710150d-20c8-46a9-bba5-b40f62e41180";
+          this.SaveSupplyCode = productjs.SupplyCode_NVL;
+          this.SaveSupplyID.push(productjs.SupplyID_NVL);
         }else if(property == 4){
-          this.SaveSupplyCode = "TP";
-          this.SaveSupplyID = "7a64f0a9-508d-278e-0d4c-16e575b61049";
+          this.SaveSupplyCode = productjs.SupplyCode_TP;
+          this.SaveSupplyID.push(productjs.SupplyID_TP);
         }else{
-          this.SaveSupplyCode = "CDDC";
-          this.SaveSupplyID = "100e1add-24b8-4d56-bb94-78396c967e2e";
+          this.SaveSupplyCode = productjs.SupplyCode_CDCC;
+          this.SaveSupplyID.push(productjs.SupplyID_CDCC);
         }
     },
 
@@ -457,12 +500,16 @@ export default {
           .then(async (data) => {
             this.LoadingShow = false; //Đóng loading
             this.Products = data;
-            if (detailFormMode == 1) {
-              this.Products.ProductCode = "";
+            //nhân bản
+            if(detailFormMode == 1){
               await this.getCodeTable();
               await this.getSupplyCode(value);
             }
             this.Mode = detailFormMode;
+            if (this.Products.SupplyCode) {
+              this.Products.SupplyCode =
+              this.Products.SupplyCode.split(",");
+            }
             this.SaveSupplyCode = this.Products.SupplyCode;
             console.log(this.Mode);
             this.isShow = true; //Hiển thị popup
@@ -489,15 +536,25 @@ export default {
         this.isShow = true;
       }
     },
+
+    /**
+    Hàm mở dropbox xóa
+    Nguyễn Văn Cương 23/11/2022
+     */
+    openDropDelete(){
+      if(this.listProDelete.length > 1){
+        this.isShowDropItemDelete = !this.isShowDropItemDelete;
+      }
+      if(this.listProDelete.length == 0 || this.listProDelete == []){
+        this.isShowDropItemDelete = false;
+      }
+    },
     /** 
      * hàm mở popup hỏi người dùng có xóa không
      *  Nguyễn Văn Cương 25/09/2022
     */
-    openPopupAsk(){
-        if(this.listProDelete.length > 1){
-          console.log(this.listProDelete);
-          this.isShowAskDelete = true;
-        } 
+    openPopupAsk(){  
+      this.isShowAskDelete = true;
     },
     /**
      * hàm đóng popup thêm nhân viên
@@ -581,10 +638,11 @@ export default {
           this.ToastMess_color = toast.ToastMess_color_faild;
           this.ToastMess = toast.ToastMessDeleteMuti_faild;
         }
+        this.timeout = null;
         this.closeToast();
     },
     /**
-    Hàm hiện thị thông báo cho popup nhân viên
+    Hàm hiện thị thông báo cho popup 
     Nguyễn Văn Cương 15/10/2022
      */
     showToastPopup(Toastcssicon, Toastcss, ToastMess_color, ToastMess){
@@ -593,9 +651,14 @@ export default {
         this.Toastcss = Toastcss;
         this.ToastMess_color = ToastMess_color;
         this.ToastMess = ToastMess;
+        this.timeout = null;
         this.closeToast();
     },
-
+    
+    /***
+     * Hàm tự động đóng toast
+     * Nguyễn Văn Cương 1/11/2022
+     */
     closeToast(){
       if(this.timeout){
         clearTimeout(this.timeout)
@@ -615,7 +678,7 @@ export default {
     async deleteMultiple() {
       var listD = this.listProDelete;
       
-      await fetch(configs.baseURLProduct + "batch-delete", {
+      await fetch(configs.baseURLProduct + productjs.batchdelete, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -634,6 +697,7 @@ export default {
               //load lại data
               this.ClosePopupAsk();
               this.OffSetValue = 0;
+              this.DeleteMutiPadding = true;
               this.loadData();
               this.closeSelectedAll = true;
               this.ShowToast(this.ToastStatus = true);
@@ -657,10 +721,52 @@ export default {
       this.Sort = 0;
       this.TypeSort = [];
       this.Keyword = [];
+      this.FilterKey = null;
       this.FilterLabel = null;
       this.BindingFilterValue = [];
       this.loadData();
     },
+
+    /**
+     * Hàm xóa giá trị tình trạng tồn kho
+     * Nguyễn Văn Cương 29/11/2022
+     */
+    ResetStatusWarehouse(){
+      this.FilterStatus_out_stock = 0;
+      this.ProductStatus_out_stock = [];
+      this.FilterStatus_exist = 0;
+      this.ProductStatus_exist = [];
+      this.FilterStatus_not_exist = 0;
+      this.ProductStatus_not_exist = [];
+    },
+
+    /**
+     * Hàm hiển thị dữ liệu lên bảng
+     * Nguyễn Văn Cương 29/11/2022
+     */
+    BridingTable(){
+      if(this.Sort == 5){
+        switch (this.FilterKey) {
+          case 0:
+            this.TableValues = this.ProductsTable;
+            break;
+          case 1:
+            this.TableValues = this.ProductStatus_exist;
+            break;
+          case 2: 
+            this.TableValues = this.ProductStatus_out_stock;
+            break;
+          case 3: 
+            this.TableValues = this.ProductStatus_not_exist;
+            break;
+          default:
+            break;
+        }
+      }else{
+        this.TableValues = this.ProductsTable;
+      }
+    },
+
     /**
      * hàm load dữ liệu
      * Nguyễn Văn Cương 15/09/2022
@@ -668,6 +774,7 @@ export default {
     loadData() {
       console.log(1);
       this.LoadingShow = true;
+      this.ResetStatusWarehouse();
       var limit = this.LimitValue; //lưu số lượng bản ghi
       if (limit == null) {
         //nếu không có, mặc định là 10
@@ -704,8 +811,13 @@ export default {
       })
         .then((res) => res.json())
         .then((data) => {
-          this.ProductsTable = data; //lưu dữ liệu
+          this.ProductsTable = data.data; //lưu dữ liệu
+          this.CaculateWarehouseStatus();
+          this.BridingTable();
           this.TotalCount = data.totalCount;
+          this.SumQuantity = data.sumQuantity;
+          this.SumExistent = data.sumExistent;
+          this.DeleteMutiPadding = false;
           this.BindingFilter();
           this.LoadingShow = false; //tắt loading
         })
@@ -723,7 +835,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURLProduct + "get-products-excel",{method: "GET"})
+        fetch(configs.baseURLProduct + productjs.getproductexcel,{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a
@@ -761,17 +873,45 @@ export default {
       this.isShowNotification = false;
       this.validate = false;
     },
+    /**
+     * Hàm tính toán tình trạng tồn kho
+     * Nguyễn Văn Cương 28/11/2022
+     */
+     CaculateWarehouseStatus(){
+        for (let i = 0; i < this.ProductsTable.length; i++) {
+            //trường hợp sắp hết hàng khi số lượng tồn tối thiểu lớn hơn số lượng tồn
+            if(this.ProductsTable[i].amount > this.ProductsTable[i].quantityStock){
+              this.FilterStatus_out_stock = this.FilterStatus_out_stock + 1;
+              this.ProductStatus_out_stock.push(this.ProductsTable[i]);
+
+            //trường hợp hết hàng khi số lượng tồn bằng 0
+            }else if(this.ProductsTable[i].quantityStock == null){
+              this.FilterStatus_not_exist = this.FilterStatus_not_exist  + 1;
+              this.ProductStatus_not_exist.push(this.ProductsTable[i]);
+
+            //trường hợp còn tồn khi số lượng tồn tối thiểu nhỏ hơn số lượng tồn
+            }else{
+              this.FilterStatus_exist = this.FilterStatus_exist  + 1;
+              this.ProductStatus_exist.push(this.ProductsTable[i]);
+            }
+        }
+        
+     },
   },
   created() {
     this.loadData();
   },
   mounted(){
+    //gọi hàm phím tắt
       window.addEventListener('keyup', this.handleEventInterrupt);
+      //gọi hàm clickoutsite
       window.addEventListener('mousedown', this.clickEventInterrupt);
       
   },
   unmounted(){
+    //xóa hàm phím tắt
       window.removeEventListener('keyup', this.handleEventInterrupt);
+      //xóa hàm clickoutsite
       window.removeEventListener('mouseup', this.clickEventInterrupt);
   },
 
@@ -787,8 +927,10 @@ export default {
       LoadingShow: false,
        //lưu giá trị nhân viên
       Products: null,
-      //lưu giá trị bảng nhân viên
+      //lưu giá trị bảng hàng hóa
       ProductsTable: null, 
+      //lưu giá trị để hiển thị lên table
+      TableValues: null,
       //lưu giá trị số lượng trang
       LimitValue: null, 
       //lưu giá trị bản ghi hiện tại
@@ -827,6 +969,10 @@ export default {
       ButtonMode: 1,
       //lưu tổng trang mặc định
       TotalCount: 10,
+      //lưu tổng số Số lượng tồn mặc định
+      SumQuantity: 0,
+      //lưu tổng số Giá trị tồn tối thiểu
+      SumExistent: 0,
       //hiển thị overview
       isShowOverview: true,
       //lưu css overview
@@ -851,17 +997,38 @@ export default {
       BindingFilterValue: [],
       //lưu tên head muốn filter
       FilterLabel: null,
+      //lưu keyword filter
       FilterKey: null,
-      SaveSupplyCode: "",
-      SaveSupplyID: null,
+      //lưu lại code nhóm vật tư hàng hóa
+      SaveSupplyCode: [],
+      //lưu lại id nhóm vật tư hàng hóa
+      SaveSupplyID: [],
+      //trạng thái hiển thị dropbox xóa
+      isShowDropItemDelete: false,
+      //lưu trạng thái xóa nhiều
+      DeleteMutiPadding: false,
+      //lưu tên trường filter
+      SaveTypeFilter: null,
+      //lưu số lượng còn tồn
+      FilterStatus_exist: 0,
+      //lưu mảng số lượng tồn kho
+      ProductStatus_exist: [],
+      //lưu số lượng sắp hết hàng
+      FilterStatus_out_stock: 0,
+      //lưu mảng số lượng sắp hết hàng
+      ProductStatus_out_stock: [],
+      //lưu số lượng hết hàng
+      FilterStatus_not_exist: 0,
+      //lưu mảng số lượng hết hàng
+      ProductStatus_not_exist: [],
       //lưu giá trị tdhead của table
       thList: [
         {style: "min-width: 150px;", label: "TÊN", filterlabel: "Tên", property: "ProductName", inputfilter: 1},
         {style: "min-width: 100px;", label: "MÃ", filterlabel: "Mã", property: "ProductCode", inputfilter: 1},
         {style: "min-width: 100px;", label: "GIẢM THUẾ THEO NQ 43", filterlabel: "Giảm thuế theo NQ 43", class: "tab", span: "Trạng thái tra cứu giảm thuế theo Nghị quyết 43/2022/QH15", property: "TaxReduction", inputfilter: 3 },
         {style: "min-width: 100px;", label: "TÍNH CHẤT",filterlabel: "Tính chất", property: "Nature", inputfilter: 2},
-        {style: "min-width: 100px;", label: "NHÓM VTHH", filterlabel: "Nhóm VTHH", class: "tab-b", span: "Nhóm vật tư hàng hóa", property: "SupplyName", inputfilter: 1},
-        {style: "min-width: 100px;", label: "ĐƠN VỊ TÍNH", filterlabel: "Đơn vị tính", property: "UnitCalculateValue", inputfilter: 1},
+        {style: "min-width: 100px;", label: "NHÓM VTHH", filterlabel: "Nhóm VTHH", class: "tab-b", span: "Nhóm vật tư hàng hóa", property: "s.SupplyCode", inputfilter: 1},
+        {style: "min-width: 100px;", label: "ĐƠN VỊ TÍNH", filterlabel: "Đơn vị tính", property: "u.UnitCalculateValue", inputfilter: 1},
         {style: "min-width: 115px;", label: "SỐ LƯỢNG TỒN", filterlabel: "Số lượng tồn", class: "tab-th-amount", property: "QuantityStock" , inputfilter: 1},
         {style: "min-width: 100px;", label: "GIÁ TRỊ TỒN", filterlabel: "Giá trị tồn", class: "tab-th-amount",property: "ExistentialValue", inputfilter: 1},
         {style: "min-width: 100px;", label: "THỜI GIAN BẢO HÀNH", filterlabel: "Thời gian bảo hành", property: "Insurance", inputfilter: 1},
@@ -872,7 +1039,7 @@ export default {
       {property: "productCode"},
       {property: "taxReduction", fun: 4}, 
       {property: "nature", fun: 5},
-      {property: "supplyName"},
+      {property: "supplyCode"},
       {property: "unitCalculateValue"},
       {property: "quantityStock", fun: 6, class: "product-tab-th-amount"},
       {property: "existentialValue", fun: 6, class: "product-tab-th-amount"},
@@ -1162,5 +1329,26 @@ export default {
   height: 15px;
 }.label-filter.delete:hover{
   text-decoration: underline;
+}.deletedrop{
+    width: 100px;
+    height: 80px;
+    position: absolute;
+    z-index: 10;
+    background-color: #fff;
+    border: 1px solid #bbbbbb;
+    border-radius: 4px;
+    text-align: left;
+    top: 275px;
+    left: 129px;
+    font-size: 13px;
+    
+}.deletedrop-item{
+  width: 93%;
+  height: 25px;
+  padding-top: 2px;
+  padding-left: 7px;
+}.deletedrop-item:hover{
+  background-color: #E8E9EC;
+  
 }
 </style>

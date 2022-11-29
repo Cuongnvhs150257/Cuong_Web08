@@ -14,7 +14,7 @@
   <div class="filterdrop" v-if="MDropSta == 2">
     <div class="filterdrop-data"  v-for="item in FilterList" :key="item" ref="filterdrop">
       <div class="filterdrop-item" @click="getFilter(item.comparisonType, item.label)"  >{{item.label}}</div>
-    </div>
+  </div>
     
   </div>
 
@@ -30,8 +30,11 @@ export default {
     window.removeEventListener('mouseup', this.clickEventInterrupt);
   },
   props:{
+    //style của dropitem
     Drstyle: String,
+    //loại dropitem
     MDropSta: Number,
+    //mảng chứa các loại filter
     FilterList: [],
   },
   components:{
@@ -187,5 +190,12 @@ export default {
   color: #50b83c;
 }.filterdrop-item.i8{
   height: 23px;
+}.deletedrop{
+  width: 150px;
+  height: 50px;
+  background-color: #fff;
+  z-index: 10;
+  left: 0;
+  border: 1px solid #bbb;
 }
 </style>

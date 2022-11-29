@@ -1,5 +1,5 @@
 <template>
-        <input :type="typeInput" class="item-input" :class="{ 'item-input-red': !inValue, 'item-input-green': !inValueChange }" :placeholder="placeholder"  :value="modelValue" @input="handleInput" :tabindex="tab" :maxlength="maxlength">
+        <input :type="typeInput" :style="style" class="item-input" :class="{ 'item-input-red': !inValue, 'item-input-green': !inValueChange }" :placeholder="placeholder"  :value="modelValue" @input="handleInput" :tabindex="tab" :maxlength="maxlength">
 </template>
 <style>
 
@@ -35,6 +35,8 @@ export default {
         refs: String,
         maxlength: Number,
         typeInput: String,
+        NumberDecimal: Boolean,
+        style: String,
     },
     methods:{
          /**
@@ -42,16 +44,46 @@ export default {
          * Nguyễn Văn Cương 26/09/2022
          */
         handleInput(event){
+            console.log(1);
             this.inValueChange = this.inValue;
-            this.$emit("update:modelValue",event.target.value);
+            this.ValueInput = event.target.value;
+            if(this.NumberDecimal == true){
+                this.ValueInput = this.SumFormat(this.ValueInput);
+                this.$emit("update:modelValue",this.ValueInput);
+            }else{
+                this.$emit("update:modelValue",this.ValueInput);
+            }
+            this.$emit("updateAlert");
+        },
+        /**
+        * Hàm format tổng
+        * Nguyễn Văn Cương 21/11/2022
+        */
+        SumFormat(price) {
+            if(price){
+                const pieces = parseFloat(price).toFixed(2).split('')
+                let ii = pieces.length - 3
+                while ((ii-=3) > 0) {
+                pieces.splice(ii, 0, ',')
+            }
+            return pieces.join('');
+        }else{
+            return "";
         }
+    },
     },
     data(){
         return{
+            //trạng thái đỏ input
             inValueChange: {
                 type: Boolean,
                 default: true,
-            }
+            },
+            //lưu giá trị input
+            ValueInput: null,
+            //lưu thời gian delay khi nhập
+            timeout: null,
+
         }
     }
 

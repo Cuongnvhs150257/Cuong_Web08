@@ -19,5 +19,6 @@ namespace MISA.WEB08.AMIS.DL
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Supply> GetSupplyExcel();
+
     }
 }

@@ -10,7 +10,7 @@
     </thead>
     <tbody v-if="RecordsLoad" >
       <tr
-        v-for="re in RecordsLoad.data"
+        v-for="re in RecordsLoad"
         :key="re[tdListTable[tdListTable.length - 1].property]"
         @dblclick="rowDBClick(re[tdListTable[tdListTable.length - 1].property])"
       >
@@ -85,20 +85,36 @@ import MDropItem from "../MDropItem/MDropItem.vue";
 import configs from '../../../configs/index';
 import enums from '../../../resouce/enums';
 import toast from '../../../resouce/toast';
+import formatjs from '../../../resouce/format';
+import productjs from '../../../resouce/product';
 
 export default {
   name: "RecordList",
   props: {
+    //object chứa record
     RecordsLoad: Object,
+    //trạng thái đóng mở
     closeSelectedAll: Boolean,
+    //table theader
     thListTable: [],
+    //table tbody
     tdListTable: [],
+    //table tfooter
     tfoot: Boolean,
+    //tiêu đề của popup
     PopupNotilable: String,
+    //url 
     baseURL: String,
+    //trạng thái checkbox 
     TableCheckBox: Boolean,
+    //object chứa record đệ quy
     RecordsMuti: Object,
+    //object chứa record đệ quy
     CheckDeleteIns: Boolean,
+    //Tổng số lượng tồn
+    SumQuantity: Number,
+    //Tổng giá trị tồn
+    SumExistent: Number,
   },
   components: {
     MPopupNotification,
@@ -107,35 +123,15 @@ export default {
     MDropItem,
   },
   mounted() {
-    this.getSum();
+    //gọi hàm click outsite
     window.addEventListener('mousedown', this.clickEventInterrupt);
   },
   unmounted() {
+    //xóa hàm click outsite
     window.removeEventListener('mouseup', this.clickEventInterrupt);
   },
   
   methods: {
-
-    /***
-    Hàm lấy tổng 
-    Nguyễn Văn Cương 21/11/2022
-     */
-     getSum(){
-      fetch(configs.baseURLProduct + "getsum", {
-        method: "GET", //lấy mã nhân viên cao nhất
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          var s = JSON.stringify(data.SumQuantity);
-          var d = JSON.stringify(data.SumExistent);
-          this.SumQuantity = s.replace(/[^a-zA-Z0-9]*/g, "");
-          this.SumExistent = d.replace(/[^a-zA-Z0-9]*/g, "");
-          
-        })
-        .catch((res) => {
-          console.log(res);
-        });
-     },
     
     /**
      * Hàm format tổng
@@ -178,21 +174,21 @@ export default {
     },
 
     /**
-         * hàm click outsite
-         * Nguyễn Văn Cương 01/10/2022
-         */
-        clickEventInterrupt(event){
-          //lưu vị trí con chuột left, top
-          this.PosY = event.y;
-          this.PosX = event.x
-        },
+    * hàm click outsite
+    * Nguyễn Văn Cương 01/10/2022
+    */
+    clickEventInterrupt(event){
+    //lưu vị trí con chuột left, top
+      this.PosY = event.y;
+      this.PosX = event.x
+    },
 
     /**
     Hàm gọi popup Filter
     Nguyễn Văn Cương 10/11/2022
      */
-    openFilter(inputfil,value, filterlabel){
-      this.$emit("Show-Filter", 2,inputfil, value, filterlabel, this.PosY, this.PosX);
+    openFilter(inputfil , value, filterlabel){
+      this.$emit("Show-Filter", 2 , inputfil, value, filterlabel, this.PosY, this.PosX);
     },
 
     /**
@@ -223,7 +219,9 @@ export default {
           );
       }else{
         this.listReSelected = [];
+        this.$emit("get-List-Checkbox", this.listReSelected)
       }
+      console.log(this.listReSelected);
     },
 
     /**
@@ -231,9 +229,23 @@ export default {
      */
     handleCheckBox(ReID){
           //thêm mã nhân viên đã chọn vào mảng
-          this.listReSelected.push(ReID);
-          this.$emit("get-List-Checkbox", this.listReSelected)
-          console.log(this.listReSelected);
+          if(!this.listReSelected.includes(ReID)){
+            this.listReSelected.push(ReID);
+          }
+          else{
+            const index = this.listReSelected.indexOf(ReID);
+            if (index > -1) {
+              //loại bỏ phần tử khỏi mảng
+              this.listReSelected.splice(index, 1); 
+            }
+          }
+          if(this.listReSelected.length == 10){
+            this.handleCheckBoxAll();
+          }else{
+             this.stateCheckAll = false;
+            this.$emit("get-List-Checkbox", this.listReSelected);
+          }
+          
     },
 
     /**
@@ -287,19 +299,19 @@ export default {
 
     /**
      * hàm format thuế
-     * Nguyễn Văn Cương 01/10/2022
+     * Nguyễn Văn Cương 01/11/2022
      */
     formatTaxRecord(status){
 
       //giá trị 1 là hoạt động
        if(status == enums.ACTIVE){
-         return status = "Có giảm thuế";
+         return status = formatjs.Tax_Active;
       //giá trị 2 là ngưng hoạt động
        }else if(status == enums.UNACTIVE){
-         return status = "Không giảm thuế";
+         return status = formatjs.Tax_UnActive;
        //giá trị 0 là chưa xác định
        }else if (status == enums.UNKNOW){
-         return status = "Chưa xác định";
+         return status = formatjs.Tax_UnKnow;
       //không có cho thành rỗng
        }else{
          return status = "";
@@ -314,13 +326,13 @@ export default {
 
       //giá trị 1 là hoạt động
        if(status == enums.ACTIVE){
-         return status = "Đang sử dụng";
+         return status = formatjs.Status_Active;
       //giá trị 2 là ngưng hoạt động
        }else if(status == enums.UNACTIVE){
-         return status = "Ngưng sử dụng";
+         return status = formatjs.Status_UnActive;
        //giá trị 0 là chưa xác định
        }else if (status == enums.UNKNOW){
-         return status = "Chưa xác định";
+         return status = formatjs.Status_Unknow;
       //không có cho thành rỗng
        }else{
          return status = "";
@@ -363,13 +375,13 @@ export default {
 
       //giá trị 1 là nữ 
        if(gender == enums.FEMALE){
-         return gender = "Nữ";
+         return gender = formatjs.Gender_Female;
       //giá trị 2 là nam
        }else if(gender == enums.MALE){
-         return gender = "Nam";
+         return gender = formatjs.Gender_Male;
        //giá trị 0 là khác
        }else if (gender == enums.ELSE){
-         return gender = "Khác";
+         return gender = formatjs.Gender_Else;
       //không có cho thành rỗng
        }else{
          return gender = "";
@@ -383,19 +395,19 @@ export default {
     formatNatureRecord(value){
        //giá trị 1 là nữ 
        if(value == enums.Product){
-         return value = "Hàng hóa";
+         return value = formatjs.Nature_HH;
       //giá trị 2 là nam
        }else if(value == enums.Service){
-         return value = "Dịch vụ";
+         return value = formatjs.Nature_DV;
        //giá trị 0 là khác
        }else if (value == enums.Material){
-         return value = "Nguyên vật liệu";
+         return value = formatjs.Nature_NVL;
       //không có cho thành rỗng
        }else if (value == enums.FiProduct){
-         return value = "Thành phẩm";
+         return value = formatjs.Nature_TP;
       //không có cho thành rỗng
        }else if (value == enums.Tools){
-         return value = "Công cụ dụng cụ";
+         return value = formatjs.Nature_CCDC;
       //không có cho thành rỗng
        }else{
          return value = "";
@@ -419,6 +431,23 @@ export default {
           this.ToastMess_color = toast.ToastMess_color_faild;
           this.ToastMess = toast.ToastMessDelete_faild;
         }
+        this.closeToast();
+    },
+
+    /***
+     * Hàm tự động đóng toast
+     * Nguyễn Văn Cương 1/11/2022
+     */
+    closeToast(){
+      if(this.timeout){
+        clearTimeout(this.timeout)
+        this.timeout = null;
+      }
+      else{
+        this.timeout = setTimeout(() => {
+        this.isShowToast = false;
+        }, 4000);
+      }
     },
 
     /**
@@ -475,7 +504,7 @@ export default {
     async CheckDelete(recordid){
       try {
         this.IncurredID = null;
-        await fetch(configs[this.baseURL] + "checkdelete?checkdelete=" + recordid, {method: "GET"})
+        await fetch(configs[this.baseURL] + productjs.CheckDelete + recordid, {method: "GET"})
         .then((res) => res.json())
         .then((data) => {
           if (data.errorCode) {
@@ -490,6 +519,8 @@ export default {
         console.log(error);
       }
     },
+
+
     
   },
   created() {
@@ -542,9 +573,9 @@ export default {
       //kiểu mở popup thông báo
       PopupNotificationMode: 2,
       //Tổng số lượng tồn
-      SumQuantity: null,
+      SumQuantityV1: null,
       //Tổng giá trị tồn
-      SumExistent: null,
+      SumExistentV1: null,
 
 
     };

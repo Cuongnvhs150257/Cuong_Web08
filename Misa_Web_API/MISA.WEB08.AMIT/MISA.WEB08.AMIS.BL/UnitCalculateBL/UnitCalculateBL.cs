@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using MISA.WEB08.AMIS.Common.Entities;
+using MISA.WEB08.AMIS.Common.Enums;
 using MISA.WEB08.AMIS.Common.Resource;
 using MISA.WEB08.AMIS.DL;
 using System;
@@ -89,7 +90,7 @@ namespace MISA.WEB08.AMIS.BL
                     ws.Cell(currentRow, 1).Value = numberOrder;
                     ws.Cell(currentRow, 2).Value = unitcalculate.UnitCalculateValue;
                     ws.Cell(currentRow, 3).Value = unitcalculate.Describe;
-                    ws.Cell(currentRow, 4).Value = unitcalculate.Status;
+                    ws.Cell(currentRow, 4).Value = unitcalculate.Status == (int)Status.ACTIVE ? "Đang sử dụng" : unitcalculate.Status == (int)Status.UNACTIVE ? "Ngưng sử dụng" : unitcalculate.Status == (int)Status.UNKNOW ? "Chưa xác định" : "";
 
                     // Căn giữa các trường
                     ws.Cell(currentRow, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);

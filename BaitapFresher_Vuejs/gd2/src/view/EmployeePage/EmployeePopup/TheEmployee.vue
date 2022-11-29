@@ -84,6 +84,7 @@ import MPopup from "./TheEmployeePopup.vue";
 import MLoading from "../../../components/Base/MLoading/MLoading.vue";
 import MInputSearch from "../../../components/Base/MInputSearch/MInputSearch.vue";
 import MPopupNotification from "../../../components/Base/MPopupNotification/MPopupNotification.vue";
+import employeejs from '../../../resouce/employee';
 import toast from "../../../resouce/toast";
 import configs from "../../../configs/index";
 import enums from "../../../resouce/enums";
@@ -106,7 +107,7 @@ export default {
      * Nguyễn Văn Cương 01/10/2022
      */
     async getNewCode() {
-      await fetch(configs.baseURL + "getmax", {
+      await fetch(configs.baseURL + employeejs.getmax, {
         method: "GET", //lấy mã nhân viên cao nhất
       })
         .then((response) => response.json())
@@ -281,7 +282,7 @@ export default {
     async deleteMultiple() {
       var listD = this.listEmpDelete;
       
-      await fetch(configs.baseURL + "batch-delete", {
+      await fetch(configs.baseURL + employeejs.batchdelete, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -343,7 +344,7 @@ export default {
       })
         .then((res) => res.json())
         .then((data) => {
-          this.EmployeesTable = data; //lưu dữ liệu
+          this.EmployeesTable = data.data; //lưu dữ liệu
           this.TotalCount = data.totalCount;
           this.LoadingShow = false; //tắt loading
         })
@@ -361,7 +362,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURL + "get-employees-excel",{method: "GET"})
+        fetch(configs.baseURL + employeejs.getemployeeexcel,{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a

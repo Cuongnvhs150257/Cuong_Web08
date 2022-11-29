@@ -86,19 +86,6 @@ namespace MISA.WEB08.AMIS.BL
         /// <returns></returns>
         public object CheckDelete(Guid record);
 
-        /// <summary>
-        /// Hàm cập nhật mã tự sinh
-        /// CreatedBy: Nguyễn Văn Cương 20/11/2022
-        /// </summary>
-        /// <param name="record">Bản ghi</param>
-        public void SaveCode(T record);
-
-        /// <summary>
-        /// Hàm kết nối DB để lấy mã tự sinh
-        /// Createby: Nguyễn Văn Cương 20/11/2022
-        /// </summary>
-        /// <returns></returns>
-        public object GetNewCode();
 
         #endregion
     }

@@ -50,7 +50,7 @@
         @offset-value="getOffSetValue"
       />
     </div>
-    <MPopupEdit v-if="isShow" :height="'width: 600px; height: 320px'" :width="'width: 500px'" :baseURL="'baseURLSupply'" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="3" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Supplys" :recordvalue="SupplyValue" />
+    <MPopupEdit v-if="isShow" @show-toast="showToastPopup" :height="'width: 600px; height: 320px'" :width="'width: 500px'" :baseURL="'baseURLSupply'" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="3" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Supplys" :recordvalue="SupplyValue" />
  
 
     <!-- <Teleport to="#page-employee">
@@ -71,6 +71,7 @@ import MToast from '../../components/Base/MToast/MToast.vue';
 import MLoading from '../../components/Base/MLoading/MLoading.vue';
 import MTable from "../../components/Base/MTable/MTable.vue";
 import MPopupEdit from '../../components/Base/MPopupEdit/MPopupEdit.vue';
+import supplyjs from '../../resouce/supply';
 import configs from '../../configs/index';
 import enums from '../../resouce/enums';
 import toast from '../../resouce/toast';
@@ -99,7 +100,7 @@ export default {
      * Nguyễn Văn Cương 01/10/2022
      */
     async getNewCode() {
-      await fetch(configs.baseURLSupply + "getmax", {
+      await fetch(configs.baseURLSupply + supplyjs.getmax, {
         method: "GET", //lấy mã nhân viên cao nhất
       })
         .then((response) => response.json())
@@ -128,7 +129,7 @@ export default {
           .then((res) => res.json())
           .then(async (data) => {
             this.LoadingShow = false; //Đóng loading
-            this.PopupEdit_label = "Sửa Nhóm vật tư, hàng hóa, dịch vụ";
+            this.PopupEdit_label = supplyjs.PopupEdit_label_edit;
             this.Supplys = data;
             if (detailFormMode == 1) {
               this.Supplys.SupplyCode = "";
@@ -144,7 +145,7 @@ export default {
         //trường hợp chỉ mở popup
       } else {
         (this.Supplys = {}), //dữ liệu trên popup rỗng
-          this.PopupEdit_label = "Thêm Nhóm vật tư, hàng hóa, dịch vụ";
+          this.PopupEdit_label = supplyjs.PopupEdit_label_add;
           this.Mode = detailFormMode;
         this.isShow = true;
       }
@@ -279,7 +280,7 @@ export default {
     async deleteMultiple() {
       var listD = this.listSuDelete;
       
-      await fetch(configs.baseURLSupply + "batch-delete", {
+      await fetch(configs.baseURLSupply + supplyjs.batchdelete, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -342,7 +343,7 @@ export default {
       })
         .then((res) => res.json())
         .then((data) => {
-          this.SupplysTable = data; //lưu dữ liệu
+          this.SupplysTable = data.data; //lưu dữ liệu
           this.TotalCount = data.totalCount;
           this.LoadingShow = false; //tắt loading
         })
@@ -352,8 +353,9 @@ export default {
     },
 
     /**
-     * hàm tạo mảng đệ quy
+     * hàm tạo mảng đệ quy v1
      * Nguyễn Văn Cương 10/11/2022
+     * Đang hoàn thiện (còn lỗi)
      */
     getMutiTable(){
       //trạng thái phần từ
@@ -365,7 +367,7 @@ export default {
           if(a == b){
             //nếu parentID của phần từ b trùng với supplyID của phần từ a => tạo mảng đệ quy
             //đẩy vào mảng tablemuti
-            this.TableMuti.push({arr: this.SupplysTable.data[i], style: "font-weight: 700; font-family: Misa Fonts Semibold;", class: false}, {arr: this.SupplysTable.data[j], style: "display: none", class: true});
+            this.TableMuti.push({arr: this.SupplysTable.data[i], style: supplyjs.SupplysTableStyle_1, class: false}, {arr: this.SupplysTable.data[j], style: supplyjs.SupplysTableStyle_2, class: true});
             sta = false;
             break;
           }else{
@@ -380,6 +382,12 @@ export default {
       console.log(this.TableMuti);
       
     },
+
+    /**
+     * Hàm lấy bảng đệ quy v2
+     * Nguyễn Văn Cương 12/11/2022
+     * Đang hoàn thiện (còn lỗi)
+     */
     getMutiTableTwo(){
       let parentarr = this.SupplysTable.data;
       let childarr = [];
@@ -406,7 +414,7 @@ export default {
         //hiển loading
         this.LoadingShow = true;
        //Gọi API
-        fetch(configs.baseURLSupply + "get-supplys-excel",{method: "GET"})
+        fetch(configs.baseURLSupply + supplyjs.getsupplyexcel,{method: "GET"})
         .then((t)=>{
             return t.blob().then((b)=>{
               //tạo thẻ a

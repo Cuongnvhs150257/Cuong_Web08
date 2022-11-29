@@ -60,7 +60,7 @@
                   :DropboxItem="DropboxItemStatusWarehouse"
                   :maxlength="0"
                   :readonly="true"
-                  :inputfilter="4"
+                  :inputfilter="5"
                   :Filter="false"
                   :Tabname="'Tình trạng tồn kho'"
                   @get-recordvalue="getRecord"
@@ -80,12 +80,12 @@
                   :maxlength="0"
                   :readonly="true"
                   :Filter="false"
-                  :inputfilter="3"
+                  :inputfilter="4"
                   :Tabname="'Trạng thái'"
                   @get-recordvalue="getRecord"
                   :value="'Status'"
                   :label="'label'"
-                  :valuePost="'uc.Status'"
+                  :valuePost="'u.Status'"
                   ref="combobox"
                 />
             </div>
@@ -111,8 +111,8 @@
         </div>
         <div class="filterb-mid">
             <div class="filterb-mid-top">
-                <div class="filterb-mid-label">Lọc tên</div>
-                <div class="filterb-mid-dropbox">
+                <div class="filterb-mid-label">Lọc {{Label}}</div>
+                <div class="filterb-mid-dropbox" v-if="typeInput == 1">
                   <label class="filterb-mid-dropbox-label">{{FilterLable}}</label>
                   <div class="filterb-mid-icon" @click="OpenDropFilter">
                   </div>
@@ -176,9 +176,14 @@ import MCombobox from "../../Base/MCombobox/MCombobox.vue";
 import MDropItem from "../MDropItem/MDropItem.vue";
 export default {
   props:{
+    //trạng thái mở loại filter
     FilterMode: Number,
+    //style của filter
     FilterStyle: String,
+    //trạng thái input của filter
     typeInput: Number,
+    //tên cột filter
+    Label: String,
   },
     components:{
         MButton,
@@ -188,20 +193,30 @@ export default {
     },
 
     methods:{
+      /**
+       * Hàm reset lại filter
+       */
       handleResetCombobox(){
         this.RecordNull = true;
         this.SupplyNull = true;
       },
+          /**
+     * Hàm thay đổi thạng thái reset combobox
+     * Nguyễn Văn Cương 20/11/2022
+     */
       Chage(){
         this.SupplyNull = false;
         this.RecordNull = false;
       },
+      //Hàm đóng filter
       closeFilter(){
           this.$emit("Close-Filter");
       },
+      //Hàm mở filter
       OpenDropFilter(){
         this.isShowDropFilter = !this.isShowDropFilter;
       },
+      //Hàm đóng filter 
       CloseFilterDrop(){
         this.isShowDropFilter = false;
       },
@@ -211,6 +226,7 @@ export default {
       */
       getFilter(comparisonType, label){
         console.log(1);
+        this.CompareStatus = true;
         this.$emit("get-Filter-Header", comparisonType);
         this.FilterLable = label;
         if(comparisonType == 1 || comparisonType == 2){
@@ -219,6 +235,11 @@ export default {
           this.DisableInput = false;
         }
       },
+
+      /**
+       * Hàm lấy các phần từ của record
+       * Nguyễn Văn Cương 17/11/2022 
+       */
       getRecord(keyword, namevalue, filterlabel, inputfilter){
         if(keyword == 0){
           this.$emit("get-Filter-Header", keyword);
@@ -242,20 +263,32 @@ export default {
           this.$emit("get-Keyword-Header", value);
         }, 500);
       }
+      /***
+       * Hàm bắt đầu chạy filter
+       */
       },
       btnFilterClick(){
+        if(!this.CompareStatus){
+          this.$emit("get-Filter-Header", 5);
+        }
         this.$emit("start-Filter");
       },
     },
 
     data(){
       return{
+        //trạng thái reset filter supply
         SupplyNull: false,
+        //trạng thái hiển thị filter
         isShowDropFilter: false,
+        //tiêu đề của chọn filter
         FilterLable: "Chứa",
         //lưu style input
         DisableInput: false,
+        //trạng thái reset filter
         RecordNull: false,
+        //trạng thái chọn loại so sánh
+        CompareStatus: false,
 
       //lưu giá trị của combobox tính chất
       DropboxItemNature: [
@@ -269,15 +302,15 @@ export default {
         },
         {
           Nature: 2,
-          label: "Thành phẩm",
-        },
-        {
-          Nature: 3,
           label: "Dịch vụ",
         },
         {
-          Nature: 4,
+          Nature: 3,
           label: "Nguyên vật liệu",
+        },
+        {
+          Nature: 4,
+          label: "Thành phẩm",
         },
         {
           Nature: 5,
@@ -291,15 +324,15 @@ export default {
           label: "Tất cả",
         },
         {
-          StatusWarehouse: 2,
+          StatusWarehouse: 1,
           label: "Còn tồn",
         },
         {
-          StatusWarehouse: 3,
+          StatusWarehouse: 2,
           label: "Sắp hết hàng",
         },
         {
-          StatusWarehouse: 4,
+          StatusWarehouse: 3,
           label: "Hết hàng",
         }
       ],
@@ -310,14 +343,15 @@ export default {
           label: "Tất cả",
         },
         {
-          Status: 2,
+          Status: 1,
           label: "Đang sử dụng",
         },
         {
-          Status: 3,
+          Status: 2,
           label: "Ngừng sử dụng",
         }
       ],
+      //lưu giá trị loại filter
       FilterList: [
         {
           label: "(Trống)",

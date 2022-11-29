@@ -84,11 +84,17 @@ import MButton from "../MButton/MButton.vue";
 
 export default {
   props:{
+      //tiêu đề lỗi
       errors: String,
+      //css icon
       classcssicon: String,
+      //css tiêu đề
       classlabel: String,
+      //code record
       getRecordCode: String,
+      //mã 
       record: String,
+      //loại popup
       MPopupN: Number
   },
   methods: {

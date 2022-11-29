@@ -37,7 +37,7 @@ namespace MISA.WEB08.AMIS.BL
         /// Createby: Nguyễn Văn Cương 26/09/2022
         /// </summary>
         /// <param name="employeeid"></param>
-        /// <returns></returns>
+        /// <returns>allrecord</returns>
         public IEnumerable<T> GetAllRecords()
         {
             return _baseDL.GetAllRecords();
@@ -48,7 +48,7 @@ namespace MISA.WEB08.AMIS.BL
         /// Createby: Nguyễn Văn Cương 26/09/2022
         /// </summary>
         /// <param name="record"></param>
-        /// <returns></returns>
+        /// <returns>true, false</returns>
         private ServiceRespone ValidateRequestData(Boolean validateStatus, T record)
         {
             var properties = typeof(T).GetProperties();
@@ -108,16 +108,15 @@ namespace MISA.WEB08.AMIS.BL
         /// Createby: Nguyễn Văn Cương 26/09/2022
         /// </summary>
         /// <param name="record"></param>
-        /// <returns></returns>
+        /// <returns>new recordid</returns>
         public ServiceRespone InsertRecord(T record)
         {
             var validateStatus = true;
             var validateResult = ValidateRequestData(validateStatus, record);
 
             if (validateResult != null && validateResult.Success)
-            {
+            {    
                 var newRecordID = _baseDL.InsertRecords(record);
-                SaveCode(record);
 
                 if (newRecordID != Guid.Empty)
                 {
@@ -151,71 +150,6 @@ namespace MISA.WEB08.AMIS.BL
         }
 
         /// <summary>
-        /// Hàm cập nhật mã tự sinh
-        /// CreatedBy: Nguyễn Văn Cương 20/11/2022
-        /// </summary>
-        /// <param name="record">Bản ghi</param>
-        public void SaveCode(T record)
-        {
-            string prefix = "";
-            string number = "";
-            string last = "";
-
-            var properties = typeof(T).GetProperties();
-            foreach (var property in properties)
-            {
-                var SearchCodeAttribute = (SearchCodeAttribute?)Attribute.GetCustomAttribute(property, typeof(SearchCodeAttribute));
-                if (SearchCodeAttribute != null)
-                {
-                    string properyValue = property.GetValue(record).ToString();
-                    for (int i = 0; i < properyValue.Length; i++)
-                    {
-                        char[] keyNumber = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
-                        char temp = properyValue[i];
-                        if ((keyNumber.Contains(temp)) && last == "")
-                        {
-                            if (number == "" && temp == '0')
-                            {
-                                prefix += temp;
-                            }
-                            else
-                            {
-                                number += temp;
-                            }
-                        }
-                        else
-                        {
-                            if (number != "")
-                            {
-                                last += temp;
-                            }
-                            else
-                            {
-                                prefix += temp;
-                            }
-                        }
-                    }
-                    if (number == "")
-                    {
-                        number = "0";
-                    }
-                    _baseDL.SaveCode(prefix, number, last);
-                }
-            }
- 
-        }
-
-        /// <summary>
-        /// Hàm lấy mã tự sinh
-        /// Createby: Nguyễn Văn Cương 20/11/2022
-        /// </summary>
-        /// <returns></returns>
-        public object GetNewCode()
-        {
-            return _baseDL.GetNewCode();
-        }
-
-        /// <summary>
         /// Hàm kết nối DL để lấy nhân viên theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
         /// </summary>
@@ -239,8 +173,12 @@ namespace MISA.WEB08.AMIS.BL
             string query = "";
             string queryFirst = "";
             string queryAfter = "";
-            string queryStartCount = "";
-            string queryCount = "";
+            Boolean status = false;
+
+            if(typeof(T).Name == "Product")
+            {
+                status = true;
+            }
 
             ///trường hợp search thông thường
             if (where != null && typesoft.Length == 0)
@@ -262,7 +200,7 @@ namespace MISA.WEB08.AMIS.BL
                     }
                     
                 }
-                query = queryFirst + queryAfter;
+                query = "(" + queryFirst + queryAfter + ")";
 
             }
             ///trường hợp cả search cả lọc
@@ -271,8 +209,7 @@ namespace MISA.WEB08.AMIS.BL
                 string typename = "";
                 string typequery = "";
                 string key = "";
-                queryFirst = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ProductID HAVING ";
-                queryStartCount = "ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' GROUP BY ";
+                queryFirst = "( ProductName LIKE '%" + where + "%'" + "OR ProductCode LIKE '%" + where + "%' ) AND ";
                 for (int i = 0; i < typesoft.Length; i++)
                 {   
                     ///Lọc bảng đầu tiên
@@ -310,7 +247,7 @@ namespace MISA.WEB08.AMIS.BL
                             break;
                         ///lấy khác
                         case 4:
-                            queryAfter += typequery + " != " + "'" + key + "'";
+                            queryAfter += typequery + " <> " + "'" + key + "'";
                             break;
                         ///lấy chứa
                         case 5:
@@ -318,7 +255,7 @@ namespace MISA.WEB08.AMIS.BL
                             break;
                         ///lấy không chứa
                         case 6:
-                            queryAfter += typequery + " LIKE '!%" + key + "%'";
+                            queryAfter += typequery + " NOT LIKE '%" + key + "%'";
                             break;
                         ///lấy bắt đầu với
                         case 7:
@@ -330,7 +267,6 @@ namespace MISA.WEB08.AMIS.BL
                             break;
                     }
                     query = queryFirst + queryAfter;
-                    queryCount = queryStartCount + queryAfter;
                 }
 
             }
@@ -378,7 +314,7 @@ namespace MISA.WEB08.AMIS.BL
                             break;
                         ///lấy khác
                         case 4:
-                            query += typequery + " != " + "'" + key + "' ";
+                            query += typequery + " <> " + "'" + key + "' ";
                             break;
                         ///lấy chứa
                         case 5:
@@ -386,7 +322,7 @@ namespace MISA.WEB08.AMIS.BL
                             break;
                         ///lấy không chứa
                         case 6:
-                            query += typequery + " LIKE '!%" + key + "%' ";
+                            query += typequery + " NOT LIKE '%" + key + "%' ";
                             break;
                         ///lấy bắt đầu với
                         case 7:
@@ -400,7 +336,7 @@ namespace MISA.WEB08.AMIS.BL
                 }
             }
 
-            return _baseDL.Filter(limit, offset, query, queryCount);
+            return _baseDL.Filter(limit, offset, query, status);
         }
 
 
@@ -478,7 +414,7 @@ namespace MISA.WEB08.AMIS.BL
         /// Hàm kết nối DB để lấy mã đối tượng lớn nhất
         /// Createby: Nguyễn Văn Cương 26/09/2022
         /// </summary>
-        /// <returns></returns>
+        /// <returns>maxrecord</returns>
         public object GetMaxRecord()
         {
             return _baseDL.GetMaxRecord();
@@ -489,7 +425,7 @@ namespace MISA.WEB08.AMIS.BL
         /// Nguyễn Văn Cương 15/11/2022
         /// </summary>
         /// <param name="record"></param>
-        /// <returns></returns>
+        /// <returns>true, false</returns>
         public object CheckDelete(Guid record)
         {
             return _baseDL.CheckDelete(record);

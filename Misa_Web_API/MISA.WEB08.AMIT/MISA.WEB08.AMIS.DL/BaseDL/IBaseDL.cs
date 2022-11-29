@@ -25,6 +25,7 @@ namespace MISA.WEB08.AMIS.DL
         /// <returns></returns>
         public Guid InsertRecords(T record);
 
+
         /// <summary>
         /// Hàm kết nối DB để lấy nhân viên theo ID
         /// Createby: Nguyễn Văn Cương 26/09/2022
@@ -49,7 +50,7 @@ namespace MISA.WEB08.AMIS.DL
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         /// <returns>Data, TotalCount</returns>
-        public PagingData<T> Filter(int? limit, int? offset, string? query, string? queryCount);
+        public PagingData<T> Filter(int? limit, int? offset, string? query, Boolean? status);
 
         /// <summary>
         /// Hàm kết nối DB để xóa nhân viên theo ID
@@ -90,22 +91,7 @@ namespace MISA.WEB08.AMIS.DL
         /// <returns></returns>
         public object CheckDelete(Guid record);
 
-        /// <summary>
-        /// Hàm cập nhật mã tự sinh
-        /// Createby: Nguyễn Văn Cương 20/11/2022
-        /// </summary>
-        /// <param name="prefix"></param>
-        /// <param name="number"></param>
-        /// <param name="last"></param>
-        public void SaveCode(string prefix, string number, string last);
 
-
-        /// <summary>
-        /// Hàm kết nối DB để lấy mã tự sinh
-        /// Createby: Nguyễn Văn Cương 20/11/2022
-        /// </summary>
-        /// <returns></returns>
-        public object GetNewCode();
     }
 
     #endregion

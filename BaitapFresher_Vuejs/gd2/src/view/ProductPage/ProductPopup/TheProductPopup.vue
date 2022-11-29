@@ -73,6 +73,7 @@
                 :tab="1"
                 ref="inputFocus"
                 v-model="Products.ProductName"
+                @updateAlert="UpdateAlert"
               />
               <div class="alertInput"  v-if="isShowAlertName"  >Tên không được để trống</div>
             </div>
@@ -86,7 +87,7 @@
                   :typeInput="'text'"
                   :tab="2"
                   v-model="Products.ProductCode"
-                  
+                  @updateAlert="UpdateAlert"
                 />
                 <div class="alertInput b" v-if="isShowAlertCode" >Mã không được để trống</div>
               </div>
@@ -95,6 +96,8 @@
                 <span class="product-tooltip"> Nhóm vật tư hàng hóa </span>
                 <MCombobox
                   :baseURL="'baseURLSupply'"
+                  :ResetSupply="SupplyNull"
+                  @ChangeReset="Chage"
                   :ComboClass="2"
                   :CombolabelLeft="'Mã nhóm vật tư, hàng hóa, dịch vụ'"
                   :CombolabelRight="'Tên nhóm vật tư, hàng hóa, dịch vụ'"
@@ -109,7 +112,7 @@
                   :label="'supplyName'"
                   :code="'supplyCode'"
                   :BridingSupplyCode="BridingCode"
-                  :BridingSupplyID="BridingID"
+                  :BridingSupplyID="BridingIDData"
                   :isShow="isShowDropbox"
                   :maxlength="100"
                   @get-recordvalue="getRecord"
@@ -123,6 +126,8 @@
                 <label class="item-label product">Đơn vị tính chính</label>
                 <MCombobox
                   :Comboboxmodel="Products.UnitCalculateValue"
+                  :Reset="ResetCombobox"
+                  @ChangeReset="Chage"
                   :baseURL="'baseURLUnitCalculate'"
                   :tab="4"
                   :iconadd="true"
@@ -147,6 +152,9 @@
                 </span>
                 <MCombobox
                   :Comboboxmodel="fomatTaxReduction(Products.TaxReduction)"
+                  :Reset="ResetCombobox"
+                  @ChangeReset="Chage"
+                  :Defaul="true"
                   :tab="5"
                   :DropboxItem="DropboxItemTax"
                   :maxlength="0"
@@ -183,6 +191,8 @@
             <div class="product-popup-input6">
               <label class="item-label product">Thời hạn bảo hành</label>
               <MCombobox
+                :Reset="ResetCombobox"
+                @ChangeReset="Chage"
                 :tab="7"
                 :Comboboxmodel="Products.Insurance"
                 :DropboxItem="DropboxItemInsurance"
@@ -198,7 +208,7 @@
             </div>
             <div class="product-popup-input7">
               <label class="item-label product">Số lượng tồn tối thiểu</label>
-              <MInput :tab="8" v-model="Products.Amount" :typeInput="'number'" />
+              <MInput :tab="8" :style="'text-align: right; width: 92%; padding-right: 10px;'" :NumberDecimal="true" v-model="Products.Amount" />
             </div>
             <div class="product-popup-input8">
               <label class="item-label product">Nguồn gốc</label>
@@ -234,8 +244,10 @@
                 <label class="item-label product">Kho ngầm định</label>
                 <MCombobox
                   :Comboboxmodel="Products.WarehouseCode"
+                  :Reset="ResetCombobox"
+                  @ChangeReset="Chage"
                   :baseURL="'baseURLWarehouse'"
-                  :tab="15"
+                  :tab="13"
                   :ComboClass="2"
                   :InputClass="true"
                   :Filter="false"
@@ -258,74 +270,74 @@
               </div>
               <div class="product-popup-input13">
                 <label class="item-label product">Tài khoản Kho</label>
-                <MInput :tab="16" v-model="Products.WarehouseAccount" :typeInput="'text'" />
+                <MInput :tab="14" v-model="Products.WarehouseAccount" :typeInput="'text'" />
               </div>
               <div class="product-popup-input14">
                 <label class="item-label product item3">TK doanh thu </label>
-                <MInput :tab="17" v-model="Products.RevenueAccount" :typeInput="'text'" />
+                <MInput :tab="15" v-model="Products.RevenueAccount" :typeInput="'text'" />
                 <span class="product-tooltip">Tài khoản danh thu</span>
               </div>
               <div class="product-popup-input15">
                 <label class="item-label product item4">TK chiết khấu</label>
-                <MInput :tab="18" v-model="Products.DiscountAccount" :typeInput="'text'" />
+                <MInput :tab="16" v-model="Products.DiscountAccount" :typeInput="'text'" />
                  <span class="product-tooltip">Tài khoản chiết khấu</span>
               </div>
             </div>
             <div class="product-popup-open-div item2">
               <div class="product-popup-input16">
                 <label class="item-label product item5">TK giảm giá</label>
-                <MInput :tab="19" v-model="Products.ReduceAccout" :typeInput="'text'" />
+                <MInput :tab="17" v-model="Products.ReduceAccout" :typeInput="'text'" />
                  <span class="product-tooltip">Tài khoản giảm giá</span>
               </div>
               <div class="product-popup-input17">
                 <label class="item-label product item6">TK trả lại</label>
-                <MInput :tab="20" v-model="Products.ReturnAccount" :typeInput="'text'" />
+                <MInput :tab="18" v-model="Products.ReturnAccount" :typeInput="'text'" />
                  <span class="product-tooltip">Tài khoản trả lại</span>
               </div>
               <div class="product-popup-input18">
                 <label class="item-label product item7">TK chi phí</label>
-                <MInput :tab="21" v-model="Products.ExpenseAccount" :typeInput="'text'" />
+                <MInput :tab="19" v-model="Products.ExpenseAccount" :typeInput="'text'" />
                  <span class="product-tooltip">Tài khoản chi phí</span>
               </div>
               <div class="product-popup-input19">
                 <label class="item-label product item8">Tỷ lệ CKMH(%)</label>
-                <MInput :tab="22" v-model="Products.DiscountRate" :typeInput="'text'" />
+                <MInput :tab="20" v-model="Products.DiscountRate" :typeInput="'text'" />
                  <span class="product-tooltip">Tỷ lệ chiết khấu mua hàng</span>
               </div>
             </div>
             <div class="product-popup-open-div item3">
               <div class="product-popup-input20">
                 <label class="item-label product">Đơn giá mua cố định</label>
-                <MInput :tab="15" v-model="Products.FixedPrice" :typeInput="'number'" />
+                <MInput :tab="21" :NumberDecimal="true" v-model="Products.FixedPrice" />
               </div>
               <div class="product-popup-input21">
                 <label class="item-label product">Đơn giá mua gần nhất</label>
-                <MInput :tab="16" v-model="Products.NearestPrice" :typeInput="'number'" />
+                <MInput :tab="22" :NumberDecimal="true" v-model="Products.NearestPrice"  />
               </div>
               <div class="product-popup-input22">
                 <label class="item-label product">Đơn giá bán</label>
-                <MInput :tab="17" v-model="Products.Price" :typeInput="'number'" />
+                <MInput :tab="23" :NumberDecimal="true" v-model="Products.Price" />
               </div>
             </div>
             <div class="product-popup-open-div item4">
               <div class="product-popup-input24">
                 <label class="item-label product item9">Thuế suất GTGT(%)</label>
-                <MInput :tab="15" v-model="Products.VATTax" :typeInput="'text'" />
+                <MInput :tab="24" v-model="Products.VATTax" :typeInput="'text'" />
                  <span class="product-tooltip">Thuế suất giá trị gia tăng</span>
               </div>
               <div class="product-popup-input25">
                 <label class="item-label product item10">Thuế suất thuế NK(%)</label>
-                <MInput :tab="16" v-model="Products.ImportTax" :typeInput="'number'" />
+                <MInput :tab="25" :NumberDecimal="true" v-model="Products.ImportTax"  />
                  <span class="product-tooltip">Thuế suất thuế nhập khẩu</span>
               </div>
               <div class="product-popup-input26">
                 <label class="item-label product item11">Thuế suất thuế XK(%)</label>
-                <MInput :tab="17" v-model="Products.ExportTax" :typeInput="'number'" />
+                <MInput :tab="26" :NumberDecimal="true" v-model="Products.ExportTax" />
                  <span class="product-tooltip">Thuế suất thuế xuất khẩu</span>
               </div>
               <div class="product-popup-input27">
                 <label class="item-label product item12">Nhóm HHDV chịu thuế TTĐB</label>
-                <MInput :tab="18" v-model="Products.SupplyExciseTax" :typeInput="'number'" />
+                <MInput :tab="27" v-model="Products.SupplyExciseTax" />
                  <span class="product-tooltip">Nhóm hàng hóa đặc biệt chịu thuế tiêu thụ đặc biệt</span>
               </div>
             </div>
@@ -335,17 +347,17 @@
       <div class="product-popup-product-content-bottom">
         <div class="product-popup-content-bottom-left">
           <div @click="handleCloseProductPopup">
-            <MButton :tab="14" :ButtonCss="'btn-button-cancel'" :text="'Hủy'" />
+            <MButton :tab="32" :ButtonCss="'btn-button-cancel'" :text="'Hủy'" />
           </div>
         </div>
         <div class="product-popup-content-bottom-right">
           <div class="btn-product-popup-save1" @click="btnSaveonClickAdd">
-            <MButton :tab="12" :ButtonCss="'btn-button-cancel'" :text="'Cất'" />
+            <MButton :tab="30" :ButtonCss="'btn-button-cancel'" :text="'Cất'" />
             <span class="product-tooltip">Ctrl + Shift</span>
           </div>
           <div class="btn-product-popup-save2" @click="btnSaveonClick">
             <MButton
-              :tab="13"
+              :tab="31"
               :ButtonCss="'btn-button-save'"
               :text="'Cất và thêm'"
             />
@@ -398,6 +410,8 @@ import MPopupEdit from "../../../components/Base/MPopupEdit/MPopupEdit.vue";
 import MPopupNotification from "../../../components/Base/MPopupNotification/MPopupNotification.vue";
 import configs from "../../../configs/index";
 import popupnotification from "../../../resouce/popupnotification";
+import productjs from '../../../resouce/product';
+import formatjs from '../../../resouce/format';
 import enums from "../../../resouce/enums";
 import toast from "../../../resouce/toast";
 import notification from "../../../resouce/notification";
@@ -405,8 +419,19 @@ export default {
   created() {
     if (this.productsSelected) {
       this.Products = { ...this.productsSelected };
+      this.ProductsOld = {...this.productsSelected}
       console.log(this.Products);
     }
+    if (this.Products.GroupID) {
+          this.Products.GroupID =
+            this.Products.GroupID.split(",");
+    }
+    if (this.Products.SupplyID) {
+      this.Products.SupplyID =
+      this.Products.SupplyID.split(",");
+    }
+    this.changeBridingID();
+
   },
   mounted() {
     this.handleLoopFocus();
@@ -427,13 +452,53 @@ export default {
     MPopupNotification,
   },
   props: {
+    //loại tính chất
     property: Number,
+    //object chứa product
     productsSelected: Object,
+    //trạng thái form đang mở
     detailFormMode: Number,
+    //lấy code của trạng thái
     BridingCode: String, 
+    //lấy id trạng thái
     BridingID: String,
   },
   methods: {
+
+    /**
+     * Hàm thay đổi ID khi brinding lên combobox
+     * Nguyễn Văn Cương 22/11/2022
+     */
+    changeBridingID(){
+      //trường hợp dbclick 
+      if(this.productsSelected.SupplyID != null){
+        this.BridingIDData = this.productsSelected.SupplyID;
+        this.BridingIDData = this.BridingIDData.split(",");
+      }
+      //trường hợp thêm
+      else{
+        this.BridingIDData = this.BridingID;
+      }
+    },
+
+    /**
+     * Hàm ẩn arlet sau khi người dùng nhập ô inpu
+     * Nguyễn Văn Cương 22/11/2022
+     */
+    UpdateAlert(){
+      //trường hợp nhập vào ô input
+      this.isShowAlertName = false;
+      this.isShowAlertCode = false;
+      this.inValue_Name = true;
+      this.inValue_Code = true;
+      //trường hợp xóa ô input
+      if(this.Products.ProductName.length == 0){
+        this.inValue_Name = false;
+      }
+      if(this.Products.ProductCode.length == 0){
+        this.inValue_Code = false;
+      }
+    },
     /**
      * hàm hiển thị alert
      * Nguyễn Văn Cương 10/11/2022
@@ -463,10 +528,6 @@ export default {
       }
     },
 
-    getCode(value){
-      console.log(value)
-    },
-
     /**
      * Hàm mở nội dung
      * Nguyễn Văn Cương 01/10/2022
@@ -475,9 +536,9 @@ export default {
       this.OpenContentInput = !this.OpenContentInput;
       if (this.OpenContentInput == false) {
         //thay đổi icon nút
-        this.OpenContentcss = "product-popup-open-icon";
+        this.OpenContentcss = productjs.OpenContentcss_1;
       } else {
-        this.OpenContentcss = "product-popup-open-icon b";
+        this.OpenContentcss = productjs.OpenContentcss_2;
       }
     },
     /**
@@ -603,24 +664,24 @@ export default {
 
     /**
      * hàm format thuế
-     * Nguyễn Văn Cương 01/10/2022
+     * Nguyễn Văn Cương 01/11/2022
      */
-    fomatTaxReduction(status) {
-      //giá trị 1 là hoạt động
-      if (status == enums.ACTIVE) {
-        return (status = "Có giảm thuế");
-        //giá trị 2 là ngưng hoạt động
-      } else if (status == enums.UNACTIVE) {
-        return (status = "Không giảm thuế");
-        //giá trị 0 là chưa xác định
-      } else if (status == enums.UNKNOW) {
-        return (status = "Chưa xác định");
-        //không có cho thành rỗng
-      } else {
-        return (status = "");
-      }
-    },
+    fomatTaxReduction(status){
 
+      //giá trị 1 là hoạt động
+       if(status == enums.ACTIVE){
+         return status = formatjs.Tax_Active;
+      //giá trị 2 là ngưng hoạt động
+       }else if(status == enums.UNACTIVE){
+         return status = formatjs.Tax_UnActive;
+       //giá trị 0 là chưa xác định
+       }else if (status == enums.UNKNOW){
+         return status = formatjs.Tax_UnKnow;
+      //không có cho thành rỗng
+       }else{
+         return status = "";
+       }
+    },
     /**
      * hàm cất và thêm không đóng popup
      * Nguyễn Văn Cương 10/10/2022
@@ -637,8 +698,8 @@ export default {
      */
     handleOpenPopupAskEdit() {
       //so sánh xem người dùng có thay đổi trường nào không
-      for (const prop in this.productsSelected) {
-        if (this.productsSelected[prop] != this.Products[prop]) {
+      for (const prop in this.ProductsOld) {
+        if (this.ProductsOld[prop] != this.Products[prop]) {
           //nếu có thì hiện popup hỏi
           this.isShowPopupAskEdit = true;
           return;
@@ -646,7 +707,7 @@ export default {
       }
       if (
         this.Products.ProductCode != null &&
-        this.Products.ProductName == null
+        this.Products.ProductName != null && this.detailFormMode == 1
       ) {
         //trong trường hợp mở popup thêm nhân viên
         this.isShowPopupAskEdit = true;
@@ -724,13 +785,15 @@ export default {
      * Nguyễn Văn Cương 20/11/2022
      */
     async getCodeTable() {
-      await fetch(configs.baseURLProduct + "getnewcode", {
+      await fetch(configs.baseURLProduct + productjs.getnewcode, {
         method: "GET", //lấy mã nhân viên cao nhất
       })
         .then((response) => response.json())
         .then((data) => {
           var s = JSON.stringify(data.NewCode);
+          //tách dấu "" ra
           this.Products.ProductCode = s.replace(/[^a-zA-Z0-9]*/g, "");
+          this.ProductsOld.ProductCode = this.Products.ProductCode;
           
         })
         .catch((res) => {
@@ -779,17 +842,19 @@ export default {
      */
     async btnSaveonClick() {
       var method = "POST";
-      var url = configs.baseURLProduct;
+      var url = configs.baseURLProduct + "GroupSupply";
       this.errors = [];
       if(this.property){
         this.Products.Nature = this.property;
       }
-
+      if(this.Products.SupplyCode){
+        this.Products.SupplyCode = this.Products.SupplyCode.join(",");
+      }
       if (this.validateEmpty() == true) {
         //Hàm sửa nhân viên
         if (this.Products.ProductCode && this.detailFormMode == 2) {
           method = "PUT";
-          url = url + `${this.Products.ProductID}`;
+          url = url + "?GroupSupply=" + `${this.Products.ProductID}`;
           this.ClosePopup = true;
           this.ToastAddClose = true;
         }
@@ -808,21 +873,28 @@ export default {
             ? null
             :this.Products.SupplyID
             ? this.Products.SupplyID
-            :null,
+            : productjs.SupplyID_HH,
 
             UnitCalculateID: 
             this.Products.UnitCalculateID === ""
             ?null
             :this.Products.UnitCalculateID
             ?this.Products.UnitCalculateID
-            :null,
+            : productjs.UnitCalculate_ID_Default,
 
             WarehouseID:
             this.Products.WarehouseID === ""
             ?null
             :this.Products.WarehouseID
             ?this.Products.WarehouseID
-            :null
+            : productjs.Warehouse_ID_Default,
+
+            WarehouseCode:
+            this.Products.WarehouseCode === ""
+            ?null
+            :this.Products.WarehouseCode
+            ?this.Products.WarehouseCode
+            : ""
             
             }),
         })
@@ -861,6 +933,7 @@ export default {
                 //xóa form popup sau khi thêm thành công
               } else {
                 this.Products = {};
+                this.handleResetCombobox();
                 this.getCodeTable();
                 //hiển thị thông báo (thêm thành công)
                 this.ShowToast((this.ToastStatus = 1));
@@ -876,6 +949,24 @@ export default {
         //hiển thị thông báo (thêm thất bại)
         //this.ShowToast((this.ToastStatus = 0));
       }
+    },
+
+    /**
+    * Hàm reset lại combobox
+    * Nguyễn Văn Cương 20/11/2022
+    */
+    handleResetCombobox(){
+      this.ResetCombobox = true;
+      this.SupplyNull = true;
+    },
+
+    /**
+     * Hàm thay đổi thạng thái reset combobox
+     * Nguyễn Văn Cương 20/11/2022
+     */
+    Chage(){
+      this.SupplyNull = false;
+      this.ResetCombobox = false;
     },
     /**
      * Hàm mở popup thông báo
@@ -904,6 +995,11 @@ export default {
     return {
       //mảng chưa keyCode
       arrKeyCode: [],
+
+      //trạng thái reset combobox
+        ResetCombobox: false,
+      //trạng thái reset combobox nhóm vật tư
+      SupplyNull: false,
 
       //lưu giá trị của combobox trạng thái
       DropboxItemTax: [
@@ -951,6 +1047,8 @@ export default {
       isShowEdit: false,
       //lưu giá trị bảng product
       Products: {},
+      //lưu giá trị products ban đầu để so sánh
+      ProductsOld: {},
       //lưu trạng thái 
       Mode: 1,
       
@@ -963,6 +1061,7 @@ export default {
 
       //lưu trạng thái mở nội dung
       OpenContentInput: false,
+      //lưu css opencontent
       OpenContentcss: "product-popup-open-icon",
       //lưu dữ liệu nhân viên
       inValue_Code: {
@@ -1029,7 +1128,9 @@ export default {
       //lưu trạng thái alert
       isShowAlertName: false,
       //lưu trạng thái alert
-      isShowAlertCode: false
+      isShowAlertCode: false,
+      //lưu bringid
+      BridingIDData: null,
     };
   },
 };
@@ -1471,6 +1572,8 @@ export default {
   border-radius: 4px;
   border-color: transparent transparent #FF7777 transparent;
   cursor: pointer;
+}.product-popup-input13, .product-popup-input14, .product-popup-input15, .product-popup-input17, .product-popup-input18, .product-popup-input19, .product-popup-input21 .product-popup-input22, .product-popup-input25, .product-popup-input26, .product-popup-input27{
+  margin-top: 4px;
 }
 </style>
 
