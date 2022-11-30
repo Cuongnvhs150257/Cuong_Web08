@@ -20,13 +20,13 @@
             <div class="popupedit-input1" ref="inputCode">
               <label class="item-label product">Mã</label>
               <label class="item-labelsao"> *</label>
-              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" ref="inputFocus" v-model="Records[recordvalue[1].value]"/>
+              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" ref="inputFocus" @updateAlert="UpdateAlert" v-model="Records[recordvalue[1].value]"/>
               <div class="alertInputEd" v-if="isShowAlertCode" >Mã không được để trống</div>
             </div>
             <div class="popupedit-input2" ref="inputName">
               <label class="item-label product">Tên</label>
               <label class="item-labelsao"> *</label>
-              <MInput :tab="2" v-model="Records[recordvalue[2].value]" />
+              <MInput :tab="2" v-model="Records[recordvalue[2].value]" @updateAlert="UpdateAlert" />
               <div class="alertInputEd b"  v-if="isShowAlertName"  >Tên không được để trống</div>
             </div>
             <div class="popupedit-input4">
@@ -41,7 +41,7 @@
             <div class="popupedit-input5" ref="inputCode">
               <label class="item-label product">Đơn vị tính</label>
               <label class="item-labelsao"> *</label>
-              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" ref="inputFocus" v-model="Records[recordvalue[1].value]" />
+              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" ref="inputFocus" @updateAlert="UpdateAlert" v-model="Records[recordvalue[1].value]" />
               <div class="alertInputEd"  v-if="isShowAlertCode"  >Đơn vị tính được để trống</div>
             </div>
             <div class="popupedit-input6">
@@ -55,13 +55,13 @@
             <div class="popupedit-input7" ref="inputCode">
               <label class="item-label product">Mã</label>
               <label class="item-labelsao"> *</label>
-              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" ref="inputFocus" v-model="Records[recordvalue[1].value]"/>
+              <MInput :inValue="inValue_Code" :maxlength="36" :tab="1" ref="inputFocus" @updateAlert="UpdateAlert" v-model="Records[recordvalue[1].value]"/>
               <div class="alertInputEd"  v-if="isShowAlertCode"  >Mã được để trống</div>
             </div>
             <div class="popupedit-input8" ref="inputName">
               <label class="item-label product">Tên</label>
               <label class="item-labelsao"> *</label>
-              <MInput :tab="2" v-model="Records[recordvalue[2].value]" />
+              <MInput :tab="2" v-model="Records[recordvalue[2].value]" @updateAlert="UpdateAlert" />
               <div class="alertInputEd c"  v-if="isShowAlertName"  >Tên không được để trống</div>
             </div>
             <div class="popupedit-input9">
@@ -79,7 +79,7 @@
           </div>
           <div class="popupedit-content-bottom-right">
             <div class="btn-product-popup-save1" @click="btnSaveonClickAdd"><MButton  :tab="5"  :ButtonCss="'btn-button-cancel'" :text="'Cất'" />
-            <span class="product-tooltip">Ctrl + Shift</span></div>
+            <span class="product-tooltip">Ctrl + S</span></div>
             <div class="btn-product-popup-save2" @click="btnSaveonClick" > <MButton  :tab="6" :ButtonCss="'btn-button-save'" :text="'Cất và thêm'" />
             <span class="product-tooltip">Ctrl + Alt + C</span></div>  
           </div>
@@ -196,6 +196,26 @@ export default {
            this.isShowAlertCode = false;
       }
     },
+
+     /**
+     * Hàm ẩn arlet sau khi người dùng nhập ô inpu
+     * Nguyễn Văn Cương 22/11/2022
+     */
+    UpdateAlert(){
+      //trường hợp nhập vào ô input
+      this.isShowAlertName = false;
+      this.isShowAlertCode = false;
+      this.inValue_Name = true;
+      this.inValue_Code = true;
+      //trường hợp xóa ô input
+      if(this.Records[this.recordvalue[0].value].length == 0){
+        this.inValue_Name = false;
+      }
+      if(this.Records[this.recordvalue[1].value].length == 0){
+        this.inValue_Code = false;
+      }
+    },
+
     /**
     * hàm tabindex vòng lặp
      Nguyễn Văn Cương 10/10/2022
@@ -209,11 +229,13 @@ export default {
      * Nguyễn Văn Cương 10/10/2022
      */
     handleEvent(event) {
-      if (event.keyCode == enums.CTRL || event.keyCode == enums.SHIFT) {
+      
+      if (event.keyCode == enums.CTRL || event.keyCode == enums.S) {
+        event.preventDefault();
         if (!this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.push(event.keyCode);
 
-          //nếu có 2 phím tắt CTRL và SHIFT thì thực hiện lưu đóng popup
+          //nếu có 2 phím tắt CTRL và S thì thực hiện lưu đóng popup
           if (this.arrKeyCode.length == 2) {
             this.arrKeyCode.length = 0;
             this.ClosePopup = true;
@@ -226,6 +248,7 @@ export default {
         event.keyCode == enums.ALT ||
         event.keyCode == enums.C
       ) {
+        event.preventDefault();
         if (!this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.push(event.keyCode);
 
@@ -239,10 +262,12 @@ export default {
 
       //nếu có phím tắt ESC thì đóng popup
       if (event.keyCode == enums.ESC) {
+        event.preventDefault();
         this.handleOpenPopupAskEdit();
       }
       //nếu có phím tắt F2 thì gọi trở giúp
       if (event.keyCode == enums.F2) {
+        event.preventDefault();
         alert(notification.Help);
       }
     },
@@ -252,11 +277,13 @@ export default {
      * Nguyễn Văn Cương 10/10/2022
      */
     handleEventInterrupt(event) {
+      
       if (
         event.keyCode == enums.CTRL ||
-        event.keyCode == enums.SHIFT ||
+        event.keyCode == enums.ALT ||
         event.keyCode == enums.C
       ) {
+        event.preventDefault();
         if (this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.length = 0;
         }

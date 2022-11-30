@@ -148,7 +148,7 @@ export default {
   right: 3px;
   background-color: #fff;
   border: 1px solid #bbbb;
-  z-index: 3;
+  z-index: 10;
 }
 .mdrop-itemtbl {
   height: 32px;

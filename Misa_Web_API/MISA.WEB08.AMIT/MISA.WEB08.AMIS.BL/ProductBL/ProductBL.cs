@@ -292,6 +292,7 @@ namespace MISA.WEB08.AMIS.BL
                 }
 
                 var Update = _productDL.UpdateMutiRecords(record, productid, RecordIDMuti, GroupIDMuti);
+                SaveCode(record);
 
                 if (Update != null)
                 {

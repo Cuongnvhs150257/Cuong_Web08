@@ -301,7 +301,7 @@
               </div>
               <div class="product-popup-input19">
                 <label class="item-label product item8">Tỷ lệ CKMH(%)</label>
-                <MInput :tab="20" v-model="Products.DiscountRate" :typeInput="'text'" />
+                <MInput :tab="20" :maxValue="100" v-model="Products.DiscountRate" :typeInput="'text'" />
                  <span class="product-tooltip">Tỷ lệ chiết khấu mua hàng</span>
               </div>
             </div>
@@ -322,22 +322,22 @@
             <div class="product-popup-open-div item4">
               <div class="product-popup-input24">
                 <label class="item-label product item9">Thuế suất GTGT(%)</label>
-                <MInput :tab="24" v-model="Products.VATTax" :typeInput="'text'" />
+                <MInput :tab="24" :maxValue="100" v-model="Products.VATTax" :typeInput="'text'" />
                  <span class="product-tooltip">Thuế suất giá trị gia tăng</span>
               </div>
               <div class="product-popup-input25">
                 <label class="item-label product item10">Thuế suất thuế NK(%)</label>
-                <MInput :tab="25" :NumberDecimal="true" v-model="Products.ImportTax"  />
+                <MInput :tab="25" :maxValue="100" :NumberDecimal="true" v-model="Products.ImportTax"  />
                  <span class="product-tooltip">Thuế suất thuế nhập khẩu</span>
               </div>
               <div class="product-popup-input26">
                 <label class="item-label product item11">Thuế suất thuế XK(%)</label>
-                <MInput :tab="26" :NumberDecimal="true" v-model="Products.ExportTax" />
+                <MInput :tab="26" :maxValue="100" :NumberDecimal="true" v-model="Products.ExportTax" />
                  <span class="product-tooltip">Thuế suất thuế xuất khẩu</span>
               </div>
               <div class="product-popup-input27">
                 <label class="item-label product item12">Nhóm HHDV chịu thuế TTĐB</label>
-                <MInput :tab="27" v-model="Products.SupplyExciseTax" />
+                <MInput :tab="27" :maxValue="100" v-model="Products.SupplyExciseTax" />
                  <span class="product-tooltip">Nhóm hàng hóa đặc biệt chịu thuế tiêu thụ đặc biệt</span>
               </div>
             </div>
@@ -353,7 +353,7 @@
         <div class="product-popup-content-bottom-right">
           <div class="btn-product-popup-save1" @click="btnSaveonClickAdd">
             <MButton :tab="30" :ButtonCss="'btn-button-cancel'" :text="'Cất'" />
-            <span class="product-tooltip">Ctrl + Shift</span>
+            <span class="product-tooltip">Ctrl + S</span>
           </div>
           <div class="btn-product-popup-save2" @click="btnSaveonClick">
             <MButton
@@ -554,7 +554,8 @@ export default {
      * Nguyễn Văn Cương 10/10/2022
      */
     handleEvent(event) {
-      if (event.keyCode == enums.CTRL || event.keyCode == enums.SHIFT) {
+      if (event.keyCode == enums.CTRL || event.keyCode == enums.S) {
+        event.preventDefault();
         if (!this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.push(event.keyCode);
 
@@ -571,6 +572,7 @@ export default {
         event.keyCode == enums.ALT ||
         event.keyCode == enums.C
       ) {
+        event.preventDefault();
         if (!this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.push(event.keyCode);
 
@@ -584,10 +586,12 @@ export default {
 
       //nếu có phím tắt ESC thì đóng popup
       if (event.keyCode == enums.ESC) {
+        event.preventDefault();
         this.handleOpenPopupAskEdit();
       }
       //nếu có phím tắt F2 thì gọi trở giúp
       if (event.keyCode == enums.F2) {
+        event.preventDefault();
         alert(notification.Help);
       }
     },
@@ -599,9 +603,10 @@ export default {
     handleEventInterrupt(event) {
       if (
         event.keyCode == enums.CTRL ||
-        event.keyCode == enums.SHIFT ||
+        event.keyCode == enums.ALT ||
         event.keyCode == enums.C
       ) {
+        event.preventDefault();
         if (this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.length = 0;
         }

@@ -80,6 +80,7 @@
         @get-List-Checkbox="getListProduct"
         :closeSelectedAll="closeSelectedAll"
         :SumQuantity="SumQuantity"
+        :DeleteCheckbox="ChangeCheckbox"
         :SumExistent="SumExistent"
         :thListTable="thList"
         :tdListTable="tdList"
@@ -103,7 +104,7 @@
 
     <TheProductPopup v-if="isShow" @show-toast="showToastPopup" :BridingCode="SaveSupplyCode" :BridingID="SaveSupplyID" @data-load="loadData" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
     <div ref="filter">
-    <MFilter :typeInput="InputType" :Label="FilterLabel" v-if="isShowFilter" @get-Typesoft="getTypesoft" @start-Filter="loadData" @get-Keyword-Header="getKeywordHeader" @get-Filter-Header="getFilterHeader" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
+    <MFilter :typeInput="InputType" @get-StatusWarehouse="getStatusWarehouse" :Label="FilterLabel" v-if="isShowFilter" @get-Typesoft="getTypesoft" @start-Filter="loadData" @get-Keyword-Header="getKeywordHeader" @get-Filter-Header="getFilterHeader" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
     </div>
     <MPopupNotification v-if="isShowAskDelete" @popup-ask-cance="ClosePopupAsk" @agree-delete-click="deleteMultiple" :MPopupN = 2 />
     <MToast v-if="isShowToast" :text="ToastMess" :text_color="ToastMess_color" :classcss="Toastcss" :classcssicon="Toastcssicon"/>
@@ -150,6 +151,15 @@ export default {
     getFilterHeader(value){
       this.Sort = value;
     },
+
+    /**
+    Hàm lấy giá trị để lọc tình trạng tồn kho
+    Nguyễn Văn Cương 30/11/2022
+     */
+    getStatusWarehouse(value){
+      this.StatusWarehouse = value;
+    }, 
+
         /**
     Hàm lấy giá trị tìm kiếm để lọc
     Nguyễn Văn Cương 17/11/2022
@@ -617,8 +627,9 @@ export default {
      * Hàm lấy danh sách mã nhân viên cần xóa
      * Nguyễn Văn Cương 15/10/2022
      */
-    getListProduct(listProDe) {
+    getListProduct(listProDe, status) {
       this.listProDelete = listProDe;
+      this.CheckAll = status;
     },
     
     /**
@@ -696,8 +707,11 @@ export default {
             }else{
               //load lại data
               this.ClosePopupAsk();
-              this.OffSetValue = 0;
-              this.DeleteMutiPadding = true;
+              if(this.CheckAll){
+                this.OffSetValue = 0;
+                this.DeleteMutiPadding = true;
+              }
+              this.ChangeCheckbox = true;
               this.loadData();
               this.closeSelectedAll = true;
               this.ShowToast(this.ToastStatus = true);
@@ -737,7 +751,7 @@ export default {
       this.FilterStatus_exist = 0;
       this.ProductStatus_exist = [];
       this.FilterStatus_not_exist = 0;
-      this.ProductStatus_not_exist = [];
+      this.ProductStatus_not_exist = []; 
     },
 
     /**
@@ -745,21 +759,27 @@ export default {
      * Nguyễn Văn Cương 29/11/2022
      */
     BridingTable(){
-      if(this.Sort == 5){
+      if(this.StatusWarehouse == 0){
         switch (this.FilterKey) {
+          //trường hợp tất cả
           case 0:
             this.TableValues = this.ProductsTable;
             break;
+          //trường hợp còn tồn
           case 1:
             this.TableValues = this.ProductStatus_exist;
             break;
+          //trường hợp sắp hết hàng
           case 2: 
             this.TableValues = this.ProductStatus_out_stock;
             break;
+          //trường hợp hết hàng
           case 3: 
             this.TableValues = this.ProductStatus_not_exist;
             break;
           default:
+            //trường hợp tất cả
+            this.TableValues = this.ProductsTable;
             break;
         }
       }else{
@@ -878,6 +898,7 @@ export default {
      * Nguyễn Văn Cương 28/11/2022
      */
      CaculateWarehouseStatus(){
+       if(!this.DeleteMutiPadding){
         for (let i = 0; i < this.ProductsTable.length; i++) {
             //trường hợp sắp hết hàng khi số lượng tồn tối thiểu lớn hơn số lượng tồn
             if(this.ProductsTable[i].amount > this.ProductsTable[i].quantityStock){
@@ -895,7 +916,7 @@ export default {
               this.ProductStatus_exist.push(this.ProductsTable[i]);
             }
         }
-        
+       }
      },
   },
   created() {
@@ -986,7 +1007,7 @@ export default {
       //lưu lại id của product
       SaveProductID: null,
       //lưu giá trị lọc
-      Sort: 0,
+      Sort: null,
       //lưu tên trường cần soft
       TypeSort: [],
       //lưu giá trị tìm kiếm nhập vào theo cột
@@ -1021,6 +1042,12 @@ export default {
       FilterStatus_not_exist: 0,
       //lưu mảng số lượng hết hàng
       ProductStatus_not_exist: [],
+      //lưu trạng thái tình trạng tồn kho
+      StatusWarehouse: null,
+      //lưu trạng thái xóa check box
+      ChangeCheckbox: false,
+      //lưu trạng thái chọn nhiều để xóa hay không
+      CheckAll: false,
       //lưu giá trị tdhead của table
       thList: [
         {style: "min-width: 150px;", label: "TÊN", filterlabel: "Tên", property: "ProductName", inputfilter: 1},

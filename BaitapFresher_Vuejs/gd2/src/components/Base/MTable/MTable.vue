@@ -115,12 +115,19 @@ export default {
     SumQuantity: Number,
     //Tổng giá trị tồn
     SumExistent: Number,
+    //trạng thái xóa checkbox
+    DeleteCheckbox: Boolean,
   },
   components: {
     MPopupNotification,
     MCheckbox,
     MToast,
     MDropItem,
+  },  
+  updated() {
+    if(this.DeleteCheckbox){
+      this.stateCheckAll = false;
+    }
   },
   mounted() {
     //gọi hàm click outsite
@@ -212,14 +219,14 @@ export default {
       this.stateCheckAll = !this.stateCheckAll;
       if(this.stateCheckAll == true){
           //vòng lặp thêm mã nhân viên vào mảng
-          this.RecordsLoad.data.forEach(re => {
+          this.RecordsLoad.forEach(re => {
             this.listReSelected.push(re[this.tdListTable[this.tdListTable.length - 1].property]);
           },
-          this.$emit("get-List-Checkbox", this.listReSelected)
+          this.$emit("get-List-Checkbox", this.listReSelected, this.stateCheckAll)
           );
       }else{
         this.listReSelected = [];
-        this.$emit("get-List-Checkbox", this.listReSelected)
+        this.$emit("get-List-Checkbox", this.listReSelected, this.stateCheckAll)
       }
       console.log(this.listReSelected);
     },
@@ -243,7 +250,7 @@ export default {
             this.handleCheckBoxAll();
           }else{
              this.stateCheckAll = false;
-            this.$emit("get-List-Checkbox", this.listReSelected);
+            this.$emit("get-List-Checkbox", this.listReSelected, this.stateCheckAll);
           }
           
     },
@@ -522,9 +529,6 @@ export default {
 
 
     
-  },
-  created() {
-
   },
   data() {
     return {

@@ -244,7 +244,12 @@ export default {
         if(keyword == 0){
           this.$emit("get-Filter-Header", keyword);
         }else{
-          this.$emit("get-Filter-Header", 5);
+          if(inputfilter == 5){
+            this.$emit("get-StatusWarehouse", 0);
+          }else{
+            this.$emit("get-Filter-Header", 5);
+          } 
+          
           this.$emit("get-Keyword-Header", keyword);
         }
           this.$emit("get-Typesoft", namevalue, filterlabel, inputfilter);

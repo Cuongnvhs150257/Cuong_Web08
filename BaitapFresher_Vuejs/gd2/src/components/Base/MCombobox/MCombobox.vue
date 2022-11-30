@@ -175,12 +175,7 @@ export default {
             //lưu index của giá trị
             this.indexComboMutiItem = this.ComboMutiItem.indexOf(muti[this.code]);
             console.log(this.ComboMutiItem);
-            this.SaveID = muti[this.value];
-            if(!this.MutiID.includes(this.SaveID)){
-              this.MutiID.push(this.SaveID);
-            }
-            this.$emit("get-recordvalue",this.MutiID, this.valuePost);
-            
+            this.BridingIDMuti(muti[this.value]);
           }else{
             //chưa có thì chọn tiếp
             this.selectedRecord(muti);
@@ -188,6 +183,14 @@ export default {
           //xoay icon nút
           this.Rotate();
           
+        },
+
+        BridingIDMuti(value){
+          this.SaveID = value;
+          if(!this.MutiID.includes(this.SaveID)){
+              this.MutiID.push(this.SaveID);
+          }
+          this.$emit("get-recordvalue",this.MutiID, this.valuePost);
         },
 
         /**
@@ -220,7 +223,7 @@ export default {
           if (index > -1) {
             //loại bỏ phần tử khỏi mảng
             this.ComboMutiItem.splice(index, 1); 
-          }  
+          } 
         },
 
         /**
