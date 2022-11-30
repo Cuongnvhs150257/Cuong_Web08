@@ -353,7 +353,7 @@
         <div class="product-popup-content-bottom-right">
           <div class="btn-product-popup-save1" @click="btnSaveonClickAdd">
             <MButton :tab="30" :ButtonCss="'btn-button-cancel'" :text="'Cất'" />
-            <span class="product-tooltip">Ctrl + S</span>
+            <span class="product-tooltip">Ctrl + Shift</span>
           </div>
           <div class="btn-product-popup-save2" @click="btnSaveonClick">
             <MButton
@@ -554,8 +554,7 @@ export default {
      * Nguyễn Văn Cương 10/10/2022
      */
     handleEvent(event) {
-      if (event.keyCode == enums.CTRL || event.keyCode == enums.S) {
-        event.preventDefault();
+      if (event.keyCode == enums.CTRL || event.keyCode == enums.SHIFT) {
         if (!this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.push(event.keyCode);
 
@@ -572,7 +571,6 @@ export default {
         event.keyCode == enums.ALT ||
         event.keyCode == enums.C
       ) {
-        event.preventDefault();
         if (!this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.push(event.keyCode);
 
@@ -586,12 +584,10 @@ export default {
 
       //nếu có phím tắt ESC thì đóng popup
       if (event.keyCode == enums.ESC) {
-        event.preventDefault();
         this.handleOpenPopupAskEdit();
       }
       //nếu có phím tắt F2 thì gọi trở giúp
       if (event.keyCode == enums.F2) {
-        event.preventDefault();
         alert(notification.Help);
       }
     },
@@ -606,7 +602,6 @@ export default {
         event.keyCode == enums.ALT ||
         event.keyCode == enums.C
       ) {
-        event.preventDefault();
         if (this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.length = 0;
         }

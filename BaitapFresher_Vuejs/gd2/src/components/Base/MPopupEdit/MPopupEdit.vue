@@ -79,7 +79,7 @@
           </div>
           <div class="popupedit-content-bottom-right">
             <div class="btn-product-popup-save1" @click="btnSaveonClickAdd"><MButton  :tab="5"  :ButtonCss="'btn-button-cancel'" :text="'Cất'" />
-            <span class="product-tooltip">Ctrl + S</span></div>
+            <span class="product-tooltip">Ctrl + Shift</span></div>
             <div class="btn-product-popup-save2" @click="btnSaveonClick" > <MButton  :tab="6" :ButtonCss="'btn-button-save'" :text="'Cất và thêm'" />
             <span class="product-tooltip">Ctrl + Alt + C</span></div>  
           </div>
@@ -230,8 +230,7 @@ export default {
      */
     handleEvent(event) {
       
-      if (event.keyCode == enums.CTRL || event.keyCode == enums.S) {
-        event.preventDefault();
+      if (event.keyCode == enums.CTRL || event.keyCode == enums.SHIFT) {
         if (!this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.push(event.keyCode);
 
@@ -248,7 +247,6 @@ export default {
         event.keyCode == enums.ALT ||
         event.keyCode == enums.C
       ) {
-        event.preventDefault();
         if (!this.arrKeyCode.includes(event.keyCode)) {
           this.arrKeyCode.push(event.keyCode);
 
@@ -262,12 +260,10 @@ export default {
 
       //nếu có phím tắt ESC thì đóng popup
       if (event.keyCode == enums.ESC) {
-        event.preventDefault();
         this.handleOpenPopupAskEdit();
       }
       //nếu có phím tắt F2 thì gọi trở giúp
       if (event.keyCode == enums.F2) {
-        event.preventDefault();
         alert(notification.Help);
       }
     },
