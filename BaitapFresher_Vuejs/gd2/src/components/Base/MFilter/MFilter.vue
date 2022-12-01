@@ -259,27 +259,19 @@ export default {
       Nguyễn Văn Cương 17/11/2022 
        */
       getKeywordValue(value){
-      if(this.timeout){
-        clearTimeout(this.timeout)
-        this.timeout = null;
-      }
-      else{
-        this.timeout = setTimeout(() => {
-          this.$emit("get-Keyword-Header", value);
-        }, 500);
-      }
+          this.KeywordValue = value;
+      },
       /***
        * Hàm bắt đầu chạy filter
        */
-      },
       btnFilterClick(){
         if(!this.CompareStatus){
           this.$emit("get-Filter-Header", 5);
         }
+        this.$emit("get-Keyword-Header", this.KeywordValue);
         this.$emit("start-Filter");
       },
-    },
-
+    }, 
     data(){
       return{
         //trạng thái reset filter supply
@@ -294,7 +286,8 @@ export default {
         RecordNull: false,
         //trạng thái chọn loại so sánh
         CompareStatus: false,
-
+        //lưu keyword muốn lọc
+        KeywordValue: null,
       //lưu giá trị của combobox tính chất
       DropboxItemNature: [
         {

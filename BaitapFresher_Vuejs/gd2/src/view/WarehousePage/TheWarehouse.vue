@@ -32,6 +32,7 @@
         :RecordsLoad="WarehousesTable"
         @data-load-delete="loadData"
         @get-List-Checkbox="getListWarehouse"
+        @get-offset-delete="getOffsetDelete"
         :closeSelectedAll="closeSelectedAll"
         :thListTable="thList"
         :tdListTable="tdList"
@@ -46,6 +47,7 @@
         :TotalCount="TotalCount"
         @filter-padding="getLimitValue"
         @offset-value="getOffSetValue"
+        :DeleteMuti="DeleteMutiPadding"
       />
     </div>
     <MPopupEdit v-if="isShow" :baseURL="'baseURLWarehouse'" @show-toast="showToastPopup" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="1" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Warehouses" :recordvalue="WarehouseValue" />
@@ -90,26 +92,6 @@ export default {
      */
     closeProductPopup(){
       this.isShow = false;
-    },
-
-    /**
-     * Hàm lấy mã nhân viên mới
-     * Nguyễn Văn Cương 01/10/2022
-     */
-    async getNewCode() {
-      await fetch(configs.baseURLWarehouse + warehousejs.getmax, {
-        method: "GET", //lấy mã nhân viên cao nhất
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          var s = JSON.stringify(data);
-          var d = s.replace(/[^0-9]*/g, ""); //lấy mã nhân viên cao nhất, loại bỏ dữ liệu thừa
-          var e = "NV-" + d; //thêm chữ nv đằng trước
-          this.Warehouses.WarehouseCode = e;
-        })
-        .catch((res) => {
-          console.log(res);
-        });
     },
 
     /**
@@ -187,10 +169,19 @@ export default {
     },
 
     /**
+     * lấy trang hiển thị sau khi xóa hết bản ghi trong trang
+     * Nguyễn Văn Cương 1/12/2022
+     */
+    getOffsetDelete(){
+      this.OffSetValue = 0;
+      this.DeleteMutiPadding = true;
+      this.loadData();
+    },
+
+    /**
      * lấy trang hiển thị
      * Nguyễn Văn Cương 25/09/2022
      */
-    
     getOffSetValue(offset) {
       this.OffSetValue = offset;
       this.loadData();
@@ -211,6 +202,10 @@ export default {
         this.WhereValue = where;
         this.loadData();
         }, 1000);
+      }
+      if(where == ""){
+        this.WhereValue = null;
+        this.loadData();
       }
     },
     /**
@@ -466,6 +461,8 @@ export default {
       WarehouseValue: [{value: 'WarehouseID'},{value: 'WarehouseCode'},{value:'WarehouseName'}, {value: 'WarehouseAccount'}, {value: 'Address'}],
       //tổng số trang mặc định
       TotalCount: 10, 
+      //lưu trạng thái xóa nhiều
+      DeleteMutiPadding: false,
       //lưu giá trị thead
       thList: [
         {style: "min-width: 80px;", label: "MÃ KHO"},

@@ -77,6 +77,7 @@
         @custom-open-dbclick="openPopup"
         :RecordsLoad="TableValues"
         @data-load-delete="loadData"
+        @get-offset-delete="getOffsetDelete"
         @get-List-Checkbox="getListProduct"
         :closeSelectedAll="closeSelectedAll"
         :SumQuantity="SumQuantity"
@@ -475,6 +476,11 @@ export default {
           console.log(res);
         });
     },
+
+    /**
+     * Hàm lấy mã nhóm vật tư hàng hóa mặc định
+     * Nguyễn Văn Cương 16/11/2022
+     */
     getSupplyCode(property){
         this.SaveSupplyCode = [];
         this.SaveSupplyID = [];
@@ -482,16 +488,16 @@ export default {
           this.SaveSupplyCode.push(productjs.SupplyCode_HH);
           this.SaveSupplyID.push(productjs.SupplyID_HH);
         }else if(property == 2){
-          this.SaveSupplyCode = productjs.SupplyCode_DV;
+          this.SaveSupplyCode.push(productjs.SupplyCode_DV);
           this.SaveSupplyID.push(productjs.SupplyID_DV);
         }else if(property == 3){
-          this.SaveSupplyCode = productjs.SupplyCode_NVL;
+          this.SaveSupplyCode.push(productjs.SupplyCode_NVL);
           this.SaveSupplyID.push(productjs.SupplyID_NVL);
         }else if(property == 4){
-          this.SaveSupplyCode = productjs.SupplyCode_TP;
+          this.SaveSupplyCode.push(productjs.SupplyCode_TP);
           this.SaveSupplyID.push(productjs.SupplyID_TP);
         }else{
-          this.SaveSupplyCode = productjs.SupplyCode_CDCC;
+          this.SaveSupplyCode.push(productjs.SupplyCode_CDCC);
           this.SaveSupplyID.push(productjs.SupplyID_CDCC);
         }
     },
@@ -592,18 +598,41 @@ export default {
      * Nguyễn Văn Cương 25/09/2022
      */
     getLimitValue(limits) {
-      this.LimitValue = limits;
+      if(this.StatusWarehouse == 0){
+        this.Offsetwarehousestatus = limits;
+        this.Limitwarehousestatus = this.Offsetwarehousestatus * 2;
+        this.BridingTable();
+      }else{
+        this.LimitValue = limits;
+        this.loadData();
+      }
+
+    },
+
+    /**
+     * lấy trang hiển thị sau khi xóa hết bản ghi trong trang
+     * Nguyễn Văn Cương 1/12/2022
+     */
+    getOffsetDelete(){
+      this.OffSetValue = 0;
+      this.DeleteMutiPadding = true;
       this.loadData();
     },
 
     /**
      * lấy trang hiển thị
-     *
+     * Nguyễn Văn Cương 25/09/2022
      */
-    
     getOffSetValue(offset) {
-      this.OffSetValue = offset;
-      this.loadData();
+      if(this.StatusWarehouse == 0){
+        this.Offsetwarehousestatus = offset;
+        this.Limitwarehousestatus = offset + this.Limitwarehousestatus;
+        this.BridingTable();
+      }else{
+        this.OffSetValue = offset;
+        this.loadData();
+      }
+
     },
 
     /**
@@ -611,7 +640,7 @@ export default {
      * Nguyễn Văn Cương 25/09/2022
      */
     getWhereValue(where) {
-
+      /*
       if(this.timeout){
         clearTimeout(this.timeout)
         this.timeout = null;
@@ -621,6 +650,13 @@ export default {
         this.WhereValue = where;
         this.loadData();
         }, 1000);
+      }
+      */
+     this.WhereValue = where;
+
+      if(where == ""){
+        this.WhereValue = null;
+        this.loadData();
       }
     },
     /**
@@ -738,6 +774,8 @@ export default {
       this.FilterKey = null;
       this.FilterLabel = null;
       this.BindingFilterValue = [];
+      this.StatusWarehouse = null;
+      this.DeleteMutiPadding = false;
       this.loadData();
     },
 
@@ -764,26 +802,32 @@ export default {
           //trường hợp tất cả
           case 0:
             this.TableValues = this.ProductsTable;
+            this.TotalCount = this.Totalcount;
             break;
           //trường hợp còn tồn
           case 1:
-            this.TableValues = this.ProductStatus_exist;
+            this.TableValues = this.ProductStatus_exist.slice(this.Offsetwarehousestatus,this.Limitwarehousestatus);
+            this.TotalCount = this.FilterStatus_exist
             break;
           //trường hợp sắp hết hàng
           case 2: 
-            this.TableValues = this.ProductStatus_out_stock;
+            this.TableValues = this.ProductStatus_out_stock.slice(this.Offsetwarehousestatus,this.Limitwarehousestatus);
+            this.TotalCount = this.FilterStatus_out_stock;
             break;
           //trường hợp hết hàng
           case 3: 
-            this.TableValues = this.ProductStatus_not_exist;
+            this.TableValues = this.ProductStatus_not_exist.slice(this.Offsetwarehousestatus,this.Limitwarehousestatus);
+            this.TotalCount = this.FilterStatus_not_exist;
             break;
           default:
             //trường hợp tất cả
             this.TableValues = this.ProductsTable;
+            this.TotalCount = this.Totalcount;
             break;
         }
       }else{
         this.TableValues = this.ProductsTable;
+        this.TotalCount = this.Totalcount;
       }
     },
 
@@ -832,12 +876,16 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           this.ProductsTable = data.data; //lưu dữ liệu
+          this.Totalcount = data.totalCount;
           this.CaculateWarehouseStatus();
           this.BridingTable();
-          this.TotalCount = data.totalCount;
-          this.SumQuantity = data.sumQuantity;
-          this.SumExistent = data.sumExistent;
-          this.DeleteMutiPadding = false;
+          if(this.StatusWarehouse == 0){
+            this.SumQuantity = null;
+            this.SumExistent = null;
+          }else{
+            this.SumQuantity = data.sumQuantity;
+            this.SumExistent = data.sumExistent;
+          }
           this.BindingFilter();
           this.LoadingShow = false; //tắt loading
         })
@@ -881,7 +929,7 @@ export default {
      */
     handleEventInterrupt(event){
         if(event.keyCode == enums.ENTER){
-           this.openPopup();
+           this.loadData();
         }
     },
     
@@ -893,34 +941,57 @@ export default {
       this.isShowNotification = false;
       this.validate = false;
     },
+
+    /**
+     * Hàm lấy mã  mới
+     * Nguyễn Văn Cương 20/11/2022
+     */
+    getAll() {
+      fetch(configs.baseURLProduct, {
+        method: "GET", //lấy mã nhân viên cao nhất
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.AllProduct = data;
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
     /**
      * Hàm tính toán tình trạng tồn kho
      * Nguyễn Văn Cương 28/11/2022
      */
      CaculateWarehouseStatus(){
-       if(!this.DeleteMutiPadding){
-        for (let i = 0; i < this.ProductsTable.length; i++) {
+        for (let i = 0; i < this.AllProduct.length; i++) {
             //trường hợp sắp hết hàng khi số lượng tồn tối thiểu lớn hơn số lượng tồn
-            if(this.ProductsTable[i].amount > this.ProductsTable[i].quantityStock){
-              this.FilterStatus_out_stock = this.FilterStatus_out_stock + 1;
-              this.ProductStatus_out_stock.push(this.ProductsTable[i]);
-
+            if(this.AllProduct[i].amount > this.AllProduct[i].quantityStock && this.AllProduct[i].quantityStock != null){
+              if(!this.ProductStatus_out_stock.includes(this.AllProduct[i])){
+                this.FilterStatus_out_stock = this.FilterStatus_out_stock + 1;
+                this.ProductStatus_out_stock.push(this.AllProduct[i]);
+              }
             //trường hợp hết hàng khi số lượng tồn bằng 0
-            }else if(this.ProductsTable[i].quantityStock == null){
-              this.FilterStatus_not_exist = this.FilterStatus_not_exist  + 1;
-              this.ProductStatus_not_exist.push(this.ProductsTable[i]);
-
+            }else if(this.AllProduct[i].quantityStock == null){
+              if(!this.ProductStatus_not_exist.includes(this.AllProduct[i])){
+                this.FilterStatus_not_exist = this.FilterStatus_not_exist  + 1;
+                this.ProductStatus_not_exist.push(this.AllProduct[i]);
+              }
             //trường hợp còn tồn khi số lượng tồn tối thiểu nhỏ hơn số lượng tồn
             }else{
-              this.FilterStatus_exist = this.FilterStatus_exist  + 1;
-              this.ProductStatus_exist.push(this.ProductsTable[i]);
+              if(!this.ProductStatus_exist.includes(this.AllProduct[i])){
+                this.FilterStatus_exist = this.FilterStatus_exist  + 1;
+                this.ProductStatus_exist.push(this.AllProduct[i]);
+              }
             }
-        }
        }
      },
   },
   created() {
+    this.getAll();
     this.loadData();
+  },
+  updated(){
+    this.getAll();
   },
   mounted(){
     //gọi hàm phím tắt
@@ -1048,6 +1119,14 @@ export default {
       ChangeCheckbox: false,
       //lưu trạng thái chọn nhiều để xóa hay không
       CheckAll: false,
+      //lưu tổng số lượng
+      Totalcount: null,
+      //lưu toàn bộ bản ghi danh sách hàng hóa
+      AllProduct: null,
+      //lưu bản ghi bắt đầu để lọc tình trạng tồn kho
+      Offsetwarehousestatus: 0,
+      //lưu số lượng bản ghi để lọc tình trạng tồn kho
+      Limitwarehousestatus: 10,
       //lưu giá trị tdhead của table
       thList: [
         {style: "min-width: 150px;", label: "TÊN", filterlabel: "Tên", property: "ProductName", inputfilter: 1},

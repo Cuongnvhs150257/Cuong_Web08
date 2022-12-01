@@ -489,7 +489,11 @@ export default {
               }
               else{
                   //load lại data
-                this.$emit("data-load-delete");
+                if(this.RecordsLoad.length <= 1){
+                  this.$emit("get-offset-delete");
+                }else{
+                  this.$emit("data-load-delete");
+                }
                 this.ShowToast(this.ToastStatus = true);
                 console.log(data);
               }

@@ -70,9 +70,6 @@
         </div>
       </div>
       <div class="popupincurred-bottom">
-          <div class="popupincurred-bottom-right-btn" @click="agreesave">
-            <MButton :ButtonCss="'btn-button-openPopup-Employee c'" :text="'Xem phát sinh'" />
-          </div>
           <button class="popupincurred-bottom-right" @click="closeNotification">Đóng</button>
       </div>
     </div>

@@ -32,6 +32,7 @@
         @custom-open-dbclick="openPopup"
         @data-load-delete="loadData"
         @get-List-Checkbox="getListSupply"
+        @get-offset-delete="getOffsetDelete"
         :closeSelectedAll="closeSelectedAll"
         :thListTable="thList"
         :tdListTable="tdList"
@@ -48,6 +49,7 @@
         :TotalCount="TotalCount"
         @filter-padding="getLimitValue"
         @offset-value="getOffSetValue"
+        :DeleteMuti="DeleteMutiPadding"
       />
     </div>
     <MPopupEdit v-if="isShow" @show-toast="showToastPopup" :height="'width: 600px; height: 320px'" :width="'width: 500px'" :baseURL="'baseURLSupply'" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="3" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Supplys" :recordvalue="SupplyValue" />
@@ -93,26 +95,6 @@ export default {
      */
     closeProductPopup(){
       this.isShow = false;
-    },
-
-    /**
-     * Hàm lấy mã nhân viên mới
-     * Nguyễn Văn Cương 01/10/2022
-     */
-    async getNewCode() {
-      await fetch(configs.baseURLSupply + supplyjs.getmax, {
-        method: "GET", //lấy mã nhân viên cao nhất
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          var s = JSON.stringify(data);
-          var d = s.replace(/[^0-9]*/g, ""); //lấy mã nhân viên cao nhất, loại bỏ dữ liệu thừa
-          var e = "NV-" + d; //thêm chữ nv đằng trước
-          this.Supplys.SupplyCode = e;
-        })
-        .catch((res) => {
-          console.log(res);
-        });
     },
 
     /**
@@ -191,10 +173,20 @@ export default {
     },
 
     /**
-     * lấy trang hiển thị
-     *
+     * lấy trang hiển thị sau khi xóa hết bản ghi trong trang
+     * Nguyễn Văn Cương 1/12/2022
      */
-    
+    getOffsetDelete(){
+      this.OffSetValue = 0;
+      this.DeleteMutiPadding = true;
+      this.loadData();
+    },
+
+
+    /**
+     * lấy trang hiển thị
+     * Nguyễn Văn Cương 1/12/2022
+     */
     getOffSetValue(offset) {
       this.OffSetValue = offset;
       this.loadData();
@@ -215,6 +207,10 @@ export default {
         this.WhereValue = where;
         this.loadData();
         }, 1000);
+      }
+      if(where == ""){
+        this.WhereValue = null;
+        this.loadData();
       }
     },
     /**
@@ -272,45 +268,6 @@ export default {
         }, 4000);
       }
     },
-
-    /**
-     * Hàm thực hiện xóa nhiều nhân viên
-     * Nguyễn Văn Cương 15/10/2022
-     */
-    async deleteMultiple() {
-      var listD = this.listSuDelete;
-      
-      await fetch(configs.baseURLSupply + supplyjs.batchdelete, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(listD),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.errorCode) {
-              //mở popup thông báo
-              this.isShowNotification = true;
-              if (data.errorCode) {
-                this.errors = data.moreInfo;
-              }
-            }else{
-              //load lại data
-              this.ClosePopupAsk();
-              this.loadData();
-              this.closeSelectedAll = true;
-              this.ShowToast(this.ToastStatus = true);
-              console.log(data);
-            }
-          
-        })
-        .catch((res) => {
-          this.ShowToast(this.ToastStatus = false);
-          console.log(res);
-        });
-    },
-
     /**
      * hàm load dữ liệu
      * Nguyễn Văn Cương 15/09/2022
@@ -520,6 +477,8 @@ export default {
       SupplyValue: [{value: 'SupplyID'},{value: 'SupplyCode'},{value:'SupplyName'}, {value: 'Status'}],
       //giá trị tổng số trang mặc định
       TotalCount: 10,
+      //lưu trạng thái xóa nhiều
+      DeleteMutiPadding: false,
       //lưu giá trị của thead trong table
       thList: [
         {style: "min-width: 200px;", label: "MÃ NHÓM VẬT TƯ, HÀNG HÓA, DỊCH VỤ"},

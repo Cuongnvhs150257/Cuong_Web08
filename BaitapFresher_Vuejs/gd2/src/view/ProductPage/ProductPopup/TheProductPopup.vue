@@ -699,7 +699,7 @@ export default {
     handleOpenPopupAskEdit() {
       //so sánh xem người dùng có thay đổi trường nào không
       for (const prop in this.ProductsOld) {
-        if (this.ProductsOld[prop] != this.Products[prop]) {
+        if (this.ProductsOld[prop] != this.Products[prop] && this.Products[prop] != null) {
           //nếu có thì hiện popup hỏi
           this.isShowPopupAskEdit = true;
           return;
