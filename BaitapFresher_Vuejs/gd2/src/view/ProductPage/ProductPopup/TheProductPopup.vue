@@ -208,7 +208,7 @@
             </div>
             <div class="product-popup-input7">
               <label class="item-label product">Số lượng tồn tối thiểu</label>
-              <MInput :tab="8" :style="'text-align: right; width: 92%; padding-right: 10px;'" :NumberDecimal="true" v-model="Products.Amount" />
+              <MInput :tab="8" :style="'text-align: right; width: 92%; padding-right: 10px;'" :typeInput="'text'" :NumberDecimal="true" v-model="Products.Amount" />
             </div>
             <div class="product-popup-input8">
               <label class="item-label product">Nguồn gốc</label>
@@ -857,6 +857,8 @@ export default {
           url = url + "?GroupSupply=" + `${this.Products.ProductID}`;
           this.ClosePopup = true;
           this.ToastAddClose = true;
+          //trở về trang 1 sau sửa
+          this.$emit("Edit-Padding");
         }
         console.log(this.Products);
         fetch(url, {

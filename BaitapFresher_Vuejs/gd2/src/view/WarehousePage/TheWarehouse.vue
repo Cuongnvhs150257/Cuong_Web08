@@ -50,7 +50,7 @@
         :DeleteMuti="DeleteMutiPadding"
       />
     </div>
-    <MPopupEdit v-if="isShow" :baseURL="'baseURLWarehouse'" @show-toast="showToastPopup" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="1" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Warehouses" :recordvalue="WarehouseValue" />
+    <MPopupEdit v-if="isShow" @Edit-Padding="getOffsetDelete" :baseURL="'baseURLWarehouse'" @show-toast="showToastPopup" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="1" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Warehouses" :recordvalue="WarehouseValue" />
  
 
     <!-- <Teleport to="#page-employee">
@@ -107,7 +107,11 @@ export default {
           .then((res) => res.json())
           .then(async (data) => {
             this.LoadingShow = false; //Đóng loading
-            this.PopupEdit_label = warehousejs.PopupEdit_label_edit;
+            if(detailFormMode == 1){
+              this.PopupEdit_label = warehousejs.PopupEdit_label_add;
+            }else{
+              this.PopupEdit_label = warehousejs.PopupEdit_label_edit;
+            }
             this.Warehouses = data;
             if (detailFormMode == 1) {
               this.Warehouses.WarehouseCode = "";
@@ -192,17 +196,7 @@ export default {
      * Nguyễn Văn Cương 25/09/2022
      */
     getWhereValue(where) {
-
-      if(this.timeout){
-        clearTimeout(this.timeout)
-        this.timeout = null;
-      }
-      else{
-        this.timeout = setTimeout(() => {
-        this.WhereValue = where;
-        this.loadData();
-        }, 1000);
-      }
+      this.WhereValue = where;
       if(where == ""){
         this.WhereValue = null;
         this.loadData();
@@ -379,7 +373,7 @@ export default {
      */
     handleEventInterrupt(event){
         if(event.keyCode == enums.ENTER){
-           this.openPopup();
+           this.loadData();
         }
     },
     

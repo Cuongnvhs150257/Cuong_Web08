@@ -22,4 +22,7 @@ export default{
 
     //Cảnh báo ngày lớn hơn hiện tại
     DateError: "Ngày không được lớn hơn hiện tại",
+
+    //đơn vị tính trống
+    UnitCalculateValueNull: "Đơn vị tính không được để trống",
 }

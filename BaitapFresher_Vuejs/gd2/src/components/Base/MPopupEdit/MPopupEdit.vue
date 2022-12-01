@@ -26,7 +26,7 @@
             <div class="popupedit-input2" ref="inputName">
               <label class="item-label product">Tên</label>
               <label class="item-labelsao"> *</label>
-              <MInput :tab="2" v-model="Records[recordvalue[2].value]" @updateAlert="UpdateAlert" />
+              <MInput :tab="2" :inValue="inValue_Name" v-model="Records[recordvalue[2].value]" @updateAlert="UpdateAlert" />
               <div class="alertInputEd b"  v-if="isShowAlertName"  >Tên không được để trống</div>
             </div>
             <div class="popupedit-input4">
@@ -61,7 +61,7 @@
             <div class="popupedit-input8" ref="inputName">
               <label class="item-label product">Tên</label>
               <label class="item-labelsao"> *</label>
-              <MInput :tab="2" v-model="Records[recordvalue[2].value]" @updateAlert="UpdateAlert" />
+              <MInput :tab="2" :inValue="inValue_Name" v-model="Records[recordvalue[2].value]" @updateAlert="UpdateAlert" />
               <div class="alertInputEd c"  v-if="isShowAlertName"  >Tên không được để trống</div>
             </div>
             <div class="popupedit-input9">
@@ -205,6 +205,7 @@ export default {
       //trường hợp nhập vào ô input
       this.isShowAlertName = false;
       this.isShowAlertCode = false;
+      this.inValue = true;
       this.inValue_Name = true;
       this.inValue_Code = true;
       //trường hợp xóa ô input
@@ -403,10 +404,8 @@ export default {
         if (!this.Records[this.recordvalue[1].value]) {
           //mở popup thông báo
           this.showNotification(this.NotifiStatus == true);
-
-          this.errors = notification.EmployeeCodeNull;
-          //đỏ input mã
-          this.inValue_Code = false;
+          //đỏ input
+          this.inValue = false;
           //hiển thị toolTip
           this.Spanempty = true;
           //dữ liệu cần thiết trống
@@ -416,14 +415,20 @@ export default {
 
           //mở popup thông báo
           this.showNotification(this.NotifiStatus == true);
-
-          this.errors = notification.EmployeeNameNull;
-          //đỏ input đơn vị
-          this.inValue_Name = false;
           //hiển thị toolTip
           this.Spanempty = true;
           //dữ liệu cần thiết trống
           validate = false; 
+        }
+        if(!this.inValue && !this.ValidateUnit){
+          this.errors = notification.EmployeeCodeNull;
+          this.inValue_Code = false;
+        }else if(this.ValidateUnit){
+          this.errors = notification.UnitCalculateValueNull;
+          this.inValue_Code = false;
+        }else{
+          this.errors = notification.EmployeeNameNull;
+          this.inValue_Name = false;
         }
         
       } else {
@@ -448,6 +453,8 @@ export default {
           url = url + `${this.Records[this.recordvalue[0].value]}`;
           this.ClosePopup = true;
           this.ToastAddClose = true;
+          //trở về trang 1 sau sửa
+          this.$emit("Edit-Padding");
         }
         fetch(url, {
           method: method,
@@ -551,6 +558,7 @@ export default {
         type: Boolean,
         default: true,
       },
+      inValue: true,
       //lưu cảnh báo thiếu dữ liệu
       errors: [],
       //gọi popup thiếu dữ liệu

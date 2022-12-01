@@ -12,10 +12,10 @@
   </div>
   <div class="combomuti" v-if="ComboClass === 2" :class="{'dropbox-input-green': !inValueChange, 'dropbox-input-green': isShowDropbox }">
     <div class="combomuti-input-main">
-      <div class="combomuti-input-main-data" v-for="item in ComboMutiItem" :key="item">
+      <div class="combomuti-input-main-data" v-for="(item, index) in ComboMutiItem" :key="item">
         <div class="combomuti-main-item">
           <div class="item-label">{{item}}</div>
-          <div class="item-cancel" @click="CancelComboMutiItem(item)" ></div>
+          <div class="item-cancel" @click="CancelComboMutiItem(item, index)" ></div>
         </div>
       </div>
       <input class="combomuti-input" type="text" :readonly="readonly" :style="width" :maxlength="maxlength" v-model="this.RecordSle[label]" :tabindex="tab" />
@@ -133,7 +133,7 @@ export default {
           this.isShowDropbox = !this.isShowDropbox;
           this.isShowD = this.isShowDropbox;
           if(this.Filter == true){
-            this.$emit("get-recordvalue", drop[this.label], this.valueFilter, this.Tabname, this.inputfilter);
+            this.$emit("get-recordvalue", drop[this.code], this.valueFilter, this.Tabname, this.inputfilter);
           }else{
             this.$emit("get-recordvalue", drop[this.value], this.valuePost, this.Tabname, this.inputfilter);
           }
@@ -185,6 +185,10 @@ export default {
           
         },
 
+        /**
+         * Lẫy id của các nhóm vật tư hàng hóa
+         * Nguyễn Văn Cương 21/11/2022
+         */
         BridingIDMuti(value){
           this.SaveID = value;
           if(!this.MutiID.includes(this.SaveID)){
@@ -204,6 +208,9 @@ export default {
             }
             if(this.BridingSupplyID && this.SaveID == null){
               this.$emit("get-recordvalue", this.BridingSupplyID, this.valuePost);
+              for (let i = 0; i < this.BridingSupplyID.length; i++) {
+                this.BridingIDMuti(this.BridingSupplyID[i]);
+              }
             }
           }
           if(this.Defaul && !this.Comboboxmodel){
@@ -217,12 +224,18 @@ export default {
         hàm xóa phần tử trong combobox nhiều
         Nguyễn Văn Cương 05/10/2022
          */
-        CancelComboMutiItem(value){
+        CancelComboMutiItem(value, pos){
           //tìm index của phần từ trong mảng
           const index = this.ComboMutiItem.indexOf(value);
           if (index > -1) {
             //loại bỏ phần tử khỏi mảng
             this.ComboMutiItem.splice(index, 1); 
+          } 
+          //tìm index của phần từ trong mảng
+          const post = this.MutiID.indexOf(pos);
+          if (index > -1) {
+            //loại bỏ phần tử khỏi mảng
+            this.MutiID.splice(post, 1); 
           } 
         },
 

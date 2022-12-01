@@ -38,7 +38,7 @@
                   :valuePost="'SupplyID'"
                   :label="'supplyName'"
                   :code="'supplyCode'"
-                  :valueFilter="'s.SupplyName'"
+                  :valueFilter="'s.SupplyCode'"
                   :inputfilter="1"
                   :Tabname="'Nhóm'"
                   :Filter="true"

@@ -52,7 +52,7 @@
         :DeleteMuti="DeleteMutiPadding"
       />
     </div>
-    <MPopupEdit v-if="isShow" @show-toast="showToastPopup" :height="'width: 600px; height: 320px'" :width="'width: 500px'" :baseURL="'baseURLSupply'" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="3" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Supplys" :recordvalue="SupplyValue" />
+    <MPopupEdit v-if="isShow" @Edit-Padding="getOffsetDelete"  @show-toast="showToastPopup" :height="'width: 600px; height: 320px'" :width="'width: 500px'" :baseURL="'baseURLSupply'" :detailFormMode="Mode" :PopupEdit_label="PopupEdit_label" :inputShow="3" @data-load="loadData" @custom-handle-click="closeProductPopup" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Supplys" :recordvalue="SupplyValue" />
  
 
     <!-- <Teleport to="#page-employee">
@@ -111,10 +111,12 @@ export default {
           .then((res) => res.json())
           .then(async (data) => {
             this.LoadingShow = false; //Đóng loading
-            this.PopupEdit_label = supplyjs.PopupEdit_label_edit;
             this.Supplys = data;
             if (detailFormMode == 1) {
               this.Supplys.SupplyCode = "";
+              this.PopupEdit_label = supplyjs.PopupEdit_label_add;
+            }else{
+              this.PopupEdit_label = supplyjs.PopupEdit_label_edit;
             }
             this.Mode = detailFormMode;
             console.log(this.Mode);
@@ -197,7 +199,7 @@ export default {
      * Nguyễn Văn Cương 25/09/2022
      */
     getWhereValue(where) {
-
+      /*
       if(this.timeout){
         clearTimeout(this.timeout)
         this.timeout = null;
@@ -208,6 +210,8 @@ export default {
         this.loadData();
         }, 1000);
       }
+      */
+      this.WhereValue = where;
       if(where == ""){
         this.WhereValue = null;
         this.loadData();
@@ -397,7 +401,7 @@ export default {
      */
     handleEventInterrupt(event){
         if(event.keyCode == enums.ENTER){
-           this.openPopup();
+           this.loadData();
         }
     },
     

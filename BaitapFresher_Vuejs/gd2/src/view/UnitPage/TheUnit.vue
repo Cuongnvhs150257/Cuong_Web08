@@ -50,7 +50,7 @@
         :DeleteMuti="DeleteMutiPadding"
       />
     </div>
-    <MPopupEdit v-if="isShow" @show-toast="showToastPopup" :PopupEdit_label="PopupEdit_label" :detailFormMode="Mode" :ValidateUnit="true"  @data-load="loadData" @custom-handle-click="closeProductPopup" :baseURL="'baseURLUnitCalculate'" :height="'height: 320px;'" :inputShow="2" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Units" :recordvalue="UnitValue" />
+    <MPopupEdit v-if="isShow" @Edit-Padding="getOffsetDelete" @show-toast="showToastPopup" :PopupEdit_label="PopupEdit_label" :detailFormMode="Mode" :ValidateUnit="true"  @data-load="loadData" @custom-handle-click="closeProductPopup" :baseURL="'baseURLUnitCalculate'" :height="'height: 320px;'" :inputShow="2" @close-product-popup="closeProductPopup" @open-popup-select="openPopupSelect" :recordsSelected="Units" :recordvalue="UnitValue" />
 
     
 
@@ -108,9 +108,11 @@ export default {
           .then(async (data) => {
             this.LoadingShow = false; //Đóng loading
             this.Units = data;
-            this.PopupEdit_label = unitcalculatejs.PopupEdit_label_edit;
             if (detailFormMode == 1) {
-              this.Units.UnitCalculateCode = "";
+              this.Units.UnitCalculateValue = "";
+              this.PopupEdit_label = unitcalculatejs.PopupEdit_label_add;
+            }else{
+              this.PopupEdit_label = unitcalculatejs.PopupEdit_label_edit;
             }
             this.Mode = detailFormMode;
             console.log(this.Mode);
@@ -192,17 +194,8 @@ export default {
      * Nguyễn Văn Cương 25/09/2022
      */
     getWhereValue(where) {
-
-      if(this.timeout){
-        clearTimeout(this.timeout)
-        this.timeout = null;
-      }
-      else{
-        this.timeout = setTimeout(() => {
-        this.WhereValue = where;
-        this.loadData();
-        }, 1000);
-      }
+      
+      this.WhereValue = where;
       if(where == ""){
         this.WhereValue = null;
         this.loadData();
@@ -342,7 +335,7 @@ export default {
      */
     handleEventInterrupt(event){
         if(event.keyCode == enums.ENTER){
-           this.openPopup();
+           this.loadData();
         }
     },
     

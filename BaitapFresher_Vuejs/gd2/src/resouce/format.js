@@ -7,7 +7,10 @@ export default{
     Status_UnActive: "Ngưng sử dụng",
 
     //trạng thái ngưng sử dụng
-    Status_Unknow: "Tất cả",
+    Status_Unknow: "Chưa xác định",
+
+        //trạng thái ngưng sử dụng
+    Status_All: "Tất cả",
 
     //trạng thái còn tồn
     FilterStatus_exist: "Còn tồn",

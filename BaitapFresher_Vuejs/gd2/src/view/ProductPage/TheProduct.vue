@@ -53,7 +53,7 @@
             <MButton :ButtonCss="'btn-button-actionMutile'" :text="'Thực hiện hàng loạt'" :iconcss="'icon-filter'" /></div>
           <div class="product-content-toolbar-left-btn" @click="showFilter(1)" ><MButton :ButtonCss="'btn-button-filter'" :iconcss="'icon-filter'" :text="'Lọc'"/></div>
           <div class="toolbar-filter-label" v-for="(item, index) in BindingFilterValue" :key="item">
-            <label class="label-filter" >{{item}}</label>
+            <label class="label-filter" >{{item.label}}</label>
             <div class="label-icon" @click="CancelFilterlabel(item, index)"></div>
           </div>
           <div class="toolbar-filter-label">
@@ -103,7 +103,7 @@
     </div>
     <TheProductSelect v-if="isShowPopupSelect" @close-popup-selete="closePopupSelect" @open-product-popup="openPopup" :ProductID="SaveProductID" />
 
-    <TheProductPopup v-if="isShow" @show-toast="showToastPopup" :BridingCode="SaveSupplyCode" :BridingID="SaveSupplyID" @data-load="loadData" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
+    <TheProductPopup v-if="isShow" @Edit-Padding="getOffsetDelete" @show-toast="showToastPopup" :BridingCode="SaveSupplyCode" :BridingID="SaveSupplyID" @data-load="loadData" @close-product-popup="closeProductPopup" @custom-handle-click="closeProductPopup" :detailFormMode="Mode" @open-popup-select="openPopupSelect" :property="ProductPopupProperty" :productsSelected="Products" />
     <div ref="filter">
     <MFilter :typeInput="InputType" @get-StatusWarehouse="getStatusWarehouse" :Label="FilterLabel" v-if="isShowFilter" @get-Typesoft="getTypesoft" @start-Filter="loadData" @get-Keyword-Header="getKeywordHeader" @get-Filter-Header="getFilterHeader" :FilterMode="FilterMode" :FilterStyle="StyleFilter" @Close-Filter="closeFilter" />
     </div>
@@ -281,25 +281,44 @@ export default {
       if(this.WhereValue){
         this.FilterLabel = null;
       }
-      if(!this.BindingFilterValue.includes(this.FilterLabel) && this.FilterLabel != null && this.FilterKey != null){
-        //trường hợp hiển thị thông thường
-        if(this.InputType == 1){
-          this.BindingFilterValue.push(this.FilterLabel + ": " + this.FilterKey);
-        //phải format tính chất
-        }else if(this.InputType == 2){
-          this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatNatureRecord(this.FilterKey));
-        //phải format thuế
-        }else if(this.InputType == 3){
-          this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatTaxRecord(this.FilterKey));
-        //phải format trạng thái
-        }else if(this.InputType == 4){
-          this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatStatusRecord(this.FilterKey));
-        //phải format trạng thái
-        }else{
-          this.BindingFilterValue.push(this.FilterLabel + ": " + this.formatFilterStatusRecord(this.FilterKey));
+
+      /*
+      for (let i = 0; i < this.TypeSort.length; i++) {
+        if(this.BindingFilterValue.length > 0){
+          if(this.BindingFilterValue[i].value == this.FilterLabel){
+            this.BindingFilterValue.splice(i, 1); 
+          }
+          if(this.BindingFilterValue.length == this.TypeSort.length){
+            this.BindingFilterValue.splice(i-1, 1);
+          }
         }
-        
       }
+      */
+        
+        if(!this.BindingFilterValue.includes(this.FilterLabel) && this.FilterLabel != null && this.FilterKey != null){
+          //trường hợp hiển thị thông thường
+          if(this.InputType == 1){
+            this.BindingFilterValue.push({label: this.FilterLabel + ": " + this.FilterKey, value: this.FilterLabel});
+            
+          //phải format tính chất
+          }else if(this.InputType == 2){
+            this.BindingFilterValue.push({label:this.FilterLabel + ": " + this.formatNatureRecord(this.FilterKey), value: this.FilterLabel});
+            
+          //phải format thuế
+          }else if(this.InputType == 3){
+            this.BindingFilterValue.push({label:this.FilterLabel + ": " + this.formatTaxRecord(this.FilterKey), value: this.FilterLabel});
+            
+          //phải format trạng thái
+          }else if(this.InputType == 4){
+            this.BindingFilterValue.push({label:this.FilterLabel + ": " + this.formatStatusRecord(this.FilterKey), value: this.FilterLabel});
+            
+          //phải format trạng thái
+          }else{
+            this.BindingFilterValue.push({label:this.FilterLabel + ": " + this.formatFilterStatusRecord(this.FilterKey), value: this.FilterLabel});
+            
+          }
+        }
+      
     },
 
     /**
@@ -877,7 +896,9 @@ export default {
         .then((data) => {
           this.ProductsTable = data.data; //lưu dữ liệu
           this.Totalcount = data.totalCount;
-          this.CaculateWarehouseStatus();
+          if(!this.DeleteMutiPadding){
+            this.CaculateWarehouseStatus();
+          }
           this.BridingTable();
           if(this.StatusWarehouse == 0){
             this.SumQuantity = null;
