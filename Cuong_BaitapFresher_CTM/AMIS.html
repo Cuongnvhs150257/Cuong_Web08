@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý nhân viên - Phần mềm kế toán AMIS</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <button type="button" class="header-left-btn header-left-btn-menu"></button>
+                <label class="header-left-label">CÔNG TY TNHH SẢN XUẤT - THƯƠNG MẠI - DỊCH VỤ QUI PHÚC</label>
+                <button type="button" class="header-left-btn header-left-btn-down"></button>
+            </div>
+            <div class="header-right">
+                <button type="button" class="header-right-btn header-notification"></button>
+                <div class="header-avatar"></div>
+                <label class="header-username">Nguyễn Văn Cương</label>
+                <button type="button" class="header-right-btn header-right-btn-down"></button>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="sidebar-top">
+                <button class="sidebar-btn-left sidebar-btn-left-open" type="button"></button>
+                <div class="sidebar-logo"></div>
+            </div>
+            <div class="sidebar-menu">
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon1"></div>
+                    <label class="sidebar-item-laber">Tổng quan</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon2"></div>
+                    <label class="sidebar-item-laber">Tiền mặt</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon3"></div>
+                    <label class="sidebar-item-laber">Tiền gửi</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon4"></div>
+                    <label class="sidebar-item-laber">Mua hàng</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon5"></div>
+                    <label class="sidebar-item-laber">Bán hàng</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon6"></div>
+                    <label class="sidebar-item-laber">Quản lý hóa đơn</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon7"></div>
+                    <label class="sidebar-item-laber">Kho</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon8"></div>
+                    <label class="sidebar-item-laber">Công cụ dụng cụ</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon9"></div>
+                    <label class="sidebar-item-laber">Tài sản cố định</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon10"></div>
+                    <label class="sidebar-item-laber">Thuế</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon11"></div>
+                    <label class="sidebar-item-laber">Giá thành</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon12"></div>
+                    <label class="sidebar-item-laber">Tổng hợp</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon13"></div>
+                    <label class="sidebar-item-laber">Ngân sách</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon14"></div>
+                    <label class="sidebar-item-laber">Báo cáo</label>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-item-icon sicon15"></div>
+                    <label class="sidebar-item-laber">Phân tích tài chính</label>
+                </div>
+
+            </div>
+        </div>
+        <div class="content">
+            <div class="content-top">
+                <div class="content-top-left">
+                    <div class="content-top-left-label">
+                        <label class="content-top-label">Nhân viên</label>
+                    </div>
+                    
+                </div>
+                <div class="content-top-right">
+                    <button type="button" class="content-top-btn">Thêm nhân viên</button>
+                </div>
+                
+            </div>
+            <div class="content-toolbar">
+                <div class="content-toolbar-right">
+                    <input type="text" class="toolbar-input" placeholder="Tìm theo mã, tên nhân viên">
+                    <button type="button" class="toolbar-load">
+
+                    </button>    
+                </div>
+     
+                </div>
+            </div>
+            <div class="content-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>Mã nhân viên</th>
+                            <th>Tên nhân viên</th>
+                            <th>Giới tính</th>
+                            <th>Ngày sinh</th>
+                            <th>Số CMND</th>
+                            <th>Chức danh</th>
+                            <th>Tên đơn vị</th>
+                            <th>Số tài khoản</th>
+                            <th>Tên ngân hàng</th>
+                            <th>Chi nhánh ngân hàng</th>
+                            <th>Chức năng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>NV011111</td>
+                            <td>Nguyen Van A</td>
+                            <td>Nam</td>
+                            <td>20/08/1995</td>
+                            <td>088888888</td>
+                            <td>A@gmail.com</td>
+                            <td>Quản lý</td>
+                            <td>Phòng nhân sự</td>
+                            <td>15.000.000</td>
+                            <td>Đang thử việc</td>
+                            <td></td>
+                        </tr>
+
+                    
+
+                    </tbody>
+                </table>
+                <div class="padding">
+                    <div class="padding-left">Tổng số: 1035 bản ghi</div>
+                    <div class="padding-right">
+                        <select >
+                            <option value="1">20 bản ghi trên 1 trang</option>
+                            <option value="2">20 nhân viên/trang</option>
+                        </select>
+                        <div class="padding-center">
+                            <button class="btn-first">Trước</button>
+                            <div class="page-group">
+                                <button class="paddingnumber button-seleced">1</button>
+                                <button class="paddingnumber">2</button>
+                                <button class="paddingnumber">3</button>
+                                <button class="paddingnumber">4</button>
+                            </div>
+                            <button class="btn-last">Sau</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        
+    </div>
+</body>
+</html>

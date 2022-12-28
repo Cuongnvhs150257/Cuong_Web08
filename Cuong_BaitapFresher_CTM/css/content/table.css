@@ -1,0 +1,29 @@
+.content-table{
+    height: calc(100% - 200px);
+    width: calc(100% - 250px);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #fff;
+    margin-right: 30px;
+}
+.content-table table{
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: unset;
+    font-size: 13px;
+}
+
+.content-table tr, .content-table th, .content-table td{
+    border-bottom: 1px solid rgb(216, 211, 211);
+    border-right: 1px solid rgb(216, 211, 211);
+    height: 35px;
+   
+}
+.content-table tr td, .content-table tr th{
+    padding-left: 10px;
+    text-align: left;
+}
+.content-table thead{
+    background-color: rgb(236,238,241);
+}

@@ -1,0 +1,146 @@
+.sidebar-top{
+    width: 200px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+}
+.sidebar-btn-left{
+    width: 30px;
+    height: 30px;
+    border: none;
+    margin-left: 27px;
+    margin-top: 10px;
+}
+.sidebar-btn-left-open{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-repeat: no-repeat;
+    background-position: -418px -92px;
+    background-color:  rgb(57,58,61);
+    /* background: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg) no-repeat -418px -92px; */
+}
+.sidebar-logo{
+    width: 150px;
+    height: 48px;
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Logo_Module_TiengViet_White.66947422.svg);
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-position: 16px center;
+    
+}
+.sidebar-menu{
+    width: 200px;
+    height: calc(100vh - 48px);
+}
+.sidebar-item{
+    width: 200px;
+    height: 40px;
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+}
+.sidebar-item:hover{
+    background-color: rgb(88,89,93);
+}
+.sidebar-item-icon{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    margin-top: 13px;
+}
+
+.sidebar-item-laber{
+    color: #fff;
+    width: 130px;
+    margin-top: 13px;
+
+}
+.sicon1{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -34px -1630px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon2{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -78px -1631px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon3{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -121px -1633px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon4{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -165px -1632px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}.sicon5{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -206px -1631px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon6{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -254px -1632px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon7{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -294px -1632px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon8{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -339px -1633px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon9{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -382px -1632px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon10{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -427px -1634px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon11{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -471px -1633px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon12{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -514px -1632px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon13{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -382px -1664px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon14{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -552px -1636px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+.sicon15{
+    background-image: url(/Cuong_BaitapFresher_CTM/assets/Resource/img/Sprites.64af8f61.svg);
+    background-position: -207px -1667px;
+    background-repeat: no-repeat;
+    background-color: rgb(57,58,61);
+}
+
