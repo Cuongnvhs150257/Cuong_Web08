@@ -903,10 +903,10 @@ export default {
           .then((res) => res.json())
           .then((res) => {
             console.log(res);
-            if (res.errorCode) {
+            if (res.data.errorCode) {
               //mở popup thông báo
               this.showNotification(this.NotifiStatus == false);
-              if (res.errorCode == "8") {
+              if (res.data.errorCode == "8") {
                 let errormess = res.moreInfo;
                 let arrayStrig = errormess.split("<");
                 this.errors =

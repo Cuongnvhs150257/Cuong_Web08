@@ -273,7 +273,7 @@ namespace MISA.WEB08.AMIS.BL
         /// <returns></returns>
         public ServiceRespone UpdateMutiRecords(Product record, Guid productid)
         {
-            var validateStatus = false;
+            var validateStatus = true;
             var validateResult = ValidateRequestData(validateStatus, record);
 
             if (validateResult != null && validateResult.Success)

@@ -239,13 +239,6 @@ export default {
           if(!this.listReSelected.includes(ReID)){
             this.listReSelected.push(ReID);
           }
-          else{
-            const index = this.listReSelected.indexOf(ReID);
-            if (index > -1) {
-              //loại bỏ phần tử khỏi mảng
-              this.listReSelected.splice(index, 1); 
-            }
-          }
           if(this.listReSelected.length == 10){
             this.handleCheckBoxAll();
           }else{
